@@ -73,42 +73,42 @@ size_t	len_wd(char const *str, char *charset)
 
 	i = 0;
     boolean = 0;
-	while (i < ft_strlen(str) && boolean == 0)
+	while (str[i] && ft_ischarset(charset, str[i]) == 0 && boolean == 0)
 	{
-        if (((i && str[i - 1] != '\\') || !i) && str[i] == '\'' && i + 1 < ft_strlen(str))
+        if (((i && str[i - 1] != '\\') || !i) && str[i] == '\'' && i < ft_strlen(str))
         {
             i++;
-            while (str[i] && !(str[i - 1] != '\\' && str[i] == '\''))
+            while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i] == '\''))
 				i++;
-			if (i < ft_strlen(str) && str[i - 1] != '\\' && str[i] == '\'')
-			{
-				if (i + 1 < ft_strlen(str) && ft_ischarset(charset, str[i + 1]))
-					i++;
+	//		if (i < ft_strlen(str) && str[i - 1] != '\\' && str[i] == '\'')
+	//		{
+	//			if (i + 1 < ft_strlen(str) && ft_ischarset(charset, str[i + 1]))
+	//				i++;
 				boolean = 1;
-			}
+	//		}
         }
-        if (((i && str[i - 1] != '\\') || !i) && str[i] == '\"' && i + 1 < ft_strlen(str))
+        if (((i && str[i - 1] != '\\') || !i) && str[i] == '\"' && i < ft_strlen(str))
         {
             i++;
-            while (str[i] && !(str[i - 1] != '\\' && str[i] == '\"'))
+            while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i] == '\"'))
                 i++;
-			if (i < ft_strlen(str) && str[i - 1] != '\\' && str[i] == '\"')
-			{
-				if (i + 1 < ft_strlen(str) && ft_ischarset(charset, str[i + 1]))
-					i++;
+	//		if (i < ft_strlen(str) && str[i - 1] != '\\' && str[i] == '\"')
+	//		{
+	//			if (i + 1 < ft_strlen(str) && ft_ischarset(charset, str[i + 1]))
+	//				i++;
 				boolean = 1;
-			}
+	//		}
         }
-		if (((i && str[i - 1] != '\\') || !i) && ft_ischarset(charset, str[i]) && i + 1 < ft_strlen(str))
+		if ((i && str[i - 1] == '\\') && ft_ischarset(charset, str[i]) && i < ft_strlen(str))
 		{
-			while (str[i] && i + 1 < ft_strlen(str) && ft_ischarset(charset, str[i + 1]))
+			while (str[i] && i + 1 < ft_strlen(str) && ft_ischarset(charset, str[i + 1]) == 0)
 				i++;
 			boolean = 1;
 		}
-		if (str[i])
-			i++;
+		i++;
 	}
-	return (i);
+	printf("i %d\n", i);
+	return (i + 1);
 }
 
 size_t	count_malloc(char const *s, char *str)
@@ -158,12 +158,12 @@ char			**ft_split(char const *s, char *str)
 		return (0);
 	while (i < ft_strlen((char *)s))
 	{
-		while (s[i] && j < count_malloc(s, str) && s[i] && ft_ischarset(str, s[i]) == 0)
+		while (j < count_malloc(s, str) && ft_ischarset(str, s[i]) == 0)
 		{
-			if (!(res[j] = malloc(sizeof(char) * (len_wd(&s[i], str) + 1))))
+			if (!(res[j] = malloc(sizeof(char) * (len_wd(&s[i], str)))))
 				return (ft_free(res, j));
-			res[j] = ft_memmove(res[j], &s[i], len_wd(&s[i], str) + 1);
-			res[j][len_wd(&s[i], str)] = '\0';
+			res[j] = ft_memmove(res[j], &s[i], len_wd(&s[i], str));
+			res[j][len_wd(&s[i], str) - 1] = '\0';
 			j++;
 			i += len_wd(&s[i], str);
 		}

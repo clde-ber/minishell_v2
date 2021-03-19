@@ -109,6 +109,7 @@ t_list *set_env(char **env, char **tab)
     t_list *lst;
     t_list *first;
 
+	printf("B");
 	j = 0;
 	while (tab[j])
 		j++;

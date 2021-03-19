@@ -55,22 +55,25 @@ void    dispatch(char *str, char **env)
     res = ft_split(str, "\t\n\r\v\f ");
     while (res[i])
     {
-        printf("%d\n", i);
-        printf("%s\n", res[i]);
+        printf("%d|\n", i);
+        printf("%s|\n", res[i]);
         i++;
     }
 /*    if (search_word(str, "pwd") == 1)
         ft_pwd(str);
     else if (search_word(str, "echo") == 1)
         ft_echo(str);
-    else*/ if (ft_split(str, "\t\n\r\v\f ")[0][0] == '.' && ft_split(str, "\t\n\r\v\f ")[0][1] == '/')
+    else*/ if (res[0][0] == '.' && res[0][1] == '/')
         find_exe(0, str, env);
-    else if (ft_strcmp(ft_split(str, "\t\n\r\v\f ")[0], "export") == 0)
-        set_env(env, ft_split(str, "\t\n\r\v\f "));
-    else if (ft_strcmp(ft_split(str, "\t\n\r\v\f ")[0], "env") == 0)
+    else if (ft_strcmp(res[0], "export") == 0)
+     {
+         printf("a");
+            set_env(env, res);
+     }
+    else if (ft_strcmp(res[0], "env") == 0)
         print_env(env, var_env);
-    else if (ft_strcmp(ft_split(str, "\t\n\r\v\f ")[0], "unset") == 0)
-        unset(var_env, ft_split(str, "\t\n\r\v\f "));
+    else if (ft_strcmp(res[0], "unset") == 0)
+        unset(var_env, res);
     else
         printf("nope");
 }
