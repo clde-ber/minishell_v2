@@ -12,7 +12,9 @@ size_t	len_wd(char const *str, char *charset)
         if (((i && str[i - 1] != '\\') || !i) && str[i] == '\'' && i < ft_strlen(str))
         {
             i++;
-            while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i] == '\''))
+			if (str[i - 1] != '\\' && str[i] == '\'')
+				boolean = 1;
+            while (i < ft_strlen(str) && (!(str[i - 1] != '\\' && str[i] == '\'')))
 				i++;
 	//		if (i < ft_strlen(str) && str[i - 1] != '\\' && str[i] == '\'')
 	//		{
@@ -24,7 +26,9 @@ size_t	len_wd(char const *str, char *charset)
         if (((i && str[i - 1] != '\\') || !i) && str[i] == '\"' && i < ft_strlen(str))
         {
             i++;
-            while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i] == '\"'))
+			if (str[i - 1] != '\\' && str[i] == '\"')
+				boolean = 1;
+            while (i < ft_strlen(str) && (!(str[i - 1] != '\\' && str[i] == '\"')))
                 i++;
 	//		if (i < ft_strlen(str) && str[i - 1] != '\\' && str[i] == '\"')
 	//		{
@@ -41,11 +45,10 @@ size_t	len_wd(char const *str, char *charset)
 		}
 		i++;
 	}
-	// printf("i %d\n", i);
-	if (i <= ft_strlen((char *)str))
-		return (i + 1);
-	else
-		return (i);
+	printf("i %d\n", i);
+	if (i >= ft_strlen(str))
+		return (ft_strlen(str));
+	return (i);
 }
 
 size_t	count_malloc(char const *s, char *str)
@@ -59,11 +62,14 @@ size_t	count_malloc(char const *s, char *str)
 		return (1);
     while (i < ft_strlen((char *)s))
 	{
-		i += len_wd(&s[i], str);
-		count++;
-
+		while (i < ft_strlen((char *)s) && ft_ischarset(str, s[i]) == 0)
+		{
+			i += len_wd(&s[i], str);
+			count++;
+		}
+		i++;
 	}
-	// printf("%d\n", count);
+	printf("%d\n", count);
 	return (count);
 }
 
@@ -97,12 +103,13 @@ char			**ft_split(char const *s, char *str)
 	{
 		while (i < ft_strlen((char *)s) && j < count_malloc(s, str) && ft_ischarset(str, s[i]) == 0)
 		{
-			if (!(res[j] = malloc(sizeof(char) * (len_wd(&s[i], str)))))
+			if (!(res[j] = malloc(sizeof(char) * (len_wd(&s[i], str) + 1))))
 				return (ft_free(res, j));
-			res[j] = ft_memmove(res[j], &s[i], len_wd(&s[i], str));
-			res[j][len_wd(&s[i], str) - 1] = '\0';
+			res[j] = ft_memmove(res[j], &s[i], len_wd(&s[i], str) + 1);
+			res[j][len_wd(&s[i], str)] = '\0';
 			j++;
 			i += len_wd(&s[i], str);
+			printf("lenwd %d\n", len_wd(&s[i], str));
 		}
 		i++;
 	}

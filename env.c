@@ -34,23 +34,25 @@ t_list *set_env(char **env, char **tab)
     t_list *lst;
     t_list *first;
 
-	printf("B");
 	j = 0;
 	while (tab[j])
 		j++;
-    i = j - 1;
+    i = (j == 0) ? j : j - 1;
 	k = 0;
 	while (env[k])
 		k++;
 	k--;
-	var_env = ft_lstnew(ft_get_name(tab[i]), ft_strchr(tab[i], '=') + 1);
+	if (!j)
+		var_env = ft_lstnew(ft_get_name(env[k]), ft_strchr(env[k], '=') + 1);
+/*	else
+		var_env = ft_lstnew(ft_get_name(env[k]), ft_strchr(env[k], '=') + 1);*/
 	while (i >= 1)
     {
 		ft_lstadd_front(&var_env, ft_lstnew(ft_get_name(tab[i]), ft_strchr(tab[i], '=') + 1));
 		ft_lstiter(var_env, &ft_record, tab[i]);
 		i--;
 	}
-	while (k >= 1)
+	while (!j && k >= 1)
 	{
 		ft_lstadd_front(&var_env, ft_lstnew(ft_get_name(env[k]), ft_strchr(env[k], '=') + 1));
 		ft_lstiter(var_env, &ft_record, env[k]);
