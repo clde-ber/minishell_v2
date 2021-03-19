@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-#define BUFFER_SIZE 50
-
 static char		*ft_read_a_join(size_t i, char *buf, char **line)
 {
 	buf[i] = '\0';

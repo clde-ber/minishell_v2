@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+// a mettre qqpart
 t_list *var_env = NULL;
 
 char *getcommand(char *str)

@@ -5,6 +5,11 @@
 
 #include "minishell.h"
 
+/*
+**All functions pertaining the echo implementation. WIP: echo doc disappears to be attributed to redirection functions.
+** echo stdin goes into echo main and creates char *output to be passed if redirection exists or to be printed.
+*/
+
 void    ft_echo_stdin(char *str, int option, int i)
 {
     // add difference single double quote
