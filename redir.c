@@ -1,28 +1,33 @@
-/*
-**All functions pertaining the echo implementation. WIP: echo doc disappears to be attributed to redirection functions.
-** echo stdin goes into echo main and creates char *output to be passed if redirection exists or to be printed.
-*/
+#include "minishell.h"
 
 /*
 **All functions for redirections (> >> <) shall go there. A work in progress.
 */
 
-#include "minishell.h"
-
-void    redir_file(char *str, char *output)
+void    redir_file(char **res, char *output, int c)
 {
+    int fd;
+    int i;
 
+    i = 0;
+    if (c == 0)
+        fd = open(res[2], O_CREAT | O_WRONLY | O_TRUNC, 0777);
+    else 
+        fd = open(res[2], O_APPEND, 0777);
+    while (output[i])
+        write(fd, &output[i++], 1);
+    close(fd);
+    return ;
 }
 
-void    check_redir(char *command, char *output)
+void    check_redir(char **res, char *output)
 {
-/*    char *ret;
-    if ((ret = strchr(str, '<')) != NULL)
-        redir_ext(command, output);
-    else if ((ret = strchr(str, '>')) != NULL)
-    {
-        if (ret++ == '>')
-            redir_EOF(command, output);
-        redir_file(command, output);
-    }*/
+    if (ft_strcmp(res[1], ">") == 0)
+        redir_file(res, output, 0);
+    else if (ft_strcmp(res[1], ">>") == 0)
+        redir_file(res, output, 1);
+    // else if (ft_strcmp(res[1], "<") == 0)
+    //     redir_ext(command, output);
+    else
+        return;
 }
