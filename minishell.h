@@ -35,34 +35,11 @@ typedef struct s_list
 //droit a variable globale comme ça? si oui tant mieux
 extern t_list *var_env;
 
-// size_t	ft_strlen(char *str);
-
-// char	*ft_strjoin(char *s1, char *s2);
-// int				get_next_line(int fd, char **line);
-// size_t	ft_strlen(char *str);
-// void    dispatch(char *str, char **env);
-// void    ft_pwd(char *str);
-// char *getcommand(char *str);
-// void    ft_echo(char *str);
-// void    ft_echo_doc(char *str, int option, int i);
-// void    ft_echo_stdin(char *str, int option, int i);
-// int search_word(char *str, char *to_find);
-// int check_word(char *str, char *to_find, int i);
-// int	ft_strcmp(const char *s1, const char *s2);
-
-// int find_exe(int index, char *path, char **env);
-// int launch_exe(char *exe, char *path, char **env);
-// char *get_path(char *path, char c);
-// char	*ft_get_filename(const char *s, int c);
-// char	*ft_strdup(const char *s1);
-// char	*ft_strchr(const char *s, int c);
-// int	ft_strcmp(const char *s1, const char *s2);
-
 /*
 **start_a_parse_bulle
 */
 char *getcommand(char *str);
-void    ft_pwd(char *str);
+void    ft_pwd(char **res);
 void    dispatch(char *str, char **env);
 
 /*
@@ -93,8 +70,8 @@ void print_env(char **tab, t_list *env);
 /*
 **redir
 */
-void    check_redir(char *command, char *output);
-void    redir_file(char *str, char *output);
+void    check_redir(char **res, char *output);
+void    redir_file(char **res, char *output, int c);
 
 /*
 **echo

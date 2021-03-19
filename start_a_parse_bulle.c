@@ -11,7 +11,7 @@ char *getcommand(char *str)
 
     i = 0;
     j = 0;
-    while (str[i] && str[i] != '|' && str[i] != ';' && str[i] != ':')
+    while (str[i] && str[i] != ';')
         i++;
     if (i == 0)
         return (NULL);
@@ -26,19 +26,25 @@ char *getcommand(char *str)
     return (ret);
 }
 
-void    ft_pwd(char *str)
+void    ft_pwd(char **res)
 {
     char *path;
 
-    // path = NULL;
-    // getcwd(path, 0);
-    // version linux: oath alloué par appel de commande via malloc si size est 0 et buff null. Need free apres
-    
+    int i = 0;
+
     if (!(path = malloc(sizeof(char) * 1000)))
         return ;
     getcwd(path, 1000);
-    check_redir(str, path);
-    // printf("%s", path);
+    if (res[1])
+    {
+        check_redir(res, path);
+        // check_pipe(res, path);
+    }
+    if (!res[1])
+    {
+        while (path[i])
+        write(1, &path[i++], 1);
+    }
     free(path);
 }
 
@@ -60,11 +66,18 @@ void    dispatch(char *str, char **env)
         printf("%s|\n", res[i]);
         i++;
     }
+    printf("command:%s\n", res[0]);
+    printf("%d", ft_strcmp(res[0], "pwd"));
+    if (ft_strcmp(res[0], "pwd") == 0)
+    {
+        write(1, "ok", 2);
+        ft_pwd(res);
+    }
 /*    if (search_word(str, "pwd") == 1)
         ft_pwd(str);
     else if (search_word(str, "echo") == 1)
         ft_echo(str);
-    else*/ if (res[0][0] == '.' && res[0][1] == '/')
+    else*/ else if (res[0][0] == '.' && res[0][1] == '/')
         find_exe(0, str, env);
     else if (ft_strcmp(res[0], "export") == 0)
      {

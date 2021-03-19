@@ -41,7 +41,7 @@ size_t	len_wd(char const *str, char *charset)
 		}
 		i++;
 	}
-	printf("i %d\n", i);
+	// printf("i %d\n", i);
 	if (i <= ft_strlen((char *)str))
 		return (i + 1);
 	else
@@ -63,7 +63,7 @@ size_t	count_malloc(char const *s, char *str)
 		count++;
 
 	}
-	printf("%d\n", count);
+	// printf("%d\n", count);
 	return (count);
 }
 
