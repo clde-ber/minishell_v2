@@ -11,9 +11,9 @@ void    redir_file(char **res, char *output, int c)
 
     i = 0;
     if (c == 0)
-        fd = open(res[2], O_CREAT | O_WRONLY | O_TRUNC, 0777);
+        fd = open(res[2], O_CREAT | O_RDWR | O_TRUNC, 0777);
     else 
-        fd = open(res[2], O_APPEND, 0777);
+        fd = open(res[2], O_APPEND | O_RDWR, 0777);
     while (output[i])
         write(fd, &output[i++], 1);
     close(fd);

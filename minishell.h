@@ -77,9 +77,7 @@ void    redir_file(char **res, char *output, int c);
 /*
 **echo
 */
-void    ft_echo(char *str);
-void    ft_echo_doc(char *str, int option, int i);
-void    ft_echo_stdin(char *str, int option, int i);
+void    ft_echo(char **res, t_list *var_env);
 
 /*
 **libft_list
@@ -99,18 +97,10 @@ void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *), char *str);
 /*
 **minishell_utils
 */
+int ft_strchr_bis(const char *s, int c);
 int check_word(char *str, char *to_find, int i);
 int search_word(char *str, char *to_find);
 int ft_isspace(char c);
-
-/*
-**libft_utils
-*/
-size_t	ft_strlen(char *str);
-char	*ft_strjoin(char *s1, char *s2);
-int	ft_strcmp(const char *s1, const char *s2);
-char	*ft_strchr(const char *s, int c);
-char	*ft_strdup(const char *s1);
 
 /*
 **gnl
@@ -124,11 +114,27 @@ int		find_n(char *buf, size_t size);
 char	*join_a_free(char *s1, char *s2);
 
 /*
+**libft_utils
+*/
+size_t	ft_strlen(char *str);
+char	*ft_strjoin(char *s1, char *s2);
+int	ft_strcmp(const char *s1, const char *s2);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strdup(const char *s1);
+
+/*
 **libft_utils2
 */
 void	*ft_calloc(size_t count, size_t size);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 int ft_ischarset(char *str, char c);
+
+/*
+**libft_utils3
+*/
+void	ft_putstr_fd(char *s, int fd);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+char			*ft_strtrim(char const *s1, char const *set);
 
 #endif

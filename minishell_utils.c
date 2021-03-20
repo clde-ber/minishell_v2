@@ -5,6 +5,24 @@
 
 #include "minishell.h"
 
+int ft_strchr_bis(const char *s, int c)
+{
+	char	to_find;
+	int		i;
+
+	i = 0;
+	to_find = c;
+	while (s[i])
+	{
+		if (s[i] == to_find)
+			return (i);
+		i++;
+	}
+	if (c == '\0')
+		return (i);
+	return (-1);
+}
+
 int ft_isspace(char c)
 {
     if (c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f' || c == ' ')
