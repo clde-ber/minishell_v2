@@ -3,6 +3,20 @@
 // a mettre qqpart
 t_list *var_env = NULL;
 
+int ft_is_empty_string(char *str)
+{
+    int i;
+
+    i = 0;
+    while (str[i])
+    {
+        if (ft_isspace(str[i]) == 0)
+            return (0);
+        i++;
+    }
+    return (1);
+}
+
 char *getcommand(char *str)
 {
     int i;
@@ -59,7 +73,11 @@ void    dispatch(char *str, char **env)
     char **res;
 
     i = 0;
-    res = ft_split(str, "\t\n\r\v\f ");
+    if (ft_is_empty_string(str))
+        res = ft_calloc(2, sizeof(char *));
+    else
+    {
+        res = ft_split(str, "\t\n\r\v\f ");
     while (res[i])
     {
         printf("%d|\n", i);
@@ -67,29 +85,30 @@ void    dispatch(char *str, char **env)
         i++;
     }
     printf("command:%s\n", res[0]);
-    printf("%d", ft_strcmp(res[0], "pwd"));
-    if (ft_strcmp(res[0], "pwd") == 0)
-    {
-        write(1, "ok", 2);
-        ft_pwd(res);
-    }
-/*    if (search_word(str, "pwd") == 1)
-        ft_pwd(str);
-    else if (search_word(str, "echo") == 1)
-        ft_echo(str);
-    else*/ else if (res[0][0] == '.' && res[0][1] == '/')
-        find_exe(0, str, env);
-    else if (ft_strcmp(res[0], "export") == 0)
-     {
-         printf("a");
-            set_env(env, res);
-     }
-    else if (ft_strcmp(res[0], "env") == 0)
-        print_env(env, var_env);
-    else if (ft_strcmp(res[0], "unset") == 0)
-        unset(var_env, res);
-    else
-        printf("nope");
+//    printf("%d", ft_strcmp(res[0], "pwd"));
+        if (ft_strcmp(res[0], "pwd") == 0)
+        {
+            write(1, "ok", 2);
+            ft_pwd(res);
+        }
+    /*    if (search_word(str, "pwd") == 1)
+            ft_pwd(str);
+        else if (search_word(str, "echo") == 1)
+            ft_echo(str);
+        else*/ else if (res[0][0] == '.' && res[0][1] == '/')
+            find_exe(0, str, env);
+        else if (ft_strcmp(res[0], "export") == 0)
+        {
+            printf("a");
+                set_env(env, res);
+        }
+        else if (ft_strcmp(res[0], "env") == 0)
+            print_env(env, var_env);
+        else if (ft_strcmp(res[0], "unset") == 0)
+            unset(var_env, res);
+        else
+            printf("nope");
+        }
 }
 
 // pour l'instant, ne prend qu'une commande. La commande doit etre enregistrée (pas fait), découpée (fait mais 
@@ -103,6 +122,7 @@ int main(int ac, char **av, char **env)
 
     end = 0;
     line = NULL;
+    set_env(env, ft_calloc(2, sizeof(char *)));
     while (res && end == 0)
     {
         write(1, "***minishell*** > ", 18);

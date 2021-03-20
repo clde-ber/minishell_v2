@@ -41,6 +41,7 @@ extern t_list *var_env;
 char *getcommand(char *str);
 void    ft_pwd(char **res);
 void    dispatch(char *str, char **env);
+int ft_is_empty_string(char *str);
 
 /*
 **ft_split
@@ -100,6 +101,7 @@ void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *), char *str);
 */
 int check_word(char *str, char *to_find, int i);
 int search_word(char *str, char *to_find);
+int ft_isspace(char c);
 
 /*
 **libft_utils

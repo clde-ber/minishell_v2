@@ -5,6 +5,13 @@
 
 #include "minishell.h"
 
+int ft_isspace(char c)
+{
+    if (c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f' || c == ' ')
+        return (1);
+    return (0);
+}
+
 int check_word(char *str, char *to_find, int i)
 {
     int j;
