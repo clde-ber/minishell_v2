@@ -51,7 +51,6 @@ size_t	count_malloc(char const *s, char *str)
 		}
 		i++;
 	}
-	 printf("count %d\n", count);
 	return (count);
 }
 

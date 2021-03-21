@@ -26,39 +26,44 @@ char *ft_get_name(char *str)
     return (copy);
 }
 
-t_list *set_env(char **env, char **tab)
+t_list *set_new_env(char **env, char **tab, t_list *var_env)
 {
-    int i;
-	int j;
 	int k;
-    t_list *lst;
+    t_list *tmp;
     t_list *first;
 
-	j = 0;
-	while (tab[j])
-		j++;
-    i = (j == 0) ? j : j - 1;
 	k = 0;
 	while (env[k])
 		k++;
 	k--;
-	if (!j)
-		var_env = ft_lstnew(ft_get_name(env[k]), ft_strchr(env[k], '=') + 1);
-/*	else
-		var_env = ft_lstnew(ft_get_name(env[k]), ft_strchr(env[k], '=') + 1);*/
-	while (i >= 1)
-    {
-		ft_lstadd_front(&var_env, ft_lstnew(ft_get_name(tab[i]), ft_strchr(tab[i], '=') + 1));
-		ft_lstiter(var_env, &ft_record, tab[i]);
-		i--;
-	}
-	while (!j && k >= 1)
+	var_env = ft_lstnew(ft_get_name(env[k]), ft_strchr(env[k], '=') + 1);
+	while (k >= 0)
 	{
 		ft_lstadd_front(&var_env, ft_lstnew(ft_get_name(env[k]), ft_strchr(env[k], '=') + 1));
 		ft_lstiter(var_env, &ft_record, env[k]);
 		k--;
 	}
-    return (var_env);
+	return (var_env);
+}
+
+t_list *set_env(char **env, char **tab, t_list *var_env)
+{
+    int i;
+	int j;
+
+	j = 0;
+	while (tab[j])
+		j++;
+    i = j - 1;
+	while (var_env->next)
+		var_env = var_env->next;
+	while (i >= 1)
+    {
+		ft_lstadd_back(&var_env, ft_lstnew(ft_get_name(tab[i]), ft_strchr(tab[i], '=') + 1));
+		ft_lstiter(var_env, &ft_record, tab[i]);
+		i--;
+	}
+	return (var_env);
 }
 
 t_list	*unset(t_list *env, char **tab)
@@ -86,20 +91,18 @@ t_list	*unset(t_list *env, char **tab)
 	return (env);
 }
 
-void print_env(char **tab, t_list *env)
+void print_env(char **tab, t_list *environ)
 {
 	char *str = NULL;
 	char *str2 = NULL;
-	while (env->next)
+	while (environ->next)
 	{
-		if (ft_strlen(env->name))
+		if (ft_strlen(environ->name))
     	{
-			str2 = ft_strjoin(env->name, "=");
-			str = ft_strjoin(str2, env->value);
+			str2 = ft_strjoin(environ->name, "=");
+			str = ft_strjoin(str2, environ->value);
 			printf("%s\n", str);
-			free(str);
-			free(str2);
 		}
-		env = env->next;
+		environ = environ->next;
 	}
 }

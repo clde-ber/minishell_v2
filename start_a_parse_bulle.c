@@ -1,8 +1,5 @@
 #include "minishell.h"
 
-// a mettre qqpart
-t_list *var_env = NULL;
-
 int ft_is_empty_string(char *str)
 {
     int i;
@@ -67,10 +64,11 @@ void    ft_pwd(char **res)
 // exemple: echo "pwd" > file pourrait trouver echo en premier.
 // need parsing plus precis en lettre par lettre
 
-void    dispatch(char *str, char **env)
+void    dispatch(char *str, char **env, t_list *var_env)
 {
     int i;
     char **res;
+    t_list **environ;
 
     i = 0;
     if (ft_is_empty_string(str))
@@ -91,14 +89,11 @@ void    dispatch(char *str, char **env)
     else if (res[0][0] == '.' && res[0][1] == '/')
         find_exe(0, str, env);
     else if (ft_strcmp(res[0], "export") == 0)
-    {
-        printf("a");
-        set_env(env, res);
-    }
+        var_env = set_env(env, res, var_env);
     else if (ft_strcmp(res[0], "env") == 0)
         print_env(env, var_env);
     else if (ft_strcmp(res[0], "unset") == 0)
-        unset(var_env, res);
+        var_env = unset(var_env, res);
     else
         printf("nope");
 }
@@ -111,11 +106,12 @@ int main(int ac, char **av, char **env)
     int end;
     int res;
     char *command;
+    t_list *var_env;
 
     end = 0;
     line = NULL;
-    set_env(env, ft_calloc(2, sizeof(char *)));
-    while (res && end == 0)
+    var_env = set_new_env(env, ft_calloc(2, sizeof(char *)), var_env);
+    while (end == 0)
     {
         write(1, "***minishell*** > ", 18);
         res = get_next_line(0, &line);
@@ -123,8 +119,7 @@ int main(int ac, char **av, char **env)
             end = 1;
         // printf("test:%s", line);
          if ((command = getcommand(line)) != NULL)
-            dispatch(command, env);
-//        end = 1;
+            dispatch(command, env, var_env);
     }
     free(line);
     return (0);

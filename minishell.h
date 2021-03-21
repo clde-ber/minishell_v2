@@ -40,7 +40,7 @@ extern t_list *var_env;
 */
 char *getcommand(char *str);
 void    ft_pwd(char **res);
-void    dispatch(char *str, char **env);
+void    dispatch(char *str, char **env, t_list *var_env);
 int ft_is_empty_string(char *str);
 
 /*
@@ -63,9 +63,10 @@ int find_exe(int index, char *path, char **env);
 **env
 */
 char *ft_get_name(char *str);
-t_list *set_env(char **env, char **tab);
+t_list *set_env(char **env, char **tab, t_list *var_env);
+t_list *set_new_env(char **env, char **tab, t_list *var_env);
 t_list	*unset(t_list *env, char **tab);
-void print_env(char **tab, t_list *env);
+void print_env(char **tab, t_list *environ);
 
 
 /*
