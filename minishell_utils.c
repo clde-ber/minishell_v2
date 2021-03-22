@@ -12,12 +12,15 @@ int ft_strchr_bis(const char *s, int c)
 
 	i = 0;
 	to_find = c;
+    printf("%s", s);
+    write(1, "ok", 2);
 	while (s[i])
 	{
 		if (s[i] == to_find)
 			return (i);
 		i++;
 	}
+    write(1, "ok", 2);
 	if (c == '\0')
 		return (i);
 	return (-1);
