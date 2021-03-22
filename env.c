@@ -91,6 +91,7 @@ t_list	*unset(t_list *env, char **tab)
 	return (env);
 }
 
+// a pas besoin de tab? a enlever?
 void print_env(char **tab, t_list *environ)
 {
 	char *str = NULL;

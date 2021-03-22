@@ -9,10 +9,12 @@ char *get_word(char **res, int i, int j)
 {
     char *str;
     int t;
+    int k;
 
     t = 0;
     j++;
-    while (ft_isspace(res[i][j]) == 0 && res[i][j] && res[i][j] != "\"")
+    k = j;
+    while (ft_isspace(res[i][j]) == 0 && res[i][j] && res[i][j] != '\"')
     {
         t++;
         j++;
@@ -20,8 +22,8 @@ char *get_word(char **res, int i, int j)
     if (!(str = malloc(sizeof(char) * t + 1)))
         return (NULL);
     t = 0;
-    while (ft_isspace(res[i][j]) == 0 && res[i][j] && res[i][j] != "\"")   
-        str[t++] = res[i][j++];
+    while (ft_isspace(res[i][k]) == 0 && res[i][k] && res[i][k] != '\"')   
+        str[t++] = res[i][k++];
     return (str);
 }
 
@@ -32,10 +34,10 @@ void    change_str_env(t_list *var_env, char **res, int i, int j)
     char *buf;
 
     chg = -1;
-    if (res[i][0] == "\'" || (j != 1 && res[i][j - 1] == "\\"))
+    if (res[i][0] == '\'' || (j != 1 && res[i][j - 1] == '\\'))
         return ;
     str = get_word(res, i, j);
-    while (var_env)
+    while (var_env->next)
     {
         if (ft_strcmp(var_env->name, str) == 0)
         {
@@ -59,10 +61,9 @@ void    check_quote(t_list *var_env, char **res, int i)
     char *buf;
     int j;
 
-    j = ft_strchr_bis(res[i], "$");
+    j = ft_strchr_bis(res[i], '$');
     if (j != -1)
         change_str_env(var_env, res, i, j);
-    write(1, "ok", 2);
     if (res[i][0] == '\"')
     {
         buf = ft_strtrim(res[i], "\"");
@@ -77,7 +78,6 @@ void    check_quote(t_list *var_env, char **res, int i)
         res[i] = ft_strdup(buf);
         free(buf);
     }
-    write(1, "ok", 2);
 }
 
 void    ft_echo(char **res, t_list *var_env)
@@ -103,7 +103,6 @@ void    ft_echo(char **res, t_list *var_env)
             output = ft_strjoin(output, " ");
             output = ft_strjoin(output, res[i]);
         }
-        write(1, "ok", 2);
         i++;
     }
     if (option == 0)
