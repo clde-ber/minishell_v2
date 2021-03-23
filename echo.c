@@ -129,7 +129,7 @@ void    ft_echo(char **res, t_list *var_env)
     i = 1;
     output = NULL;
     option = 0;
-    if (strcmp(res[i], "-n") == 0)
+    if (res[i] && ft_strcmp(res[i], "-n") == 0)
     {
         option = 1;
         i++;
@@ -148,12 +148,19 @@ void    ft_echo(char **res, t_list *var_env)
         }
         i++;
     }
-    if (option == 0)
+    if (option == 0 && output != NULL)
     {
         buf = ft_strjoin(output, "\n");
         free(output);
         output = ft_strdup(buf);
         free(buf);
+    }
+    if (output == NULL)
+    {
+        if (option == 0)
+            output = ft_strdup("\n");
+        else
+            output = ft_strdup("");
     }
     if (check_redir(res, i, output) == 0)
         ft_putstr_fd(output, 1);

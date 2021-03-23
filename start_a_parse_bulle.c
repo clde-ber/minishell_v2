@@ -101,7 +101,7 @@ int main(int ac, char **av, char **env)
     int res;
     char *command;
     t_list *var_env;
-    t_line save[2];
+    // t_line save[2];
 
 
     end = 0;

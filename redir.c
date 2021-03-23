@@ -22,6 +22,8 @@ void    redir_file(char **res, char *output, int c)
 
 int    check_redir(char **res, int i, char *output)
 {
+    if (!res[i])
+        return (0);
     if (ft_strcmp(res[i], ">") == 0)
         redir_file(res, output, 0);
     else if (ft_strcmp(res[i], ">>") == 0)
