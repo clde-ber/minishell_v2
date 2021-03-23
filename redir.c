@@ -20,14 +20,15 @@ void    redir_file(char **res, char *output, int c)
     return ;
 }
 
-void    check_redir(char **res, char *output)
+int    check_redir(char **res, int i, char *output)
 {
-    if (ft_strcmp(res[1], ">") == 0)
+    if (ft_strcmp(res[i], ">") == 0)
         redir_file(res, output, 0);
-    else if (ft_strcmp(res[1], ">>") == 0)
+    else if (ft_strcmp(res[i], ">>") == 0)
         redir_file(res, output, 1);
     // else if (ft_strcmp(res[1], "<") == 0)
     //     redir_ext(command, output);
     else
-        return;
+        return (0);
+    return (1);
 }

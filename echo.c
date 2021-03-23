@@ -1,9 +1,9 @@
+#include "minishell.h"
+
 /*
 **All functions pertaining the echo implementation. WIP: echo doc disappears to be attributed to redirection functions.
 ** echo stdin goes into echo main and creates char *output to be passed if redirection exists or to be printed.
 */
-
-#include "minishell.h"
 
 char *get_word(char **res, int i, int j)
 {
@@ -36,31 +36,21 @@ char    *replace_word(char *repl, char *dest, char *str, int j)
 
     i = 0;
     k = 0;
-    // write(1, "test", 4);
     if (!(buf = malloc(sizeof(char) * (ft_strlen(dest) - (ft_strlen(str) + 1) + ft_strlen(repl) + 1))))
         return (NULL);
-    // write(1, "conf", 4);
     while (i != j)
     {
         buf[i] = dest[i];
-        // write(1, &buf[i], 1);
         i++;
     }
     l = i;
     while (repl[k])
-    {
         buf[i++] = repl[k++];
-        // write(1, &buf[i -1], 1);
-    }
     l += ft_strlen(str) + 1;
     while(dest[l])
-    {
         buf[i++] = dest[l++];
-        // write(1, &buf[i -1], 1);
-    }
     buf[i] = '\0';
     free(dest);
-    // ft_putstr_fd(buf, 1);
     dest = ft_strdup(buf);
     free(buf);
     return (dest);
@@ -77,12 +67,9 @@ void    change_str_env(t_list *var_env, char **res, int i, int j)
     str = get_word(res, i, j);
     while (var_env->next)
     {
-        // ft_putstr_fd(res[i],1);
         if (ft_strcmp(var_env->name, str) == 0)
         {
-            // free(res[i]);
             res[i] = replace_word(var_env->value, res[i], str, j);
-            // write(1, "cc", 2);
             chg = 1;
         }
         var_env = var_env->next;
@@ -125,9 +112,7 @@ void    check_quote(t_list *var_env, char **res, int i)
     {
         change_str_env(var_env, res, i, j);
         j = ft_strchr_bis(res[i], '$');
-        //write(1, "ll", 2);
     }
-    // ft_putstr_fd(res[i],1);
     if (res[i][0] == '\"')
         go_trim(res, i, 0);
     else if(res[i][0] == '\'')
@@ -143,6 +128,7 @@ void    ft_echo(char **res, t_list *var_env)
 
     i = 1;
     output = NULL;
+    option = 0;
     if (strcmp(res[i], "-n") == 0)
     {
         option = 1;
@@ -157,7 +143,6 @@ void    ft_echo(char **res, t_list *var_env)
         {
             buf = ft_strjoin(output, " ");
             free(output);
-            // output = ft_strjoin(output, " ");
             output = ft_strjoin(buf, res[i]);
             free(buf);
         }
@@ -170,5 +155,6 @@ void    ft_echo(char **res, t_list *var_env)
         output = ft_strdup(buf);
         free(buf);
     }
-    ft_putstr_fd(output, 1);
+    if (check_redir(res, i, output) == 0)
+        ft_putstr_fd(output, 1);
 }

@@ -17,12 +17,12 @@
 /*
 **Liste chainee for termcap
 */
-/*typedef struct s_list t_list;
-struct s_list{
-    char *line;
-    void *next;
-    void *prec;
-};*/
+// typedef struct s_line t_line;
+// struct s_line{
+//     char *line;
+//     void *next;
+//     void *prec;
+// };
 
 typedef struct s_list
 {
@@ -72,7 +72,7 @@ void print_env(char **tab, t_list *environ);
 /*
 **redir
 */
-void    check_redir(char **res, char *output);
+int    check_redir(char **res, int i, char *output);
 void    redir_file(char **res, char *output, int c);
 
 /*

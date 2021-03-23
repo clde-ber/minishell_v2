@@ -40,23 +40,17 @@ char *getcommand(char *str)
 void    ft_pwd(char **res)
 {
     char *path;
+    char *buf;
 
     int i = 0;
 
     if (!(path = malloc(sizeof(char) * 1000)))
         return ;
     getcwd(path, 1000);
-    if (res[1])
-    {
-        check_redir(res, path);
-        // check_pipe(res, path);
-    }
-    if (!res[1])
-    {
-        while (path[i])
-        write(1, &path[i++], 1);
-    }
+    buf = ft_strjoin(path, "\n");
     free(path);
+    if (check_redir(res, i++, buf) == 0)
+        ft_putstr_fd(buf, 1);
 }
 
 // trouve la fonction qui correspond a la commande.
@@ -107,6 +101,8 @@ int main(int ac, char **av, char **env)
     int res;
     char *command;
     t_list *var_env;
+    t_line save[2];
+
 
     end = 0;
     line = NULL;
@@ -118,7 +114,7 @@ int main(int ac, char **av, char **env)
         if (ft_strcmp(line, "exit") == 0) //builtin à coder
             end = 1;
         // printf("test:%s", line);
-         if ((command = getcommand(line)) != NULL)
+        if ((command = getcommand(line)) != NULL)
             dispatch(command, env, var_env);
     }
     free(line);
