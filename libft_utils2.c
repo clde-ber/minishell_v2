@@ -1,5 +1,25 @@
 #include "minishell.h"
 
+int ft_strrchr(const char *s, int c)
+{
+	char	to_find;
+	size_t	i;
+
+	i = ft_strlen(s);
+	to_find = c;
+	while (i)
+	{
+		if (s[i] == to_find)
+			return (i);
+		i--;
+	}
+	if (s[i] == to_find)
+		return ((char *)&s[i]);
+	return (NULL);
+}
+
+
+
 void	*ft_calloc(size_t count, size_t size)
 {
 	size_t	i;
@@ -55,8 +75,6 @@ int ft_ischarset(char *str, char c)
 	int i;
 
 	i = 0;
-//	printf("str %s\n", str);
-//	printf("c %c\n", c);
 	while (str[i])
 	{
 		if ((char)c == str[i])

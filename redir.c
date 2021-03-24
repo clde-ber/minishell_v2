@@ -28,7 +28,7 @@ int    check_redir(char **res, int i, char *output)
         redir_file(res, output, 0);
     else if (ft_strcmp(res[i], ">>") == 0)
         redir_file(res, output, 1);
-    // else if (ft_strcmp(res[1], "<") == 0)
+    // else if (ft_strcmp(res[i], "<") == 0)
     //     redir_ext(command, output);
     else
         return (0);

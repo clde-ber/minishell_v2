@@ -37,22 +37,6 @@ char *getcommand(char *str)
     return (ret);
 }
 
-void    ft_pwd(char **res)
-{
-    char *path;
-    char *buf;
-
-    int i = 0;
-
-    if (!(path = malloc(sizeof(char) * 1000)))
-        return ;
-    getcwd(path, 1000);
-    buf = ft_strjoin(path, "\n");
-    free(path);
-    if (check_redir(res, i++, buf) == 0)
-        ft_putstr_fd(buf, 1);
-}
-
 // trouve la fonction qui correspond a la commande.
 // Problemes : ici trouve le mot cle sans difference de s'il est intégré a une autre commande ou pas.
 // exemple: echo "pwd" > file pourrait trouver echo en premier.
@@ -62,7 +46,6 @@ void    dispatch(char *str, char **env, t_list *var_env)
 {
     int i;
     char **res;
-    t_list **environ;
 
     i = 0;
     if (ft_is_empty_string(str))
@@ -80,6 +63,8 @@ void    dispatch(char *str, char **env, t_list *var_env)
         ft_pwd(res);
     else if (ft_strcmp(res[0], "echo") == 0)
         ft_echo(res, var_env);
+    else if (ft_strcmp(res[0], "cd") == 0)
+        ft_cd(res);
     else if (res[0][0] == '.' && res[0][1] == '/')
         find_exe(0, str, env);
     else if (ft_strcmp(res[0], "export") == 0)
@@ -98,7 +83,6 @@ int main(int ac, char **av, char **env)
 {
     char *line;
     int end;
-    int res;
     char *command;
     t_list *var_env;
     // t_line save[2];
@@ -110,7 +94,7 @@ int main(int ac, char **av, char **env)
     while (end == 0)
     {
         write(1, "***minishell*** > ", 18);
-        res = get_next_line(0, &line);
+        get_next_line(0, &line);
         if (ft_strcmp(line, "exit") == 0) //builtin à coder
             end = 1;
         // printf("test:%s", line);

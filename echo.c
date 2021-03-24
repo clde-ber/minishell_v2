@@ -65,7 +65,7 @@ void    change_str_env(t_list *var_env, char **res, int i, int j)
     if (res[i][0] == '\'' || (j != 1 && res[i][j - 1] == '\\'))
         return ;
     str = get_word(res, i, j);
-    while (var_env->next)
+    while (var_env->next && chg == -1)
     {
         if (ft_strcmp(var_env->name, str) == 0)
         {
@@ -74,14 +74,13 @@ void    change_str_env(t_list *var_env, char **res, int i, int j)
         }
         var_env = var_env->next;
     }
+    //devrait faire \n plutot que chaine vide?
     if (chg == -1)
     {
         free(res[i]);
         res[i] = ft_strdup("");
     }
 }
-
-//WARNING should only replace first occurence of env
 
 void    go_trim(char **res, int i, int c)
 {
@@ -118,6 +117,8 @@ void    check_quote(t_list *var_env, char **res, int i)
     else if(res[i][0] == '\'')
         go_trim(res, i, 1);
 }
+
+//check si multiquote pas de mvt sur les env
 
 void    ft_echo(char **res, t_list *var_env)
 {

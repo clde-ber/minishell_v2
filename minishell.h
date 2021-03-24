@@ -68,6 +68,12 @@ t_list *set_new_env(char **env, char **tab, t_list *var_env);
 t_list	*unset(t_list *env, char **tab);
 void print_env(char **tab, t_list *environ);
 
+/*
+**path
+*/
+void    ft_pwd(char **res);
+char *minus_path(char **res, char *path, int i);
+void    ft_cd(char **res);
 
 /*
 **redir
@@ -79,21 +85,6 @@ void    redir_file(char **res, char *output, int c);
 **echo
 */
 void    ft_echo(char **res, t_list *var_env);
-
-/*
-**libft_list
-*/
-void	ft_lstdelone(t_list *lst);
-t_list	*ft_lstnew(char *name, void *value);
-void	ft_lstadd_front(t_list **alst, t_list *new);
-t_list	*ft_lstlast(t_list *lst);
-void	ft_lstadd_back(t_list **alst, t_list *new);
-
-/*
-**libft_list2
-*/
-t_list ft_record(void *lst, void *str);
-void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *), char *str);
 
 /*
 **minishell_utils
@@ -126,6 +117,7 @@ char	*ft_strdup(const char *s1);
 /*
 **libft_utils2
 */
+int ft_strrchr(const char *s, int c);
 void	*ft_calloc(size_t count, size_t size);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 void	*ft_memmove(void *dst, const void *src, size_t len);
@@ -137,5 +129,26 @@ int ft_ischarset(char *str, char c);
 void	ft_putstr_fd(char *s, int fd);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char			*ft_strtrim(char const *s1, char const *set);
+
+/*
+**libft_utils4
+*/
+int	ft_strlcpy(char *dst, const char *src, int dstsize);
+
+/*
+**libft_list
+*/
+void	ft_lstdelone(t_list *lst);
+t_list	*ft_lstnew(char *name, void *value);
+void	ft_lstadd_front(t_list **alst, t_list *new);
+t_list	*ft_lstlast(t_list *lst);
+void	ft_lstadd_back(t_list **alst, t_list *new);
+
+/*
+**libft_list2
+*/
+t_list ft_record(void *lst, void *str);
+void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *), char *str);
+
 
 #endif
