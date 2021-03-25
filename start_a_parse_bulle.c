@@ -42,7 +42,7 @@ char *getcommand(char *str)
 // exemple: echo "pwd" > file pourrait trouver echo en premier.
 // need parsing plus precis en lettre par lettre
 
-void    dispatch(char *str, char **env, t_list *var_env)
+void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 {
     int i;
     char **res;
@@ -68,13 +68,13 @@ void    dispatch(char *str, char **env, t_list *var_env)
     else if (res[0][0] == '.' && res[0][1] == '/')
         find_exe(0, str, env);
     else if (ft_strcmp(res[0], "export") == 0)
-        var_env = set_env(env, res, var_env);
+        var_env = set_env(env, res, var_env, cmd);
     else if (ft_strcmp(res[0], "env") == 0)
         print_env(env, var_env);
     else if (ft_strcmp(res[0], "unset") == 0)
         var_env = unset(var_env, res);
     else
-        printf("nope");
+        set_args(res, env, cmd->path);
 }
 
 // pour l'instant, ne prend qu'une commande. La commande doit etre enregistrée (pas fait), découpée (fait mais 
@@ -85,12 +85,15 @@ int main(int ac, char **av, char **env)
     int end;
     char *command;
     t_list *var_env;
+    t_command *cmd;
     // t_line save[2];
 
 
     end = 0;
     line = NULL;
-    var_env = set_new_env(env, ft_calloc(2, sizeof(char *)), var_env);
+    if (!(cmd = malloc(sizeof(t_command))))
+        return (NULL);
+    var_env = set_new_env(env, ft_calloc(2, sizeof(char *)), var_env, cmd);
     while (end == 0)
     {
         write(1, "***minishell*** > ", 18);
@@ -99,7 +102,7 @@ int main(int ac, char **av, char **env)
             end = 1;
         // printf("test:%s", line);
         if ((command = getcommand(line)) != NULL)
-            dispatch(command, env, var_env);
+            dispatch(command, env, var_env, cmd);
     }
     free(line);
     return (0);

@@ -32,6 +32,11 @@ typedef struct s_list
     struct s_list *next;
 }               t_list;
 
+typedef struct s_command
+{
+    char *path;
+}               t_command;
+
 //droit a variable globale comme ça? si oui tant mieux
 extern t_list *var_env;
 
@@ -40,7 +45,7 @@ extern t_list *var_env;
 */
 char *getcommand(char *str);
 void    ft_pwd(char **res);
-void    dispatch(char *str, char **env, t_list *var_env);
+void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd);
 int ft_is_empty_string(char *str);
 
 /*
@@ -63,8 +68,8 @@ int find_exe(int index, char *path, char **env);
 **env
 */
 char *ft_get_name(char *str);
-t_list *set_env(char **env, char **tab, t_list *var_env);
-t_list *set_new_env(char **env, char **tab, t_list *var_env);
+t_list *set_env(char **env, char **tab, t_list *var_env, t_command *cmd);
+t_list *set_new_env(char **env, char **tab, t_list *var_env, t_command *cmd);
 t_list	*unset(t_list *env, char **tab);
 void print_env(char **tab, t_list *environ);
 
@@ -85,6 +90,18 @@ void    redir_file(char **res, char *output, int c);
 **echo
 */
 void    ft_echo(char **res, t_list *var_env);
+
+/*
+**exec
+*/
+int set_args(char **res, char **env, char *path);
+int exec_command(char **args, char **res, char *path, int j);
+int read_dir(char *path, char *command);
+
+/*
+**parse_path
+*/
+char **parse_path(char const *s, char c);
 
 /*
 **minishell_utils
@@ -147,8 +164,8 @@ void	ft_lstadd_back(t_list **alst, t_list *new);
 /*
 **libft_list2
 */
-t_list ft_record(void *lst, void *str);
-void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *), char *str);
+t_list ft_record(void *lst, void *str, void *cmd);
+void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *, void *), char *str, t_command *cmd);
 
 
 #endif

@@ -26,7 +26,7 @@ char *ft_get_name(char *str)
     return (copy);
 }
 
-t_list *set_new_env(char **env, char **tab, t_list *var_env)
+t_list *set_new_env(char **env, char **tab, t_list *var_env, t_command *cmd)
 {
 	int k;
     t_list *tmp;
@@ -40,13 +40,13 @@ t_list *set_new_env(char **env, char **tab, t_list *var_env)
 	while (k >= 0)
 	{
 		ft_lstadd_front(&var_env, ft_lstnew(ft_get_name(env[k]), ft_strchr(env[k], '=') + 1));
-		ft_lstiter(var_env, &ft_record, env[k]);
+		ft_lstiter(var_env, &ft_record, env[k], cmd);
 		k--;
 	}
 	return (var_env);
 }
 
-t_list *set_env(char **env, char **tab, t_list *var_env)
+t_list *set_env(char **env, char **tab, t_list *var_env, t_command *cmd)
 {
     int i;
 	int j;
@@ -60,7 +60,7 @@ t_list *set_env(char **env, char **tab, t_list *var_env)
 	while (i >= 1)
     {
 		ft_lstadd_back(&var_env, ft_lstnew(ft_get_name(tab[i]), ft_strchr(tab[i], '=') + 1));
-		ft_lstiter(var_env, &ft_record, tab[i]);
+		ft_lstiter(var_env, &ft_record, tab[i], cmd);
 		i--;
 	}
 	return (var_env);
