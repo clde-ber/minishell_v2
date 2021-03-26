@@ -109,12 +109,11 @@ int main(int ac, char **av, char **env)
         get_next_line(0, &line);
         if (ft_strcmp(line, "exit") == 0) //builtin à coder
             end = 1;
-        // printf("test:%s", line);
         if ((command = getcommand(line)) != NULL)
             dispatch(command, env, var_env, cmd);
         free(line);
+        free(command);
     }
-    free(command);
     ft_lstdel(var_env);
     ft_free(to_free, 2);
     free(cmd->path);

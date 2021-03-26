@@ -48,7 +48,7 @@ t_list *set_new_env(char **env, char **tab, t_list *var_env, t_command *cmd)
 	return (var_env);
 }
 
-void *check_doublons(char **env, char **tab, t_list *var_env, t_command *cmd)
+void check_doublons(char **env, char **tab, t_list *var_env, t_command *cmd)
 {
 	int k;
 	int l;
@@ -87,7 +87,7 @@ void *check_doublons(char **env, char **tab, t_list *var_env, t_command *cmd)
 	}
 }
 
-void *set_env(char **env, char **tab, t_list *var_env, t_command *cmd)
+void set_env(char **env, char **tab, t_list *var_env, t_command *cmd)
 {
     int i;
 	int j;
@@ -126,7 +126,7 @@ void *set_env(char **env, char **tab, t_list *var_env, t_command *cmd)
 	}
 }
 
-void	*unset(t_list *env, char **tab)
+void	unset(t_list *env, char **tab)
 {
 	int i;
 	int j = 0;
@@ -151,7 +151,7 @@ void	*unset(t_list *env, char **tab)
 }
 
 // a pas besoin de tab? a enlever?
-void *print_env(char **tab, t_list *environ)
+void print_env(char **tab, t_list *environ)
 {
 	char *str = NULL;
 	char *str2 = NULL;

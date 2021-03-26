@@ -54,7 +54,7 @@ int exec_command(char **args, char **res, char *path, int j)
             free(argv[0]);
             to_free2 = ft_strjoin(tab[x], "/");
             argv[0] = ft_strjoin(to_free2, res[0]);
-            if (ret = execve(argv[0], argv, envp) == -1)
+            if ((ret = execve(argv[0], argv, envp)) == -1)
             free(to_free2);
         	x++;
         }
