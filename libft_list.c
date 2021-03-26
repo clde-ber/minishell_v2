@@ -15,8 +15,12 @@ t_list	*ft_lstnew(char *name, void *value)
 
 	if (!(new = malloc(sizeof(t_list))))
 		return (NULL);
-	new->name = name;
-    new->value = value;
+	new->name = ft_strdup(name);
+	free(name);
+	name = 0;
+    new->value = ft_strdup(value);
+	free(value);
+	value = 0;
 	new->next = NULL;
     new->prec = NULL;
 	return (new);
