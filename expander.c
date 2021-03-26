@@ -33,7 +33,7 @@ char *search_env_value(char *str, t_list *var_env)
         }
         var_env = var_env->next;
     }
-    return (NULL);
+    return (ft_strdup(""));
 }
 
 char *ft_get_var_name(char *str)
@@ -142,8 +142,8 @@ char *expander(char *res, t_list *var_env)
             {
                 str[i] = res[j];
                 i++;
+                j++;
             }
-            j++;
         }
     }
     else
