@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char *search_env_name(char *str, t_list *var_env)
+/*char *search_env_name(char *str, t_list *var_env)
 {
     int chg;
     char *ret;
@@ -16,7 +16,7 @@ char *search_env_name(char *str, t_list *var_env)
         var_env = var_env->next;
     }
     return (ft_strdup(""));
-}
+}*/
 
 char *search_env_value(char *str, t_list *var_env)
 {
@@ -43,7 +43,20 @@ char *ft_get_var_name(char *str)
     int len;
 
     i = 0;
-    len = ft_strlen(str);
+    while (str[i] && ft_isalnum(str[i]))
+        i++;
+    len = i;
+    i = 0;
+    if (!(res = malloc(sizeof(char) * (len + 1))))
+        return (0);
+    while (i < len)
+    {
+        res[i] = str[i];
+        i++;
+    }
+    res[i] = '\0';
+    return (res);
+/*    len = ft_strlen(str);
     if (str[len - 1] == '\"')
     {
         if (!(res = malloc(sizeof(char) * (len + 1))))
@@ -57,7 +70,7 @@ char *ft_get_var_name(char *str)
     }
     else
         res = ft_strdup(str);
-    return (res); 
+    return (res); */
 }
 
 char *antislashes_a_quotes(char *str)
@@ -100,38 +113,35 @@ char *expander(char *res, t_list *var_env)
     j = 0;
     k = 0;
     boolean = 0;
+    len = ft_strlen(res);
     if (!(str = malloc(sizeof(char) * 255)))
         return (0);
-    len = ft_strlen(res);
     if (len > 1 && res[0] == '\"' && res[len - 1] == '\"')
     {
         j++;
-        while (j < len - 1)
+        if (ft_strchr(res, '$') == NULL)
         {
-            if (res[j] == '$' && res[j + 1] != '$')
-            {
-                j++;
-                to_free2 = ft_get_var_name(&res[j]);
-                to_free = search_env_value(to_free2, var_env);
-                while (to_free[k])
-                {   
-                    str[i] = to_free[k];
-                    k++;
-                    i++;
-                }
-                j += ft_strlen(to_free2);
-                k = 0;
-                boolean = 1;
-            }
-            else
+            while (res[j])
             {
                 str[i] = res[j];
                 i++;
                 j++;
             }
         }
-        if (boolean == 1)
+        else
+        {
+            while (res[j + 1] && (!(res[j] == '$' && res[j + 1] != '$')))
+                j++;
+            to_free2 = ft_get_var_name(&res[j + 1]);
+            to_free = search_env_value(to_free2, var_env);
+            while (to_free[k])
+            {   
+                str[i] = to_free[k];
+                k++;
+                i++;
+            }
             free(to_free2);
+        }
     }
     else if (len > 1 && res[0] == '\'' && res[len - 1] == '\'')
     {
@@ -148,32 +158,29 @@ char *expander(char *res, t_list *var_env)
     }
     else
     {
-        while (j < len)
+        if (ft_strchr(res, '$') == NULL)
         {
-            if (res[j] == '$' && res[j + 1] != '$')
-            {
-                j++;
-                to_free2 = ft_get_var_name(&res[j]);
-                to_free = search_env_value(to_free2, var_env);
-                while (to_free[k])
-                {   
-                    str[i] = to_free[k];
-                    k++;
-                    i++;
-                }
-                j += ft_strlen(to_free2);
-                k = 0;
-                boolean = 1;
-            }
-            else
+            while (res[j])
             {
                 str[i] = res[j];
                 i++;
                 j++;
             }
         }
-        if (boolean == 1)
+        else
+        {
+            while (res[j + 1] && (!(res[j] == '$' && res[j + 1] != '$')))
+                j++;
+            to_free2 = ft_get_var_name(&res[j + 1]);
+            to_free = search_env_value(to_free2, var_env);
+            while (to_free[k])
+            {   
+                str[i] = to_free[k];
+                k++;
+                i++;
+            }
             free(to_free2);
+        }
     }
     str[i] = '\0';
     str = antislashes_a_quotes(str);

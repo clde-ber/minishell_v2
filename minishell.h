@@ -59,7 +59,7 @@ char			**ft_split(char const *s, char *str);
 /*
 **expander
 */
-char *search_env_name(char *str, t_list *var_env);
+//char *search_env_name(char *str, t_list *var_env);
 char *search_env_value(char *str, t_list *var_env);
 char *antislashes_a_quotes(char *str);
 char *expander(char *res, t_list *var_env);
@@ -161,6 +161,7 @@ char			*ft_strtrim(char const *s1, char const *set);
 **libft_utils4
 */
 int	ft_strlcpy(char *dst, const char *src, int dstsize);
+int	ft_isalnum(int c);
 
 /*
 **libft_list
