@@ -108,7 +108,9 @@ char *expander(char *res, t_list *var_env)
 
     i = 0;
     len = ft_strlen(res);
-    if (ft_strchr(res, '$') == NULL)
+    if (ft_strlen(res) == 2 && res[0] == '$' && res[1] == '$')
+        return (ft_strdup(res));
+    else if (ft_strchr(res, '$') == NULL)
         return (ft_strdup(res));
     else if (res[0] == '\'' && res[len - 1] == '\'')
         return (ft_strtrim(res, "\'"));
