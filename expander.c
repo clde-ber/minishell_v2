@@ -117,9 +117,9 @@ char *expander(char *res, t_list *var_env)
         while (res[i + 1] && (!(res[i] == '$' && res[i + 1] != '$')))
             i++;
         if (res[0] == '\"' && res[len - 1] == '\"')
-            to_free2 = ft_strtrim(res, "$\"");
+            to_free2 = ft_strtrim(&res[i], "$\"");
         else
-            to_free2 = ft_strtrim(res, "$");
+            to_free2 = ft_strtrim(&res[i], "$");
         if (to_free = search_env_value(to_free2, var_env))
         {
             if (!(str = malloc(sizeof(char) * 255)))
