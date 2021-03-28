@@ -33,9 +33,9 @@ char *search_env_value(char *str, t_list *var_env)
         }
         var_env = var_env->next;
     }
-    return (ft_strdup(""));
+    return (NULL);
 }
-
+/*
 char *ft_get_var_name(char *str)
 {
     int i;
@@ -56,7 +56,7 @@ char *ft_get_var_name(char *str)
     }
     res[i] = '\0';
     return (res);
-/*    len = ft_strlen(str);
+    len = ft_strlen(str);
     if (str[len - 1] == '\"')
     {
         if (!(res = malloc(sizeof(char) * (len + 1))))
@@ -70,8 +70,8 @@ char *ft_get_var_name(char *str)
     }
     else
         res = ft_strdup(str);
-    return (res); */
-}
+    return (res); 
+}*/
 
 char *antislashes_a_quotes(char *str)
 {
@@ -102,88 +102,38 @@ char *expander(char *res, t_list *var_env)
 {
     int i;
     int len;
-    int j;
-    int k;
     char *str;
     char *to_free;
     char *to_free2;
-    int boolean;
 
     i = 0;
-    j = 0;
-    k = 0;
-    boolean = 0;
     len = ft_strlen(res);
-    if (!(str = malloc(sizeof(char) * 255)))
-        return (0);
-    if (len > 1 && res[0] == '\"' && res[len - 1] == '\"')
-    {
-        j++;
-        if (ft_strchr(res, '$') == NULL)
-        {
-            while (res[j])
-            {
-                str[i] = res[j];
-                i++;
-                j++;
-            }
-        }
-        else
-        {
-            while (res[j + 1] && (!(res[j] == '$' && res[j + 1] != '$')))
-                j++;
-            to_free2 = ft_get_var_name(&res[j + 1]);
-            to_free = search_env_value(to_free2, var_env);
-            while (to_free[k])
-            {   
-                str[i] = to_free[k];
-                k++;
-                i++;
-            }
-            free(to_free2);
-        }
-    }
-    else if (len > 1 && res[0] == '\'' && res[len - 1] == '\'')
-    {
-        j++;
-        while (j < len - 1)
-        {
-            if (i < len - 2)
-            {
-                str[i] = res[j];
-                i++;
-                j++;
-            }
-        }
-    }
+    if (ft_strchr(res, '$') == NULL)
+        return (ft_strdup(res));
+    else if (res[0] == '\'' && res[len - 1] == '\'')
+        return (ft_strtrim(res, "\'"));
     else
     {
-        if (ft_strchr(res, '$') == NULL)
-        {
-            while (res[j])
-            {
-                str[i] = res[j];
-                i++;
-                j++;
-            }
-        }
+        while (res[i + 1] && (!(res[i] == '$' && res[i + 1] != '$')))
+            i++;
+        if (res[0] == '\"' && res[len - 1] == '\"')
+            to_free2 = ft_strtrim(res, "$\"");
         else
+            to_free2 = ft_strtrim(res, "$");
+        if (to_free = search_env_value(to_free2, var_env))
         {
-            while (res[j + 1] && (!(res[j] == '$' && res[j + 1] != '$')))
-                j++;
-            to_free2 = ft_get_var_name(&res[j + 1]);
-            to_free = search_env_value(to_free2, var_env);
-            while (to_free[k])
+            if (!(str = malloc(sizeof(char) * 255)))
+                return (0);
+            i = 0;
+            while (to_free[i])
             {   
-                str[i] = to_free[k];
-                k++;
+                str[i] = to_free[i];
                 i++;
             }
+            str[i] = '\0';
             free(to_free2);
         }
     }
-    str[i] = '\0';
-    str = antislashes_a_quotes(str);
     return (str);
 }
 
