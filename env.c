@@ -108,7 +108,10 @@ void set_env(char **env, char **tab, t_list *var_env, t_command *cmd)
 			if (strcmp((str = ft_get_name(tab[k])), var_env->name) == 0)
 			{
 				free(var_env->value);
-				var_env->value = ft_strdup(ft_strchr(tab[k], '=') + 1);
+				if (ft_strchr(tab[k], '='))
+					var_env->value = ft_strdup(ft_strchr(tab[k], '=') + 1);
+				else
+					var_env->value = ft_strdup("");
 				tab[k][0] = '=';
 				tab[k][1] = '\0';
 			}
