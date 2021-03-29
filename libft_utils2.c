@@ -14,8 +14,8 @@ int ft_strrchr(const char *s, int c)
 		i--;
 	}
 	if (s[i] == to_find)
-		return ((char *)&s[i]);
-	return (NULL);
+		return (i);
+	return (-1);
 }
 
 
