@@ -57,6 +57,15 @@ void		*ft_free(char **res, int j);
 char			**ft_split(char const *s, char *str);
 
 /*
+**expander
+*/
+//char *search_env_name(char *str, t_list *var_env);
+char *search_env_value(char *str, t_list *var_env);
+char *antislashes_a_quotes(char *str);
+char *expander(char *res, t_list *var_env);
+char **parse_res(char **res, t_list *var_env);
+
+/*
 **find_a_launch_exe
 */
 char	*ft_get_filename(const char *s, int c);
@@ -68,10 +77,11 @@ int find_exe(int index, char *path, char **env);
 **env
 */
 char *ft_get_name(char *str);
-t_list *set_env(char **env, char **tab, t_list *var_env, t_command *cmd);
+void set_env(char **env, char **tab, t_list *var_env, t_command *cmd);
 t_list *set_new_env(char **env, char **tab, t_list *var_env, t_command *cmd);
-t_list	*unset(t_list *env, char **tab);
+void	unset(t_list *env, char **tab);
 void print_env(char **tab, t_list *environ);
+void check_doublons(char **env, char **tab, t_list *var_env, t_command *cmd);
 
 /*
 **path
@@ -151,6 +161,7 @@ char			*ft_strtrim(char const *s1, char const *set);
 **libft_utils4
 */
 int	ft_strlcpy(char *dst, const char *src, int dstsize);
+int	ft_isalnum(int c);
 
 /*
 **libft_list
@@ -166,6 +177,7 @@ void	ft_lstadd_back(t_list **alst, t_list *new);
 */
 t_list ft_record(void *lst, void *str, void *cmd);
 void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *, void *), char *str, t_command *cmd);
+void ft_lstdel(t_list *lst);
 
 
 #endif
