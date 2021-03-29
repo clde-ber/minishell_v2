@@ -46,6 +46,7 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 {
     int i;
     char **res;
+    char **parsed_res;
 
     i = 0;
     if (ft_is_empty_string(str))
@@ -68,13 +69,20 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
     else if (res[0][0] == '.' && res[0][1] == '/')
         find_exe(0, str, env);
     else if (ft_strcmp(res[0], "export") == 0)
-        var_env = set_env(env, res, var_env, cmd);
+    {
+        check_doublons(env, res, var_env, cmd);
+        set_env(env, res, var_env, cmd);
+    }
     else if (ft_strcmp(res[0], "env") == 0)
         print_env(env, var_env);
     else if (ft_strcmp(res[0], "unset") == 0)
-        var_env = unset(var_env, res);
+        unset(var_env, res);
     else
-        set_args(res, env, cmd->path);
+    {
+        set_args((parsed_res = parse_res(res, var_env)), env, cmd->path);
+        ft_free(parsed_res, i + 1);
+    }
+    ft_free(res, i + 1);
 }
 
 // pour l'instant, ne prend qu'une commande. La commande doit etre enregistrée (pas fait), découpée (fait mais 
@@ -86,6 +94,7 @@ int main(int ac, char **av, char **env)
     char *command;
     t_list *var_env;
     t_command *cmd;
+    char **to_free;
     // t_line save[2];
 
 
@@ -93,17 +102,21 @@ int main(int ac, char **av, char **env)
     line = NULL;
     if (!(cmd = malloc(sizeof(t_command))))
         return (NULL);
-    var_env = set_new_env(env, ft_calloc(2, sizeof(char *)), var_env, cmd);
+    var_env = set_new_env(env, (to_free = ft_calloc(2, sizeof(char *))), var_env, cmd);
     while (end == 0)
     {
         write(1, "***minishell*** > ", 18);
         get_next_line(0, &line);
         if (ft_strcmp(line, "exit") == 0) //builtin à coder
             end = 1;
-        // printf("test:%s", line);
         if ((command = getcommand(line)) != NULL)
             dispatch(command, env, var_env, cmd);
+        free(line);
+        free(command);
     }
-    free(line);
+    ft_lstdel(var_env);
+    ft_free(to_free, 2);
+    free(cmd->path);
+    free(cmd);
     return (0);
 }

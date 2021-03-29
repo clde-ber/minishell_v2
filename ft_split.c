@@ -28,6 +28,11 @@ size_t	len_wd(char const *str, char *charset)
 			i--;
 			boolean = 1;
 		}
+		if (str[i] == '$' && str[i + 1] == '$')
+		{
+			i++;
+			boolean = 1;
+		}
 		i++;
 	}
 	return (i >= ft_strlen(str)) ? ft_strlen(str) : i;
