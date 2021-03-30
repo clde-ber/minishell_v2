@@ -71,7 +71,7 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
         find_exe(0, str, env);
     else if (ft_strcmp(res[0], "export") == 0)
     {
-        check_doublons(env, res, var_env, cmd);
+        check_doublons(env, parsed_res, var_env, cmd);
         set_env(env, parsed_res, var_env, cmd);
     }
     else if (ft_strcmp(res[0], "env") == 0)
