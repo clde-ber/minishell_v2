@@ -87,7 +87,7 @@ char *antislashes_a_quotes(char *str)
         return (0);
     while (i < len)
     {
-        if (str[i] == '\\' || str[i] == '\'' || str[i] == '\"')
+        if (str[i] == '\\')
             i++;
         ret[j] = str[i];
         j++;
@@ -116,57 +116,61 @@ char *expander(char *res, t_list *var_env, char **args)
     if (ft_strlen(res) == 2 && res[0] == '$' && res[1] == '$')
         to_free2 = ft_strdup(res);
     else if (res[0] == '\'' && ft_strcmp(args[0], "export") && ft_strcmp(args[0], "unset"))
-    {
-        to_free2 =  ft_strtrim(res, "\'");
-        if (to_free2[0] == '$')
-            return (search_env_value(to_free2 + 1, var_env));
-        else
-            return (to_free2);
-    }
+        return (ft_strtrim(res, "\'"));
     else if (ft_strcmp(args[0], "export") && ft_strcmp(args[0], "unset"))
     {
         to_free2 = ft_strtrim(res, "\"");
         if (to_free2[0] == '$')
-            return (search_env_value(to_free2 + 1, var_env));
+            return (search_env_value(parse_path(&to_free2[1], '$')[0], var_env));
         else
-            return (to_free2);
+            return (parse_path(to_free2, '$')[0]);
     }
     else
     {
         if (ft_strchr(res, '=') && ft_strcmp(args[0], "export") == 0)
         {
-            if (parse_path(res, '=')[0] && parse_path(res, '=')[0][0] == '\"')
-                trim_first = ft_strtrim(parse_path(res, '=')[0], "\"");
-            else
-                trim_first = parse_path(res, '=')[0];
-            if (parse_path(res, '=')[0] && parse_path(res, '=')[1][0] == '\"')
-                trim_secd = ft_strtrim(parse_path(res, '=')[1], "\"");
-            else
-                trim_secd = parse_path(res, '=')[1];
+            trim_first = parse_path(res, '=')[0];
+            trim_secd = parse_path(res, '=')[1];
+            if (trim_first && trim_first[0] == '\"')
+                trim_first = ft_strtrim(trim_first, "\"");
+            else if (trim_first && trim_first[0] == '$')
+                trim_first = search_env_value(trim_first, var_env);
+            else if (trim_first && trim_first[0] == '\'')
+                trim_first = ft_strtrim(trim_first, "\'");
+            if (trim_secd && trim_secd[0] == '\"')
+                trim_secd = ft_strtrim(trim_secd, "\"");
+            else if (trim_secd && trim_secd[0] == '$')
+                trim_secd = search_env_value(trim_secd, var_env);
+            else if (trim_secd && trim_secd[0] == '\'')
+                trim_secd = ft_strtrim(trim_secd, "\'");
             if (trim_first[0] == '$')
-                trim_first = search_env_value(parse_path(trim_first + 1, '$')[0], var_env);
+                trim_first = search_env_value(parse_path(&trim_first[1], '$')[0], var_env);
             else
                 trim_first = parse_path(trim_first, '$')[0];
             if (trim_secd[0] == '$')
-                trim_secd = search_env_value(parse_path(trim_secd + 1, '$')[0], var_env);
+                trim_secd = search_env_value(parse_path(&trim_secd[1], '$')[0], var_env);
             else
                 trim_secd = parse_path(trim_secd, '$')[0];
-            printf("str = %s\n", ft_strjoin(ft_strjoin(trim_first, "="), trim_secd));
-            return (ft_strjoin(ft_strjoin(trim_first, "="), trim_secd));
+            return (ft_strjoin(ft_strjoin(ft_strtrim(trim_first, "\'"), "="), ft_strtrim(trim_secd, "\'")));
         }
         else if (ft_strcmp(args[0], "export") == 0 && (!(ft_strchr(res, '='))))
-            to_free2 = ft_strdup("");
+            return (ft_strdup(""));
         else if (ft_strcmp(args[0], "unset") == 0)
         {
             if (res[0] == '$')
                 to_free2 = ft_strdup("");
-            if (res[0] == '\'')
-                to_free2 = ft_strtrim(res, "\'");
+            if (res[0] == '\'' && res[1] == '$')
+                to_free2 = parse_path(ft_strtrim(&res[1], "\'"), '$')[0];
+            if (res[0] == '\'' && res[1] != '$')
+                to_free2 = parse_path(ft_strtrim(res, "\'"), '$')[0];
+            else if (res[0] == '\"' && res[1] == '$')
+                to_free2 = parse_path(ft_strtrim(&res[1], "\""), '$')[0];
             else
-                to_free2 = ft_strtrim(res, "\"");
+                to_free2 = parse_path(ft_strtrim(res, "\""), '$')[0];
+            return (to_free2);
         }
     }
-    return (to_free2);
+    return (ft_strdup(""));
 }
 
 char **parse_res(char **res, t_list *var_env)
