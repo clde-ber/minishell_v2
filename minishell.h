@@ -40,6 +40,10 @@ typedef struct s_command
 //droit a variable globale comme ça? si oui tant mieux
 extern t_list *var_env;
 
+//A DELETE
+// dans debug_to_delete
+void	ft_putstr_nbr(int i, int fd);
+
 /*
 **start_a_parse_bulle
 */

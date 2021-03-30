@@ -3,7 +3,7 @@
 int ft_strrchr(const char *s, int c)
 {
 	char	to_find;
-	size_t	i;
+	int	i;
 
 	i = ft_strlen(s);
 	to_find = c;
@@ -17,8 +17,6 @@ int ft_strrchr(const char *s, int c)
 		return (i);
 	return (-1);
 }
-
-
 
 void	*ft_calloc(size_t count, size_t size)
 {
