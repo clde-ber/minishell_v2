@@ -79,11 +79,8 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
     else if (ft_strcmp(res[0], "unset") == 0)
         unset(var_env, parsed_res);
     else
-    {
         set_args(parsed_res, env, cmd->path);
-        ft_free(parsed_res, i + 1);
-    }
-    ft_free(res, i + 1);
+    //    ft_free(parsed_res, i + 1);
 }
 
 // pour l'instant, ne prend qu'une commande. La commande doit etre enregistrée (pas fait), découpée (fait mais 

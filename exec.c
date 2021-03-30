@@ -91,7 +91,7 @@ int set_args(char **res, char **env, char *path)
             return (0);
         while (index + 1 < i)
         {
-            args[index] = ft_strdup(res[index + 1]);
+            args[index] = res[index + 1];
             index++;
         }
         args[index] = NULL;

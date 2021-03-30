@@ -94,7 +94,7 @@ char *antislashes_a_quotes(char *str)
         i++;
     }
     ret[j] = '\0';
-    free(str);
+//    free(str);
     return (ret);
 }
 
@@ -106,26 +106,65 @@ char *expander(char *res, t_list *var_env, char **args)
     char *to_free;
     char *to_free2;
     char *tmp;
+    char *trim_first;
+    char *trim_secd;
 
     i = 0;
     len = ft_strlen(res);
+    trim_first = NULL;
+    trim_secd = NULL;
     if (ft_strlen(res) == 2 && res[0] == '$' && res[1] == '$')
-        return (ft_strdup(res));
-    else if (ft_strchr(res, '$') == NULL)
-        return (ft_strdup(res));
-    else if (res[0] == '\'' && res[len - 1] == '\'')
-        return (ft_strtrim(res, "\'"));
+        to_free2 = ft_strdup(res);
+    else if (res[0] == '\'' && ft_strcmp(args[0], "export") && ft_strcmp(args[0], "unset"))
+    {
+        to_free2 =  ft_strtrim(res, "\'");
+        if (to_free2[0] == '$')
+            return (search_env_value(to_free2 + 1, var_env));
+        else
+            return (to_free2);
+    }
+    else if (ft_strcmp(args[0], "export") && ft_strcmp(args[0], "unset"))
+    {
+        to_free2 = ft_strtrim(res, "\"");
+        if (to_free2[0] == '$')
+            return (search_env_value(to_free2 + 1, var_env));
+        else
+            return (to_free2);
+    }
     else
     {
-        if ((tmp = search_env_name(parse_path(ft_strtrim(parse_path(res, '=')[0], "\""), '$')[0], var_env))
-        && (ft_strcmp(args[0], "export") == 0 || ft_strcmp(args[0], "unset") == 0))
-            to_free2 = ft_strjoin(ft_strjoin(search_env_name(parse_path(ft_strtrim(parse_path(res, '=')[0], "\""), '$')[0],
-            var_env), "="), search_env_value(parse_path(ft_strtrim(parse_path(res, '=')[1], "\""), '$')[0], var_env));
-        else if ((!(tmp)) && (ft_strcmp(args[0], "export") == 0 || ft_strcmp(args[0], "unset") == 0))
-            to_free2 = ft_strjoin(ft_strjoin(parse_path(ft_strtrim(parse_path(res, '=')[0], "\""), '$')[0], "="),
-            search_env_value(parse_path(ft_strtrim(parse_path(res, '=')[1], "\""), '$')[0], var_env));
-        else
-            to_free2 = search_env_value(parse_path(res, '$')[0], var_env);
+        if (ft_strchr(res, '=') && ft_strcmp(args[0], "export") == 0)
+        {
+            if (parse_path(res, '=')[0] && parse_path(res, '=')[0][0] == '\"')
+                trim_first = ft_strtrim(parse_path(res, '=')[0], "\"");
+            else
+                trim_first = parse_path(res, '=')[0];
+            if (parse_path(res, '=')[0] && parse_path(res, '=')[1][0] == '\"')
+                trim_secd = ft_strtrim(parse_path(res, '=')[1], "\"");
+            else
+                trim_secd = parse_path(res, '=')[1];
+            if (trim_first[0] == '$')
+                trim_first = search_env_value(parse_path(trim_first + 1, '$')[0], var_env);
+            else
+                trim_first = parse_path(trim_first, '$')[0];
+            if (trim_secd[0] == '$')
+                trim_secd = search_env_value(parse_path(trim_secd + 1, '$')[0], var_env);
+            else
+                trim_secd = parse_path(trim_secd, '$')[0];
+            printf("str = %s\n", ft_strjoin(ft_strjoin(trim_first, "="), trim_secd));
+            return (ft_strjoin(ft_strjoin(trim_first, "="), trim_secd));
+        }
+        else if (ft_strcmp(args[0], "export") == 0 && (!(ft_strchr(res, '='))))
+            to_free2 = ft_strdup("");
+        else if (ft_strcmp(args[0], "unset") == 0)
+        {
+            if (res[0] == '$')
+                to_free2 = ft_strdup("");
+            if (res[0] == '\'')
+                to_free2 = ft_strtrim(res, "\'");
+            else
+                to_free2 = ft_strtrim(res, "\"");
+        }
     }
     return (to_free2);
 }
@@ -149,11 +188,12 @@ char **parse_res(char **res, t_list *var_env)
         || (res[i][0] == '\"' && res[i][ft_strlen(res[i]) - 1] == '\"'))
         && res[i + 1] && ft_strchr(res[i + 1], '='))
         {
-            parsed_res[j] = expander(ft_strjoin(res[i], res[i + 1]), var_env, res);
+            parsed_res[j] = expander(antislashes_a_quotes(ft_strjoin(res[i], res[i + 1])), var_env, res);
             i++;
         }
         else
-            parsed_res[j] = expander(res[i], var_env, res);
+            parsed_res[j] = expander(antislashes_a_quotes(res[i]), var_env, res);
+        printf("%s\n", parsed_res[j]);
         i++;
         j++;
     }

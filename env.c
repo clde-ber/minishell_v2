@@ -143,7 +143,7 @@ void	unset(t_list *env, char **tab)
 	{
 		while (i < j)
 		{
-			if (strcmp(tab[i], env->name) == 0)
+			if (strcmp(ft_get_name(tab[i]), env->name) == 0)
 			{
 				env->name = ft_strdup("");
 				env->value = ft_strdup("");
