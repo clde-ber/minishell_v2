@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-/*char *search_env_name(char *str, t_list *var_env)
+char *search_env_name(char *str, t_list *var_env)
 {
     int chg;
     char *ret;
@@ -15,8 +15,8 @@
         }
         var_env = var_env->next;
     }
-    return (ft_strdup(""));
-}*/
+    return (NULL);
+}
 
 char *search_env_value(char *str, t_list *var_env)
 {
@@ -33,7 +33,7 @@ char *search_env_value(char *str, t_list *var_env)
         }
         var_env = var_env->next;
     }
-    return (NULL);
+    return (ft_strdup(""));
 }
 /*
 char *ft_get_var_name(char *str)
@@ -98,13 +98,14 @@ char *antislashes_a_quotes(char *str)
     return (ret);
 }
 
-char *expander(char *res, t_list *var_env)
+char *expander(char *res, t_list *var_env, char **args)
 {
     int i;
     int len;
     char *str;
     char *to_free;
     char *to_free2;
+    char *tmp;
 
     i = 0;
     len = ft_strlen(res);
@@ -116,27 +117,17 @@ char *expander(char *res, t_list *var_env)
         return (ft_strtrim(res, "\'"));
     else
     {
-        while (res[i + 1] && (!(res[i] == '$' && res[i + 1] != '$')))
-            i++;
-        if (res[0] == '\"' && res[len - 1] == '\"')
-            to_free2 = ft_strtrim(&res[i], "$\"");
+        if ((tmp = search_env_name(parse_path(ft_strtrim(parse_path(res, '=')[0], "\""), '$')[0], var_env))
+        && (ft_strcmp(args[0], "export") == 0 || ft_strcmp(args[0], "unset") == 0))
+            to_free2 = ft_strjoin(ft_strjoin(search_env_name(parse_path(ft_strtrim(parse_path(res, '=')[0], "\""), '$')[0],
+            var_env), "="), search_env_value(parse_path(ft_strtrim(parse_path(res, '=')[1], "\""), '$')[0], var_env));
+        else if ((!(tmp)) && (ft_strcmp(args[0], "export") == 0 || ft_strcmp(args[0], "unset") == 0))
+            to_free2 = ft_strjoin(ft_strjoin(parse_path(ft_strtrim(parse_path(res, '=')[0], "\""), '$')[0], "="),
+            search_env_value(parse_path(ft_strtrim(parse_path(res, '=')[1], "\""), '$')[0], var_env));
         else
-            to_free2 = ft_strtrim(&res[i], "$");
-        if (to_free = search_env_value(to_free2, var_env))
-        {
-            if (!(str = malloc(sizeof(char) * 255)))
-                return (0);
-            i = 0;
-            while (to_free[i])
-            {   
-                str[i] = to_free[i];
-                i++;
-            }
-            str[i] = '\0';
-            free(to_free2);
-        }
+            to_free2 = search_env_value(parse_path(res, '$')[0], var_env);
     }
-    return (str);
+    return (to_free2);
 }
 
 char **parse_res(char **res, t_list *var_env)
@@ -151,13 +142,21 @@ char **parse_res(char **res, t_list *var_env)
     if (!(parsed_res = malloc(sizeof(char *) * (i + 1))))
         return (0);
     i = 0;
+    j = 0;
     while (res[i])
     {
-        parsed_res[i] = expander(res[i], var_env);
-        printf("%s\n", parsed_res[i]);
+        if (((res[i][0] == '\'' && res[i][ft_strlen(res[i]) - 1] == '\'')
+        || (res[i][0] == '\"' && res[i][ft_strlen(res[i]) - 1] == '\"'))
+        && res[i + 1] && ft_strchr(res[i + 1], '='))
+        {
+            parsed_res[j] = expander(ft_strjoin(res[i], res[i + 1]), var_env, res);
+            i++;
+        }
+        else
+            parsed_res[j] = expander(res[i], var_env, res);
         i++;
+        j++;
     }
-    parsed_res[i] = NULL;
-    printf("%s\n", parsed_res[i]);
+    parsed_res[j] = NULL;
     return (parsed_res);
 }

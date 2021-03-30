@@ -59,10 +59,10 @@ char			**ft_split(char const *s, char *str);
 /*
 **expander
 */
-//char *search_env_name(char *str, t_list *var_env);
+char *search_env_name(char *str, t_list *var_env);
 char *search_env_value(char *str, t_list *var_env);
 char *antislashes_a_quotes(char *str);
-char *expander(char *res, t_list *var_env);
+char *expander(char *res, t_list *var_env, char **args);
 char **parse_res(char **res, t_list *var_env);
 
 /*

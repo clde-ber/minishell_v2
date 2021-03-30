@@ -59,6 +59,7 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
         printf("%s|\n", res[i]);
         i++;
     }
+    parsed_res = parse_res(res, var_env);
     // printf("command:%s\n", res[0]);
     if (ft_strcmp(res[0], "pwd") == 0)
         ft_pwd(res);
@@ -71,15 +72,15 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
     else if (ft_strcmp(res[0], "export") == 0)
     {
         check_doublons(env, res, var_env, cmd);
-        set_env(env, res, var_env, cmd);
+        set_env(env, parsed_res, var_env, cmd);
     }
     else if (ft_strcmp(res[0], "env") == 0)
         print_env(env, var_env);
     else if (ft_strcmp(res[0], "unset") == 0)
-        unset(var_env, res);
+        unset(var_env, parsed_res);
     else
     {
-        set_args((parsed_res = parse_res(res, var_env)), env, cmd->path);
+        set_args(parsed_res, env, cmd->path);
         ft_free(parsed_res, i + 1);
     }
     ft_free(res, i + 1);

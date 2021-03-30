@@ -107,7 +107,6 @@ void set_env(char **env, char **tab, t_list *var_env, t_command *cmd)
 		{
 			if (strcmp((str = ft_get_name(tab[k])), var_env->name) == 0)
 			{
-				free(var_env->value);
 				if (ft_strchr(tab[k], '='))
 					var_env->value = ft_strdup(ft_strchr(tab[k], '=') + 1);
 				else
@@ -123,7 +122,10 @@ void set_env(char **env, char **tab, t_list *var_env, t_command *cmd)
 	}
 	while (i >= 1)
     {
-		ft_lstadd_back(&var_env, ft_lstnew((str = ft_get_name(tab[i])), (str2 = ft_strdup(ft_strchr(tab[i], '=') + 1))));
+		if (ft_strchr(tab[i], '='))
+			ft_lstadd_back(&var_env, ft_lstnew((str = ft_get_name(tab[i])), (str2 = ft_strdup(ft_strchr(tab[i], '=') + 1))));
+		else
+			ft_lstadd_back(&var_env, ft_lstnew((str = ft_get_name(tab[i])), (str2 = ft_strdup(""))));
 		ft_lstiter(var_env, &ft_record, tab[i], cmd);
 		i--;
 	}
