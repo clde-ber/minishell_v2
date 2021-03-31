@@ -59,6 +59,7 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
         printf("%s|\n", res[i]);
         i++;
     }
+    parsed_res = (ft_is_empty_string(str)) ? ft_calloc(2, sizeof(char *)) : parse_res(res, var_env);
     // printf("command:%s\n", res[0]);
     if (ft_strcmp(res[0], "pwd") == 0)
         ft_pwd(res);
@@ -70,19 +71,17 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
         find_exe(0, str, env);
     else if (ft_strcmp(res[0], "export") == 0)
     {
-        check_doublons(env, res, var_env, cmd);
-        set_env(env, res, var_env, cmd);
+        check_doublons(env, parsed_res, var_env, cmd);
+        set_env(env, parsed_res, var_env, cmd);
     }
     else if (ft_strcmp(res[0], "env") == 0)
         print_env(env, var_env);
     else if (ft_strcmp(res[0], "unset") == 0)
-        unset(var_env, res);
+        unset(var_env, parsed_res);
     else
-    {
-        set_args((parsed_res = parse_res(res, var_env)), env, cmd->path);
-        ft_free(parsed_res, i + 1);
-    }
-    ft_free(res, i + 1);
+        set_args(parsed_res, env, cmd->path);
+//    ft_free(parsed_res, i + 1);
+//    ft_free(res, i + 1);
 }
 
 // pour l'instant, ne prend qu'une commande. La commande doit etre enregistrée (pas fait), découpée (fait mais 
@@ -110,9 +109,11 @@ int main(int ac, char **av, char **env)
         if (ft_strcmp(line, "exit") == 0) //builtin à coder
             end = 1;
         if ((command = getcommand(line)) != NULL)
+        {
             dispatch(command, env, var_env, cmd);
+            free(command);
+        }
         free(line);
-        free(command);
     }
     ft_lstdel(var_env);
     ft_free(to_free, 2);
