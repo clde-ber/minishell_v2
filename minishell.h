@@ -87,8 +87,9 @@ char *ft_get_name(char *str);
 void set_env(char **env, char **tab, t_list *var_env, t_command *cmd);
 t_list *set_new_env(char **env, char **tab, t_list *var_env, t_command *cmd);
 void	unset(t_list *env, char **tab);
-void print_env(char **tab, t_list *environ);
-void check_doublons(char **env, char **tab, t_list *var_env, t_command *cmd);
+void print_env(t_list *environ);
+void check_doublons_cl(char **env, char **tab, t_list *var_env, t_command *cmd);
+t_list *check_doublons(int k, int j, char **tab, t_list *var_env);
 
 /*
 **path

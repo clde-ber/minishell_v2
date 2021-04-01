@@ -71,11 +71,11 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
         find_exe(0, str, env);
     else if (ft_strcmp(res[0], "export") == 0)
     {
-        check_doublons(env, parsed_res, var_env, cmd);
+        check_doublons_cl(env, parsed_res, var_env, cmd);
         set_env(env, parsed_res, var_env, cmd);
     }
     else if (ft_strcmp(res[0], "env") == 0)
-        print_env(env, var_env);
+        print_env(var_env);
     else if (ft_strcmp(res[0], "unset") == 0)
         unset(var_env, parsed_res);
     else
