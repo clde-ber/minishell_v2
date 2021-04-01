@@ -12,65 +12,74 @@ int read_dir(char *path, char *command)
     return (1);
 }
 
-int exec_command(char **args, char **res, char *path, int j)
+char **arguments(char **res, int j, char **args, char *path)
 {
-    pid_t pid;
-    int ret;
-    int status;
-    int i;
     char **argv;
-    char **tab;
-    int x;
-    int y;
-    char *to_free;
-    char *to_free2;
+    int i;
 
     i = 1;
-    pid = 0;
-    ret = 0;
-    errno = 0;
-    status = 0;
-    x = 0;
-    y = 0;
+    argv = NULL;
     if (!(argv = malloc(sizeof(char *) * (j + 2))))
         return (0);
-    tab = parse_path(path, ':');
-    while (tab[y])
-        y++;
-    to_free2 = ft_strjoin(tab[0], "/");
-    argv[0] = ft_strjoin(to_free2, res[0]);
-    free(to_free2);
+    argv[0] = ft_strjoin(ft_strjoin(parse_path(path, ':')[0], "/"), res[0]);
     while (i < j)
     {
         argv[i] = ft_strdup(args[i - 1]);
         i++;
     }
     argv[i] = NULL;
-    char *envp[]={(to_free = ft_strjoin("PATH=", path)), NULL};
-    if ((pid = fork()) == 0)
-    {
-        while (tab[x])
-		{
-            free(argv[0]);
-            to_free2 = ft_strjoin(tab[x], "/");
-            argv[0] = ft_strjoin(to_free2, res[0]);
-            if ((ret = execve(argv[0], argv, envp)) == -1)
-            free(to_free2);
-        	x++;
-        }
-    }
-    waitpid(ret, &status, 0);
-    ft_free(tab, y + 1);
-    ft_free(argv, j + 1);
-    free(to_free);
-	if (WIFEXITED(status))
+    return (argv);
+}
+
+char **environment(char *path)
+{
+    char **envp;
+
+    envp = NULL;
+    if (!(envp = malloc(sizeof(char *) * 2)))
+        return (0);
+    envp[0] = ft_strjoin("PATH=", path);
+    envp[1] = NULL;
+    return (envp);
+}
+
+int exit_status(int status, int errno)
+{
+    if (WIFEXITED(status))
         return (0);
     else
 	{
         printf("%s\n", strerror(errno));
 		exit(0);
 	}
-    return (0);
+}
+
+int exec_command(char **args, char **res, char *path, int j)
+{
+    pid_t pid;
+    int ret;
+    int status;
+    int i;
+    char **tab;
+
+    pid = 0;
+    ret = 0;
+    errno = 0;
+    status = 0;
+    tab = arguments(res, j, args, path);
+    i = 0;
+    if ((pid = fork()) == 0)
+    {
+        while (parse_path(path, ':')[i])
+		{
+            free(tab[0]);
+            tab[0] = ft_strjoin(ft_strjoin(parse_path(path, ':')[i], "/"), res[0]);
+            ret = execve(tab[0], tab, environment(path));
+        	i++;
+        }
+    }
+    waitpid(ret, &status, 0);
+    return (exit_status(status, errno));
 // waitpid attd que le programme se termine 
 }
 
@@ -79,7 +88,6 @@ int set_args(char **res, char **env, char *path)
     int i;
     int index;
     char **args;
-    char **to_free;
 
     i = 0;
     index = 0;
@@ -96,12 +104,8 @@ int set_args(char **res, char **env, char *path)
         }
         args[index] = NULL;
         exec_command(args, res, path, i);
-    //    ft_free(args, index + 1);
     }
     else
-    {
-        exec_command((to_free = ft_calloc(2, sizeof(char *))), res, path, 1);
-    //    ft_free(to_free, 2);
-    }
+        exec_command(ft_calloc(2, sizeof(char *)), res, path, 1);
     return (0);
 }

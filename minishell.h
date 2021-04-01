@@ -115,6 +115,9 @@ void    ft_echo(char **res, t_list *var_env);
 int set_args(char **res, char **env, char *path);
 int exec_command(char **args, char **res, char *path, int j);
 int read_dir(char *path, char *command);
+char **arguments(char **tab, int i, char **args, char *path);
+char **environment(char *path);
+int exit_status(int status, int errno);
 
 /*
 **parse_path

@@ -274,24 +274,30 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd)
         i++;
     if (!(parsed_res = malloc(sizeof(char *) * (i + 1))))
         return (0);
-    i = 1;
-    j = 1;
-    if (res[0] && res[0][0] == '\'')
-        parsed_res[0] = ft_strtrim(res[0], "\'");
-    else if (res[0])
-        parsed_res[0] = ft_strtrim(res[0], "\"");
+    i = 0;
+    j = 0;
     while (res[i])
     {
-        if (((res[i][0] == '\'' && res[i][ft_strlen(res[i]) - 1] == '\'')
-        || (res[i][0] == '\"' && res[i][ft_strlen(res[i]) - 1] == '\"'))
-        && res[i + 1] && ft_strchr(res[i + 1], '='))
+        if (i > 0)
         {
-            parsed_res[j] = expander(antislashes_a_quotes(ft_strjoin(res[i], res[i + 1])), var_env, res, cmd);
-            i++;
+            if (((res[i][0] == '\'' && res[i][ft_strlen(res[i]) - 1] == '\'')
+            || (res[i][0] == '\"' && res[i][ft_strlen(res[i]) - 1] == '\"'))
+            && res[i + 1] && ft_strchr(res[i + 1], '='))
+            {
+                parsed_res[j] = expander(antislashes_a_quotes(ft_strjoin(res[i], res[i + 1])), var_env, res, cmd);
+                i++;
+            }
+            else
+                parsed_res[j] = expander(antislashes_a_quotes(res[i]), var_env, res, cmd);
+            printf("%s\n", parsed_res[j]);
         }
         else
-            parsed_res[j] = expander(antislashes_a_quotes(res[i]), var_env, res, cmd);
-        printf("%s\n", parsed_res[j]);
+        {
+            if (res[0] && res[0][0] == '\'')
+                parsed_res[0] = expander(antislashes_a_quotes(ft_strtrim(res[0], "\'")), var_env, res, cmd);
+            else if (res[0])
+                parsed_res[0] = expander(antislashes_a_quotes(ft_strtrim(res[0], "\"")), var_env, res, cmd);
+        }
         i++;
         j++;
     }
