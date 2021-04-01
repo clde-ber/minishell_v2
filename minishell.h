@@ -78,7 +78,7 @@ int is_valid_env(char *str);
 char	*ft_get_filename(const char *s, int c);
 char *get_path(char *path, char c);
 int launch_exe(char *exe, char *path, char **env);
-int find_exe(int index, char *path, char **env);
+void find_exe(int index, char *path, char **env);
 
 /*
 **env
