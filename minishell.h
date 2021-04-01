@@ -35,6 +35,8 @@ typedef struct s_list
 typedef struct s_command
 {
     char *path;
+    int index;
+    
 }               t_command;
 
 //droit a variable globale comme ça? si oui tant mieux
@@ -66,8 +68,8 @@ char			**ft_split(char const *s, char *str);
 char *search_env_name(char *str, t_list *var_env);
 char *search_env_value(char *str, t_list *var_env);
 char *antislashes_a_quotes(char *str);
-char *expander(char *res, t_list *var_env, char **args);
-char **parse_res(char **res, t_list *var_env);
+char *expander(char *res, t_list *var_env, char **args, t_command *cmd);
+char **parse_res(char **res, t_list *var_env, t_command *cmd);
 int is_valid_env(char *str);
 
 /*

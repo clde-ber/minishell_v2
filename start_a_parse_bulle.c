@@ -59,7 +59,7 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
         printf("%s|\n", res[i]);
         i++;
     }
-    parsed_res = (ft_is_empty_string(str)) ? ft_calloc(2, sizeof(char *)) : parse_res(res, var_env);
+    parsed_res = (ft_is_empty_string(str)) ? ft_calloc(2, sizeof(char *)) : parse_res(res, var_env, cmd);
     // printf("command:%s\n", res[0]);
     if (ft_strcmp(res[0], "pwd") == 0)
         ft_pwd(res);
