@@ -78,8 +78,8 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
         print_env(env, var_env);
     else if (ft_strcmp(res[0], "unset") == 0)
         unset(var_env, parsed_res);
-//    else
-//        set_args(parsed_res, env, cmd->path);
+    else
+        set_args(parsed_res, env, cmd->path);
 //    ft_free(parsed_res, i + 1);
 //    ft_free(res, i + 1);
 }

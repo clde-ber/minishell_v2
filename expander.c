@@ -153,8 +153,10 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
     char *tmp;
     char *trim_first;
     char *trim_secd;
+    int is_simple_q;
 
     i = 0;
+    is_simple_q = 0;
     len = ft_strlen(res);
     trim_first = NULL;
     trim_secd = NULL;
@@ -162,9 +164,16 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
     cmd->index = 0;
     printf("res%s\n", res);
     if (is_handled_cmd(args[0]) == 0 && res[0] == '\'')
-        return (ft_strtrim(res, "\'"));
+    {
+        tmp = ft_strtrim(res, "\'");
+        is_simple_q = 1;
+    }
     else if (is_handled_cmd(args[0]) == 0)
-        return (ft_strtrim(res, "\""));
+        tmp = ft_strtrim(res, "\"");
+    if (is_handled_cmd(args[0]) == 0 && tmp[0] == '$' && is_simple_q == 0)
+        tmp = get_env(tmp + 1, var_env, cmd);
+    if (is_handled_cmd(args[0]) == 0)
+        return (tmp);
     else
     {
         if (ft_strcmp(args[0], "export") == 0)
