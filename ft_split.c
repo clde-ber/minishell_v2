@@ -9,6 +9,13 @@ size_t	len_wd(char const *str, char *charset)
     boolean = 0;
 	while (i < ft_strlen((char *)str) && boolean == 0)
 	{
+		if (str[i] == '<' || str[i] == '>' || str[i] == '|')
+		{
+			while (str[i] == '<' || str[i] == '>' || str[i] == '|')
+				i++;
+			i--;
+			boolean = 1;
+		}
         if (((i && str[i - 1] != '\\') || !i) && str[i] == '\'' && i < ft_strlen(str))
         {
             i++;
@@ -28,14 +35,7 @@ size_t	len_wd(char const *str, char *charset)
 			i--;
 			boolean = 1;
 		}
-		if (i < ft_strlen(str) && str[i] == '>' && str[i + 1] == '>')
-		{
-			i++;
-			boolean = 1;
-		}
-		if (i < ft_strlen(str) && str[i] != '>' && str[i + 1] == '>')
-			boolean = 1;
-		if (i < ft_strlen(str) && str[i] != '|' && str[i + 1] == '|')
+		if (str[i + 1] == '<' || str[i + 1] == '>' || str[i + 1] == '|')
 			boolean = 1;
 		i++;
 	}
