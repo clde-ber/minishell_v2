@@ -6,7 +6,7 @@ char *search_env_name(char *str, t_list *var_env)
     char *ret;
 
     chg = -1;
-    while (var_env->next && chg == -1)
+    while (var_env && chg == -1)
     {
         if (ft_strcmp(var_env->name, str) == 0)
         {
@@ -22,7 +22,7 @@ char *search_env_value(char *str, t_list *var_env)
 {
     char *ret;
 
-    while (var_env->next)
+    while (var_env)
     {
         if (ft_strcmp(var_env->name, str) == 0)
         {
@@ -33,43 +33,6 @@ char *search_env_value(char *str, t_list *var_env)
     }
     return (ft_strdup(""));
 }
-/*
-char *ft_get_var_name(char *str)
-{
-    int i;
-    char *res;
-    int len;
-
-    i = 0;
-    while (str[i] && ft_isalnum(str[i]))
-        i++;
-    len = i;
-    i = 0;
-    if (!(res = malloc(sizeof(char) * (len + 1))))
-        return (0);
-    while (i < len)
-    {
-        res[i] = str[i];
-        i++;
-    }
-    res[i] = '\0';
-    return (res);
-    len = ft_strlen(str);
-    if (str[len - 1] == '\"')
-    {
-        if (!(res = malloc(sizeof(char) * (len + 1))))
-            return (0);
-        while (i < len - 1)
-        {
-            res[i] = str[i];
-            i++;
-        }
-        res[i] = '\0';
-    }
-    else
-        res = ft_strdup(str);
-    return (res); 
-}*/
 
 char *antislashes_a_quotes(char *str)
 {
@@ -114,6 +77,25 @@ int is_valid_env(char *str)
     return (0);
 }
 
+int is_handled_cmd(char *str)
+{
+    if (ft_strcmp(str, "echo") == 0)
+        return (1);
+    if (ft_strcmp(str, "cd") == 0)
+        return (1);
+    if (ft_strcmp(str, "pwd") == 0)
+        return (1);
+    if (ft_strcmp(str, "export") == 0)
+        return (1);
+    if (ft_strcmp(str, "unset") == 0)
+        return (1);
+    if (ft_strcmp(str, "env") == 0)
+        return (1);
+    if (ft_strcmp(str, "exit") == 0)
+        return (1);
+    return (0);
+}
+
 char *expander(char *res, t_list *var_env, char **args)
 {
     int i;
@@ -129,11 +111,11 @@ char *expander(char *res, t_list *var_env, char **args)
     len = ft_strlen(res);
     trim_first = NULL;
     trim_secd = NULL;
-    if (ft_strlen(res) == 2 && res[0] == '$' && res[1] == '$')
+    if (is_handled_cmd(args[0]) == 0 && ft_strlen(res) == 2 && res[0] == '$' && res[1] == '$')
         return (ft_strdup(res));
-    else if (res[0] == '\'' && ft_strcmp(args[0], "export") && ft_strcmp(args[0], "unset"))
+    else if (is_handled_cmd(args[0]) == 0 && res[0] == '\'')
         return (ft_strtrim(res, "\'"));
-    else if (ft_strcmp(args[0], "export") && ft_strcmp(args[0], "unset"))
+    else if (is_handled_cmd(args[0]) == 0)
     {
         to_free2 = ft_strtrim(res, "\"");
         if (to_free2[0] == '$')
@@ -165,8 +147,6 @@ char *expander(char *res, t_list *var_env, char **args)
                 write(1, "aaaa", 4);
                 trim_secd = search_env_value(&trim_secd[1], var_env);
             }
-            if (trim_first[0] == '$')
-                trim_first = search_env_value(parse_path(&trim_first[1], '$')[0], var_env);
             else if (trim_first[0] == '\'')
             {
                 if (is_valid_env(trim_first))
@@ -194,8 +174,8 @@ char *expander(char *res, t_list *var_env, char **args)
                 write(1, "dddd", 4);
                 trim_secd = parse_path(trim_secd, '$')[0];
             }
-             printf("%s\n", trim_first);
-            printf("%s\n", trim_secd);
+             printf("trim first%s\n", trim_first);
+            printf("trim secd%s\n", trim_secd);
             return (ft_strjoin(ft_strjoin(ft_strtrim(trim_first, "\'"), "="), ft_strtrim(trim_secd, "\'")));
         }
         else if (ft_strcmp(args[0], "export") == 0 && (!(ft_strchr(res, '='))))

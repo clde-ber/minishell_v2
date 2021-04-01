@@ -150,7 +150,7 @@ void	unset(t_list *env, char **tab)
 	while (tab[j])
 		j++;
 	i = 1;
-	while (env->next)
+	while (env)
 	{
 		while (i < j)
 		{
@@ -178,9 +178,6 @@ void print_env(char **tab, t_list *environ)
 			str2 = ft_strjoin(environ->name, "=");
 			str = ft_strjoin(str2, environ->value);
 			printf("%s\n", str);
-			printf("actual %d\n", environ);
-			printf("next %d\n", environ->next);
-			printf("prec %d\n", environ->prec);
 			free(str2);
 			free(str);
 		}

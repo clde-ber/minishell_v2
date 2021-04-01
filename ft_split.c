@@ -28,11 +28,15 @@ size_t	len_wd(char const *str, char *charset)
 			i--;
 			boolean = 1;
 		}
-		if (str[i] == '$' && str[i + 1] == '$')
+		if (i < ft_strlen(str) && str[i] == '>' && str[i + 1] == '>')
 		{
 			i++;
 			boolean = 1;
 		}
+		if (i < ft_strlen(str) && str[i] != '>' && str[i + 1] == '>')
+			boolean = 1;
+		if (i < ft_strlen(str) && str[i] != '|' && str[i + 1] == '|')
+			boolean = 1;
 		i++;
 	}
 	return (i >= ft_strlen(str)) ? ft_strlen(str) : i;
