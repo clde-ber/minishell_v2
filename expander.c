@@ -143,124 +143,126 @@ char *get_env(char *str, t_list *var_env, t_command *cmd)
         return (search_env_value(test, var_env));
 }
 
-char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
+char *replace_by_env(char *trim, t_list *var_env, t_command *cmd)
 {
     int i;
-    int len;
-    char *str;
-    char *to_free;
-    char *to_free2;
+    char *tmp;
+
+    i = 0;
+    tmp = ft_strdup("");
+    while (i < ft_strlen(trim))
+    {
+        if (is_valid_env_c(trim[i]))
+        {
+            tmp = ft_strjoin(tmp, get_string(&trim[i]));
+            i += ft_strlen(get_string(&trim[i]));
+        }
+        else if (trim[i] == '$')
+        {
+            tmp = ft_strjoin(tmp, get_env(&trim[i + 1], var_env, cmd));
+            i += cmd->index + 1;
+        }
+        else
+            return (ft_strdup(""));
+        cmd->index = 0;
+    }
+    return (tmp);
+}
+
+char *non_handled_commands(char *res, t_list *var_env, char **args, t_command *cmd)
+{
+    char *tmp;
+
+    tmp = ft_strdup(res);
+    tmp = ft_strtrim(tmp, "\"");
+    if (is_handled_cmd(args[0]) == 0 && tmp[0] == '$')
+        tmp = replace_by_env(tmp, var_env, cmd);
+    return (ft_strtrim(tmp, "\'"));
+}
+
+char *handled_export(char *res, t_list *var_env, char **args, t_command *cmd)
+{
+    char *trim_first;
+    char *trim_secd;
+
+    trim_first = NULL;
+    trim_secd = NULL;
+    if ((ft_strchr(res, '=')))
+    {
+        trim_first = parse_path(res, '=')[0];
+        trim_secd = parse_path(res, '=')[1];
+    }
+    else
+    {
+        trim_first = ft_strdup(res);
+        trim_secd = ft_strdup("");
+    }
+    if (trim_first[0] != '\'')
+        trim_first = ft_strtrim(trim_first, "\"");
+    if (trim_secd[0] != '\'')
+        trim_secd = ft_strtrim(trim_secd, "\"");
+    trim_first = replace_by_env(trim_first, var_env, cmd);
+    trim_secd = replace_by_env(trim_secd, var_env, cmd);
+    return (ft_strjoin(ft_strjoin(trim_first, "="), trim_secd));
+}
+
+char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
+{
     char *tmp;
     char *trim_first;
     char *trim_secd;
-    int is_simple_q;
 
-    i = 0;
-    is_simple_q = 0;
-    len = ft_strlen(res);
     trim_first = NULL;
     trim_secd = NULL;
-    tmp = ft_strdup("");
     cmd->index = 0;
-    printf("res%s\n", res);
-    if (is_handled_cmd(args[0]) == 0 && res[0] == '\'')
-    {
-        tmp = ft_strtrim(res, "\'");
-        is_simple_q = 1;
-    }
-    else if (is_handled_cmd(args[0]) == 0)
-        tmp = ft_strtrim(res, "\"");
-    if (is_handled_cmd(args[0]) == 0 && tmp[0] == '$' && is_simple_q == 0)
-        tmp = get_env(tmp + 1, var_env, cmd);
     if (is_handled_cmd(args[0]) == 0)
-        return (tmp);
+        return (non_handled_commands(res, var_env, args, cmd));
     else
     {
         if (ft_strcmp(args[0], "export") == 0)
-        {
-            write(1, "a", 1);
-            if ((ft_strchr(res, '=')))
-            {
-                trim_first = parse_path(res, '=')[0];
-                trim_secd = parse_path(res, '=')[1];
-                write(1, "e", 1);
-            }
-            else
-                trim_secd = ft_strdup("");
-            if (trim_first[0] != '\'')
-                trim_first = ft_strtrim(trim_first, "\"");
-            if (trim_secd[0] != '\'')
-                trim_secd = ft_strtrim(trim_secd, "\"");
-            write(1, "b", 1);
-            while (i < ft_strlen(trim_first))
-            {
-                if (is_valid_env_c(trim_first[i]))
-                {
-                    write(1, "c", 1);
-                    tmp = ft_strjoin(tmp, get_string(&trim_first[i]));
-                    i += ft_strlen(get_string(&trim_first[i]));
-                }
-                else if (trim_first[i] == '$')
-                {
-                    write(1, "d", 1);
-                    tmp = ft_strjoin(tmp, get_env(&trim_first[i + 1], var_env, cmd));
-                    i += cmd->index + 1;
-                }
-                else
-                    return (ft_strdup(""));
-                cmd->index = 0;
-            }
-            trim_first = tmp;
-            tmp = ft_strdup("");
-            i = 0;
-            write(1, "x", 1);
-            while (i < ft_strlen(trim_secd))
-            {
-                write(1, "x", 1);
-                if (is_valid_env_c(trim_secd[i]))
-                {
-                    write(1, "x", 1);
-                    tmp = ft_strjoin(tmp, get_string(&trim_secd[i]));
-                    i += ft_strlen(get_string(&trim_secd[i]));
-                }
-                else if (trim_secd[i] == '$')
-                {
-                    write(1, "y", 1);
-                    tmp = ft_strjoin(tmp, get_env(&trim_secd[i + 1], var_env, cmd));
-                    i += cmd->index + 1;
-                }
-                else
-                    return (ft_strdup(""));
-                cmd->index = 0;
-            }
-            trim_secd = tmp;
-            return (ft_strjoin(ft_strjoin(trim_first, "="), trim_secd));
-        }
+            return (handled_export(res, var_env, args, cmd));
         else if (ft_strcmp(args[0], "unset") == 0)
         {
             if (res[0] == '\'')
                 res = ft_strtrim(res, "\'");
             else
                 res = ft_strtrim(res, "\"");
-            while (res[i])
-            {
-                if (is_valid_env_c(res[i]))
-                {
-                    tmp = ft_strjoin(tmp, get_string(&res[i]));
-                    i += ft_strlen(get_string(&res[i]));
-                }
-                else if (res[i] == '$')
-                {
-                    tmp = ft_strjoin(tmp, get_env(&res[i + 1], var_env, cmd));
-                    i += cmd->index + 1;
-                }
-                else
-                    return (ft_strdup(""));
-            }
-            return (ft_strdup(tmp));
+            return (replace_by_env(res, var_env, cmd));
         }
     }
     return (ft_strdup("error"));
+}
+
+char **parse_first_arg(char **res, char **parsed_res, t_command *cmd, t_list *var_env)
+{
+    if (res[0] && res[0][0] == '\'')
+        parsed_res[0] = expander(antislashes_a_quotes(ft_strtrim(res[0], "\'")), var_env, res, cmd);
+    else if (res)
+        parsed_res[0] = expander(antislashes_a_quotes(ft_strtrim(res[0], "\"")), var_env, res, cmd);
+    return (parsed_res);
+}
+
+int strings_to_join(char **res, int i)
+{
+    if (((res[i][0] == '\'' && res[i][ft_strlen(res[i]) - 1] == '\'')
+    || (res[i][0] == '\"' && res[i][ft_strlen(res[i]) - 1] == '\"'))
+    && res[i + 1] && ft_strchr(res[i + 1], '='))
+        return (1);
+    return (0);
+}
+
+char **create_parsed_res(char **res)
+{
+    int i;
+    char **parsed_res;
+
+    parsed_res = NULL;
+    i = 0;
+    while (res[i])
+        i++;
+    if (!(parsed_res = malloc(sizeof(char *) * (i + 1))))
+        return (0);
+    return (parsed_res);
 }
 
 char **parse_res(char **res, t_list *var_env, t_command *cmd)
@@ -269,35 +271,20 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd)
     char **parsed_res;
     int j;
 
-    i = 0;
-    while (res[i])
-        i++;
-    if (!(parsed_res = malloc(sizeof(char *) * (i + 1))))
-        return (0);
-    i = 0;
-    j = 0;
+    parsed_res = create_parsed_res(res);
+    i = 1;
+    j = 1;
+    parsed_res = parse_first_arg(res, parsed_res, cmd, var_env);
     while (res[i])
     {
-        if (i > 0)
+        if ((strings_to_join(res, i)))
         {
-            if (((res[i][0] == '\'' && res[i][ft_strlen(res[i]) - 1] == '\'')
-            || (res[i][0] == '\"' && res[i][ft_strlen(res[i]) - 1] == '\"'))
-            && res[i + 1] && ft_strchr(res[i + 1], '='))
-            {
-                parsed_res[j] = expander(antislashes_a_quotes(ft_strjoin(res[i], res[i + 1])), var_env, res, cmd);
-                i++;
-            }
-            else
-                parsed_res[j] = expander(antislashes_a_quotes(res[i]), var_env, res, cmd);
-            printf("%s\n", parsed_res[j]);
+            parsed_res[j] = expander(antislashes_a_quotes(ft_strjoin(res[i],
+            res[i + 1])), var_env, res, cmd);
+            i++;
         }
         else
-        {
-            if (res[0] && res[0][0] == '\'')
-                parsed_res[0] = expander(antislashes_a_quotes(ft_strtrim(res[0], "\'")), var_env, res, cmd);
-            else if (res[0])
-                parsed_res[0] = expander(antislashes_a_quotes(ft_strtrim(res[0], "\"")), var_env, res, cmd);
-        }
+            parsed_res[j] = expander(antislashes_a_quotes(res[i]), var_env, res, cmd);
         i++;
         j++;
     }

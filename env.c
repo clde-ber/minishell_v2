@@ -82,6 +82,18 @@ void check_doublons_cl(char **env, char **tab, t_list *var_env, t_command *cmd)
 	}
 }
 
+void replace_env(char *tab, t_list *var_env)
+{
+	if (ft_strcmp(ft_get_name(tab), var_env->name) == 0)
+	{
+		if (ft_strchr(tab, '='))
+			var_env->value = ft_strdup(ft_strchr(tab, '=') + 1);
+		else
+			var_env->value = ft_strdup("");
+		tab[0] = '\0';
+	}
+}
+
 t_list *check_doublons(int k, int j, char **tab, t_list *var_env)
 {
 	k = j - 1;
@@ -89,20 +101,13 @@ t_list *check_doublons(int k, int j, char **tab, t_list *var_env)
 	{
 		while (k >= 1)
 		{
-			if (strcmp(ft_get_name(tab[k]), var_env->name) == 0)
-			{
-				if (ft_strchr(tab[k], '='))
-					var_env->value = ft_strdup(ft_strchr(tab[k], '=') + 1);
-				else
-					var_env->value = ft_strdup("");
-				tab[k][0] = '=';
-				tab[k][1] = '\0';
-			}
+			replace_env(tab[k], var_env);
 			k--;
 		}
 		k = j - 1;
 		var_env = var_env->next;
 	}
+	replace_env(tab[k], var_env);
 	return (var_env);
 }
 
@@ -132,6 +137,7 @@ void set_env(char **env, char **tab, t_list *var_env, t_command *cmd)
 		tmp_new = tmp;
 		i++;
 	}
+	var_env = tmp_new;
 }
 
 void	unset(t_list *env, char **tab)
