@@ -65,31 +65,59 @@ char			**ft_split(char const *s, char *str);
 /*
 **expander
 */
+char **create_parsed_res(char **res);
+int strings_to_join(char **res, int i);
+char **parse_first_arg(char **res, char **parsed_res, t_command *cmd, t_list *var_env);
+char *expander(char *res, t_list *var_env, char **args, t_command *cmd);
+char **parse_res(char **res, t_list *var_env, t_command *cmd);
+
+/*
+**expander_utils
+*/
+char *get_string(char *str);
+char *get_env(char *str, t_list *var_env, t_command *cmd);
+char *replace_by_env(char *trim, t_list *var_env, t_command *cmd);
+char *non_handled_commands(char *res, t_list *var_env, char **args, t_command *cmd);
+char *handled_export(char *res, t_list *var_env, char **args, t_command *cmd);
+
+/*
+**expander_utils2
+*/
 char *search_env_name(char *str, t_list *var_env);
 char *search_env_value(char *str, t_list *var_env);
 char *antislashes_a_quotes(char *str);
-char *expander(char *res, t_list *var_env, char **args, t_command *cmd);
-char **parse_res(char **res, t_list *var_env, t_command *cmd);
 int is_valid_env(char *str);
+int is_valid_env_c(char c);
 
 /*
-**find_a_launch_exe
+**launch_exe
 */
-char	*ft_get_filename(const char *s, int c);
-char *get_path(char *path, char c);
 int launch_exe(char *exe, char *path, char **env);
 void find_exe(int index, char *path, char **env);
 
 /*
+**launch_exe_utils
+*/
+char	*ft_get_filename(const char *s, int c);
+char *get_path(char *path, char c);
+char **arg_tab(char *exe, char *path, char **env);
+char **env_tab(char *path);
+
+/*
 **env
 */
-char *ft_get_name(char *str);
 void set_env(char **env, char **tab, t_list *var_env, t_command *cmd);
 t_list *set_new_env(char **env, char **tab, t_list *var_env, t_command *cmd);
 void	unset(t_list *env, char **tab);
 void print_env(t_list *environ);
+
+/*
+**env_utils
+*/
+char *ft_get_name(char *str);
 void check_doublons_cl(char **env, char **tab, t_list *var_env, t_command *cmd);
 t_list *check_doublons(int k, int j, char **tab, t_list *var_env);
+void replace_env(char *tab, t_list *var_env);
 
 /*
 **path
@@ -131,6 +159,7 @@ int ft_strchr_bis(const char *s, int c);
 int check_word(char *str, char *to_find, int i);
 int search_word(char *str, char *to_find);
 int ft_isspace(char c);
+int is_handled_cmd(char *str);
 
 /*
 **gnl

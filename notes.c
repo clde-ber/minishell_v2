@@ -1,6 +1,6 @@
 // compil : gcc find_a_launch_exe.c start_a_parse_bulle.c echo.c env.c gnl.c gnl_utils.c ft_split.c libft_utils.c minishell_utils.c redir.c && ./a.out -fsanitize=address
 
-new compil : gcc find_a_launch_exe.c start_a_parse_bulle.c echo.c env.c gnl.c gnl_utils.c ft_split.c libft_utils.c minishell_utils.c redir.c libft_utils2.c libft_list.c libft_list2.c libft_utils3.c libft_utils4.c path.c exec.c parse_path.c expander.c debug_to_delete.c && ./a.out
+new compil : gcc expander_utils.c expander_utils2.c env_utils.c launch_exe.c launch_exe_utils.c start_a_parse_bulle.c echo.c env.c gnl.c gnl_utils.c ft_split.c libft_utils.c minishell_utils.c redir.c libft_utils2.c libft_list.c libft_list2.c libft_utils3.c libft_utils4.c path.c exec.c parse_path.c expander.c debug_to_delete.c && ./a.out
 
 // ---
 
