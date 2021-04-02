@@ -110,7 +110,7 @@ char			**ft_split(char const *s, char *str)
 		{
 			if (!(res[j] = malloc(sizeof(char) * (len_wd(&s[i], str) + 1))))
 				return (ft_free(res, j));
-			res[j] = ft_memmove(res[j], &s[i], len_wd(&s[i], str) + 1);
+			res[j] = ft_memmove(res[j], &s[i], len_wd(&s[i], str));
 			res[j][len_wd(&s[i], str)] = '\0';
 			j++;
 			i += len_wd(&s[i], str);
