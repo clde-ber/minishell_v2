@@ -36,7 +36,7 @@ typedef struct s_command
 {
     char *path;
     int index;
-    
+    int idx_parsing;
 }               t_command;
 
 //droit a variable globale comme ça? si oui tant mieux

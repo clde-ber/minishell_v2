@@ -1,45 +1,60 @@
 #include "minishell.h"
 
+int is_symbol(char c, char comp)
+{
+	if (c == '<' || c == '>' || c == '|')
+		return (1);
+	if (c == '$' && comp == '?')
+		return (2);
+	return (0);
+}
+
+size_t parse_command(int i, char *str, int *res, char *charset)
+{
+	if (is_symbol(str[i], str[i + 1]) && (*res = 1))
+	{
+		while (str[i] && is_symbol(str[i], str[i + 1]))
+			i += is_symbol(str[i], str[i + 1]);
+		i--;
+	}
+	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\'') && (*res = 1))
+	{
+		i++;
+    	while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i] == '\''))
+			i++;
+	}
+	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\"') && (*res = 1))
+    {
+        i++;
+        while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i] == '\"'))
+            i++;
+    }
+	else if (((!i && ft_ischarset(charset, str[i])) || (i &&
+		ft_ischarset(charset, str[i]) && str[i - 1] != '\\')) && (*res = 1))
+			i--;
+	else if (str[i + 1] && (is_symbol(str[i + 1], str[i + 2]) == 1 ||
+	is_symbol(str[i + 1], str[i + 2]) == 2))
+		*res = 1;
+	return (i);
+}
+
 size_t	len_wd(char const *str, char *charset)
 {
 	size_t i;
-    int boolean;
+	int j;
+	int res;
 
+	j = 1;
+	res = 0;
 	i = 0;
-    boolean = 0;
-	while (i < ft_strlen((char *)str) && boolean == 0)
+	while (i < ft_strlen(str) && res == 0)
 	{
-		if (str[i] == '<' || str[i] == '>' || str[i] == '|')
-		{
-			while (str[i] == '<' || str[i] == '>' || str[i] == '|')
-				i++;
-			i--;
-			boolean = 1;
-		}
-        if (((i && str[i - 1] != '\\') || !i) && str[i] == '\'' && i < ft_strlen(str))
-        {
-            i++;
-            while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i] == '\''))
-				i++;
-			boolean = 1;
-        }
-        if (((i && str[i - 1] != '\\') || !i) && str[i] == '\"' && i < ft_strlen(str))
-        {
-            i++;
-            while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i] == '\"'))
-                i++;
-			boolean = 1;
-        }
-		if ((!i && ft_ischarset(charset, str[i])) || (i && ft_ischarset(charset, str[i]) && str[i - 1] != '\\'))
-		{
-			i--;
-			boolean = 1;
-		}
-		if (str[i + 1] == '<' || str[i + 1] == '>' || str[i + 1] == '|')
-			boolean = 1;
+		i = parse_command(i, str, &res, charset);
 		i++;
 	}
-	return (i >= ft_strlen(str)) ? ft_strlen(str) : i;
+	if (i >= ft_strlen(str))
+		return (ft_strlen(str));
+	return (i);
 }
 
 size_t	count_malloc(char const *s, char *str)
