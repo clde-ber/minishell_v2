@@ -1,5 +1,12 @@
 #include "minishell.h"
 
+/*
+** Functions that are similar to launch_exe ones, using execve to execute any command. Here, functions are supposed to handle not only the "./"
+** one but any shell commands. Variable $PATH environment value is splited with ':' character to help testing different locations for our 
+** command binaries - for example /bin/. Execve is called with first command line argument until it returns correctly, that is until it finds where
+** the command binaries are stored. Then it executes the command or prints an error.
+*/
+
 int read_dir(char *path, char *command)
 {
     DIR *dir;
@@ -68,6 +75,8 @@ int exec_command(char **args, char **res, char *path, int j)
     status = 0;
     tab = arguments(res, j, args, path);
     i = 0;
+// readdir must be called to print correct error.
+// Fork duplicates the process so the parent process doesn't return when the child process does.
     if ((pid = fork()) == 0)
     {
         while (parse_path(path, ':')[i])
@@ -80,8 +89,10 @@ int exec_command(char **args, char **res, char *path, int j)
     }
     waitpid(ret, &status, 0);
     return (exit_status(status, errno));
-// waitpid attd que le programme se termine 
+// waitpid waits for the program to be finished. 
 }
+
+//res[0] needs to be trimed so strings with simple or double quotes are managed.
 
 int set_args(char **res, char **env, char *path)
 {

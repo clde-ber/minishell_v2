@@ -1,5 +1,10 @@
 #include "minishell.h"
 
+/*
+** Functions that ouput a two dimensional array from a string with a single character as separator. Useful for getting all possible locations for shell command
+** binaries.
+*/
+
 static size_t	len_word(char const *str, int c)
 {
 	size_t i;

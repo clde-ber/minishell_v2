@@ -1,5 +1,10 @@
 #include "minishell.h"
 
+/*
+** Functions that help re-parsing all command line arguments. Output environment chained list names and values to be compared, check whether the syntax
+** of an environment variable is correct and output strings without antislashes.
+*/
+
 char *search_env_name(char *str, t_list *var_env)
 {
     int chg;

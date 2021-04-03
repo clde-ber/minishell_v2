@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+/*
+** Functions that play the role of the expander. After all the arguments in the command line have been splited with ft_split, each argument is read
+** according to whether it begins with ' " $ or whatever. A two dimensional array is returned to be used either in the fonctions that are shell commands
+** recreated builtins or in the execve function.
+*/
+
 char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
 {
     char *tmp;

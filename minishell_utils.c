@@ -1,6 +1,7 @@
 /*
 **Useful functions created for minishell
 **check word and search word detect keywords in commands
+**Check whether the recreated builtins have to be called vs execve
 */
 
 #include "minishell.h"

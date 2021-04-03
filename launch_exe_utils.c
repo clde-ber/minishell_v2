@@ -1,5 +1,10 @@
 #include "minishell.h"
 
+/*
+** Functions that support launch_exe ones. Output the directories path and the name of the file. Creates two dimensional arrays for execve
+** to perform which are environment and argument related.
+*/
+
 char	*ft_get_filename(const char *s, int c)
 {
 	char	*str;

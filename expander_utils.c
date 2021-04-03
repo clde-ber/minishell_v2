@@ -1,5 +1,9 @@
 #include "minishell.h"
 
+/*
+** Functions that replace any occurences of $ with existing environment variable name.
+*/
+
 char *get_string(char *str)
 {
     int i;

@@ -1,3 +1,8 @@
+/*
+** Functions that read each line from a specific file descriptor. Returns 0 when EOF is read and 1 when a line terminating '\n' is read.
+** Fills a '\0'-terminating char * with all characters of the line except '\n'.
+*/
+
 #include "minishell.h"
 
 static char		*ft_read_a_join(size_t i, char *buf, char **line)

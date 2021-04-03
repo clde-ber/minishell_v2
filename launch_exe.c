@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+/*
+** Functions that search and launch an executable when first command line agurment begins with "./". The program reads directories and compares
+** their names to the ones in path. At the end, it checks whether the filename is correct or exists. If the last directory can't be opened, it returns
+** an error. If execve - that executes the command - returns an error, it prints error accordingly. If command is interrupted by a signal, it prints an error.
+*/
+
 int launch_exe(char *exe, char *path, char **env)
 {
     pid_t pid;

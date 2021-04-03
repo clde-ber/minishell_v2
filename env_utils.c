@@ -1,5 +1,10 @@
 #include "minishell.h"
 
+/*
+** Functions that help managing environment variables chained list. Output variable name, check whether there are doublons in environement variable
+** names in the command line itself or compare new variables names with existing ones. If so, variable values are replaced by the last one that are set.
+*/
+
 char *ft_get_name(char *str)
 {
     int i;

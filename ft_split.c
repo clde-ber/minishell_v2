@@ -1,5 +1,12 @@
 #include "minishell.h"
 
+/*
+** Functions that play the role of the lexer & the tokenizer. It splits the command line string into words according to whether there is any types of spacing.
+** It may also sparate words according to whether there are into quotes, even if no spacing, and whether there are >> > < $ ? | characters. It returns a
+** two dimensional array to be used by expander functions. Each word in that array comes with some identifiers - for example $ ' " - that help binding it
+** with its value.
+*/
+
 int is_symbol(char c, char comp)
 {
 	if (c == '<' || c == '>' || c == '|')

@@ -1,3 +1,8 @@
+/*
+** Functions that manage environment variables chained list - create, amend it & print it. Once the main variable list with environment variables
+** imported from computer is created, it is amended with new entries if export is invoked, updated when unset is called, and printed when env is.
+*/
+
 #include "minishell.h"
 
 t_list *set_new_env(char **env, char **tab, t_list *var_env, t_command *cmd)
