@@ -36,9 +36,9 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
 char **parse_first_arg(char **res, char **parsed_res, t_command *cmd, t_list *var_env)
 {
     if (res[0] && res[0][0] == '\'')
-        parsed_res[0] = expander(antislashes_a_quotes(ft_strtrim(res[0], "\'")), var_env, res, cmd);
+        parsed_res[0] = expander(ft_strtrim(res[0], "\'"), var_env, res, cmd);
     else if (res)
-        parsed_res[0] = expander(antislashes_a_quotes(ft_strtrim(res[0], "\"")), var_env, res, cmd);
+        parsed_res[0] = expander(ft_strtrim(res[0], "\""), var_env, res, cmd);
     return (parsed_res);
 }
 
@@ -59,7 +59,10 @@ char **create_parsed_res(char **res)
     parsed_res = NULL;
     i = 0;
     while (res[i])
+    {
+        res[i] = antislashes_a_quotes(res[i]);
         i++;
+    }
     if (!(parsed_res = malloc(sizeof(char *) * (i + 1))))
         return (0);
     return (parsed_res);
@@ -79,12 +82,12 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd)
     {
         if ((strings_to_join(res, i)))
         {
-            parsed_res[j] = expander(antislashes_a_quotes(ft_strjoin(res[i],
-            res[i + 1])), var_env, res, cmd);
+            parsed_res[j] = expander(ft_strjoin(res[i],
+            res[i + 1]), var_env, res, cmd);
             i++;
         }
         else
-            parsed_res[j] = expander(antislashes_a_quotes(res[i]), var_env, res, cmd);
+            parsed_res[j] = expander(res[i], var_env, res, cmd);
         i++;
         j++;
     }
