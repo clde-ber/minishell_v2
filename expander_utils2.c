@@ -67,7 +67,7 @@ char *antislashes_a_quotes(char *str)
 int is_valid_env_c(char c)
 {
     if (ft_isalnum(c) || c == '_' || c == '\t' || c == '\n' || c == '\r' || c == '\v'
-    || c == '\f' || c == ' ')
+    || c == '\f' || c == ' ' || c == '+')
         return (1);
     return (0);
 }
@@ -82,7 +82,8 @@ int is_valid_env(char *str)
     while (str[i])
     {
         if (str[i] == '_' || ft_isalnum(str[i]) || str[i] == '\t' || str[i] == '\n' ||
-        str[i] == '\r' || str[i] == '\v' || str[i] == '\f' || str[i] == ' ')
+        str[i] == '\r' || str[i] == '\v' || str[i] == '\f' || str[i] == ' ' ||
+        str[i] == '+')
             count++;
         i++;
     }

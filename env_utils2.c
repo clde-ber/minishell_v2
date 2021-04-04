@@ -20,7 +20,8 @@ char **fill_list(t_list *environ, char **list, int i)
 	{
 		if (ft_strlen(environ->name))
     	{
-			list[i] = ft_strjoin(ft_strjoin(environ->name, "="), environ->value);
+			list[i] = ft_strjoin(ft_strjoin(ft_strjoin(ft_strjoin(ft_strjoin("de\
+clare -x ", environ->name), "="), "\""), environ->value), "\"");
 			i++;
 		}
 		environ = environ->next;

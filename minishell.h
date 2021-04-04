@@ -118,6 +118,7 @@ char *ft_get_name(char *str);
 void check_doublons_cl(char **env, char **tab, t_list *var_env, t_command *cmd);
 t_list *check_doublons(int k, int j, char **tab, t_list *var_env);
 void replace_env(char *tab, t_list *var_env);
+void add_to_env(char **tab, int k, int l);
 
 /*
 **env_utils2
