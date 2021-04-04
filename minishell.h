@@ -120,6 +120,13 @@ t_list *check_doublons(int k, int j, char **tab, t_list *var_env);
 void replace_env(char *tab, t_list *var_env);
 
 /*
+**env_utils2
+*/
+char **fill_list(t_list *environ, char **list, int i);
+char **sort_list(t_list *environ, char **list, int i, int j);
+void print_sorted_env(t_list *environ);
+
+/*
 **path
 */
 void    ft_pwd(char **res);

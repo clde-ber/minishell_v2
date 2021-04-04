@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 /*
-** Functions that help managing environment variables chained list. Output variable name, check whether there are doublons in environement variable
+** Functions that help managing environment variables linked list. Output variable name, check whether there are doublons in environement variable
 ** names in the command line itself or compare new variables names with existing ones. If so, variable values are replaced by the last one that are set.
 */
 
@@ -88,4 +88,3 @@ void replace_env(char *tab, t_list *var_env)
 		tab[0] = '\0';
 	}
 }
-

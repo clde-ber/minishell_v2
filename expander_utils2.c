@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 /*
-** Functions that help re-parsing all command line arguments. Output environment chained list names and values to be compared, check whether the syntax
+** Functions that help re-parsing all command line arguments. Output environment linked list names and values to be compared, check whether the syntax
 ** of an environment variable is correct and output strings without antislashes.
 */
 
