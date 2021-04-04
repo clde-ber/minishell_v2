@@ -105,3 +105,62 @@ void print_env(t_list *environ)
 		environ = environ->next;
 	}
 }
+
+void print_sorted_env(t_list *environ)
+{
+	char *name;
+	char *value;
+	char **list;
+	int i;
+	int j;
+	char *tmp;
+
+	name = NULL;
+	value = NULL;
+	list = NULL;
+	i = 0;
+	write(1, "a", 1);
+	while (environ->next)
+		environ = environ->next;
+	while (environ->prec)
+	{
+		environ = environ->prec;
+		i++;
+	}
+	if (!(list = malloc(sizeof(char *) * (i + 2))))
+		return (0);
+	i = 0;
+	while (environ)
+	{
+		if (ft_strlen(environ->name))
+    	{
+			list[i] = ft_strjoin(ft_strjoin(environ->name, "="), environ->value);
+			i++;
+		}
+		environ = environ->next;
+	}
+	list[i] = NULL;
+	i = 0;
+	j = 0;
+	while (list[i])
+	{
+		while (list[j])
+		{
+			if (strcmp(ft_get_name(list[i]), ft_get_name(list[j])) < 0)
+			{
+				tmp = list[i];
+				list[i] = list[j];
+				list[j] = tmp;
+			}
+			j++;
+		}
+		j = 0;
+		i++;
+	}
+	i = 0;
+	while (list[i])
+	{
+		printf("%s\n", list[i]);
+		i++;
+	}
+}

@@ -69,11 +69,13 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
         ft_cd(res);
     else if (res[0][0] == '.' && res[0][1] == '/')
         find_exe(0, str, env);
-    else if (ft_strcmp(res[0], "export") == 0)
+    else if (ft_strcmp(res[0], "export") == 0 && res[1])
     {
         check_doublons_cl(env, parsed_res, var_env, cmd);
         set_env(env, parsed_res, var_env, cmd);
     }
+    else if (ft_strcmp(res[0], "export") == 0 && (!(res[1])))
+        print_sorted_env(var_env);
     else if (ft_strcmp(res[0], "env") == 0)
         print_env(var_env);
     else if (ft_strcmp(res[0], "unset") == 0)
