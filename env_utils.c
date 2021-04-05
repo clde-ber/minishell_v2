@@ -99,7 +99,12 @@ t_list *check_doublons(int k, int j, char **tab, t_list *var_env)
 		k = j - 1;
 		var_env = var_env->next;
 	}
-	replace_env(tab[k], var_env);
+	k = j - 1;
+	while (k > 0)
+	{
+		replace_env(tab[k], var_env);
+		k--;
+	}
 	return (var_env);
 }
 
