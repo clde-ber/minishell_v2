@@ -52,13 +52,18 @@ char **environment(char *path)
 
 int exit_status(int status, int errno)
 {
-    if (WIFEXITED(status))
-        return (0);
+    if (!(status))
+    {
+        if (WIFEXITED(status))
+            return (0);
+        else
+        {
+            printf("%s\n", strerror(errno));
+            return (1);
+        }
+    }
     else
-	{
-        printf("%s\n", strerror(errno));
-		exit(0);
-	}
+        return (1);
 }
 
 int exec_command(char **args, char **res, char *path, int j)
@@ -94,7 +99,7 @@ int exec_command(char **args, char **res, char *path, int j)
 
 //res[0] needs to be trimed so strings with simple or double quotes are managed.
 
-int set_args(char **res, char **env, char *path)
+int set_args(char **res, char **env, char *path, t_command *cmd)
 {
     int i;
     int index;
@@ -114,9 +119,13 @@ int set_args(char **res, char **env, char *path)
             index++;
         }
         args[index] = NULL;
-        exec_command(args, res, path, i);
+        if ((exec_command(args, res, path, i)))
+            cmd->cmd_rv = 1;
     }
     else
-        exec_command(ft_calloc(2, sizeof(char *)), res, path, 1);
+    {
+        if ((exec_command(ft_calloc(2, sizeof(char *)), res, path, 1)))
+            cmd->cmd_rv = 1;
+    }
     return (0);
 }

@@ -36,7 +36,7 @@ typedef struct s_command
 {
     char *path;
     int index;
-    int idx_parsing;
+    int cmd_rv;
 }               t_command;
 
 //droit a variable globale comme ça? si oui tant mieux
@@ -92,8 +92,8 @@ int is_valid_env_c(char c);
 /*
 **launch_exe
 */
-int launch_exe(char *exe, char *path, char **env);
-void find_exe(int index, char *path, char **env);
+int launch_exe(char *exe, char *path, char **env, t_command *cmd);
+void find_exe(int index, char *path, char **env, t_command *cmd);
 
 /*
 **launch_exe_utils
@@ -149,7 +149,7 @@ void    ft_echo(char **res, t_list *var_env);
 /*
 **exec
 */
-int set_args(char **res, char **env, char *path);
+int set_args(char **res, char **env, char *path, t_command *cmd);
 int exec_command(char **args, char **res, char *path, int j);
 int read_dir(char *path, char *command);
 char **arguments(char **tab, int i, char **args, char *path);
@@ -164,7 +164,7 @@ char **parse_path(char const *s, char c);
 /*
 **errors
 */
-int errors(char **res);
+int errors(char **res, t_command *cmd);
 
 /*
 **minishell_utils

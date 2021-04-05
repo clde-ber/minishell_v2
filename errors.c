@@ -1,8 +1,7 @@
 #include "minishell.h"
 
-int errors(char **res)
+int errors(char **res, t_command *cmd)
 {
-    if (ft_strcmp("export", res[0]) == 0)
-        write (1, "Not a valid identifier\n", 23);
-    exit(0);
+    write (1, "Not a valid identifier\n", 23);
+    cmd->cmd_rv = 1;
 }

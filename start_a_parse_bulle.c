@@ -61,6 +61,10 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
     }
     parsed_res = (ft_is_empty_string(str)) ? ft_calloc(2, sizeof(char *)) : parse_res(res, var_env, cmd);
     // printf("command:%s\n", res[0]);
+    if (ft_strcmp(res[0], "$?") == 0)
+        printf("%d: Command not found\n", cmd->cmd_rv);
+    else
+        cmd->cmd_rv = 0;
     if (ft_strcmp(res[0], "pwd") == 0)
         ft_pwd(res);
     else if (ft_strcmp(res[0], "echo") == 0)
@@ -68,14 +72,14 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
     else if (ft_strcmp(res[0], "cd") == 0)
         ft_cd(res);
     else if (res[0][0] == '.' && res[0][1] == '/')
-        find_exe(0, str, env);
+        find_exe(0, str, env, cmd);
     else if (ft_strcmp(res[0], "export") == 0 && res[1] && parsed_res)
     {
         check_doublons_cl(env, parsed_res, var_env, cmd);
         set_env(env, parsed_res, var_env, cmd);
     }
     else if (ft_strcmp(res[0], "export") == 0 && res[1] && (!(parsed_res)))
-        errors(res);
+        errors(res, cmd);
     else if (ft_strcmp(res[0], "export") == 0 && (!(res[1])))
         print_sorted_env(var_env);
     else if (ft_strcmp(res[0], "env") == 0)
@@ -83,7 +87,7 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
     else if (ft_strcmp(res[0], "unset") == 0)
         unset(var_env, parsed_res);
     else
-        set_args(parsed_res, env, cmd->path);
+        set_args(parsed_res, env, cmd->path, cmd);
 //    ft_free(parsed_res, i + 1);
 //    ft_free(res, i + 1);
 }
@@ -111,7 +115,7 @@ int main(int ac, char **av, char **env)
         write(1, "***minishell*** > ", 18);
         get_next_line(0, &line);
         if (ft_strcmp(line, "exit") == 0) //builtin à coder
-            end = 1;
+            exit(0);
         if ((command = getcommand(line)) != NULL)
         {
             dispatch(command, env, var_env, cmd);

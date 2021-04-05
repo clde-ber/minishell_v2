@@ -6,7 +6,7 @@
 ** an error. If execve - that executes the command - returns an error, it prints error accordingly. If command is interrupted by a signal, it prints an error.
 */
 
-int launch_exe(char *exe, char *path, char **env)
+int launch_exe(char *exe, char *path, char **env, t_command *cmd)
 {
     pid_t pid;
     int ret;
@@ -25,7 +25,8 @@ int launch_exe(char *exe, char *path, char **env)
         if ((ret = execve(argv[0], argv, envp)) == -1)
 		{
 		    printf("%s\n", strerror(errno));
-			exit(0);
+            cmd->cmd_rv = 1;
+			return (0);
 		}
     }
     waitpid(ret, &status, 0);
@@ -33,7 +34,7 @@ int launch_exe(char *exe, char *path, char **env)
 // waitpid attd que le programme se termine 
 }
 
-void find_exe(int index, char *path, char **env)
+void find_exe(int index, char *path, char **env, t_command *cmd)
 {
     DIR *dir;
     int i;
@@ -47,17 +48,21 @@ void find_exe(int index, char *path, char **env)
     if (!(dir = opendir(get_path(path, '/'))))
 	{
 	    printf("%s\n", strerror(errno));
+        cmd->cmd_rv = 1;
 		return ;
 	}
     while ((st_dir = readdir(dir)))
         if (ft_strcmp(st_dir->d_name, str) == 0)
         {
-            launch_exe(st_dir->d_name, path, env);
+            launch_exe(st_dir->d_name, path, env, cmd);
             closedir(dir);
             return ;
         }
     if (errno)
+    {
         printf("%s\n", strerror(errno));
+        cmd->cmd_rv = 1;
+    }
     else
-        launch_exe(str, path, env);
+        launch_exe(str, path, env, cmd);
 }
