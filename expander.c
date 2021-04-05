@@ -36,9 +36,9 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
 char **parse_first_arg(char **res, char **parsed_res, t_command *cmd, t_list *var_env)
 {
     if (res[0] && res[0][0] == '\'')
-        parsed_res[0] = expander(ft_strtrim(res[0], "\'"), var_env, res, cmd);
+        parsed_res[0] = ft_strtrim(res[0], "\'");
     else if (res)
-        parsed_res[0] = expander(ft_strtrim(res[0], "\""), var_env, res, cmd);
+        parsed_res[0] = ft_strtrim(res[0], "\"");
     return (parsed_res);
 }
 

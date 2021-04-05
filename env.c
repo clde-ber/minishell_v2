@@ -50,15 +50,15 @@ void set_env(char **env, char **tab, t_list *var_env, t_command *cmd)
 	while (i <= j - 1)
     {
 		if (ft_strchr(tab[i], '='))
-			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tab[i]), ft_strdup(ft_strchr(tab[i], '=') + 1))));
+			ft_lstadd_back(&tmp, (tmp_new = ft_lstnew(ft_get_name(tab[i]), ft_strdup(ft_strchr(tab[i], '=') + 1))));
 		else
-			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tab[i]), ft_strdup(""))));
-		ft_lstiter(var_env, &ft_record, tab[i], cmd);
+			ft_lstadd_back(&tmp, (tmp_new = ft_lstnew(ft_get_name(tab[i]), ft_strdup(""))));
+		tmp = check_doublons(k, j, tab, var_env);
+		ft_lstiter(tmp, &ft_record, tab[i], cmd);
 		tmp->prec = tmp;
 		tmp_new = tmp;
 		i++;
 	}
-	var_env = tmp_new;
 }
 
 void	unset(t_list *env, char **tab)
