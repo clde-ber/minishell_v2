@@ -27,6 +27,8 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
                 res = ft_strtrim(res, "\'");
             else
                 res = ft_strtrim(res, "\"");
+            if (is_valid_env_name(ft_get_name(res)) == 0)
+                return (NULL);
             return (replace_by_env(res, var_env, cmd));
         }
     }
@@ -88,6 +90,8 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd)
         }
         else
             parsed_res[j] = expander(res[i], var_env, res, cmd);
+        if (parsed_res[i] == NULL)
+            return (NULL);
         i++;
         j++;
     }

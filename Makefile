@@ -3,6 +3,7 @@ SRCS		= ./debug_to_delete.c\
 		./env_utils.c\
 		./env_utils2.c\
 		./env.c\
+		./errors.c\
 		./exec.c\
 		./expander_utils.c\
 		./expander_utils2.c\

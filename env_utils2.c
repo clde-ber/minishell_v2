@@ -70,3 +70,17 @@ void print_sorted_env(t_list *environ)
 		i++;
 	}
 }
+
+int is_valid_env_name(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!(str[i] == '_' || ft_isalnum(str[i])))
+			return (0);
+		i++;
+	}
+	return (1);
+}

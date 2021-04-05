@@ -126,6 +126,7 @@ void add_to_env(char **tab, int k, int l);
 char **fill_list(t_list *environ, char **list, int i);
 char **sort_list(t_list *environ, char **list, int i, int j);
 void print_sorted_env(t_list *environ);
+int is_valid_env_name(char *str);
 
 /*
 **path
@@ -159,6 +160,11 @@ int exit_status(int status, int errno);
 **parse_path
 */
 char **parse_path(char const *s, char c);
+
+/*
+**errors
+*/
+int errors(char **res);
 
 /*
 **minishell_utils
