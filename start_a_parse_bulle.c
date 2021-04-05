@@ -59,11 +59,6 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
         printf("%s|\n", res[i]);
         i++;
     }
-    char *res_trial[4];
-    res_trial[0] = "bash";
-    res_trial[1] = "export";
-    res_trial[2] = "[a=a";
-    res_trial[3] = NULL;
     parsed_res = (ft_is_empty_string(str)) ? ft_calloc(2, sizeof(char *)) : parse_res(res, var_env, cmd);
     // printf("command:%s\n", res[0]);
     if (ft_strcmp(res[0], "pwd") == 0)

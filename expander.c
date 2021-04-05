@@ -90,7 +90,7 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd)
         }
         else
             parsed_res[j] = expander(res[i], var_env, res, cmd);
-        if (parsed_res[i] == NULL)
+        if (parsed_res[j] == NULL)
             return (NULL);
         i++;
         j++;
