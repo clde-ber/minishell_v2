@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <signal.h>
 
 #define BUFFER_SIZE 50
 
@@ -38,9 +39,6 @@ typedef struct s_command
     int index;
     int cmd_rv;
 }               t_command;
-
-//droit a variable globale comme ça? si oui tant mieux
-extern t_list *var_env;
 
 //A DELETE
 // dans debug_to_delete
@@ -161,9 +159,10 @@ int exit_status(int status, int errno);
 char **parse_path(char const *s, char c);
 
 /*
-**errors
+**sig_a_errors
 */
 int errors(char **res, t_command *cmd);
+void handle_signal(int code);
 
 /*
 **minishell_utils
@@ -232,5 +231,6 @@ t_list ft_record(void *lst, void *str, void *cmd);
 void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *, void *), char *str, t_command *cmd);
 void ft_lstdel(t_list *lst);
 
+extern int sig;
 
 #endif

@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+sig = 0;
+
 int ft_is_empty_string(char *str)
 {
     int i;
@@ -62,7 +64,15 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
     parsed_res = (ft_is_empty_string(str)) ? ft_calloc(2, sizeof(char *)) : parse_res(res, var_env, cmd);
     // printf("command:%s\n", res[0]);
     if (ft_strcmp(res[0], "$?") == 0)
+    {
+        if (sig == 1)
+            cmd->cmd_rv = 130;
+        if (sig == 2)
+            cmd->cmd_rv = 131;
+        if (sig == 1 || sig == 2)
+            sig = 0;
         printf("%d: Command not found\n", cmd->cmd_rv);
+    }
     else
     {    cmd->cmd_rv = 0;
     if (ft_strcmp(res[0], "pwd") == 0)
@@ -110,6 +120,8 @@ int main(int ac, char **av, char **env)
     if (!(cmd = malloc(sizeof(t_command))))
         return (NULL);
     var_env = set_new_env(env, (to_free = ft_calloc(2, sizeof(char *))), var_env, cmd);
+    signal(SIGINT, handle_signal);
+    signal(SIGQUIT, handle_signal);
     while (end == 0)
     {
         write(1, "***minishell*** > ", 18);

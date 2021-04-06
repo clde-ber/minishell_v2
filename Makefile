@@ -3,7 +3,6 @@ SRCS		= ./debug_to_delete.c\
 		./env_utils.c\
 		./env_utils2.c\
 		./env.c\
-		./errors.c\
 		./exec.c\
 		./expander_utils.c\
 		./expander_utils2.c\
@@ -23,6 +22,7 @@ SRCS		= ./debug_to_delete.c\
 		./parse_path.c\
 		./path.c\
 		./redir.c\
+		./sig_a_errors.c\
 		./start_a_parse_bulle.c\
 
 RENAME		= mv a.out minishell
