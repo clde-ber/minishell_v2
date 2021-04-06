@@ -124,6 +124,7 @@ int main(int ac, char **av, char **env)
     signal(SIGQUIT, handle_signal);
     while (end == 0)
     {
+        if (!(sig))
         write(1, "***minishell*** > ", 18);
         get_next_line(0, &line);
         if (ft_strcmp(line, "exit") == 0) //builtin à coder

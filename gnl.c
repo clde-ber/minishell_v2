@@ -60,6 +60,11 @@ int				get_next_line(int fd, char **line)
 	while (find_n(buf, BUFFER_SIZE) == -1 &&
 	(i = read(fd, buf, BUFFER_SIZE)) > 0)
 		line[0] = ft_read_a_join(i, buf, line);
+	if (find_n(buf, BUFFER_SIZE) == -1 && i <= 0)
+	{
+		write(1, "\n", 1);
+		exit(0);
+	}
 	line[0] = (i == 0) ? line[0] : join_a_free(line[0], buf);
 	if (find_n(line[0], ft_strlen(line[0])) != -1)
 	{

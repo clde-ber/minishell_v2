@@ -15,11 +15,11 @@ void handle_signal(int code)
     if (code == 2) //ctrl-c
     {
         sig = 1;
-        write(1, "\n", 1);
+        write(1, "\n***minishell*** > ", 19);
     }
     else if (code == 3) //ctrl-antislash
     {
         sig = 2;
-        write(1, "Quit (core dumped)\n", 19);
+        write(1, "Quit (core dumped)\n***minishell*** > ", 37);
     }
 }
