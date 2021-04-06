@@ -28,6 +28,7 @@ int launch_exe(char *exe, char *path, char **env, t_command *cmd)
             cmd->cmd_rv = 1;
 			return (0);
 		}
+        exit(status);
     }
     waitpid(ret, &status, 0);
 	return (exit_status(status, errno));

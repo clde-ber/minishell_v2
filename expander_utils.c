@@ -35,16 +35,18 @@ char *get_env(char *str, t_list *var_env, t_command *cmd)
     {
         test[i] = str[i];
         i++;
-        cmd->index += i;
         test[i] = '\0';
     }
     if (ft_strcmp(search_env_value(test, var_env), "") == 0)
         return (ft_strdup(""));
     else
+    {
+        cmd->index += ft_strlen(test);
         return (search_env_value(test, var_env));
+    }
 }
 
-char *replace_by_env(char *trim, t_list *var_env, t_command *cmd)
+char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean)
 {
     int i;
     char *tmp;
@@ -58,6 +60,7 @@ char *replace_by_env(char *trim, t_list *var_env, t_command *cmd)
         if (is_valid_env_c(trim[i]))
         {
             tmp = ft_strjoin(tmp, get_string(&trim[i]));
+            cmd->index += get_string(&trim[i]);
             i += ft_strlen(get_string(&trim[i]));
         }
         else if (trim[i] == '$')
@@ -66,7 +69,11 @@ char *replace_by_env(char *trim, t_list *var_env, t_command *cmd)
             i += cmd->index + 1;
         }
         else
+        {
+            if (boolean == 0)
+                errors(cmd);
             return (ft_strdup(""));
+        }
         cmd->index = 0;
     }
     return (tmp);
@@ -78,8 +85,8 @@ char *non_handled_commands(char *res, t_list *var_env, char **args, t_command *c
 
     tmp = ft_strdup(res);
     tmp = ft_strtrim(tmp, "\"");
-    if (is_handled_cmd(args[0]) == 0 && tmp[0] == '$')
-        tmp = replace_by_env(tmp, var_env, cmd);
+    if (ft_strchr(tmp, '$'))
+        tmp = replace_by_env(tmp, var_env, cmd, 1);
     return (ft_strtrim(tmp, "\'"));
 }
 
@@ -104,8 +111,8 @@ char *handled_export(char *res, t_list *var_env, char **args, t_command *cmd)
         trim_first = ft_strtrim(trim_first, "\"");
     if (trim_secd[0] != '\'')
         trim_secd = ft_strtrim(trim_secd, "\"");
-    trim_first = replace_by_env(trim_first, var_env, cmd);
-    trim_secd = replace_by_env(trim_secd, var_env, cmd);
+    trim_first = replace_by_env(trim_first, var_env, cmd, 0);
+    trim_secd = replace_by_env(trim_secd, var_env, cmd, 0);
     if (is_valid_env_name(ft_strtrim(ft_get_name(trim_first), "\'")) == 0)
         return (NULL);
     return (ft_strjoin(ft_strjoin(ft_strtrim(trim_first, "\'"), "="), ft_strtrim(trim_secd, "\'")));

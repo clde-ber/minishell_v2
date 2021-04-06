@@ -63,7 +63,7 @@ int exit_status(int status, int errno)
         }
     }
     else
-        return (1);
+        return (status - 255);
 }
 
 int exec_command(char **args, char **res, char *path, int j)
@@ -91,9 +91,10 @@ int exec_command(char **args, char **res, char *path, int j)
             ret = execve(tab[0], tab, environment(path));
         	i++;
         }
+        exit(status);
     }
-    if (ret == -1)
-        return (-1);
+//    if (ret == -1)
+//        return (-1);
     waitpid(ret, &status, 0);
     return (exit_status(status, errno));
 // waitpid waits for the program to be finished. 
@@ -123,18 +124,14 @@ int set_args(char **res, char **env, char *path, t_command *cmd)
             index++;
         }
         args[index] = NULL;
-        if ((ret = exec_command(args, res, path, i)))
-            cmd->cmd_rv = 1;
-        if (ret == -1)
-            printf("%s : Command not found\n", res[0], cmd->cmd_rv);
+        if ((cmd->cmd_rv = exec_command(args, res, path, i)) == -1)
+            printf("%s : Command not found\n", res[0]);
 
     }
     else
     {
-        if ((ret = exec_command(ft_calloc(2, sizeof(char *)), res, path, 1)))
-            cmd->cmd_rv = 1;
-        if (ret == -1)
-            printf("%s : Command not found\n", res[0], cmd->cmd_rv);
+        if ((cmd->cmd_rv = exec_command(ft_calloc(2, sizeof(char *)), res, path, 1)) == -1)
+            printf("%s : Command not found\n", res[0]);
     }
     return (0);
 }

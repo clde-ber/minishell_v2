@@ -55,13 +55,14 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
         res = ft_calloc(2, sizeof(char *));
     else
         res = ft_split(str, "\t\n\r\v\f ");
+    parsed_res = (ft_is_empty_string(str)) ? ft_calloc(2, sizeof(char *)) : parse_res(res, var_env, cmd);
     while (res[i])
     {
         printf("%d|\n", i);
         printf("%s|\n", res[i]);
+        printf("%s|\n", parsed_res[i]);
         i++;
     }
-    parsed_res = (ft_is_empty_string(str)) ? ft_calloc(2, sizeof(char *)) : parse_res(res, var_env, cmd);
     // printf("command:%s\n", res[0]);
     if (ft_strcmp(res[0], "$?") == 0)
     {
@@ -71,10 +72,10 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
             cmd->cmd_rv = 131;
         if (sig == 1 || sig == 2)
             sig = 0;
-        printf("%d: Command not found\n", cmd->cmd_rv);
+        printf("%d : Command not found\n", cmd->cmd_rv);
     }
     else
-    {    cmd->cmd_rv = 0;
+    {
     if (ft_strcmp(res[0], "pwd") == 0)
         ft_pwd(res);
     else if (ft_strcmp(res[0], "echo") == 0)
@@ -89,7 +90,7 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
         set_env(env, parsed_res, var_env, cmd);
     }
     else if (ft_strcmp(res[0], "export") == 0 && res[1] && (!(parsed_res)))
-        errors(res, cmd);
+        errors(cmd);
     else if (ft_strcmp(res[0], "export") == 0 && (!(res[1])))
         print_sorted_env(var_env);
     else if (ft_strcmp(res[0], "env") == 0)
@@ -97,9 +98,10 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
     else if (ft_strcmp(res[0], "unset") == 0)
         unset(var_env, parsed_res);
     else
-        set_args(parsed_res, env, cmd->path, cmd);}
-//    ft_free(parsed_res, i + 1);
-//    ft_free(res, i + 1);
+        set_args(parsed_res, env, cmd->path, cmd);
+    }
+    ft_free(parsed_res, i + 1);
+    ft_free(res, i + 1);
 }
 
 // pour l'instant, ne prend qu'une commande. La commande doit etre enregistrée (pas fait), découpée (fait mais 
@@ -125,8 +127,10 @@ int main(int ac, char **av, char **env)
     while (end == 0)
     {
         if (!(sig))
-        write(1, "***minishell*** > ", 18);
+            write(1, "***minishell*** > ", 18);
         get_next_line(0, &line);
+        if ((ft_strcmp(line, "$?")))
+            cmd->cmd_rv = 0;
         if (ft_strcmp(line, "exit") == 0) //builtin à coder
             exit(0);
         if ((command = getcommand(line)) != NULL)
@@ -134,6 +138,7 @@ int main(int ac, char **av, char **env)
             dispatch(command, env, var_env, cmd);
             free(command);
         }
+        sig = 0;
         free(line);
     }
     ft_lstdel(var_env);

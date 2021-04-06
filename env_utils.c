@@ -17,7 +17,8 @@ char *ft_get_name(char *str)
     copy = ft_strdup(str);
     while (copy[i] && boolean == 0)
     {
-        if (copy[i] == '=' || (copy[i] == '+' && copy[i + 1] == '='))
+        if (copy[i] == '=' || (copy[i] == '+' && copy[i + 1] == '=') ||
+		(copy[i] == '+' && copy[i + 1] == '\0'))
         {
             copy[i] = '\0';
             boolean = 1;
@@ -80,10 +81,7 @@ void check_doublons_cl(char **env, char **tab, t_list *var_env, t_command *cmd)
 	}
 	k = 0;
 	while (tab[k])
-	{
-		printf("tab[k]%s\n", tab[k]);
 		k++;
-	}
 }
 
 t_list *check_doublons(int k, int j, char **tab, t_list *var_env)

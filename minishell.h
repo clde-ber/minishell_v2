@@ -74,7 +74,7 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd);
 */
 char *get_string(char *str);
 char *get_env(char *str, t_list *var_env, t_command *cmd);
-char *replace_by_env(char *trim, t_list *var_env, t_command *cmd);
+char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean);
 char *non_handled_commands(char *res, t_list *var_env, char **args, t_command *cmd);
 char *handled_export(char *res, t_list *var_env, char **args, t_command *cmd);
 
@@ -161,7 +161,7 @@ char **parse_path(char const *s, char c);
 /*
 **sig_a_errors
 */
-int errors(char **res, t_command *cmd);
+int errors(t_command *cmd);
 void handle_signal(int code);
 
 /*

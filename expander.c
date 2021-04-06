@@ -25,7 +25,7 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
                 res = ft_strtrim(res, "\'");
             else
                 res = ft_strtrim(res, "\"");
-            trim = replace_by_env(res, var_env, cmd);
+            trim = replace_by_env(res, var_env, cmd, 0);
             if (is_valid_env_name(ft_strtrim(ft_get_name(trim), "\'")) == 0)
                 return (NULL);
             else
