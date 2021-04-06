@@ -64,7 +64,7 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
     if (ft_strcmp(res[0], "$?") == 0)
         printf("%d: Command not found\n", cmd->cmd_rv);
     else
-        cmd->cmd_rv = 0;
+    {    cmd->cmd_rv = 0;
     if (ft_strcmp(res[0], "pwd") == 0)
         ft_pwd(res);
     else if (ft_strcmp(res[0], "echo") == 0)
@@ -87,7 +87,7 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
     else if (ft_strcmp(res[0], "unset") == 0)
         unset(var_env, parsed_res);
     else
-        set_args(parsed_res, env, cmd->path, cmd);
+        set_args(parsed_res, env, cmd->path, cmd);}
 //    ft_free(parsed_res, i + 1);
 //    ft_free(res, i + 1);
 }

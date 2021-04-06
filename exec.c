@@ -92,6 +92,8 @@ int exec_command(char **args, char **res, char *path, int j)
         	i++;
         }
     }
+    if (ret == -1)
+        return (-1);
     waitpid(ret, &status, 0);
     return (exit_status(status, errno));
 // waitpid waits for the program to be finished. 
@@ -102,11 +104,13 @@ int exec_command(char **args, char **res, char *path, int j)
 int set_args(char **res, char **env, char *path, t_command *cmd)
 {
     int i;
+    int ret;
     int index;
     char **args;
 
     i = 0;
     index = 0;
+    ret = 0;
     while (res[i])
         i++;
     if (i > 1)
@@ -119,13 +123,18 @@ int set_args(char **res, char **env, char *path, t_command *cmd)
             index++;
         }
         args[index] = NULL;
-        if ((exec_command(args, res, path, i)))
+        if ((ret = exec_command(args, res, path, i)))
             cmd->cmd_rv = 1;
+        if (ret == -1)
+            printf("%s : Command not found\n", res[0], cmd->cmd_rv);
+
     }
     else
     {
-        if ((exec_command(ft_calloc(2, sizeof(char *)), res, path, 1)))
+        if ((ret = exec_command(ft_calloc(2, sizeof(char *)), res, path, 1)))
             cmd->cmd_rv = 1;
+        if (ret == -1)
+            printf("%s : Command not found\n", res[0], cmd->cmd_rv);
     }
     return (0);
 }
