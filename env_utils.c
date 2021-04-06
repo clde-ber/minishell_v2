@@ -17,7 +17,7 @@ char *ft_get_name(char *str)
     copy = ft_strdup(str);
     while (copy[i] && boolean == 0)
     {
-        if (copy[i] == '=' || copy[i] == '+')
+        if (copy[i] == '=' || (copy[i] == '+' && copy[i + 1] == '='))
         {
             copy[i] = '\0';
             boolean = 1;

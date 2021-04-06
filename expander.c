@@ -9,11 +9,9 @@
 char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
 {
     char *tmp;
-    char *trim_first;
-    char *trim_secd;
+    char *trim;
 
-    trim_first = NULL;
-    trim_secd = NULL;
+    trim = NULL;
     cmd->index = 0;
     if (is_handled_cmd(args[0]) == 0)
         return (non_handled_commands(res, var_env, args, cmd));
@@ -27,9 +25,11 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
                 res = ft_strtrim(res, "\'");
             else
                 res = ft_strtrim(res, "\"");
-            if (is_valid_env_name(ft_get_name(res)) == 0)
+            trim = replace_by_env(res, var_env, cmd);
+            if (is_valid_env_name(ft_strtrim(ft_get_name(trim), "\'")) == 0)
                 return (NULL);
-            return (replace_by_env(res, var_env, cmd));
+            else
+                return (trim);
         }
     }
     return (ft_strdup("error"));

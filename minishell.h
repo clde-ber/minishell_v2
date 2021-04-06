@@ -86,7 +86,6 @@ char *handled_export(char *res, t_list *var_env, char **args, t_command *cmd);
 char *search_env_name(char *str, t_list *var_env);
 char *search_env_value(char *str, t_list *var_env);
 char *antislashes_a_quotes(char *str);
-int is_valid_env(char *str);
 int is_valid_env_c(char c);
 
 /*

@@ -51,6 +51,8 @@ char *replace_by_env(char *trim, t_list *var_env, t_command *cmd)
 
     i = 0;
     tmp = ft_strdup("");
+    if (trim[0] == '\'')
+        return (ft_strtrim(trim, "\'"));
     while (i < ft_strlen(trim))
     {
         if (is_valid_env_c(trim[i]))
@@ -102,9 +104,9 @@ char *handled_export(char *res, t_list *var_env, char **args, t_command *cmd)
         trim_first = ft_strtrim(trim_first, "\"");
     if (trim_secd[0] != '\'')
         trim_secd = ft_strtrim(trim_secd, "\"");
-    if (is_valid_env_name(ft_get_name(trim_first)) == 0)
-        return (NULL);
     trim_first = replace_by_env(trim_first, var_env, cmd);
     trim_secd = replace_by_env(trim_secd, var_env, cmd);
-    return (ft_strjoin(ft_strjoin(trim_first, "="), trim_secd));
+    if (is_valid_env_name(ft_strtrim(ft_get_name(trim_first), "\'")) == 0)
+        return (NULL);
+    return (ft_strjoin(ft_strjoin(ft_strtrim(trim_first, "\'"), "="), ft_strtrim(trim_secd, "\'")));
 }
