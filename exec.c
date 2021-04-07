@@ -52,18 +52,7 @@ char **environment(char *path)
 
 int exit_status(int status, int errno)
 {
-    if (!(status))
-    {
-        if (WIFEXITED(status))
-            return (WEXITSTATUS(status));
-        else
-        {
-            printf("%s\n", strerror(errno));
-            return (1);
-        }
-    }
-    else
-        return (status - 255);
+    return (status % 255);
 }
 
 int exec_command(char **args, char **res, char *path, int j)
@@ -95,7 +84,10 @@ int exec_command(char **args, char **res, char *path, int j)
         	i++;
         }
         if (i == count)
+        {
+            exit(33151);
             printf("%s : Command not found\n", res[0]);
+        }
         exit(status);
     }
 //    if (ret == -1)
@@ -129,17 +121,13 @@ int set_args(char **res, char **env, char *path, t_command *cmd)
             index++;
         }
         args[index] = NULL;
-        if ((ret = exec_command(args, res, path, i)))
-            cmd->cmd_rv = ret - 255;
-        else
-            cmd->cmd_rv = ret;
+        ret = exec_command(args, res, path, i);
+        cmd->cmd_rv = ret;
     }
     else
     {
-        if ((ret = exec_command(ft_calloc(2, sizeof(char *)), res, path, 1)))
-            cmd->cmd_rv = ret - 255;
-        else
-            cmd->cmd_rv = ret;
+        ret = exec_command(ft_calloc(2, sizeof(char *)), res, path, 1);
+        cmd->cmd_rv = ret;
     }
     return (0);
 }
