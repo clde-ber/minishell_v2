@@ -55,7 +55,7 @@ int exit_status(int status, int errno)
     if (!(status))
     {
         if (WIFEXITED(status))
-            return (0);
+            return (WEXITSTATUS(status));
         else
         {
             printf("%s\n", strerror(errno));
@@ -73,6 +73,7 @@ int exec_command(char **args, char **res, char *path, int j)
     int status;
     int i;
     char **tab;
+    int count;
 
     pid = 0;
     ret = 0;
@@ -80,6 +81,7 @@ int exec_command(char **args, char **res, char *path, int j)
     status = 0;
     tab = arguments(res, j, args, path);
     i = 0;
+    count = 0;
 // readdir must be called to print correct error.
 // Fork duplicates the process so the parent process doesn't return when the child process does.
     if ((pid = fork()) == 0)
@@ -88,9 +90,12 @@ int exec_command(char **args, char **res, char *path, int j)
 		{
             free(tab[0]);
             tab[0] = ft_strjoin(ft_strjoin(parse_path(path, ':')[i], "/"), res[0]);
-            ret = execve(tab[0], tab, environment(path));
+            if ((ret = execve(tab[0], tab, environment(path))) == -1)
+                count++;
         	i++;
         }
+        if (i == count)
+            printf("%s : Command not found\n", res[0]);
         exit(status);
     }
 //    if (ret == -1)
@@ -105,9 +110,9 @@ int exec_command(char **args, char **res, char *path, int j)
 int set_args(char **res, char **env, char *path, t_command *cmd)
 {
     int i;
-    int ret;
     int index;
     char **args;
+    int ret;
 
     i = 0;
     index = 0;
@@ -124,14 +129,17 @@ int set_args(char **res, char **env, char *path, t_command *cmd)
             index++;
         }
         args[index] = NULL;
-        if ((cmd->cmd_rv = exec_command(args, res, path, i)) == -1)
-            printf("%s : Command not found\n", res[0]);
-
+        if ((ret = exec_command(args, res, path, i)))
+            cmd->cmd_rv = ret - 255;
+        else
+            cmd->cmd_rv = ret;
     }
     else
     {
-        if ((cmd->cmd_rv = exec_command(ft_calloc(2, sizeof(char *)), res, path, 1)) == -1)
-            printf("%s : Command not found\n", res[0]);
+        if ((ret = exec_command(ft_calloc(2, sizeof(char *)), res, path, 1)))
+            cmd->cmd_rv = ret - 255;
+        else
+            cmd->cmd_rv = ret;
     }
     return (0);
 }
