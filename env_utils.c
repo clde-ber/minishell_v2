@@ -35,20 +35,60 @@ char *ft_get_name(char *str)
 
 void add_to_env(char **tab, int k, int l)
 {
+	char *i_name;
+	char *j_name;
+	char *i_value;
+	char *j_value;
+
+	i_name = ft_get_name(tab[k]);
+	j_name = ft_get_name(tab[l]);
+	if (ft_strchr(tab[k], '='))
+		i_value = ft_strdup(ft_strchr(tab[k], '='));
+	else
+		i_value = ft_strdup("");
+	if (ft_strchr(tab[l], '='))
+		j_value = ft_strdup(ft_strchr(tab[l], '='));
+	else
+		j_value = ft_strdup("");
 	if (l > k)
 	{
 		if (ft_strchr(tab[l], '+') && ft_strchr(tab[k], '=') &&
 		ft_strchr(tab[l], '='))
-			tab[l] = ft_strjoin(ft_strjoin(ft_strjoin(ft_get_name(tab[l]), "\
-+="), ft_strchr(tab[k], '=') + 1), ft_strchr(tab[l], '=') + 1);
+		{
+			free(tab[l]);
+			tab[l] = join_a_free(join_a_free(join_a_free(j_name, "\
++="), &i_value[1]), &j_value[1]);
+			free(i_name);
+		}
+		else
+		{
+			free(i_name);
+			free(j_name);
+		}
 	}
 	else if (l < k)
 	{
 		if (ft_strchr(tab[k], '+') && ft_strchr(tab[k], '=') &&
 		ft_strchr(tab[l], '='))
-			tab[k] = ft_strjoin(ft_strjoin(ft_strjoin(ft_get_name(tab[k]), "\
-+="), ft_strchr(tab[l], '=') + 1), ft_strchr(tab[k], '=') + 1);
+		{
+			free(tab[k]);
+			tab[k] = join_a_free(join_a_free(join_a_free(i_name, "\
++="), &j_value[1]), &i_value[1]);
+			free(j_name);
+		}
+		else
+		{
+			free(i_name);
+			free(j_name);
+		}
 	}
+	else
+	{
+		free(i_name);
+		free(j_name);
+	}
+	free(i_value);
+	free(j_value);
 }
 
 void check_doublons_cl(char **env, char **tab, t_list *var_env, t_command *cmd)
@@ -56,8 +96,12 @@ void check_doublons_cl(char **env, char **tab, t_list *var_env, t_command *cmd)
 	int k;
 	int l;
 	int j;
+	char *i_name;
+	char *j_name;
 
 	j = 0;
+	i_name = NULL;
+	j_name = NULL;
 	while (tab[j])
 		j++;
 	k = j - 1;
@@ -66,22 +110,23 @@ void check_doublons_cl(char **env, char **tab, t_list *var_env, t_command *cmd)
 	{
 		while (l >= 1)
 		{
-			if (ft_strcmp(ft_get_name(tab[k]), ft_get_name(tab[l])) == 0)
+			i_name = ft_get_name(tab[k]);
+			j_name = ft_get_name(tab[l]);
+			if (ft_strcmp(i_name, j_name) == 0)
 			{
 				add_to_env(tab, k, l);
 				if (l > k)
-					tab[k] = ft_strdup("");
+					tab[k][0] = '\0';
 				else if (l < k)
-					tab[l] = ft_strdup("");
+					tab[l][0] = '\0';
 			}
 			l--;
+			free(i_name);
+			free(j_name);
 		}
 		l = j - 1;
 		k--;
 	}
-	k = 0;
-	while (tab[k])
-		k++;
 }
 
 t_list *check_doublons(int k, int j, char **tab, t_list *var_env)
@@ -108,15 +153,19 @@ t_list *check_doublons(int k, int j, char **tab, t_list *var_env)
 
 void replace_env(char *tab, t_list *var_env)
 {
-	if (ft_strcmp(ft_get_name(tab), var_env->name) == 0)
+	char *name;
+
+	name = ft_get_name(tab);
+	if (ft_strcmp(name, var_env->name) == 0)
 	{
 		if (ft_strchr(tab, '+') && ft_strchr(tab, '='))
 			var_env->value = ft_strjoin(var_env->value,
-			ft_strchr(tab, '=') + 1);
+			&ft_strchr(tab, '=')[1]);
 		else if (ft_strchr(tab, '='))
-			var_env->value = ft_strdup(ft_strchr(tab, '=') + 1);
+			var_env->value = ft_strdup(&ft_strchr(tab, '=')[1]);
 		else
-			var_env->value = ft_strdup("");
+			((char *)var_env->value)[0] = '\0';
 		tab[0] = '\0';
 	}
+	free(name);
 }

@@ -77,6 +77,8 @@ char *get_env(char *str, t_list *var_env, t_command *cmd);
 char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean);
 char *non_handled_commands(char *res, t_list *var_env, char **args, t_command *cmd);
 char *handled_export(char *res, t_list *var_env, char **args, t_command *cmd);
+char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd, int boolean);
+char *get_string_value(char *str);
 
 /*
 **expander_utils2
@@ -214,6 +216,7 @@ char			*ft_strtrim(char const *s1, char const *set);
 */
 int	ft_strlcpy(char *dst, const char *src, int dstsize);
 int	ft_isalnum(int c);
+char	*ft_strjoin_free(char *s1, char *s2);
 
 /*
 **libft_list

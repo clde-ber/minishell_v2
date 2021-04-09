@@ -32,10 +32,10 @@ FS		= a.out.dSYM minishell.dSYM valgrind_log
 CC			= gcc
 RM			= rm -f
 RM_DIR		= rm -rf
-#CFLAGS		= -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS		= -g3 -fsanitize=address #-Wall -Wextra -Werror
 $(NAME):		$(OBJ)
 #add CFLAGS
-				@$(CC) $(SRCS)
+				@$(CC) $(CFLAGS) $(SRCS)
 				@$(RENAME)
 all:			$(NAME)
 clean:

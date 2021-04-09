@@ -27,6 +27,7 @@ char *search_env_value(char *str, t_list *var_env)
 {
     char *ret;
 
+    ret = NULL;
     while (var_env)
     {
         if (ft_strcmp(var_env->name, str) == 0)
@@ -60,7 +61,7 @@ char *antislashes_a_quotes(char *str)
         i++;
     }
     ret[j] = '\0';
-//    free(str);
+    free(str);
     return (ret);
 }
 

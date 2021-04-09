@@ -60,9 +60,14 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
     {
         printf("%d|\n", i);
         printf("%s|\n", res[i]);
-        printf("%s|\n", parsed_res[i]);
         i++;
     }
+/*    i = 0;
+    while (parsed_res[i])
+    {
+        printf("%s|\n", parsed_res[i]);
+        i++;
+    }*/
     // printf("command:%s\n", res[0]);
     if (ft_strcmp(res[0], "$?") == 0)
     {
@@ -86,6 +91,12 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
         find_exe(0, str, env, cmd);
     else if (ft_strcmp(res[0], "export") == 0 && res[1] && parsed_res)
     {
+        i = 0;
+        while (parsed_res[i])
+        {
+            printf("parsedres %s\n", parsed_res[i]);
+            i++;
+        }
         check_doublons_cl(env, parsed_res, var_env, cmd);
         set_env(env, parsed_res, var_env, cmd);
     }
@@ -95,12 +106,13 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
         print_sorted_env(var_env);
     else if (ft_strcmp(res[0], "env") == 0)
         print_env(var_env);
-    else if (ft_strcmp(res[0], "unset") == 0)
+    else if (ft_strcmp(res[0], "unset") == 0 && parsed_res)
         unset(var_env, parsed_res);
     else
         set_args(parsed_res, env, cmd->path, cmd);
     }
-    ft_free(parsed_res, i + 1);
+    if (parsed_res)
+        ft_free(parsed_res, i + 1);
     ft_free(res, i + 1);
 }
 

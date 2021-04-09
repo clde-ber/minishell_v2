@@ -10,8 +10,12 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
 {
     char *tmp;
     char *trim;
+    char *name;
+    char *str;
 
     trim = NULL;
+    name = NULL;
+    str = NULL;
     cmd->index = 0;
     if (is_handled_cmd(args[0]) == 0)
         return (non_handled_commands(res, var_env, args, cmd));
@@ -22,14 +26,25 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
         else if (ft_strcmp(args[0], "unset") == 0)
         {
             if (res[0] == '\'')
-                res = ft_strtrim(res, "\'");
+                trim = ft_strtrim(res, "\'");
             else
-                res = ft_strtrim(res, "\"");
-            trim = replace_by_env(res, var_env, cmd, 0);
-            if (is_valid_env_name(ft_strtrim(ft_get_name(trim), "\'")) == 0)
+                trim = ft_strtrim(res, "\"");
+            str = ft_strtrim(trim, "\'");
+            name = ft_get_name(str);
+            if (is_valid_env_name(name) == 0)
+            {
+                free(name);
+                free(str);
+                trim = replace_by_env(trim, var_env, cmd, 0);
                 return (NULL);
+            }
             else
+            {
+                free(name);
+                free(str);
+                trim = replace_by_env(trim, var_env, cmd, 1);
                 return (trim);
+            }
         }
     }
     return (ft_strdup("error"));
@@ -50,6 +65,8 @@ int strings_to_join(char **res, int i)
     || (res[i][0] == '\"' && res[i][ft_strlen(res[i]) - 1] == '\"'))
     && res[i + 1] && ft_strchr(res[i + 1], '='))
         return (1);
+    else if (ft_strchr(res[i], '=') == 0 && res[i + 1] && res[i + 1][0] == '=')
+        return (-1);
     return (0);
 }
 
@@ -82,16 +99,22 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd)
     parsed_res = parse_first_arg(res, parsed_res, cmd, var_env);
     while (res[i])
     {
-        if ((strings_to_join(res, i)))
+        if ((strings_to_join(res, i)) > 0)
         {
             parsed_res[j] = expander(ft_strjoin(res[i],
             res[i + 1]), var_env, res, cmd);
             i++;
         }
+        else if ((strings_to_join(res, i)) == -1)
+            parsed_res[j] = NULL;
         else
             parsed_res[j] = expander(res[i], var_env, res, cmd);
         if (parsed_res[j] == NULL)
+        {
+            ft_free(parsed_res, j);
             return (NULL);
+        }
+        printf("parsed_res %s\n", parsed_res[j]);
         i++;
         j++;
     }

@@ -22,19 +22,29 @@ int read_dir(char *path, char *command)
 char **arguments(char **res, int j, char **args, char *path)
 {
     char **argv;
+    char **p_bin;
+    char *str;
     int i;
+    int k;
 
     i = 1;
+    k = 0;
+    p_bin = parse_path(path, ':');
+    while (p_bin[k])
+        k++;
+    str = ft_strjoin(p_bin[0], "/");
     argv = NULL;
     if (!(argv = malloc(sizeof(char *) * (j + 2))))
         return (0);
-    argv[0] = ft_strjoin(ft_strjoin(parse_path(path, ':')[0], "/"), res[0]);
+    argv[0] = ft_strjoin(str, res[0]);
     while (i < j)
     {
         argv[i] = ft_strdup(args[i - 1]);
         i++;
     }
     argv[i] = NULL;
+    free(str);
+    ft_free(p_bin, k + 1);
     return (argv);
 }
 
@@ -61,8 +71,12 @@ int exec_command(char **args, char **res, char *path, int j)
     int ret;
     int status;
     int i;
+    int k;
     char **tab;
     int count;
+    char *str;
+    char **p_bin;
+    char **env;
 
     pid = 0;
     ret = 0;
@@ -71,27 +85,48 @@ int exec_command(char **args, char **res, char *path, int j)
     tab = arguments(res, j, args, path);
     i = 0;
     count = 0;
+    str = NULL;
+    p_bin = NULL;
+    env = NULL;
+    k = 0;
+    while (tab[k])
+        k++;
 // readdir must be called to print correct error.
 // Fork duplicates the process so the parent process doesn't return when the child process does.
     if ((pid = fork()) == 0)
     {
-        while (parse_path(path, ':')[i])
+        i = 0;
+        k = 0;
+        p_bin = parse_path(path, ':');
+        env = environment(path);
+        while(env[k])
+            k++;
+        while (p_bin[i])
 		{
             free(tab[0]);
-            tab[0] = ft_strjoin(ft_strjoin(parse_path(path, ':')[i], "/"), res[0]);
-            if ((ret = execve(tab[0], tab, environment(path))) == -1)
+            str = ft_strjoin(p_bin[i], "/");
+            tab[0] = ft_strjoin(str, res[0]);
+            if ((ret = execve(tab[0], tab, env)) == -1)
                 count++;
         	i++;
+            free(str);
         }
         if (i == count)
         {
-            exit(33151);
+            free(tab[0]);
+            ft_free(env, k + 1);
+            ft_free(p_bin, i + 1);
             printf("%s : Command not found\n", res[0]);
+            exit(33151);
         }
+        free(tab[0]);
+        ft_free(env, k + 1);
+        ft_free(p_bin, i + 1);
         exit(status);
     }
 //    if (ret == -1)
 //        return (-1);
+    ft_free(tab, k + 1);
     waitpid(ret, &status, 0);
     return (exit_status(status, errno));
 // waitpid waits for the program to be finished. 
@@ -105,10 +140,14 @@ int set_args(char **res, char **env, char *path, t_command *cmd)
     int index;
     char **args;
     int ret;
+    char **clc;
+    int k;
 
     i = 0;
     index = 0;
     ret = 0;
+    clc = NULL;
+    k = 0;
     while (res[i])
         i++;
     if (i > 1)
@@ -117,17 +156,21 @@ int set_args(char **res, char **env, char *path, t_command *cmd)
             return (0);
         while (index + 1 < i)
         {
-            args[index] = res[index + 1];
+            args[index] = ft_strdup(res[index + 1]);
             index++;
         }
         args[index] = NULL;
         ret = exec_command(args, res, path, i);
         cmd->cmd_rv = ret;
+        ft_free(args, index + 1);
     }
     else
     {
-        ret = exec_command(ft_calloc(2, sizeof(char *)), res, path, 1);
+        ret = exec_command((clc = ft_calloc(2, sizeof(char *))), res, path, 1);
         cmd->cmd_rv = ret;
+        while (clc[k])
+            k++;
+        ft_free(clc, k + 1);
     }
     return (0);
 }

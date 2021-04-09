@@ -19,12 +19,12 @@ t_list *set_new_env(char **env, char **tab, t_list *var_env, t_command *cmd)
 	while (env[k])
 		k++;
 	k--;
-	var_env = ft_lstnew((name = ft_get_name(env[k])), (value = ft_strdup(ft_strchr(env[k], '=') + 1)));
+	var_env = ft_lstnew((name = ft_get_name(env[k])), (value = ft_strdup(&ft_strchr(env[k], '=')[1])));
 	k--;
 	while (k >= 0)
 	{
 		tmp = var_env;
-		ft_lstadd_front(&var_env, ft_lstnew((name = ft_get_name(env[k])), (value = ft_strdup(ft_strchr(env[k], '=') + 1))));
+		ft_lstadd_front(&var_env, ft_lstnew((name = ft_get_name(env[k])), (value = ft_strdup(&ft_strchr(env[k], '=')[1]))));
 		ft_lstiter(var_env, &ft_record, env[k], cmd);
 		tmp->prec = var_env;
 		k--;
@@ -50,7 +50,7 @@ void set_env(char **env, char **tab, t_list *var_env, t_command *cmd)
 	while (i <= j - 1)
     {
 		if (ft_strchr(tab[i], '='))
-			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tab[i]), ft_strdup(ft_strchr(tab[i], '=') + 1))));
+			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tab[i]), ft_strdup(&ft_strchr(tab[i], '=')[1]))));
 		else
 			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tab[i]), ft_strdup(""))));
 		ft_lstiter(var_env, &ft_record, tab[i], cmd);
@@ -65,7 +65,9 @@ void	unset(t_list *env, char **tab)
 {
 	int i;
 	int j = 0;
+	char *name;
 
+	name = NULL;
 	while (tab[j])
 		j++;
 	i = 1;
@@ -73,12 +75,13 @@ void	unset(t_list *env, char **tab)
 	{
 		while (i < j)
 		{
-			if (strcmp(ft_get_name(tab[i]), env->name) == 0)
+			if (strcmp((name = ft_get_name(tab[i])), env->name) == 0)
 			{
-				env->name = ft_strdup("");
-				env->value = ft_strdup("");
+				((char *)env->name)[0] = '\0';
+				((char *)env->value)[0] = '\0';
 			}
 			i++;
+			free(name);
 		}
 		env = env->next;
 		i = 1;
