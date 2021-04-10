@@ -2,15 +2,15 @@
 
 t_list ft_record(void *lst, void *str, void *cmd)
 {
-//	free(((t_list *)lst)->name);
-//	free(((t_list *)lst)->value);
-/*	((t_list *)lst)->name = ft_get_name(str);
-	if ((ft_strchr(str, '=')))
-		((t_list *)lst)->value = ft_strdup(ft_strchr(str, '=') + 1);
-	else
-		((t_list *)lst)->value = ft_strdup("");*/
 	if (strcmp(((char *)((t_list *)lst)->name), "PATH") == 0)
+	{
+		if (((t_command *)cmd)->path)
+		{
+			free(((t_command *)cmd)->path);
+			((t_command *)cmd)->path = NULL;
+		}
 		((t_command *)cmd)->path = ft_strdup(((char *)((t_list *)lst)->value));
+	}
 }
 
 void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *, void *), char *str, t_command *cmd)

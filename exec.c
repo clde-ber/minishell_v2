@@ -1,5 +1,12 @@
 #include "minishell.h"
 
+/*
+** Functions that are similar to launch_exe ones, using execve to execute any command. Here, functions are supposed to handle not only the "./"
+** one but any shell commands. Variable $PATH environment value is splited with ':' character to help testing different locations for our 
+** command binaries - for example /bin/. Execve is called with first command line argument until it returns correctly, that is until it finds where
+** the command binaries are stored. Then it executes the command or prints an error.
+*/
+
 int read_dir(char *path, char *command)
 {
     DIR *dir;
@@ -12,77 +19,135 @@ int read_dir(char *path, char *command)
     return (1);
 }
 
-int exec_command(char **args, char **res, char *path, int j)
+char **arguments(char **res, int j, char **args, char *path)
 {
-    pid_t pid;
-    int ret;
-    int status;
-    int i;
     char **argv;
-    char **tab;
-    int x;
-    int y;
-    char *to_free;
-    char *to_free2;
+    char **p_bin;
+    char *str;
+    int i;
+    int k;
 
     i = 1;
-    pid = 0;
-    ret = 0;
-    errno = 0;
-    status = 0;
-    x = 0;
-    y = 0;
+    k = 0;
+    p_bin = parse_path(path, ':');
+    while (p_bin[k])
+        k++;
+    str = ft_strjoin(p_bin[0], "/");
+    argv = NULL;
     if (!(argv = malloc(sizeof(char *) * (j + 2))))
         return (0);
-    tab = parse_path(path, ':');
-    while (tab[y])
-        y++;
-    to_free2 = ft_strjoin(tab[0], "/");
-    argv[0] = ft_strjoin(to_free2, res[0]);
-    free(to_free2);
+    argv[0] = ft_strjoin(str, res[0]);
     while (i < j)
     {
         argv[i] = ft_strdup(args[i - 1]);
         i++;
     }
     argv[i] = NULL;
-    char *envp[]={(to_free = ft_strjoin("PATH=", path)), NULL};
-    if ((pid = fork()) == 0)
-    {
-        while (tab[x])
-		{
-            free(argv[0]);
-            to_free2 = ft_strjoin(tab[x], "/");
-            argv[0] = ft_strjoin(to_free2, res[0]);
-            if ((ret = execve(argv[0], argv, envp)) == -1)
-            free(to_free2);
-        	x++;
-        }
-    }
-    waitpid(ret, &status, 0);
-    ft_free(tab, y + 1);
-    ft_free(argv, j + 1);
-    free(to_free);
-	if (WIFEXITED(status))
-        return (0);
-    else
-	{
-        printf("%s\n", strerror(errno));
-		exit(0);
-	}
-    return (0);
-// waitpid attd que le programme se termine 
+    free(str);
+    ft_free(p_bin, k + 1);
+    return (argv);
 }
 
-int set_args(char **res, char **env, char *path)
+char **environment(char *path)
+{
+    char **envp;
+
+    envp = NULL;
+    if (!(envp = malloc(sizeof(char *) * 2)))
+        return (0);
+    envp[0] = ft_strjoin("PATH=", path);
+    envp[1] = NULL;
+    return (envp);
+}
+
+int exit_status(int status, int errno)
+{
+    return (status % 255);
+}
+
+int exec_command(char **args, char **res, char *path, int j)
+{
+    pid_t pid;
+    int ret;
+    int status;
+    int i;
+    int k;
+    char **tab;
+    int count;
+    char *str;
+    char **p_bin;
+    char **env;
+
+    pid = 0;
+    ret = 0;
+    errno = 0;
+    status = 0;
+    tab = arguments(res, j, args, path);
+    i = 0;
+    count = 0;
+    str = NULL;
+    p_bin = NULL;
+    env = NULL;
+    k = 0;
+    while (tab[k])
+        k++;
+// readdir must be called to print correct error.
+// Fork duplicates the process so the parent process doesn't return when the child process does.
+    if ((pid = fork()) == 0)
+    {
+        i = 0;
+        k = 0;
+        p_bin = parse_path(path, ':');
+        env = environment(path);
+        while(env[k])
+            k++;
+        while (p_bin[i])
+		{
+            free(tab[0]);
+            str = ft_strjoin(p_bin[i], "/");
+            tab[0] = ft_strjoin(str, res[0]);
+            if ((ret = execve(tab[0], tab, env)) == -1)
+                count++;
+        	i++;
+            free(str);
+        }
+        if (i == count)
+        {
+            free(tab[0]);
+            ft_free(env, k + 1);
+            ft_free(p_bin, i + 1);
+            printf("%s : Command not found\n", res[0]);
+            exit(33151);
+        }
+        free(tab[0]);
+        ft_free(env, k + 1);
+        ft_free(p_bin, i + 1);
+        exit(status);
+    }
+//    if (ret == -1)
+//        return (-1);
+    ft_free(tab, k + 1);
+    waitpid(ret, &status, 0);
+    return (exit_status(status, errno));
+// waitpid waits for the program to be finished. 
+}
+
+//res[0] needs to be trimed so strings with simple or double quotes are managed.
+
+int set_args(char **res, char **env, char *path, t_command *cmd)
 {
     int i;
     int index;
     char **args;
-    char **to_free;
+    int ret;
+    char **clc;
+    int k;
 
     i = 0;
     index = 0;
+    ret = 0;
+    clc = NULL;
+    k = 0;
     while (res[i])
         i++;
     if (i > 1)
@@ -91,17 +156,21 @@ int set_args(char **res, char **env, char *path)
             return (0);
         while (index + 1 < i)
         {
-            args[index] = res[index + 1];
+            args[index] = ft_strdup(res[index + 1]);
             index++;
         }
         args[index] = NULL;
-        exec_command(args, res, path, i);
-    //    ft_free(args, index + 1);
+        ret = exec_command(args, res, path, i);
+        cmd->cmd_rv = ret;
+        ft_free(args, index + 1);
     }
     else
     {
-        exec_command((to_free = ft_calloc(2, sizeof(char *))), res, path, 1);
-    //    ft_free(to_free, 2);
+        ret = exec_command((clc = ft_calloc(2, sizeof(char *))), res, path, 1);
+        cmd->cmd_rv = ret;
+        while (clc[k])
+            k++;
+        ft_free(clc, k + 1);
     }
     return (0);
 }

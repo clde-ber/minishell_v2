@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <signal.h>
 
 #define BUFFER_SIZE 50
 
@@ -25,10 +26,9 @@ typedef struct s_list
 typedef struct s_command
 {
     char *path;
+    int index;
+    int cmd_rv;
 }               t_command;
-
-//droit a variable globale comme ça? si oui tant mieux
-extern t_list *var_env;
 
 //A DELETE
 // dans debug_to_delete
@@ -53,30 +53,69 @@ char			**ft_split(char const *s, char *str);
 /*
 **expander
 */
+char **create_parsed_res(char **res);
+int strings_to_join(char **res, int i);
+char **parse_first_arg(char **res, char **parsed_res, t_command *cmd, t_list *var_env);
+char *expander(char *res, t_list *var_env, char **args, t_command *cmd);
+char **parse_res(char **res, t_list *var_env, t_command *cmd);
+
+/*
+**expander_utils
+*/
+char *get_string(char *str);
+char *get_env(char *str, t_list *var_env, t_command *cmd);
+char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean);
+char *non_handled_commands(char *res, t_list *var_env, char **args, t_command *cmd);
+char *handled_export(char *res, t_list *var_env, char **args, t_command *cmd);
+char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd, int boolean);
+char *get_string_value(char *str);
+
+/*
+**expander_utils2
+*/
 char *search_env_name(char *str, t_list *var_env);
 char *search_env_value(char *str, t_list *var_env);
 char *antislashes_a_quotes(char *str);
-char *expander(char *res, t_list *var_env, char **args);
-char **parse_res(char **res, t_list *var_env);
-int is_valid_env(char *str);
+int is_valid_env_c(char c);
 
 /*
-**find_a_launch_exe
+**launch_exe
+*/
+int launch_exe(char *exe, char *path, char **env, t_command *cmd);
+void find_exe(int index, char *path, char **env, t_command *cmd);
+
+/*
+**launch_exe_utils
 */
 char	*ft_get_filename(const char *s, int c);
 char *get_path(char *path, char c);
-int launch_exe(char *exe, char *path, char **env);
-int find_exe(int index, char *path, char **env);
+char **arg_tab(char *exe, char *path, char **env);
+char **env_tab(char *path);
 
 /*
 **env
 */
-char *ft_get_name(char *str);
 void set_env(char **env, char **tab, t_list *var_env, t_command *cmd);
 t_list *set_new_env(char **env, char **tab, t_list *var_env, t_command *cmd);
 void	unset(t_list *env, char **tab);
-void print_env(char **tab, t_list *environ);
-void check_doublons(char **env, char **tab, t_list *var_env, t_command *cmd);
+void print_env(t_list *environ);
+
+/*
+**env_utils
+*/
+char *ft_get_name(char *str);
+void check_doublons_cl(char **env, char **tab, t_list *var_env, t_command *cmd);
+t_list *check_doublons(int k, int j, char **tab, t_list *var_env);
+void replace_env(char *tab, t_list *var_env);
+void add_to_env(char **tab, int k, int l);
+
+/*
+**env_utils2
+*/
+char **fill_list(t_list *environ, char **list, int i);
+char **sort_list(t_list *environ, char **list, int i, int j);
+void print_sorted_env(t_list *environ);
+int is_valid_env_name(char *str);
 
 /*
 **path
@@ -100,14 +139,23 @@ void    ft_echo(char **res, t_list *var_env);
 /*
 **exec
 */
-int set_args(char **res, char **env, char *path);
+int set_args(char **res, char **env, char *path, t_command *cmd);
 int exec_command(char **args, char **res, char *path, int j);
 int read_dir(char *path, char *command);
+char **arguments(char **tab, int i, char **args, char *path);
+char **environment(char *path);
+int exit_status(int status, int errno);
 
 /*
 **parse_path
 */
 char **parse_path(char const *s, char c);
+
+/*
+**sig_a_errors
+*/
+int errors(t_command *cmd);
+void handle_signal(int code);
 
 /*
 **minishell_utils
@@ -116,6 +164,12 @@ int ft_strchr_bis(const char *s, int c);
 int check_word(char *str, char *to_find, int i);
 int search_word(char *str, char *to_find);
 int ft_isspace(char c);
+int is_handled_cmd(char *str);
+
+/*
+**minishell_utils2
+*/
+void init_structs(t_command *cmd);
 
 /*
 **minishell_utils2
@@ -165,6 +219,7 @@ char			*ft_strtrim(char const *s1, char const *set);
 */
 int	ft_strlcpy(char *dst, const char *src, int dstsize);
 int	ft_isalnum(int c);
+char	*ft_strjoin_free(char *s1, char *s2);
 
 /*
 **libft_list
@@ -182,5 +237,6 @@ t_list ft_record(void *lst, void *str, void *cmd);
 void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *, void *), char *str, t_command *cmd);
 void ft_lstdel(t_list *lst);
 
+extern int sig;
 
 #endif

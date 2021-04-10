@@ -1,9 +1,29 @@
 /*
 **Useful functions created for minishell
 **check word and search word detect keywords in commands
+**Check whether the recreated builtins have to be called vs execve
 */
 
 #include "minishell.h"
+
+int is_handled_cmd(char *str)
+{
+    if (ft_strcmp(str, "echo") == 0)
+        return (1);
+    if (ft_strcmp(str, "cd") == 0)
+        return (1);
+    if (ft_strcmp(str, "pwd") == 0)
+        return (1);
+    if (ft_strcmp(str, "export") == 0)
+        return (1);
+    if (ft_strcmp(str, "unset") == 0)
+        return (1);
+    if (ft_strcmp(str, "env") == 0)
+        return (1);
+    if (ft_strcmp(str, "exit") == 0)
+        return (1);
+    return (0);
+}
 
 int ft_strchr_bis(const char *s, int c)
 {

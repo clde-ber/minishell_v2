@@ -36,3 +36,10 @@ void    free_tabtab(char **res)
         free(res[i++]);
     free(res);
 }
+
+void init_structs(t_command *cmd)
+{
+    cmd->path = NULL;
+    cmd->index = 0;
+    cmd->cmd_rv = 0;
+}

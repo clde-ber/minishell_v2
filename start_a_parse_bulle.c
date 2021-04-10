@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+sig = 0;
+
 int ft_is_empty_string(char *str)
 {
 	int i;
@@ -58,13 +60,13 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 		res = ft_calloc(2, sizeof(char *));
 	else
 		res = ft_split(str, "\t\n\r\v\f ");
+	parsed_res = (ft_is_empty_string(str)) ? ft_calloc(2, sizeof(char *)) : parse_res(res, var_env, cmd);
 	while (res[i])
 	{
 		printf("%d|\n", i);
 		printf("%s|\n", res[i]);
 		i++;
 	}
-	parsed_res = (ft_is_empty_string(str)) ? ft_calloc(2, sizeof(char *)) : parse_res(res, var_env);
 	// printf("command:%s\n", res[0]);
 	// tab = redir_ext_check(res);
 	i = 0;
@@ -75,6 +77,18 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 	//     // printf("%s|\n", tab[i]);
 	//     i++;
 	// }
+	if (ft_strcmp(res[0], "$?") == 0)
+    {
+        if (sig == 1)
+            cmd->cmd_rv = 130;
+        if (sig == 2)
+            cmd->cmd_rv = 131;
+        if (sig == 1 || sig == 2)
+            sig = 0;
+        printf("%d : Command not found\n", cmd->cmd_rv);
+    }
+    else
+    {
 	if (ft_strcmp(res[0], "pwd") == 0)
 		ft_pwd(res);
 	else if (ft_strcmp(res[0], "echo") == 0)
@@ -82,20 +96,32 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 	else if (ft_strcmp(res[0], "cd") == 0)
 		ft_cd(res);
 	else if (res[0][0] == '.' && res[0][1] == '/')
-		find_exe(0, str, env);
-	else if (ft_strcmp(res[0], "export") == 0)
-	{
-		check_doublons(env, parsed_res, var_env, cmd);
-		set_env(env, parsed_res, var_env, cmd);
-	}
-	else if (ft_strcmp(res[0], "env") == 0)
-		print_env(env, var_env);
-	else if (ft_strcmp(res[0], "unset") == 0)
-		unset(var_env, parsed_res);
-	else
-		set_args(tab, env, cmd->path);
-//    ft_free(parsed_res, i + 1);
-//    ft_free(res, i + 1);
+        find_exe(0, str, env, cmd);
+    else if (ft_strcmp(res[0], "export") == 0 && res[1] && parsed_res)
+    {
+        i = 0;
+        while (parsed_res[i])
+        {
+            printf("parsedres %s\n", parsed_res[i]);
+            i++;
+        }
+        check_doublons_cl(env, parsed_res, var_env, cmd);
+        set_env(env, parsed_res, var_env, cmd);
+    }
+    else if (ft_strcmp(res[0], "export") == 0 && res[1] && (!(parsed_res)))
+        errors(cmd);
+    else if (ft_strcmp(res[0], "export") == 0 && (!(res[1])))
+        print_sorted_env(var_env);
+    else if (ft_strcmp(res[0], "env") == 0)
+        print_env(var_env);
+    else if (ft_strcmp(res[0], "unset") == 0 && parsed_res)
+        unset(var_env, parsed_res);
+    else
+        set_args(parsed_res, env, cmd->path, cmd);
+    }
+    if (parsed_res)
+        ft_free(parsed_res, i + 1);
+    ft_free(res, i + 1);
 }
 
 char  **save_input(char *str, char **save)
@@ -146,14 +172,20 @@ int main(int ac, char **av, char **env)
 	buf = NULL;
 	if (!(cmd = malloc(sizeof(t_command))))
 		return (NULL);
+	init_structs(cmd);
 	var_env = set_new_env(env, (to_free = ft_calloc(2, sizeof(char *))), var_env, cmd);
+	signal(SIGINT, handle_signal);
+    signal(SIGQUIT, handle_signal);
 	while (end == 0)
 	{
-		write(1, "***minishell*** > ", 18);
+		if (!(sig))
+			write(1, "***minishell*** > ", 18);
 		get_next_line(0, &line);
+		if ((ft_strcmp(line, "$?")))
+            cmd->cmd_rv = 0;
 		save = save_input(line, save);
 		if (ft_strcmp(line, "exit") == 0) //builtin à coder
-			end = 1;
+			exit(0);
 		buf = ft_strdup(line);
 		while ((command = getcommand(buf)) != NULL)
 		{
@@ -167,13 +199,15 @@ int main(int ac, char **av, char **env)
 			free(command);
 			command = NULL;
 		}
+		sig = 0;
 		free(line);
 		if (buf != NULL)
 			free(buf);
 	}
 	ft_lstdel(var_env);
+	init_structs(cmd);
 	ft_free(to_free, 2);
 	free(cmd->path);
 	free(cmd);
-	return (0);
+	return(0);
 }
