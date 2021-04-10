@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int errors(t_command *cmd)
+void errors(t_command *cmd)
 {
     write (1, "Not a valid identifier\n", 23);
     cmd->cmd_rv = 1;
@@ -15,7 +15,7 @@ void handle_signal(int code)
     if (code == 2) //ctrl-c
     {
         sig = 1;
-        write(1, "\n***minishell*** > ", 19);
+        write(1, "\n", 1);
     }
     else if (code == 3) //ctrl-antislash
     {

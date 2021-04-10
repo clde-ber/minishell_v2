@@ -91,7 +91,7 @@ void add_to_env(char **tab, int k, int l)
 	free(j_value);
 }
 
-void check_doublons_cl(char **env, char **tab, t_list *var_env, t_command *cmd)
+void check_doublons_cl(char **tab)
 {
 	int k;
 	int l;

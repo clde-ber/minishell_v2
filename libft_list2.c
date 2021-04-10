@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_list ft_record(void *lst, void *str, void *cmd)
+void ft_record(void *lst, void *cmd)
 {
 	if (strcmp(((char *)((t_list *)lst)->name), "PATH") == 0)
 	{
@@ -13,12 +13,11 @@ t_list ft_record(void *lst, void *str, void *cmd)
 	}
 }
 
-void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *, void *), char *str, t_command *cmd)
+void	ft_lstiter(t_list *lst, void (*f)(void *, void *), t_command *cmd)
 {
-    int i = 0;
 	if (!lst || !f)
 		return ;
-	f(lst, str, cmd);
+	f(lst, cmd);
 	lst = lst->next;
 }
 

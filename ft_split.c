@@ -16,7 +16,7 @@ int is_symbol(char c, char comp)
 	return (0);
 }
 
-size_t parse_command(int i, char *str, int *res, char *charset)
+size_t parse_command(size_t i, char *str, int *res, char *charset)
 {
 	if (is_symbol(str[i], str[i + 1]) && (*res = 1))
 	{
@@ -45,13 +45,11 @@ size_t parse_command(int i, char *str, int *res, char *charset)
 	return (i);
 }
 
-size_t	len_wd(char const *str, char *charset)
+size_t	len_wd(char *str, char *charset)
 {
 	size_t i;
-	int j;
 	int res;
 
-	j = 1;
 	res = 0;
 	i = 0;
 	while (i < ft_strlen(str) && res == 0)
@@ -64,7 +62,7 @@ size_t	len_wd(char const *str, char *charset)
 	return (i);
 }
 
-size_t	count_malloc(char const *s, char *str)
+size_t	count_malloc(char *s, char *str)
 {
 	size_t i;
 	size_t count;
@@ -99,7 +97,7 @@ void		*ft_free(char **res, int j)
 	return (NULL);
 }
 
-char			**ft_split(char const *s, char *str)
+char			**ft_split(char *s, char *str)
 {
 	size_t	i;
 	size_t	j;

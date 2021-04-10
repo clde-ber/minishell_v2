@@ -30,7 +30,7 @@ clare -x ", environ->name), "="), "\""), environ->value), "\"");
 	return (list);
 }
 
-char **sort_list(t_list *environ, char **list, int i, int j)
+char **sort_list(char **list, int i, int j)
 {
 	char *tmp;
 	char *i_name;
@@ -71,7 +71,7 @@ void print_sorted_env(t_list *environ)
 	i = 0;
 	j = 0;
 	list = fill_list(environ, list, i);
-	list = sort_list(environ, list, i, j);
+	list = sort_list(list, i, j);
 	while (list[i])
 	{
 		printf("%s\n", list[i]);

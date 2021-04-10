@@ -7,18 +7,6 @@
 ** the command binaries are stored. Then it executes the command or prints an error.
 */
 
-int read_dir(char *path, char *command)
-{
-    DIR *dir;
-    struct dirent *s_dir;
-    if (!(dir = opendir(path)))
-	{
-	    printf("%s\n", strerror(errno));
-		return (0);
-	}
-    return (1);
-}
-
 char **arguments(char **res, int j, char **args, char *path)
 {
     char **argv;
@@ -60,7 +48,7 @@ char **environment(char *path)
     return (envp);
 }
 
-int exit_status(int status, int errno)
+int exit_status(int status)
 {
     return (status % 255);
 }
@@ -108,7 +96,7 @@ int exec_command(char **args, char **res, char *path, int j)
             tab[0] = ft_strjoin(str, res[0]);
             if ((ret = execve(tab[0], tab, env)) == -1)
                 count++;
-        	i++;
+            i++;
             free(str);
         }
         if (i == count)
@@ -128,13 +116,13 @@ int exec_command(char **args, char **res, char *path, int j)
 //        return (-1);
     ft_free(tab, k + 1);
     waitpid(ret, &status, 0);
-    return (exit_status(status, errno));
+    return (exit_status(status));
 // waitpid waits for the program to be finished. 
 }
 
 //res[0] needs to be trimed so strings with simple or double quotes are managed.
 
-int set_args(char **res, char **env, char *path, t_command *cmd)
+int set_args(char **res, char *path, t_command *cmd)
 {
     int i;
     int index;

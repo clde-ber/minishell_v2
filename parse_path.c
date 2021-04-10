@@ -5,7 +5,7 @@
 ** binaries.
 */
 
-static size_t	len_word(char const *str, int c)
+static size_t	len_word(char *str, int c)
 {
 	size_t i;
 
@@ -19,7 +19,7 @@ static size_t	len_word(char const *str, int c)
 	return (i);
 }
 
-static size_t	count_tab(char const *s, char c)
+static size_t	count_tab(char *s, char c)
 {
 	size_t i;
 	size_t count;
@@ -51,7 +51,7 @@ static void		*free_path(char **res, int j)
 	return (NULL);
 }
 
-char			**parse_path(char const *s, char c)
+char			**parse_path(char *s, char c)
 {
 	size_t	i;
 	size_t	j;

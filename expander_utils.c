@@ -80,7 +80,7 @@ char *get_env(char *str, t_list *var_env, t_command *cmd)
 
 char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean)
 {
-    int i;
+    size_t i;
     char *tmp;
     char *str;
 
@@ -120,9 +120,9 @@ char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean)
     return (tmp);
 }
 
-char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd, int boolean)
+char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 {
-    int i;
+    size_t i;
     char *tmp;
     char *str;
 
@@ -155,7 +155,7 @@ char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd, int bool
     return (tmp);
 }
 
-char *non_handled_commands(char *res, t_list *var_env, char **args, t_command *cmd)
+char *non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 {
     char *tmp;
     char *tmp_sub;
@@ -172,7 +172,7 @@ char *non_handled_commands(char *res, t_list *var_env, char **args, t_command *c
     return (ret);
 }
 
-char *handled_export(char *res, t_list *var_env, char **args, t_command *cmd)
+char *handled_export(char *res, t_list *var_env, t_command *cmd)
 {
     char *trim_first;
     char *trim_secd;
@@ -210,7 +210,7 @@ char *handled_export(char *res, t_list *var_env, char **args, t_command *cmd)
     free(str_first);
     free(str_secd);
     trim_first = replace_by_env(trim_first, var_env, cmd, 1);
-    trim_secd = replace_by_env_value(trim_secd, var_env, cmd, 1);
+    trim_secd = replace_by_env_value(trim_secd, var_env, cmd);
     trim_cmp = ft_strtrim(trim_first, "\'");
     name = ft_get_name(trim_cmp);
     if (is_valid_env_name(name) == 0)

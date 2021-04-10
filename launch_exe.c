@@ -31,18 +31,16 @@ int launch_exe(char *exe, char *path, char **env, t_command *cmd)
         exit(status);
     }
     waitpid(ret, &status, 0);
-	return (exit_status(status, errno));
+	return (exit_status(status));
 // waitpid attd que le programme se termine 
 }
 
-void find_exe(int index, char *path, char **env, t_command *cmd)
+void find_exe(char *path, char **env, t_command *cmd)
 {
     DIR *dir;
-    int i;
     char *str;
     struct dirent *st_dir;
 
-    i = 0;
     st_dir = NULL;
     str = ft_get_filename(path, '/');
     errno = 0;

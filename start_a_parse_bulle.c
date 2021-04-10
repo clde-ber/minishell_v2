@@ -44,7 +44,7 @@ char *getcommand(char *str)
 // exemple: echo "pwd" > file pourrait trouver echo en premier.
 // need parsing plus precis en lettre par lettre
 
-void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
+int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 {
     int i;
     char **res;
@@ -52,68 +52,69 @@ void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 
     i = 0;
     if (ft_is_empty_string(str))
-        res = ft_calloc(2, sizeof(char *));
-    else
-        res = ft_split(str, "\t\n\r\v\f ");
-    parsed_res = (ft_is_empty_string(str)) ? ft_calloc(2, sizeof(char *)) : parse_res(res, var_env, cmd);
-    while (res[i])
     {
-        printf("%d|\n", i);
-        printf("%s|\n", res[i]);
-        i++;
+        cmd->cmd_rv = 127;
+        return (0);
     }
-/*    i = 0;
-    while (parsed_res[i])
+    else
     {
-        printf("%s|\n", parsed_res[i]);
-        i++;
-    }*/
-    // printf("command:%s\n", res[0]);
-    if (ft_strcmp(res[0], "$?") == 0)
-    {
+        res = ft_split(str, "\t\n\r\v\f ");
+        parsed_res = parse_res(res, var_env, cmd);
+        while (res[i])
+        {
+            printf("%d|\n", i);
+            printf("%s|\n", res[i]);
+            i++;
+        }
+    /*    i = 0;
+        while (parsed_res[i])
+        {
+            printf("%s|\n", parsed_res[i]);
+            i++;
+        }*/
+        // printf("command:%s\n", res[0]);
+        if (ft_strcmp(res[0], "pwd") == 0)
+            ft_pwd(res);
+        else if (ft_strcmp(res[0], "echo") == 0)
+            ft_echo(res, var_env);
+        else if (ft_strcmp(res[0], "cd") == 0)
+            ft_cd(res);
+        else if (res[0][0] == '.' && res[0][1] == '/')
+            find_exe(str, env, cmd);
+        else if (ft_strcmp(res[0], "export") == 0 && res[1] && parsed_res)
+        {
+            i = 0;
+            while (parsed_res[i])
+            {
+                printf("parsedres %s\n", parsed_res[i]);
+                i++;
+            }
+            check_doublons_cl(parsed_res);
+            set_env(parsed_res, var_env, cmd);
+        }
+        else if (ft_strcmp(res[0], "export") == 0 && res[1] && (!(parsed_res)))
+            errors(cmd);
+        else if (ft_strcmp(res[0], "export") == 0 && (!(res[1])))
+            print_sorted_env(var_env);
+        else if (ft_strcmp(res[0], "env") == 0)
+            print_env(var_env);
+        else if (ft_strcmp(res[0], "unset") == 0 && parsed_res)
+            unset(var_env, parsed_res);
+        else if (ft_strcmp(res[0], "$?"))
+            set_args(parsed_res, cmd->path, cmd);
         if (sig == 1)
             cmd->cmd_rv = 130;
         if (sig == 2)
             cmd->cmd_rv = 131;
+        if (ft_strcmp(res[0], "$?") == 0)
+            printf("%d : Command not found\n", cmd->cmd_rv);
         if (sig == 1 || sig == 2)
             sig = 0;
-        printf("%d : Command not found\n", cmd->cmd_rv);
-    }
-    else
-    {
-    if (ft_strcmp(res[0], "pwd") == 0)
-        ft_pwd(res);
-    else if (ft_strcmp(res[0], "echo") == 0)
-        ft_echo(res, var_env);
-    else if (ft_strcmp(res[0], "cd") == 0)
-        ft_cd(res);
-    else if (res[0][0] == '.' && res[0][1] == '/')
-        find_exe(0, str, env, cmd);
-    else if (ft_strcmp(res[0], "export") == 0 && res[1] && parsed_res)
-    {
-        i = 0;
-        while (parsed_res[i])
-        {
-            printf("parsedres %s\n", parsed_res[i]);
-            i++;
-        }
-        check_doublons_cl(env, parsed_res, var_env, cmd);
-        set_env(env, parsed_res, var_env, cmd);
-    }
-    else if (ft_strcmp(res[0], "export") == 0 && res[1] && (!(parsed_res)))
-        errors(cmd);
-    else if (ft_strcmp(res[0], "export") == 0 && (!(res[1])))
-        print_sorted_env(var_env);
-    else if (ft_strcmp(res[0], "env") == 0)
-        print_env(var_env);
-    else if (ft_strcmp(res[0], "unset") == 0 && parsed_res)
-        unset(var_env, parsed_res);
-    else
-        set_args(parsed_res, env, cmd->path, cmd);
     }
     if (parsed_res)
         ft_free(parsed_res, i + 1);
     ft_free(res, i + 1);
+    return (0);
 }
 
 // pour l'instant, ne prend qu'une commande. La commande doit etre enregistrée (pas fait), découpée (fait mais 
@@ -134,7 +135,7 @@ int main(int ac, char **av, char **env)
     if (!(cmd = malloc(sizeof(t_command))))
         return (NULL);
     init_structs(cmd);
-    var_env = set_new_env(env, (to_free = ft_calloc(2, sizeof(char *))), var_env, cmd);
+    var_env = set_new_env(env, var_env, cmd);
     signal(SIGINT, handle_signal);
     signal(SIGQUIT, handle_signal);
     while (end == 0)
@@ -151,12 +152,10 @@ int main(int ac, char **av, char **env)
             dispatch(command, env, var_env, cmd);
             free(command);
         }
-        sig = 0;
         free(line);
     }
     ft_lstdel(var_env);
     init_structs(cmd);
-    ft_free(to_free, 2);
     free(cmd->path);
     free(cmd);
     return(0);

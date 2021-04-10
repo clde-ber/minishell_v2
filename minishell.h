@@ -49,23 +49,25 @@ void	ft_putstr_nbr(int i, int fd);
 */
 char *getcommand(char *str);
 void    ft_pwd(char **res);
-void    dispatch(char *str, char **env, t_list *var_env, t_command *cmd);
+int   dispatch(char *str, char **env, t_list *var_env, t_command *cmd);
 int ft_is_empty_string(char *str);
 
 /*
 **ft_split
 */
-size_t	len_wd(char const *str, char *charset);
-size_t	count_malloc(char const *s, char *str);
+size_t	len_wd(char *str, char *charset);
+size_t	count_malloc(char *s, char *str);
 void		*ft_free(char **res, int j);
-char			**ft_split(char const *s, char *str);
+char			**ft_split(char *s, char *str);
+size_t parse_command(size_t i, char *str, int *res, char *charset);
+int is_symbol(char c, char comp);
 
 /*
 **expander
 */
 char **create_parsed_res(char **res);
 int strings_to_join(char **res, int i);
-char **parse_first_arg(char **res, char **parsed_res, t_command *cmd, t_list *var_env);
+char **parse_first_arg(char **res, char **parsed_res);
 char *expander(char *res, t_list *var_env, char **args, t_command *cmd);
 char **parse_res(char **res, t_list *var_env, t_command *cmd);
 
@@ -75,9 +77,9 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd);
 char *get_string(char *str);
 char *get_env(char *str, t_list *var_env, t_command *cmd);
 char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean);
-char *non_handled_commands(char *res, t_list *var_env, char **args, t_command *cmd);
-char *handled_export(char *res, t_list *var_env, char **args, t_command *cmd);
-char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd, int boolean);
+char *non_handled_commands(char *res, t_list *var_env, t_command *cmd);
+char *handled_export(char *res, t_list *var_env, t_command *cmd);
+char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd);
 char *get_string_value(char *str);
 
 /*
@@ -92,7 +94,7 @@ int is_valid_env_c(char c);
 **launch_exe
 */
 int launch_exe(char *exe, char *path, char **env, t_command *cmd);
-void find_exe(int index, char *path, char **env, t_command *cmd);
+void find_exe(char *path, char **env, t_command *cmd);
 
 /*
 **launch_exe_utils
@@ -105,8 +107,8 @@ char **env_tab(char *path);
 /*
 **env
 */
-void set_env(char **env, char **tab, t_list *var_env, t_command *cmd);
-t_list *set_new_env(char **env, char **tab, t_list *var_env, t_command *cmd);
+void set_env(char **tab, t_list *var_env, t_command *cmd);
+t_list *set_new_env(char **env, t_list *var_env, t_command *cmd);
 void	unset(t_list *env, char **tab);
 void print_env(t_list *environ);
 
@@ -114,7 +116,7 @@ void print_env(t_list *environ);
 **env_utils
 */
 char *ft_get_name(char *str);
-void check_doublons_cl(char **env, char **tab, t_list *var_env, t_command *cmd);
+void check_doublons_cl(char **tab);
 t_list *check_doublons(int k, int j, char **tab, t_list *var_env);
 void replace_env(char *tab, t_list *var_env);
 void add_to_env(char **tab, int k, int l);
@@ -123,7 +125,7 @@ void add_to_env(char **tab, int k, int l);
 **env_utils2
 */
 char **fill_list(t_list *environ, char **list, int i);
-char **sort_list(t_list *environ, char **list, int i, int j);
+char **sort_list(char **list, int i, int j);
 void print_sorted_env(t_list *environ);
 int is_valid_env_name(char *str);
 
@@ -148,22 +150,21 @@ void    ft_echo(char **res, t_list *var_env);
 /*
 **exec
 */
-int set_args(char **res, char **env, char *path, t_command *cmd);
+int set_args(char **res, char *path, t_command *cmd);
 int exec_command(char **args, char **res, char *path, int j);
-int read_dir(char *path, char *command);
 char **arguments(char **tab, int i, char **args, char *path);
 char **environment(char *path);
-int exit_status(int status, int errno);
+int exit_status(int status);
 
 /*
 **parse_path
 */
-char **parse_path(char const *s, char c);
+char **parse_path(char *s, char c);
 
 /*
 **sig_a_errors
 */
-int errors(t_command *cmd);
+void errors(t_command *cmd);
 void handle_signal(int code);
 
 /*
@@ -235,8 +236,8 @@ void	ft_lstadd_back(t_list **alst, t_list *new);
 /*
 **libft_list2
 */
-t_list ft_record(void *lst, void *str, void *cmd);
-void	ft_lstiter(t_list *lst, t_list (*f)(void *, void *, void *), char *str, t_command *cmd);
+void ft_record(void *lst, void *cmd);
+void	ft_lstiter(t_list *lst, void (*f)(void *, void *), t_command *cmd);
 void ft_lstdel(t_list *lst);
 
 extern int sig;
