@@ -8,7 +8,6 @@
 
 char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
 {
-    char *tmp;
     char *trim;
     char *name;
     char *str;
@@ -18,11 +17,11 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
     str = NULL;
     cmd->index = 0;
     if (is_handled_cmd(args[0]) == 0)
-        return (non_handled_commands(res, var_env, args, cmd));
+        return (non_handled_commands(res, var_env, cmd));
     else
     {
         if (ft_strcmp(args[0], "export") == 0)
-            return (handled_export(res, var_env, args, cmd));
+            return (handled_export(res, var_env, cmd));
         else if (ft_strcmp(args[0], "unset") == 0)
         {
             if (res[0] == '\'')
@@ -50,7 +49,7 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
     return (ft_strdup("error"));
 }
 
-char **parse_first_arg(char **res, char **parsed_res, t_command *cmd, t_list *var_env)
+char **parse_first_arg(char **res, char **parsed_res)
 {
     if (res[0] && res[0][0] == '\'')
         parsed_res[0] = ft_strtrim(res[0], "\'");
@@ -96,7 +95,7 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd)
     parsed_res = create_parsed_res(res);
     i = 1;
     j = 1;
-    parsed_res = parse_first_arg(res, parsed_res, cmd, var_env);
+    parsed_res = parse_first_arg(res, parsed_res);
     while (res[i])
     {
         if ((strings_to_join(res, i)) > 0)

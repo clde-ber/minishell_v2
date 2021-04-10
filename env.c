@@ -5,7 +5,7 @@
 
 #include "minishell.h"
 
-t_list *set_new_env(char **env, char **tab, t_list *var_env, t_command *cmd)
+t_list *set_new_env(char **env, t_list *var_env, t_command *cmd)
 {
 	int k;
     char *name;
@@ -25,38 +25,40 @@ t_list *set_new_env(char **env, char **tab, t_list *var_env, t_command *cmd)
 	{
 		tmp = var_env;
 		ft_lstadd_front(&var_env, ft_lstnew((name = ft_get_name(env[k])), (value = ft_strdup(&ft_strchr(env[k], '=')[1]))));
-		ft_lstiter(var_env, &ft_record, env[k], cmd);
+		ft_lstiter(var_env, &ft_record, cmd);
 		tmp->prec = var_env;
 		k--;
 	}
 	return (var_env);
 }
 
-void set_env(char **env, char **tab, t_list *var_env, t_command *cmd)
+void set_env(char **tab, t_list *var_env, t_command *cmd)
 {
     int i;
 	int j;
-	int k;
 	t_list *tmp_new;
 	t_list *tmp;
+	char *empty;
 
 	j = 0;
 	tmp_new = NULL;
 	tmp = NULL;
+	empty = NULL;
 	while (tab[j])
 		j++;
     i = 1;
-	tmp = check_doublons(k, j, tab, var_env);
+	tmp = check_doublons(0, j, tab, var_env);
 	while (i <= j - 1)
     {
 		if (ft_strchr(tab[i], '='))
 			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tab[i]), ft_strdup(&ft_strchr(tab[i], '=')[1]))));
 		else
-			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tab[i]), ft_strdup(""))));
-		ft_lstiter(var_env, &ft_record, tab[i], cmd);
+			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tab[i]), (empty = ft_strdup("")))));
+		ft_lstiter(var_env, &ft_record, cmd);
 		tmp->prec = tmp;
 		tmp_new = tmp;
 		i++;
+		free(empty);
 	}
 	var_env = tmp_new;
 }
