@@ -79,50 +79,6 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 	// }
 	if (ft_strcmp(res[0], "$?") == 0)
     {
-        res = ft_split(str, "\t\n\r\v\f ");
-        parsed_res = parse_res(res, var_env, cmd);
-        while (res[i])
-        {
-            printf("%d|\n", i);
-            printf("%s|\n", res[i]);
-            i++;
-        }
-    /*    i = 0;
-        while (parsed_res[i])
-        {
-            printf("%s|\n", parsed_res[i]);
-            i++;
-        }*/
-        // printf("command:%s\n", res[0]);
-        if (ft_strcmp(res[0], "pwd") == 0)
-            ft_pwd(res);
-        else if (ft_strcmp(res[0], "echo") == 0)
-            ft_echo(res, var_env);
-        else if (ft_strcmp(res[0], "cd") == 0)
-            ft_cd(res);
-        else if (res[0][0] == '.' && res[0][1] == '/')
-            find_exe(str, env, cmd);
-        else if (ft_strcmp(res[0], "export") == 0 && res[1] && parsed_res)
-        {
-            i = 0;
-            while (parsed_res[i])
-            {
-                printf("parsedres %s\n", parsed_res[i]);
-                i++;
-            }
-            check_doublons_cl(parsed_res);
-            set_env(parsed_res, var_env, cmd);
-        }
-        else if (ft_strcmp(res[0], "export") == 0 && res[1] && (!(parsed_res)))
-            errors(cmd);
-        else if (ft_strcmp(res[0], "export") == 0 && (!(res[1])))
-            print_sorted_env(var_env);
-        else if (ft_strcmp(res[0], "env") == 0)
-            print_env(var_env);
-        else if (ft_strcmp(res[0], "unset") == 0 && parsed_res)
-            unset(var_env, parsed_res);
-        else if (ft_strcmp(res[0], "$?"))
-            set_args(parsed_res, cmd->path, cmd);
         if (sig == 1)
             cmd->cmd_rv = 130;
         if (sig == 2)
@@ -135,14 +91,15 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
     }
     else
     {
-	if (ft_strcmp(res[0], "pwd") == 0)
-		ft_pwd(res);
-	else if (ft_strcmp(res[0], "echo") == 0)
-		ft_echo(res, var_env);
-	else if (ft_strcmp(res[0], "cd") == 0)
-		ft_cd(res);
-	else if (res[0][0] == '.' && res[0][1] == '/')
-        find_exe(0, str, env, cmd);
+    if (ft_strcmp(res[0], "pwd") == 0)
+        ft_pwd(res);
+    else if (ft_strcmp(res[0], "echo") == 0)
+        ft_echo(res, var_env);
+    else if (ft_strcmp(res[0], "cd") == 0)
+        ft_cd(res);
+    else if (res[0][0] == '.' && res[0][1] == '/')
+        // find_exe(0, str, env, cmd);
+		find_exe(str, env, cmd);
     else if (ft_strcmp(res[0], "export") == 0 && res[1] && parsed_res)
     {
         i = 0;
@@ -151,8 +108,10 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
             printf("parsedres %s\n", parsed_res[i]);
             i++;
         }
-        check_doublons_cl(env, parsed_res, var_env, cmd);
-        set_env(env, parsed_res, var_env, cmd);
+        // check_doublons_cl(env, parsed_res, var_env, cmd);
+		check_doublons_cl(parsed_res);
+        // set_env(env, parsed_res, var_env, cmd);
+		set_env(parsed_res, var_env, cmd);
     }
     else if (ft_strcmp(res[0], "export") == 0 && res[1] && (!(parsed_res)))
         errors(cmd);
@@ -163,12 +122,14 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
     else if (ft_strcmp(res[0], "unset") == 0 && parsed_res)
         unset(var_env, parsed_res);
     else
-        set_args(parsed_res, env, cmd->path, cmd);
+        // set_args(parsed_res, env, cmd->path, cmd);
+		set_args(parsed_res, cmd->path, cmd);
     }
     if (parsed_res)
         ft_free(parsed_res, i + 1);
     ft_free(res, i + 1);
-    return (0);
+//    ft_free(parsed_res, i + 1);
+//    ft_free(res, i + 1);
 }
 
 char  **save_input(char *str, char **save)
@@ -220,9 +181,8 @@ int main(int ac, char **av, char **env)
 	if (!(cmd = malloc(sizeof(t_command))))
 		return (NULL);
 	init_structs(cmd);
-	var_env = set_new_env(env, (to_free = ft_calloc(2, sizeof(char *))), var_env, cmd);
-	signal(SIGINT, handle_signal);
-    signal(SIGQUIT, handle_signal);
+	// var_env = set_new_env(env, (to_free = ft_calloc(2, sizeof(char *))), var_env, cmd);
+	var_env = set_new_env(env, var_env, cmd);
 	while (end == 0)
 	{
 		if (!(sig))
@@ -232,7 +192,7 @@ int main(int ac, char **av, char **env)
             cmd->cmd_rv = 0;
 		save = save_input(line, save);
 		if (ft_strcmp(line, "exit") == 0) //builtin à coder
-			exit(0);
+			end = 1;
 		buf = ft_strdup(line);
 		while ((command = getcommand(buf)) != NULL)
 		{
@@ -256,5 +216,5 @@ int main(int ac, char **av, char **env)
 	ft_free(to_free, 2);
 	free(cmd->path);
 	free(cmd);
-	return(0);
+	return (0);
 }
