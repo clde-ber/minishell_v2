@@ -20,7 +20,7 @@ char **fill_list(t_list *environ, char **list, int i)
 	{
 		if (ft_strlen(environ->name))
     	{
-			list[i] = ft_strjoin(ft_strjoin(ft_strjoin(ft_strjoin(ft_strjoin("de\
+			list[i] = join_a_free(join_a_free(join_a_free(join_a_free(ft_strjoin("de\
 clare -x ", environ->name), "="), "\""), environ->value), "\"");
 			i++;
 		}
@@ -33,19 +33,27 @@ clare -x ", environ->name), "="), "\""), environ->value), "\"");
 char **sort_list(t_list *environ, char **list, int i, int j)
 {
 	char *tmp;
+	char *i_name;
+	char *j_name;
 
 	tmp = NULL;
+	i_name = NULL;
+	j_name = NULL;
 	while (list[i])
 	{
 		while (list[j])
 		{
-			if (strcmp(ft_get_name(list[i]), ft_get_name(list[j])) < 0)
+			i_name = ft_get_name(list[i]);
+			j_name = ft_get_name(list[j]);
+			if (strcmp(i_name, j_name) < 0)
 			{
 				tmp = list[i];
 				list[i] = list[j];
 				list[j] = tmp;
 			}
 			j++;
+			free(i_name);
+			free(j_name);
 		}
 		j = 0;
 		i++;
@@ -69,6 +77,8 @@ void print_sorted_env(t_list *environ)
 		printf("%s\n", list[i]);
 		i++;
 	}
+	ft_free(list, i + 1);
+	list = NULL;
 }
 
 int is_valid_env_name(char *str)

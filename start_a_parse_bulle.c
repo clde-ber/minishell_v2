@@ -133,6 +133,7 @@ int main(int ac, char **av, char **env)
     line = NULL;
     if (!(cmd = malloc(sizeof(t_command))))
         return (NULL);
+    init_structs(cmd);
     var_env = set_new_env(env, (to_free = ft_calloc(2, sizeof(char *))), var_env, cmd);
     signal(SIGINT, handle_signal);
     signal(SIGQUIT, handle_signal);
@@ -154,8 +155,9 @@ int main(int ac, char **av, char **env)
         free(line);
     }
     ft_lstdel(var_env);
+    init_structs(cmd);
     ft_free(to_free, 2);
     free(cmd->path);
     free(cmd);
-    return (0);
+    return(0);
 }

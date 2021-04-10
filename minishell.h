@@ -176,6 +176,11 @@ int ft_isspace(char c);
 int is_handled_cmd(char *str);
 
 /*
+**minishell_utils2
+*/
+void init_structs(t_command *cmd);
+
+/*
 **gnl
 */
 int	get_next_line(int fd, char **line);
