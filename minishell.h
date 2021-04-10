@@ -14,16 +14,6 @@
 
 #define BUFFER_SIZE 50
 
-/*
-**Liste chainee for termcap
-*/
-// typedef struct s_line t_line;
-// struct s_line{
-//     char *line;
-//     void *next;
-//     void *prec;
-// };
-
 typedef struct s_list
 {
     char *name;
@@ -98,8 +88,9 @@ void    ft_cd(char **res);
 /*
 **redir
 */
+char    **redir_ext_check(char **res);
 int    check_redir(char **res, int i, char *output);
-void    redir_file(char **res, char *output, int c);
+void    redir_file(char **res, int i, char *output, int c);
 
 /*
 **echo
@@ -125,6 +116,13 @@ int ft_strchr_bis(const char *s, int c);
 int check_word(char *str, char *to_find, int i);
 int search_word(char *str, char *to_find);
 int ft_isspace(char c);
+
+/*
+**minishell_utils2
+*/
+char    *cut_after_punct(char *dest, char *line);
+int     count_tabs(char **res);
+void    free_tabtab(char **res);
 
 /*
 **gnl
