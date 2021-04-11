@@ -93,9 +93,9 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd)
     int j;
 
     parsed_res = create_parsed_res(res);
-    i = 1;
-    j = 1;
-    parsed_res = parse_first_arg(res, parsed_res);
+    i = 0;
+    j = 0;
+//    parsed_res = parse_first_arg(res, parsed_res);
     while (res[i])
     {
         if ((strings_to_join(res, i)) > 0)

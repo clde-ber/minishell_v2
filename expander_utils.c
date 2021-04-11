@@ -166,7 +166,7 @@ char *non_handled_commands(char *res, t_list *var_env, t_command *cmd)
     ret = NULL;
     free(tmp);
     if (ft_strchr(tmp_sub, '$'))
-        tmp_sub = replace_by_env(tmp_sub, var_env, cmd, 1);
+        tmp_sub = replace_by_env_value(tmp_sub, var_env, cmd);
     ret = ft_strtrim(tmp_sub, "\'");
     free(tmp_sub);
     return (ret);
