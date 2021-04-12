@@ -94,3 +94,10 @@ int is_valid_env_name(char *str)
 	}
 	return (1);
 }
+
+int is_valid_env_name_c(char c)
+{
+	if (!(c == '_' || ft_isalnum(c)))
+		return (0);
+	return (1);
+}

@@ -66,6 +66,7 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd);
 */
 char *get_string(char *str);
 char *get_env(char *str, t_list *var_env, t_command *cmd);
+char *get_env_value(char *str, t_list *var_env, t_command *cmd);
 char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean);
 char *non_handled_commands(char *res, t_list *var_env, t_command *cmd);
 char *handled_export(char *res, t_list *var_env, t_command *cmd);
@@ -118,6 +119,7 @@ char **fill_list(t_list *environ, char **list, int i);
 char **sort_list(char **list, int i, int j);
 void print_sorted_env(t_list *environ);
 int is_valid_env_name(char *str);
+int is_valid_env_name_c(char c);
 
 /*
 **path

@@ -20,9 +20,9 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
         return (non_handled_commands(res, var_env, cmd));
     else
     {
-        if (ft_strcmp(args[0], "export") == 0)
+        if (ft_strcmp(args[0], "export") == 0 && ft_strcmp(res, "export"))
             return (handled_export(res, var_env, cmd));
-        else if (ft_strcmp(args[0], "unset") == 0)
+        else if (ft_strcmp(args[0], "unset") == 0 && ft_strcmp(res, "unset"))
         {
             if (res[0] == '\'')
                 trim = ft_strtrim(res, "\'");
@@ -30,23 +30,28 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
                 trim = ft_strtrim(res, "\"");
             str = ft_strtrim(trim, "\'");
             name = ft_get_name(str);
-            if (is_valid_env_name(name) == 0)
+            if (trim[0] == '\'')
             {
                 free(name);
-                free(str);
-                trim = replace_by_env(trim, var_env, cmd, 0);
-                return (NULL);
+                free(trim);
+                return (str);
             }
             else
             {
                 free(name);
                 free(str);
-                trim = replace_by_env(trim, var_env, cmd, 1);
-                return (trim);
+                trim = replace_by_env(trim, var_env, cmd, 0);
+                if (trim)
+                    return (trim);
+                else
+                {
+                    cmd->cmd_rv = 0;
+                    return(ft_strdup(""));
+                }
             }
         }
     }
-    return (ft_strdup("error"));
+    return (ft_strdup(res));
 }
 
 char **parse_first_arg(char **res, char **parsed_res)
@@ -72,6 +77,7 @@ int strings_to_join(char **res, int i)
 char **create_parsed_res(char **res)
 {
     int i;
+    char **tmp;
     char **parsed_res;
 
     parsed_res = NULL;
@@ -108,9 +114,10 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd)
             parsed_res[j] = NULL;
         else
             parsed_res[j] = expander(res[i], var_env, res, cmd);
+        printf("p_res j%s\n", parsed_res[j]);
         if (parsed_res[j] == NULL)
         {
-            ft_free(parsed_res, j);
+            ft_free(parsed_res, i + 1);
             return (NULL);
         }
         printf("parsed_res %s\n", parsed_res[j]);

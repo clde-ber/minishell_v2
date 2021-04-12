@@ -51,11 +51,13 @@ char *getcommand(char *str)
 int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 {
 	int i;
+	int j;
 	char **res;
 	char **parsed_res;
 	char **tab;
 
 	i = 0;
+	j = 0;
 	if (ft_is_empty_string(str))
     {
         cmd->cmd_rv = 127;
@@ -71,9 +73,10 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
             printf("%s|\n", res[i]);
             i++;
         }
+		while (parsed_res[j])
+			j++;
 		// printf("command:%s\n", res[0]);
 		// tab = redir_ext_check(res);
-		i = 0;
 		// ft_putstr_fd("mon res: ", 1);
 		// while (tab[i])
 		// {
@@ -94,7 +97,7 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
             check_doublons_cl(parsed_res);
             set_env(parsed_res, var_env, cmd);
         }
-        else if (ft_strcmp(res[0], "export") == 0 && res[1] && (!(parsed_res)))
+        else if (ft_strcmp(res[0], "export") == 0 && res[1])
             errors(cmd);
         else if (ft_strcmp(res[0], "export") == 0 && (!(res[1])))
             print_sorted_env(var_env);
@@ -102,6 +105,8 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
             print_env(var_env);
         else if (ft_strcmp(res[0], "unset") == 0 && parsed_res)
             unset(var_env, parsed_res);
+		else if (ft_strcmp(res[0], "unset") == 0)
+			errors(cmd);
         else if (ft_strcmp(res[0], "$?"))
             set_args(parsed_res, cmd->path, cmd);
         if (sig == 1)
@@ -112,9 +117,9 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
             printf("%d : Command not found\n", cmd->cmd_rv);
         if (sig == 1 || sig == 2)
             sig = 0;
+		if (parsed_res)
+			ft_free(parsed_res, j + 1);
     }
-    if (parsed_res)
-        ft_free(parsed_res, i + 1);
     ft_free(res, i + 1);
     return (0);
 }
@@ -173,7 +178,7 @@ int main(int ac, char **av, char **env)
 		get_next_line(0, &line);
 		if ((ft_strcmp(line, "$?")))
             cmd->cmd_rv = 0;
-		save = save_input(line, save);
+	//	save = save_input(line, save);
 		if (ft_strcmp(line, "exit") == 0) //builtin à coder
 			exit(0);
 		buf = ft_strdup(line);

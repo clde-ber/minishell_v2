@@ -62,6 +62,7 @@ char *antislashes_a_quotes(char *str)
     }
     ret[j] = '\0';
     free(str);
+    str = NULL;
     return (ret);
 }
 

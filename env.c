@@ -41,9 +41,9 @@ void set_env(char **tab, t_list *var_env, t_command *cmd)
 	char *empty;
 
 	j = 0;
+	empty = NULL;
 	tmp_new = NULL;
 	tmp = NULL;
-	empty = NULL;
 	while (tab[j])
 		j++;
     i = 1;

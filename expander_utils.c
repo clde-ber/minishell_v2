@@ -31,7 +31,7 @@ char *get_string_value(char *str)
     res = NULL;
     if (!(res = malloc(sizeof(char) * (ft_strlen(str) + 1))))
         return (0);
-    while (str[i])
+    while (str[i] && str[i] != '$')
     {
         res[i] = str[i];
         i++;
@@ -40,7 +40,7 @@ char *get_string_value(char *str)
     return (res);
 }
 
-char *get_env(char *str, t_list *var_env, t_command *cmd)
+char *get_env_value(char *str, t_list *var_env, t_command *cmd)
 {
     int i;
     char *test;
@@ -78,6 +78,45 @@ char *get_env(char *str, t_list *var_env, t_command *cmd)
     }
 }
 
+char *get_env(char *str, t_list *var_env, t_command *cmd)
+{
+    int i;
+    char *test;
+    char *ret;
+
+    i = 0;
+    if (!(test = malloc(sizeof(char) * (ft_strlen(str) + 1))))
+        return (0);
+    test[i] = '\0';
+    while (str[i] && ft_strcmp((ret = search_env_value(test, var_env)), "") == 0)
+    {
+        test[i] = str[i];
+        i++;
+        test[i] = '\0';
+        free(ret);
+        ret = 0;
+    }
+    if (ret)
+    {
+        free(ret);
+        ret = 0;
+    }
+    if (ft_strcmp((ret = search_env_value(test, var_env)), "") == 0)
+    {
+        free(ret);
+        ret = ft_strdup("");
+        cmd->index += ft_strlen(test);
+        free(test);
+        return (ret);
+    }
+    else
+    {
+        cmd->index += ft_strlen(test);
+        free(test);
+        return (ret);
+    }
+}
+
 char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean)
 {
     size_t i;
@@ -86,9 +125,10 @@ char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean)
 
     i = 0;
     tmp = ft_strdup("");
+    cmd->index = 0;
     if (trim[0] == '\'')
     {
-        str = ft_strjoin_free(tmp, trim);
+        str = join_a_free(tmp, trim);
         tmp = ft_strtrim(str, "\'");
         free(str);
         return (tmp);
@@ -101,6 +141,7 @@ char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean)
             cmd->index += ft_strlen(str);
             i += ft_strlen(str);
             free(str);
+            boolean = 1;
         }
         else if (trim[i] == '$')
         {
@@ -109,12 +150,18 @@ char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean)
         }
         else
         {
-            if (boolean == 0)
-                errors(cmd);
+            free(tmp);
             free(trim);
-            return (tmp);
+            return (NULL);
         }
         cmd->index = 0;
+    }
+    if (boolean == 0)
+    {
+        errors(cmd);
+        free(tmp);
+        free(trim);
+        return (NULL);
     }
     free(trim);
     return (tmp);
@@ -128,11 +175,11 @@ char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 
     i = 0;
     tmp = ft_strdup("");
+    cmd->index = 0;
     if (trim[0] == '\'')
     {
         str = ft_strjoin_free(tmp, trim);
         tmp = ft_strtrim(str, "\'");
-        free(str);
         return (tmp);
     }
     while (i < ft_strlen(trim))
@@ -146,7 +193,7 @@ char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
         }
         else
         {
-            tmp = ft_strjoin_free(tmp, get_env(&trim[i + 1], var_env, cmd));
+            tmp = ft_strjoin_free(tmp, get_env_value(&trim[i + 1], var_env, cmd));
             i += cmd->index + 1;
         }
         cmd->index = 0;
@@ -165,6 +212,7 @@ char *non_handled_commands(char *res, t_list *var_env, t_command *cmd)
     tmp_sub = ft_strtrim(tmp, "\"");
     ret = NULL;
     free(tmp);
+    printf("tmp_sub %s\n", tmp_sub);
     if (ft_strchr(tmp_sub, '$'))
         tmp_sub = replace_by_env_value(tmp_sub, var_env, cmd);
     ret = ft_strtrim(tmp_sub, "\'");
@@ -182,8 +230,14 @@ char *handled_export(char *res, t_list *var_env, t_command *cmd)
     char *trim_cmp;
     char **p_bin;
     int i;
+    int j;
+    int count;
+    char *str;
 
+    str = NULL;
     i = 0;
+    j = 0;
+    count = 0;
     trim_first = NULL;
     trim_secd = NULL;
     str_first = NULL;
@@ -193,36 +247,50 @@ char *handled_export(char *res, t_list *var_env, t_command *cmd)
     p_bin = parse_path(res, '=');
     while (p_bin[i])
         i++;
-    if ((ft_strchr(res, '=')))
+    if (ft_strchr(res, '='))
     {
         str_first = ft_strdup(p_bin[0]);
-        str_secd = ft_strdup(p_bin[1]);
+        if (!(ft_strchr(&ft_strchr(res, '=')[1], '=')))
+            str_secd = ft_strdup(p_bin[1]);
+        else
+            str_secd = ft_strdup(&ft_strchr(res, '=')[2]);
     }
     else
     {
         str_first = ft_strdup(res);
         str_secd = ft_strdup("");
     }
+    trim_first = ft_strtrim(str_first, "\"");
+    trim_secd = ft_strtrim(str_secd, "\"");
     if (str_first[0] != '\'')
-        trim_first = ft_strtrim(str_first, "\"");
+        trim_first = replace_by_env(trim_first, var_env, cmd, 0);
     if (str_secd[0] != '\'')
-        trim_secd = ft_strtrim(str_secd, "\"");
-    free(str_first);
-    free(str_secd);
-    trim_first = replace_by_env(trim_first, var_env, cmd, 1);
-    trim_secd = replace_by_env_value(trim_secd, var_env, cmd);
-    trim_cmp = ft_strtrim(trim_first, "\'");
-    name = ft_get_name(trim_cmp);
-    if (is_valid_env_name(name) == 0)
+        trim_secd = replace_by_env_value(trim_secd, var_env, cmd);
+    if ((!(trim_first)) || (!(is_valid_env_name((name = ft_get_name((trim_cmp = ft_strtrim(trim_first, "\'"))))))))
     {
-        printf("trim_first %s\n", name);
-        ft_free(p_bin, i + 1);
-        free(trim_first);
+        if (trim_first)
+        {
+            free(trim_first);
+            free(name);
+            free(trim_cmp);
+        }
+        while (((str = ft_strtrim(res, "\'")) && (is_valid_env_name_c(str[j]) || (j == 0 && str[j] == '$'))))
+        {
+            j++;
+            free(str);
+        }
+        write(1, "bash: export: '", 16);
+        write(1, &res[j], ft_strlen(&res[j]));
+        write(1, "': not a valid identifier\n", 26);
         free(trim_secd);
-        free(name);
-        free(trim_cmp);
+        free(str_first);
+        free(str_secd);
+        free(str);
+        ft_free(p_bin, i + 1);
         return (NULL);
     }
+    free(str_first);
+    free(str_secd);
     str_first = ft_strtrim(trim_first, "\'");
     str_secd = ft_strtrim(trim_secd, "\'");
     free(trim_first);
