@@ -17,7 +17,7 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
     str = NULL;
     cmd->index = 0;
     if (is_handled_cmd(args[0]) == 0 || ft_strcmp(args[0], "echo") == 0 ||
-    ft_strcmp(args[0], "pwd") == 0 || ft_strcmp(args[0], "cd"))
+    ft_strcmp(args[0], "pwd") == 0 || ft_strcmp(args[0], "cd") == 0)
         return (non_handled_commands(res, var_env, cmd));
     else
     {
