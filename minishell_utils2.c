@@ -32,6 +32,8 @@ void    free_tabtab(char **res)
     int i;
 
     i = 0;
+    if (!res)
+        return;
     while (res[i] != NULL)
         free(res[i++]);
     free(res);
