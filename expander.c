@@ -16,7 +16,8 @@ char *expander(char *res, t_list *var_env, char **args, t_command *cmd)
     name = NULL;
     str = NULL;
     cmd->index = 0;
-    if (is_handled_cmd(args[0]) == 0)
+    if (is_handled_cmd(args[0]) == 0 || ft_strcmp(args[0], "echo") == 0 ||
+    ft_strcmp(args[0], "pwd") == 0 || ft_strcmp(args[0], "cd"))
         return (non_handled_commands(res, var_env, cmd));
     else
     {
@@ -114,7 +115,6 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd)
             parsed_res[j] = NULL;
         else
             parsed_res[j] = expander(res[i], var_env, res, cmd);
-        printf("p_res j%s\n", parsed_res[j]);
         if (parsed_res[j] == NULL)
         {
             ft_free(parsed_res, i + 1);

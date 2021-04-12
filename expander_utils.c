@@ -180,6 +180,7 @@ char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
     {
         str = ft_strjoin_free(tmp, trim);
         tmp = ft_strtrim(str, "\'");
+        free(str);
         return (tmp);
     }
     while (i < ft_strlen(trim))
@@ -212,7 +213,6 @@ char *non_handled_commands(char *res, t_list *var_env, t_command *cmd)
     tmp_sub = ft_strtrim(tmp, "\"");
     ret = NULL;
     free(tmp);
-    printf("tmp_sub %s\n", tmp_sub);
     if (ft_strchr(tmp_sub, '$'))
         tmp_sub = replace_by_env_value(tmp_sub, var_env, cmd);
     ret = ft_strtrim(tmp_sub, "\'");
