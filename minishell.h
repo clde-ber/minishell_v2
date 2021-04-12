@@ -17,17 +17,24 @@
 
 typedef struct s_list
 {
-    char *name;
-    void *value;
-    struct s_list *prec;
-    struct s_list *next;
+	char *name;
+	void *value;
+	struct s_list *prec;
+	struct s_list *next;
 }               t_list;
+
+typedef struct s_fd
+{
+	int save_in;
+	int save_out;
+	char **save_pipe;
+}               t_fd;
 
 typedef struct s_command
 {
-    char *path;
-    int index;
-    int cmd_rv;
+	char *path;
+	int index;
+	int cmd_rv;
 }               t_command;
 
 //A DELETE
@@ -130,13 +137,20 @@ void    ft_cd(char **res);
 **redir
 */
 char    **redir_ext_check(char **res);
-int    check_redir(char **res, int i, char *output);
+char    **check_redir(char **res, t_fd *f);
 void    redir_file(char **res, int i, char *output, int c);
 
 /*
 **echo
 */
-void    ft_echo(char **res, t_list *var_env);
+void	ft_echo(char **res, t_list *var_env);
+
+/*
+**echo_utils
+*/
+char	*echo_option(char *output, int option);
+void	go_trim(char **res, int i, int c);
+char	*get_word(char **res, int i, int j);
 
 /*
 **exec

@@ -1,5 +1,6 @@
 SRCS =	./debug_to_delete.c\
 	./echo.c\
+	./echo_utils.c\
 	./env_utils.c\
 	./env_utils2.c\
 	./env.c\

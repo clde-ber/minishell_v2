@@ -1,127 +1,159 @@
 #include "minishell.h"
 
-/*
-**All functions for redirections (> >> <) shall go there. A work in progress.
-*/
+char **destroy_res(char **res)
+{
+    char **tab;
+    int i;
+    int m;
+    int j;
 
-void    redir_file(char **res, int i, char *output, int c)
+    i = 0;
+    j = 0;
+    m = count_tabs(res);
+    if (!(tab = malloc(sizeof(char *) * (m - 1))))
+        return (NULL);
+    while (res[i])
+    {
+        ft_putstr_fd(res[i], 1);
+        if (ft_strcmp(res[i], ">") != 0 && ft_strcmp(res[i], ">>") != 0 && ft_strcmp(res[i], "<"))
+        {
+            tab[j] = ft_strdup(res[i]);
+            j++;
+            i++;
+        }
+        else
+            i += 2;
+    }
+    tab[j] = NULL;
+    return (tab);
+}
+
+int     open_fds_out(char **res, int i, int m)
 {
     int fd;
 
     i++;
-    if (c == 0)
+    close(1);
+    if (m == 0)
         fd = open(res[i], O_CREAT | O_RDWR | O_TRUNC, 0777);
     else 
         fd = open(res[i], O_APPEND | O_RDWR, 0777);
-    ft_putstr_fd(output, fd);
-    close(fd);
-    return ;
+    return (fd);
 }
 
-char    *get_content_file(int fd)
+int     open_fds_in(char **res, int i)
 {
-    char *line;
-    char *end;
-    char *buf;
-    char *buf2;
+    int fd;
 
-    end = NULL;
-    line = NULL;
-    while (get_next_line(fd, &line) == 1)
+    i++;
+    close(0);
+    fd = open(res[i], O_RDONLY, 0777);
+    return (fd);
+}
+
+int     handle_pipe(char **res, int i)
+{
+    int fds[2];
+
+    close(0);
+    close(1);
+    if (pipe(fds) == -1)
+        return (-1);
+    return (127);
+}
+
+int    handle_fds(char **res)
+{
+    int i;
+
+    i = 0;
+    while(res[i])
     {
-        buf = ft_strjoin(line, "\n");
-        if (end == NULL)
-            end = ft_strdup(buf);
-        else
-        {
-            buf2 = ft_strjoin(end, buf);
-            free(end);
-            end = ft_strdup(buf2);
-            free(buf2);
-        }
-        free(buf);
-        free(line);
+        if (ft_strcmp(res[i], ">") == 0)
+            return(open_fds_out(res, i, 0));
+        else if (ft_strcmp(res[i], ">>") == 0)
+            return(open_fds_out(res, i, 1));
+        else if (ft_strcmp(res[i], "<") == 0)
+            return(open_fds_in(res, i));
+        else if (ft_strcmp(res[i], "|") == 0)
+            return (handle_pipe(res, i));
+        i++;
     }
-    // ft_putstr_fd(end, 1);
-    return (end);
+    return (-127);
 }
 
-char   **get_after_redir(char **res, int i, char *content)
+int count_before_pipe(char **res)
 {
-    char **tab;
+    int i;
+
+    i = 0;
+    while(res[i])
+    {
+        if (ft_strcmp(res[i], "|") == 0)
+            return (i);
+        i++;
+    }
+    return (0);
+}
+
+void    line_after_pipe(char **res, int i, t_fd *f)
+{
     int j;
     int m;
 
     j = 0;
-    m = count_tabs(res);
-    // m--;
-    if(!(tab = malloc(sizeof(char *) * m)))
+    i++;
+    m = i;
+    while (res[i])
+        i++;
+    if (f->save_pipe[0] != NULL)
+        free_tabtab(f->save_pipe);
+    if (!(f->save_pipe = malloc(sizeof(char *) * ((i - m) + 1))))
         return (NULL);
-    while (j < i)
-    {
-        tab[j] = ft_strdup(res[j]);
-        // ft_putstr_fd(tab[j], 1);
-        j++;
-    }
-    tab[j] = ft_strdup(content);
-    // ft_putstr_fd(tab[j], 1);
-    j++;
-    i += 2;
+    i = m;
     while (res[i])
     {
+        f->save_pipe[j] = ft_strdup(res[i]);
+        j++;
+        i++;
+    }
+    f->save_pipe[j] = NULL;
+}
+
+char    **save_after_pipe(char **res, t_fd *f)
+{
+    int i;
+    int j;
+    char **tab;
+
+    j = count_before_pipe(res);
+    if(!(tab = malloc(sizeof(char *) * (j + 1))))
+        return (NULL);
+    while (i < j)
+    {
         tab[j] = ft_strdup(res[i]);
-        // ft_putstr_fd(tab[j], 1);
         j++;
         i++;
     }
     tab[j] = NULL;
-    free_tabtab(res);
-    return (tab);
+    line_after_pipe(res, i, f);
 }
 
-char **redir_ext(char **res, int i)
+char **check_redir(char **res, t_fd *f)
 {
     int fd;
-    char *content;
-    char **tab;
-    
-    i++;
-    fd = open(res[i], O_RDONLY, 0555);
-    content = get_content_file(fd);
-    i--;
-    tab = get_after_redir(res, i, content);
-    return (tab);
-}
-
-char    **redir_ext_check(char **res)
-{
-    int i;
     char **tab;
 
-    i = 0;
-    while (res[i])
+    fd = handle_fds(res);
+    if (fd == -127)
+        return (res);
+    if (fd = 127)
+        return (save_after_pipe(res, f));
+    if (fd == -1)
     {
-        if (ft_strcmp(res[i], "<") == 0)
-        {
-            // free(res);
-            tab = redir_ext(res, i);
-        }
-        i++;
+        restore_fds(f);
+        return (NULL);
     }
+    tab = destroy_res(res);
     return (tab);
-}
-
-int    check_redir(char **res, int i, char *output)
-{
-    if (!res[i])
-        return (0);
-    if (ft_strcmp(res[i], ">") == 0)
-        redir_file(res, i, output, 0);
-    else if (ft_strcmp(res[i], ">>") == 0)
-        redir_file(res, i, output, 1);
-    // else if (ft_strcmp(res[i], "<") == 0)
-    //     redir_ext(res, i, output);
-    else
-        return (0);
-    return (1);
 }

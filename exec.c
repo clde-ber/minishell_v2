@@ -94,6 +94,15 @@ int exec_command(char **args, char **res, char *path, int j)
             free(tab[0]);
             str = ft_strjoin(p_bin[i], "/");
             tab[0] = ft_strjoin(str, res[0]);
+            int x = 0;
+            while (tab[x])
+            {
+                ft_putstr_nbr(x, 1);
+                ft_putstr_fd(" ", 1);
+                ft_putstr_fd(tab[x], 1);
+                ft_putstr_fd("\n", 1);
+                x++;
+            }
             if ((ret = execve(tab[0], tab, env)) == -1)
                 count++;
             i++;
@@ -136,6 +145,32 @@ int set_args(char **res, char *path, t_command *cmd)
     ret = 0;
     clc = NULL;
     k = 0;
+    // char **text = check_redir_exec(res);
+    // while (text[i])
+    //     i++;
+    // if (i > 1)
+    // {
+    //     if (!(args = malloc(sizeof(char *) * i)))
+    //         return (0);
+    //     while (index + 1 < i)
+    //     {
+    //         args[index] = ft_strdup(text[index + 1]);
+    //         index++;
+    //     }
+    //     args[index] = NULL;
+    //     ret = exec_command(args, text, path, i);
+    //     cmd->cmd_rv = ret;
+    //     ft_free(args, index + 1);
+    // }
+    // else
+    // {
+    //     ret = exec_command((clc = ft_calloc(2, sizeof(char *))), text, path, 1);
+    //     cmd->cmd_rv = ret;
+    //     while (clc[k])
+    //         k++;
+    //     ft_free(clc, k + 1);
+    // }
+    // return (0);
     while (res[i])
         i++;
     if (i > 1)

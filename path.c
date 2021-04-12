@@ -12,8 +12,8 @@ void    ft_pwd(char **res)
 	getcwd(path, 1000);
 	buf = ft_strjoin(path, "\n");
 	free(path);
-	if (check_redir(res, i++, buf) == 0)
-		ft_putstr_fd(buf, 1);
+	// if (check_redir(res, i++, buf) == 0)
+	ft_putstr_fd(buf, 1);
 }
 
 int		count_back(char *str)
@@ -40,15 +40,30 @@ int		count_back(char *str)
 	return (k);
 }
 
-char *minus_path(char **res, char *path, int i)
+char	*path_copy(char *buf, int m, int i, char **res)
 {
 	int j;
+
+	j = 0;
+	if (!(buf = malloc(sizeof(char) * m)))
+		return (NULL);
+	while (j < m)
+	{
+		buf[j] = res[i][j];
+		j++;
+	}
+	buf[j] = '\0';
+	return (buf);
+}
+
+char *minus_path(char **res, char *path, int i)
+{
 	int k;
 	char *buf;
 	int m;
 
+	buf = NULL;
 	k = count_back(res[i]);
-	j = 0;
 	while (k > 0)
 	{
 		if (buf)
@@ -57,18 +72,8 @@ char *minus_path(char **res, char *path, int i)
 		if (m == 0)
 			return (buf = ft_strdup("/"));
 		else
-		{
-			if (!(buf = malloc(sizeof(char) * m)))
-				return (NULL);
-			while (j < m)
-			{
-				buf[j] = res[i][j];
-				j++;
-			}
-			buf[j] = '\0';
-		}
+			buf = path_copy(buf, m, i, res);
 		k--;
-		j = 0;
 	}
 	return (buf);
 }
