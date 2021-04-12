@@ -73,8 +73,11 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
             printf("%s|\n", res[i]);
             i++;
         }
-		while (parsed_res[j])
+		if (parsed_res)
+		{
+			while (parsed_res[j])
 			j++;
+		}
 		// printf("command:%s\n", res[0]);
 		// tab = redir_ext_check(res);
 		// ft_putstr_fd("mon res: ", 1);
