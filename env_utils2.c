@@ -13,7 +13,7 @@ char **fill_list(t_list *environ, char **list, int i)
 		environ = environ->prec;
 		i++;
 	}
-	if (!(list = malloc(sizeof(char *) * (i + 2))))
+	if (!(list = malloc(sizeof(char *) * (i + 3))))
 		return (0);
 	i = 0;
 	while (environ)
@@ -39,9 +39,9 @@ char **sort_list(char **list, int i, int j)
 	tmp = NULL;
 	i_name = NULL;
 	j_name = NULL;
-	while (list[i])
+	while (list[++i])
 	{
-		while (list[j])
+		while (list[++j])
 		{
 			i_name = ft_get_name(list[i]);
 			j_name = ft_get_name(list[j]);
@@ -51,12 +51,10 @@ char **sort_list(char **list, int i, int j)
 				list[i] = list[j];
 				list[j] = tmp;
 			}
-			j++;
 			free(i_name);
 			free(j_name);
 		}
 		j = 0;
-		i++;
 	}
 	return (list);
 }
@@ -68,15 +66,12 @@ void print_sorted_env(t_list *environ)
 	int j;
 
 	list = NULL;
-	i = 0;
-	j = 0;
+	i = -1;
+	j = -1;
 	list = fill_list(environ, list, i);
 	list = sort_list(list, i, j);
-	while (list[i])
-	{
+	while (list[++i])
 		printf("%s\n", list[i]);
-		i++;
-	}
 	ft_free(list, i + 1);
 	list = NULL;
 }
