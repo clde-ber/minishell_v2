@@ -110,11 +110,11 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 				ft_echo(tab, var_env);
 			else if (ft_strcmp(tab[0], "cd") == 0)
 				ft_cd(tab);
-			else if (tab[0][0] == '.' && tab[0][1] == '/')
+			if (tab[0][0] == '.' && tab[0][1] == '/')
 				find_exe(str, env, cmd);
 			else if (ft_strcmp(tab[0], "export") == 0 && tab[1] && parsed_res)
         	{
-            	check_doublons_cl(parsed_res);
+            	check_doublons_cl(parsed_res, NULL, NULL, 0);
             	set_env(parsed_res, var_env, cmd);
         	}
 			else if (ft_strcmp(res[0], "export") == 0 && res[1])
