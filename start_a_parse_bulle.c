@@ -140,11 +140,9 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 			end = end_check_pipe(tab, f);
 		}
 		free_tabtab(tab);
+		free_tabtab(res);
+		free_tabtab(parsed_res);
 	}
-	// if (parsed_res)
-	// 	ft_free(parsed_res, i + 1);
-	// ft_free(tab, i + 1);
-	
 }
 
 

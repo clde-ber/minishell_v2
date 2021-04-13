@@ -38,10 +38,8 @@ void set_env(char **tab, t_list *var_env, t_command *cmd)
 	int j;
 	t_list *tmp_new;
 	t_list *tmp;
-	char *empty;
 
 	j = 0;
-	empty = NULL;
 	tmp_new = NULL;
 	tmp = NULL;
 	while (tab[j])
@@ -53,12 +51,11 @@ void set_env(char **tab, t_list *var_env, t_command *cmd)
 		if (ft_strchr(tab[i], '='))
 			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tab[i]), ft_strdup(&ft_strchr(tab[i], '=')[1]))));
 		else
-			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tab[i]), (empty = ft_strdup("")))));
+			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tab[i]), ft_strdup(""))));
 		ft_lstiter(var_env, &ft_record, cmd);
 		tmp->prec = tmp;
 		tmp_new = tmp;
 		i++;
-		free(empty);
 	}
 	var_env = tmp_new;
 }
