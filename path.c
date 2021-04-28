@@ -83,7 +83,7 @@ char *get_cwd()
 	char *path;
 
 	if (!(path = malloc(sizeof(char) * 1000)))
-		return ;
+		return (NULL);
 	getcwd(path, 1000);
 	return (path);
 }

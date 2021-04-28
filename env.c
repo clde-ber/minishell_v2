@@ -32,7 +32,7 @@ t_list *set_new_env(char **env, t_list *var_env, t_command *cmd)
 	return (var_env);
 }
 
-void set_env(char **tab, t_list *var_env, t_command *cmd)
+void set_env(char **tabl, t_list *var_env, t_command *cmd)
 {
     int i;
 	int j;
@@ -44,16 +44,16 @@ void set_env(char **tab, t_list *var_env, t_command *cmd)
 	empty = NULL;
 	tmp_new = NULL;
 	tmp = NULL;
-	while (tab[j])
+	while (tabl[j])
 		j++;
     i = 1;
-	tmp = check_doublons(0, j, tab, var_env);
+	tmp = check_doublons(0, j, tabl, var_env);
 	while (i <= j - 1)
     {
-		if (ft_strchr(tab[i], '='))
-			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tab[i]), ft_strdup(&ft_strchr(tab[i], '=')[1]))));
+		if (ft_strchr(tabl[i], '='))
+			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tabl[i]), ft_strdup(&ft_strchr(tabl[i], '=')[1]))));
 		else
-			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tab[i]), (empty = ft_strdup("")))));
+			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tabl[i]), (empty = ft_strdup("")))));
 		ft_lstiter(var_env, &ft_record, cmd);
 		tmp->prec = tmp;
 		tmp_new = tmp;
@@ -63,21 +63,21 @@ void set_env(char **tab, t_list *var_env, t_command *cmd)
 	var_env = tmp_new;
 }
 
-void	unset(t_list *env, char **tab)
+void	unset(t_list *env, char **tabl)
 {
 	int i;
 	int j = 0;
 	char *name;
 
 	name = NULL;
-	while (tab[j])
+	while (tabl[j])
 		j++;
 	i = 1;
 	while (env)
 	{
 		while (i < j)
 		{
-			if (strcmp((name = ft_get_name(tab[i])), env->name) == 0)
+			if (strcmp((name = ft_get_name(tabl[i])), env->name) == 0)
 			{
 				((char *)env->name)[0] = '\0';
 				((char *)env->value)[0] = '\0';

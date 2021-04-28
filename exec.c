@@ -60,7 +60,7 @@ int exec_command(char **args, char **res, char *path, int j)
     int status;
     int i;
     int k;
-    char **tab;
+    char **tabl;
     int count;
     char *str;
     char **p_bin;
@@ -70,14 +70,14 @@ int exec_command(char **args, char **res, char *path, int j)
     ret = 0;
     errno = 0;
     status = 0;
-    tab = arguments(res, j, args, path);
+    tabl = arguments(res, j, args, path);
     i = 0;
     count = 0;
     str = NULL;
     p_bin = NULL;
     env = NULL;
     k = 0;
-    while (tab[k])
+    while (tabl[k])
         k++;
 // readdir must be called to print correct error.
 // Fork duplicates the process so the parent process doesn't return when the child process does.
@@ -91,39 +91,39 @@ int exec_command(char **args, char **res, char *path, int j)
             k++;
         while (p_bin[i])
 		{
-            free(tab[0]);
+            free(tabl[0]);
             str = ft_strjoin(p_bin[i], "/");
-            tab[0] = ft_strjoin(str, res[0]);
+            tabl[0] = ft_strjoin(str, res[0]);
             int x = 0;
-            while (tab[x])
+            while (tabl[x])
             {
                 ft_putstr_nbr(x, 1);
                 ft_putstr_fd(" ", 1);
-                ft_putstr_fd(tab[x], 1);
+                ft_putstr_fd(tabl[x], 1);
                 ft_putstr_fd("\n", 1);
                 x++;
             }
-            if ((ret = execve(tab[0], tab, env)) == -1)
+            if ((ret = execve(tabl[0], tabl, env)) == -1)
                 count++;
             i++;
             free(str);
         }
         if (i == count)
         {
-            free(tab[0]);
+            free(tabl[0]);
             ft_free(env, k + 1);
             ft_free(p_bin, i + 1);
             printf("%s : Command not found\n", res[0]);
             exit(33151);
         }
-        free(tab[0]);
+        free(tabl[0]);
         ft_free(env, k + 1);
         ft_free(p_bin, i + 1);
         exit(status);
     }
 //    if (ret == -1)
 //        return (-1);
-    ft_free(tab, k + 1);
+    ft_free(tabl, k + 1);
     waitpid(ret, &status, 0);
     return (exit_status(status));
 // waitpid waits for the program to be finished. 

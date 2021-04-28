@@ -12,6 +12,8 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <curses.h>
+#include <term.h>
 
 #define BUFFER_SIZE 50
 
@@ -28,6 +30,10 @@ typedef struct s_fd
 	int save_in;
 	int save_out;
 	char **save_pipe;
+	int num_pipe;
+	int save_pipe_in;
+	int save_pipe_out;
+	int fds[2];
 }               t_fd;
 
 typedef struct s_command
@@ -36,6 +42,8 @@ typedef struct s_command
 	int index;
 	int cmd_rv;
 }               t_command;
+
+int     pipe_fd(t_fd *f);
 
 //A DELETE
 // dans debug_to_delete
@@ -105,19 +113,19 @@ char **env_tab(char *path);
 /*
 **env
 */
-void set_env(char **tab, t_list *var_env, t_command *cmd);
+void set_env(char **tabl, t_list *var_env, t_command *cmd);
 t_list *set_new_env(char **env, t_list *var_env, t_command *cmd);
-void	unset(t_list *env, char **tab);
+void	unset(t_list *env, char **tabl);
 void print_env(t_list *environ);
 
 /*
 **env_utils
 */
 char *ft_get_name(char *str);
-void check_doublons_cl(char **tab);
-t_list *check_doublons(int k, int j, char **tab, t_list *var_env);
-void replace_env(char *tab, t_list *var_env);
-void add_to_env(char **tab, int k, int l);
+void check_doublons_cl(char **tabl);
+t_list *check_doublons(int k, int j, char **tabl, t_list *var_env);
+void replace_env(char *tabl, t_list *var_env);
+void add_to_env(char **tabl, int k, int l);
 
 /*
 **env_utils2
@@ -138,9 +146,21 @@ void    ft_cd(char **res);
 /*
 **redir
 */
-char    **redir_ext_check(char **res);
-char    **check_redir(char **res, t_fd *f);
-void    redir_file(char **res, int i, char *output, int c);
+char **destroy_res(char **res);
+int     handle_pipe(t_fd *f);
+void    line_after_pipe(char **res, int i, t_fd *f);
+char    **save_after_pipe(char **res, t_fd *f);
+char **check_redir_end(char **res, t_fd *f);
+char **check_redir(char **res, t_fd *f);
+
+/*
+**redir_utils
+*/
+int    handle_fds(char **res, t_fd *f);
+int     open_fds_out(char **res, int i, int m);
+int     open_fds_in(char **res, int i);
+int		count_pipes(char **res);
+char	**end_redir(char **res, t_fd *f);
 
 /*
 **echo
@@ -159,7 +179,7 @@ char	*get_word(char **res, int i, int j);
 */
 int set_args(char **res, char *path, t_command *cmd);
 int exec_command(char **args, char **res, char *path, int j);
-char **arguments(char **tab, int i, char **args, char *path);
+char **arguments(char **res, int i, char **args, char *path);
 char **environment(char *path);
 int exit_status(int status);
 
@@ -186,11 +206,8 @@ int is_handled_cmd(char *str);
 /*
 **minishell_utils2
 */
+char    **copy_tabtab(char **res);
 void init_structs(t_command *cmd);
-
-/*
-**minishell_utils2
-*/
 char    *cut_after_punct(char *dest, char *line);
 int     count_tabs(char **res);
 void    free_tabtab(char **res);

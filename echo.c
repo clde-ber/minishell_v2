@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 22:13:10 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/04/11 22:30:59 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/04/23 16:14:09 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,24 +90,28 @@ void	ft_echo(char **res, t_list *var_env)
 	int		option;
 	int		i;
 	char	*output;
+	char **buf;
 
+	buf = copy_tabtab(res);
+	int k = 0;
+	while (buf[k])
+		ft_putstr_fd(buf[k++], 2);
 	i = 1;
 	output = NULL;
 	option = 0;
-	if (res[i] && ft_strcmp(res[i], "-n") == 0)
+	if (buf[i] && ft_strcmp(buf[i], "-n") == 0)
 	{
 		option = 1;
 		i++;
 	}
-	while (res[i])
+	while (buf[i])
 	{
-		check_quote(var_env, res, i);
 		if (output == NULL)
-			output = ft_strdup(res[i]);
+			output = ft_strdup(buf[i]);
 		else
 		{
 			output = ft_strjoin_free(output, ft_strdup(" "));
-			output = ft_strjoin_free(output, res[i]);
+			output = ft_strjoin_free(output, buf[i]);
 		}
 		i++;
 	}

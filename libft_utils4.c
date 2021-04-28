@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	ft_isalnum(int c)
+int		ft_isalnum(int c)
 {
 	if (c >= 'a' && c <= 'z')
 		return (1);
@@ -11,10 +11,10 @@ int	ft_isalnum(int c)
 	return (0);
 }
 
-int	ft_strlcpy(char *dst, const char *src, int dstsize)
+int		ft_strlcpy(char *dst, const char *src, int dstsize)
 {
-	int i;
-	int j;
+	int		i;
+	int		j;
 
 	j = 0;
 	i = ft_strlen(src);

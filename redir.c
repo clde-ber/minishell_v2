@@ -1,159 +1,135 @@
 #include "minishell.h"
 
-char **destroy_res(char **res)
+int chrtabtab(char **res, char *str)
 {
-    char **tab;
-    int i;
-    int m;
-    int j;
+	int i;
 
-    i = 0;
-    j = 0;
-    m = count_tabs(res);
-    if (!(tab = malloc(sizeof(char *) * (m - 1))))
-        return (NULL);
-    while (res[i])
-    {
-        ft_putstr_fd(res[i], 1);
-        if (ft_strcmp(res[i], ">") != 0 && ft_strcmp(res[i], ">>") != 0 && ft_strcmp(res[i], "<"))
-        {
-            tab[j] = ft_strdup(res[i]);
-            j++;
-            i++;
-        }
-        else
-            i += 2;
-    }
-    tab[j] = NULL;
-    return (tab);
+	i = 0;
+	while (res[i])
+	{
+		if (ft_strcmp(res[i], str) == 0)
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
-int     open_fds_out(char **res, int i, int m)
+char **divide_pipe(char **res, t_fd *f)
 {
-    int fd;
+	int m;
+	int i;
+	char **tabl;
 
-    i++;
-    close(1);
-    if (m == 0)
-        fd = open(res[i], O_CREAT | O_RDWR | O_TRUNC, 0777);
-    else 
-        fd = open(res[i], O_APPEND | O_RDWR, 0777);
-    return (fd);
+	i = 0;
+	m = count_tabs(res) - chrtabtab(res, "|");
+	if (!(f->save_pipe = malloc(sizeof(char *) * (m + 2))))
+		return NULL;
+	if (!(tabl = malloc(sizeof(char *) * (chrtabtab(res, "|") + 2))))
+		return (NULL);
+	while (i < chrtabtab(res, "|"))
+	{
+		tabl[i] = ft_strdup(res[i]);
+		i++;
+	}
+	tabl[i] = NULL;
+	i = 0;
+	while (res[chrtabtab(res, "|") + i + 1])
+	{
+		f->save_pipe[i] = ft_strdup(res[chrtabtab(res, "|") + i + 1]);
+		i++;
+	}
+	f->save_pipe[i] = NULL;
+	return (tabl);
 }
 
-int     open_fds_in(char **res, int i)
+int go_e(char **tabl, t_list *var_env, t_command *cmd)
 {
-    int fd;
-
-    i++;
-    close(0);
-    fd = open(res[i], O_RDONLY, 0777);
-    return (fd);
+	if (ft_strcmp(tabl[0], "echo") == 0)
+		ft_echo(tabl, var_env);
+	else if (ft_strcmp(tabl[0], "export") == 0 && tabl[1])
+	{
+		check_doublons_cl(tabl);
+		set_env(tabl, var_env, cmd);
+	}
+	else if (ft_strcmp(tabl[0], "export") == 0 && tabl[1])
+		errors(cmd);
+	else if (ft_strcmp(tabl[0], "export") == 0 && (!(tabl[1])))
+		print_sorted_env(var_env);
+	else if (ft_strcmp(tabl[0], "env") == 0)
+		print_env(var_env);
 }
 
-int     handle_pipe(char **res, int i)
+int go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 {
-    int fds[2];
+	int sig;
 
-    close(0);
-    close(1);
-    if (pipe(fds) == -1)
-        return (-1);
-    return (127);
+	sig = 0;
+	if (tabl[0][0] == 'e')
+		go_e(tabl, var_env, cmd);
+	else if (ft_strcmp(tabl[0], "pwd") == 0)
+		ft_pwd(tabl);
+	else if (ft_strcmp(tabl[0], "cd") == 0)
+		ft_cd(tabl);
+	else if (tabl[0][0] == '.' && tabl[0][1] == '/')
+		find_exe(tabl[0], env, cmd);
+	else if (ft_strcmp(tabl[0], "unset") == 0 && tabl[1])
+		unset(var_env, tabl);
+	else if (ft_strcmp(tabl[0], "unset") == 0)
+		errors(cmd);
+	else if (ft_strcmp(tabl[0], "$?") == 0)
+		printf("%d : Command not found\n", cmd->cmd_rv);
+	else
+		set_args(tabl, cmd->path, cmd);
+	if (sig == 1)
+		cmd->cmd_rv = 130;
+	if (sig == 2)
+		cmd->cmd_rv = 131;
+	if (sig == 1 || sig == 2)
+		sig = 0;
+	return (0);
 }
 
-int    handle_fds(char **res)
-{
-    int i;
+//marche pas avec redirs, a traiter
+//atterntion prompt affiche avec pipe
 
-    i = 0;
-    while(res[i])
-    {
-        if (ft_strcmp(res[i], ">") == 0)
-            return(open_fds_out(res, i, 0));
-        else if (ft_strcmp(res[i], ">>") == 0)
-            return(open_fds_out(res, i, 1));
-        else if (ft_strcmp(res[i], "<") == 0)
-            return(open_fds_in(res, i));
-        else if (ft_strcmp(res[i], "|") == 0)
-            return (handle_pipe(res, i));
-        i++;
-    }
-    return (-127);
+int go_pipe(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env)
+{
+	char	**one;
+	pid_t	pid;
+	int		pipe_fd[2];
+
+	one = divide_pipe(res, f);
+	pipe(pipe_fd);
+	if ((pid = fork()) == -1)
+		return -1;
+	else if (pid == 0)
+	{
+		close(pipe_fd[0]);
+		dup2(pipe_fd[1], 1);
+		go_instruction(end_redir(one, f), var_env, cmd, env);
+		close(pipe_fd[1]);
+		return 1;
+	}
+	else
+	{
+		close(pipe_fd[1]);
+		dup2(pipe_fd[0], 0);
+		go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);
+		close(pipe_fd[0]);
+	}
 }
 
-int count_before_pipe(char **res)
+int redir_and_send(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
-    int i;
-
-    i = 0;
-    while(res[i])
-    {
-        if (ft_strcmp(res[i], "|") == 0)
-            return (i);
-        i++;
-    }
-    return (0);
-}
-
-void    line_after_pipe(char **res, int i, t_fd *f)
-{
-    int j;
-    int m;
-
-    j = 0;
-    i++;
-    m = i;
-    while (res[i])
-        i++;
-    if (f->save_pipe[0] != NULL)
-        free_tabtab(f->save_pipe);
-    if (!(f->save_pipe = malloc(sizeof(char *) * ((i - m) + 1))))
-        return (NULL);
-    i = m;
-    while (res[i])
-    {
-        f->save_pipe[j] = ft_strdup(res[i]);
-        j++;
-        i++;
-    }
-    f->save_pipe[j] = NULL;
-}
-
-char    **save_after_pipe(char **res, t_fd *f)
-{
-    int i;
-    int j;
-    char **tab;
-
-    j = count_before_pipe(res);
-    if(!(tab = malloc(sizeof(char *) * (j + 1))))
-        return (NULL);
-    while (i < j)
-    {
-        tab[j] = ft_strdup(res[i]);
-        j++;
-        i++;
-    }
-    tab[j] = NULL;
-    line_after_pipe(res, i, f);
-}
-
-char **check_redir(char **res, t_fd *f)
-{
-    int fd;
-    char **tab;
-
-    fd = handle_fds(res);
-    if (fd == -127)
-        return (res);
-    if (fd = 127)
-        return (save_after_pipe(res, f));
-    if (fd == -1)
-    {
-        restore_fds(f);
-        return (NULL);
-    }
-    tab = destroy_res(res);
-    return (tab);
+	if (chrtabtab(res, "|") == -1 && chrtabtab(res, ">") == -1 && chrtabtab(res, "<") == -1 && chrtabtab(res, ">>") == -1)
+		return (go_instruction(res, var_env, cmd, env));
+	else if (chrtabtab(res, "|") == -1)
+		return (go_instruction(end_redir(res, f), var_env, cmd, env));
+	else
+	{
+		// if (count_pipes(res) == 1)
+			return (go_pipe(res, f, var_env, cmd, env));
+		// else
+		//     return (multiple_pipes(res, f));
+	}
 }

@@ -16,9 +16,9 @@ t_list	*ft_lstnew(char *name, void *value)
 	if (!(new = malloc(sizeof(t_list))))
 		return (NULL);
 	new->name = name;
-    new->value = value;
+	new->value = value;
 	new->next = NULL;
-    new->prec = NULL;
+	new->prec = NULL;
 	return (new);
 }
 
@@ -42,14 +42,13 @@ t_list	*ft_lstlast(t_list *lst)
 
 void	ft_lstadd_back(t_list **alst, t_list *new)
 {
-	t_list *last;
+	t_list	*last;
 
 	if (!new)
 		return ;
 	if (*alst == NULL)
 	{
 		*alst = new;
-	// check if next ? 
 		new->prec = NULL;
 	}
 	else
@@ -59,5 +58,3 @@ void	ft_lstadd_back(t_list **alst, t_list *new)
 		new->next = NULL;
 	}
 }
-
-

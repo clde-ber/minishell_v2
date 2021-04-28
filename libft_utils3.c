@@ -1,8 +1,8 @@
 #include "minishell.h"
 
-void	ft_putstr_fd(char *s, int fd)
+void			ft_putstr_fd(char *s, int fd)
 {
-	int i;
+	int				i;
 
 	i = 0;
 	if (!s || !fd)
@@ -14,7 +14,7 @@ void	ft_putstr_fd(char *s, int fd)
 	}
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char			*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	unsigned int	i;
 	unsigned long	l;

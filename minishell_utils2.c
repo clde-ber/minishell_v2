@@ -1,47 +1,68 @@
 #include "minishell.h"
 
-char    *cut_after_punct(char *dest, char *line)
+char	*cut_after_punct(char *dest, char *line)
 {
-    int i;
-    char *buf;
+	int		i;
+	char	*buf;
 
-    i = ft_strchr_bis(line, ';');
-    if (i == -1)
-    {
-        dest = NULL;
-        return (dest);
-    }
-    dest = ft_substr(line, i + 1, ft_strlen(line) - i);
-    return (dest);
+	i = ft_strchr_bis(line, ';');
+	if (i == -1)
+	{
+		dest = NULL;
+		return (dest);
+	}
+	dest = ft_substr(line, i + 1, ft_strlen(line) - i);
+	return (dest);
 }
 
-int     count_tabs(char **res)
+char	**copy_tabtab(char **res)
 {
-    int j;
+	int		i;
+	int		j;
+	char	**dest;
 
-    j = 0;
-    if (!res[j])
-        return (j);
-    while (res[j] != NULL)
-        j++;
-    return (j);
+	i = 0;
+	j = 0;
+	while (res[i])
+		i++;
+	if (!(dest = malloc(sizeof(char *) * (i + 1))))
+		return (NULL);
+	while (res[j])
+	{
+		dest[j] = ft_strdup(res[j]);
+		j++;
+	}
+	dest[j] = NULL;
+	return (dest);
 }
 
-void    free_tabtab(char **res)
+int		count_tabs(char **res)
 {
-    int i;
+	int		j;
 
-    i = 0;
-    if (!res)
-        return;
-    while (res[i] != NULL)
-        free(res[i++]);
-    free(res);
+	j = 0;
+	if (!res[j])
+		return (j);
+	while (res[j] != NULL)
+		j++;
+	return (j);
 }
 
-void init_structs(t_command *cmd)
+void	free_tabtab(char **res)
 {
-    cmd->path = NULL;
-    cmd->index = 0;
-    cmd->cmd_rv = 0;
+	int		i;
+
+	i = 0;
+	if (!res)
+		return ;
+	while (res[i] != NULL)
+		free(res[i++]);
+	free(res);
+}
+
+void	init_structs(t_command *cmd)
+{
+	cmd->path = NULL;
+	cmd->index = 0;
+	cmd->cmd_rv = 0;
 }

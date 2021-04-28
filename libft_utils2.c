@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-int ft_strrchr(const char *s, int c)
+int		ft_strrchr(const char *s, int c)
 {
-	char	to_find;
-	int	i;
+	char			to_find;
+	int				i;
 
 	i = ft_strlen(s);
 	to_find = c;
@@ -20,8 +20,8 @@ int ft_strrchr(const char *s, int c)
 
 void	*ft_calloc(size_t count, size_t size)
 {
-	size_t	i;
-	void	*ptr;
+	size_t			i;
+	void			*ptr;
 
 	i = 0;
 	if (!(ptr = (void *)malloc(count * size)))
@@ -36,7 +36,7 @@ void	*ft_calloc(size_t count, size_t size)
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	size_t i;
+	size_t			i;
 
 	if (!dst && !src)
 		return (NULL);
@@ -68,9 +68,9 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 	return (dst);
 }
 
-int ft_ischarset(char *str, char c)
+int		ft_ischarset(char *str, char c)
 {
-	int i;
+	int				i;
 
 	i = 0;
 	while (str[i])

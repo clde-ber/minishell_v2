@@ -6,26 +6,26 @@
 
 #include "minishell.h"
 
-int is_handled_cmd(char *str)
+int		is_handled_cmd(char *str)
 {
-    if (ft_strcmp(str, "echo") == 0)
-        return (1);
-    if (ft_strcmp(str, "cd") == 0)
-        return (1);
-    if (ft_strcmp(str, "pwd") == 0)
-        return (1);
-    if (ft_strcmp(str, "export") == 0)
-        return (1);
-    if (ft_strcmp(str, "unset") == 0)
-        return (1);
-    if (ft_strcmp(str, "env") == 0)
-        return (1);
-    if (ft_strcmp(str, "exit") == 0)
-        return (1);
-    return (0);
+	if (ft_strcmp(str, "echo") == 0)
+		return (1);
+	if (ft_strcmp(str, "cd") == 0)
+		return (1);
+	if (ft_strcmp(str, "pwd") == 0)
+		return (1);
+	if (ft_strcmp(str, "export") == 0)
+		return (1);
+	if (ft_strcmp(str, "unset") == 0)
+		return (1);
+	if (ft_strcmp(str, "env") == 0)
+		return (1);
+	if (ft_strcmp(str, "exit") == 0)
+		return (1);
+	return (0);
 }
 
-int ft_strchr_bis(const char *s, int c)
+int		ft_strchr_bis(const char *s, int c)
 {
 	char	to_find;
 	int		i;
@@ -43,41 +43,42 @@ int ft_strchr_bis(const char *s, int c)
 	return (-1);
 }
 
-int ft_isspace(char c)
+int		ft_isspace(char c)
 {
-    if (c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f' || c == ' ')
-        return (1);
-    return (0);
+	if (c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f' ||
+c == ' ')
+		return (1);
+	return (0);
 }
 
-int check_word(char *str, char *to_find, int i)
+int		check_word(char *str, char *to_find, int i)
 {
-    int j;
+	int		j;
 
-    j = 0;
-    while (to_find[j])
-    {
-        if (str[i + j] == to_find[j])
-            j++;
-        else
-            return (0);
-    }
-    return (1);
+	j = 0;
+	while (to_find[j])
+	{
+		if (str[i + j] == to_find[j])
+			j++;
+		else
+			return (0);
+	}
+	return (1);
 }
 
-int search_word(char *str, char *to_find)
+int		search_word(char *str, char *to_find)
 {
-    int i;
+	int		i;
 
-    i = 0;
-    while(str[i])
-    {
-        if (str[i] == to_find[0])
-        {
-            if (check_word(str, to_find, i) == 1)
-                return (1);
-        }
-        i++;
-    }
-    return (0);
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == to_find[0])
+		{
+			if (check_word(str, to_find, i) == 1)
+				return (1);
+		}
+		i++;
+	}
+	return (0);
 }

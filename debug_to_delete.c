@@ -85,4 +85,5 @@ void	ft_putstr_nbr(int i, int fd)
 		write(fd, &buf[j], 1);
 		j++;
 	}
+	free(buf);
 }

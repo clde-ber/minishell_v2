@@ -2,18 +2,11 @@
 
 size_t	ft_strlen(char *str)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
-	// ft_putstr_fd(str, 1);
-	// write(1, "ping", 4);
 	while (str[i])
-	{
-		// ft_putstr_nbr((int)i, 1);
-		// write(1, &str[i], 1);
 		i++;
-	}
-	// ft_putstr_nbr(i, 1);
 	return (i);
 }
 
@@ -37,7 +30,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (ptr);
 }
 
-int	ft_strcmp(const char *s1, const char *s2)
+int		ft_strcmp(const char *s1, const char *s2)
 {
 	size_t i;
 
@@ -67,21 +60,13 @@ char	*ft_strdup(const char *s1)
 	char	*ptr;
 
 	i = 0;
-	// write(1, "00", 2);
-	// ft_putstr_fd(s1, 1);
-	size_t j = ft_strlen(s1);
-	// ft_putstr_nbr(j, 1);
 	if (!(ptr = malloc(sizeof(char) * (ft_strlen((char *)s1) + 1))))
 		return (0);
-	// write(1, "11", 2);
 	while (s1[i])
 	{
 		ptr[i] = s1[i];
 		i++;
 	}
-	// write(1, "22", 2);
 	ptr[i] = '\0';
-	// write(1, "33", 2);
 	return (ptr);
 }
-

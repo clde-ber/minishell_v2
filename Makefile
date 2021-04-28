@@ -24,6 +24,7 @@ SRCS =	./debug_to_delete.c\
 	./parse_path.c\
 	./path.c\
 	./redir.c\
+	./redir_utils.c\
 	./sig_a_errors.c\
 	./start_a_parse_bulle.c\
 
@@ -35,9 +36,10 @@ CC			= gcc
 RM			= rm -f
 RM_DIR		= rm -rf
 CFLAGS		= -g3 -fsanitize=address #-Wall -Wextra -Werror
+DEP			= -lncurses
 $(NAME):		$(OBJ)
 #add CFLAGS
-				@$(CC) $(CFLAGS) $(SRCS)
+				@$(CC) $(CFLAGS) $(SRCS) $(DEP)
 				@$(RENAME)
 all:			$(NAME)
 clean:

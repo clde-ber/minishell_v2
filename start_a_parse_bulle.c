@@ -43,11 +43,6 @@ char *getcommand(char *str)
 	return (ret);
 }
 
-// trouve la fonction qui correspond a la commande.
-// Problemes : ici trouve le mot cle sans difference de s'il est intégré a une autre commande ou pas.
-// exemple: echo "pwd" > file pourrait trouver echo en premier.
-// need parsing plus precis en lettre par lettre
-
 void	restore_fds(t_fd *f)
 {
 	close(0);
@@ -56,34 +51,25 @@ void	restore_fds(t_fd *f)
 	dup2(f->save_out, 1);
 }
 
-int	end_check_pipe(char **tab, t_fd *f)
-{
-	restore_fds(f);
-	if (f->save_pipe != NULL)
-		return (1);
-	return (0);
-}
-
 void	init_fds(t_fd *f)
 {
 	f->save_in = dup(STDIN_FILENO);
 	f->save_out = dup(STDOUT_FILENO);
 	f->save_pipe = NULL;
+	f->num_pipe = 0;
+	f->save_pipe_in = 127;
+	f->save_pipe_out = 127;
+	pipe(f->fds);
 }
 
 int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 {
-	int i;
-	int j;
 	char **res;
 	char **parsed_res;
-	char **tab;
+	int num;
 	t_fd f[1];
-	int end;
 
 	init_fds(f);
-	i = 0;
-	j = 0;
 	if (ft_is_empty_string(str))
     {
         cmd->cmd_rv = 127;
@@ -93,60 +79,15 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 	{	
 		res = ft_split(str, "\t\n\r\v\f ");
 		parsed_res = parse_res(res, var_env, cmd);
-		while (res[i])
-		{
-			printf("res %d|\n", i);
-			printf("res %s|\n", res[i]);
-			i++;
-		}
-		i = 0;
-		end = 1;
-		while (end == 1)
-		{	
-			tab = check_redir(parsed_res, f);
-			if (ft_strcmp(tab[0], "pwd") == 0)
-				ft_pwd(tab);
-			else if (ft_strcmp(tab[0], "echo") == 0)
-				ft_echo(tab, var_env);
-			else if (ft_strcmp(tab[0], "cd") == 0)
-				ft_cd(tab);
-			else if (tab[0][0] == '.' && tab[0][1] == '/')
-				find_exe(str, env, cmd);
-			else if (ft_strcmp(tab[0], "export") == 0 && tab[1] && parsed_res)
-        	{
-            	check_doublons_cl(parsed_res);
-            	set_env(parsed_res, var_env, cmd);
-        	}
-			else if (ft_strcmp(res[0], "export") == 0 && res[1])
-            errors(cmd);
-        	else if (ft_strcmp(res[0], "export") == 0 && (!(res[1])))
-        	    print_sorted_env(var_env);
-        	else if (ft_strcmp(res[0], "env") == 0)
-        	    print_env(var_env);
-        	else if (ft_strcmp(res[0], "unset") == 0 && parsed_res)
-        	    unset(var_env, parsed_res);
-			else if (ft_strcmp(res[0], "unset") == 0)
-				errors(cmd);
-        	else if (ft_strcmp(res[0], "$?"))
-        	    set_args(parsed_res, cmd->path, cmd);
-        	if (sig == 1)
-        	    cmd->cmd_rv = 130;
-        	if (sig == 2)
-        	    cmd->cmd_rv = 131;
-        	if (ft_strcmp(res[0], "$?") == 0)
-        	    printf("%d : Command not found\n", cmd->cmd_rv);
-        	if (sig == 1 || sig == 2)
-        	    sig = 0;
-			end = end_check_pipe(tab, f);
-		}
-		free_tabtab(tab);
+		num = redir_and_send(parsed_res, f, var_env, cmd, env);
+		restore_fds(f);
+		free_tabtab(res);
+		if (parsed_res);
+			free_tabtab(parsed_res);
+		if (f->save_pipe != NULL)
+			free_tabtab(f->save_pipe);
 	}
-	// if (parsed_res)
-	// 	ft_free(parsed_res, i + 1);
-	// ft_free(tab, i + 1);
-	
 }
-
 
 char  **save_input(char *str, char **save)
 {
@@ -178,6 +119,131 @@ char  **save_input(char *str, char **save)
 	return (buf);
 }
 
+// int main(int ac, char **av, char **env)
+// {
+// 	char *line;
+// 	char *command;
+// 	t_list *var_env;
+// 	t_command *cmd;
+// 	char **save;
+// 	char *buf;
+// 	char *buf2;
+
+// 	line = NULL;
+// 	save = NULL;
+// 	buf = NULL;
+// 	if (!(cmd = malloc(sizeof(t_command))))
+// 		return (0);
+// 	init_structs(cmd);
+// 	var_env = set_new_env(env, var_env, cmd);
+// 	while (1)
+// 	{
+// 		if (!(sig))
+// 			write(1, "***minishell*** > ", 18);
+// 		get_next_line(0, &line);
+// 		if ((ft_strcmp(line, "$?")))
+// 			cmd->cmd_rv = 0;
+// 		save = save_input(line, save);
+// 		if (ft_strcmp(line, "exit") == 0) //builtin à coder
+// 			exit(0);
+// 		buf = ft_strdup(line);
+// 		while ((command = getcommand(buf)) != NULL)
+// 		{
+// 			dispatch(command, env, var_env, cmd);
+// 			buf2 = cut_after_punct(buf2, buf);
+// 			if (buf2 == NULL)
+// 				buf = NULL;
+// 			else
+// 				buf = ft_strdup(buf2);
+// 			free(buf2);
+// 			free(command);
+// 			command = NULL;
+// 		}
+// 		free(line);
+// 		if (buf != NULL)
+// 			free(buf);
+// 	}
+// 	ft_lstdel(var_env);
+// 	init_structs(cmd);
+// 	free(cmd->path);
+// 	free(cmd);
+// 	return (0);
+// }
+
+//get cursor space and set it after prompt before writing line, then at end of line
+
+char *go_line(char **save)
+{
+	struct termios s_termios;
+    struct termios s_termios_backup;
+    char buf[2];
+    char *term_type = getenv("TERM");
+    char *end;
+    char *buf1;
+	int i;
+	int col;
+	int li;
+
+	i = 0;
+	end = NULL;
+    tgetent(NULL, getenv("TERM"));
+	tcgetattr(STDOUT_FILENO, &s_termios);
+	tcgetattr(STDOUT_FILENO, &s_termios_backup);
+	col = tgetnum("co");
+	li = tgetnum("li");
+    s_termios.c_lflag &= ~(ICANON);
+    if (tcsetattr(0, 0, &s_termios) == -1)
+        return (-1);
+    s_termios.c_lflag &= ~(ECHO);
+    while (read(0, buf, 1) > 0)
+    {
+        buf[1] = '\0';
+        if (buf[0] == '\n')
+        {
+            if (end == NULL)
+                end = ft_strdup("\0");
+            return (end);
+        }
+        else if ((int)buf[0] == 27)
+        {
+            read(0, buf, 1);
+            if ((int)buf[0] == 91)
+            {
+                read(0, buf, 1);
+				//haut
+                if ((int)buf[0] == 65)
+				{
+					i++;
+					// tputs(tgoto(tgetstr("cm", NULL), g_info->cursor.posx, g_info->cursor.posy), 1, ft_putchar)
+					ft_putstr_fd(save[i], 1);
+				}
+                    // write(1, "up", 2);
+                else if ((int)buf[0] == 66)
+				{
+					i--;
+					ft_putstr_fd(save[i], 1);
+				}
+                    // write(1, "do", 2);
+                else
+                    ;
+            }
+        }
+        else
+        {
+            if (end == NULL)
+                end = ft_strdup(buf);
+            else
+            {
+                buf1 = ft_strdup(end);
+                free(end);
+                end = ft_strjoin(buf1, buf);
+                free(buf1);
+            }
+        }
+    }
+	return (NULL);
+}
+
 int main(int ac, char **av, char **env)
 {
 	char *line;
@@ -192,14 +258,14 @@ int main(int ac, char **av, char **env)
 	save = NULL;
 	buf = NULL;
 	if (!(cmd = malloc(sizeof(t_command))))
-		return (NULL);
+		return (0);
 	init_structs(cmd);
 	var_env = set_new_env(env, var_env, cmd);
 	while (1)
 	{
 		if (!(sig))
 			write(1, "***minishell*** > ", 18);
-		get_next_line(0, &line);
+		line = go_line(save);
 		if ((ft_strcmp(line, "$?")))
 			cmd->cmd_rv = 0;
 		save = save_input(line, save);
