@@ -250,10 +250,7 @@ char *handled_export(char *res, t_list *var_env, t_command *cmd)
     if (ft_strchr(res, '='))
     {
         str_first = ft_strdup(p_bin[0]);
-        if (!(ft_strchr(&ft_strchr(res, '=')[1], '=')))
-            str_secd = ft_strdup(p_bin[1]);
-        else
-            str_secd = ft_strdup(&ft_strchr(res, '=')[2]);
+        str_secd = ft_strdup(&ft_strchr(res, '=')[1]);
     }
     else
     {

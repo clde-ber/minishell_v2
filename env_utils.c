@@ -37,71 +37,31 @@ void add_to_env(char **tabl, int k, int l)
 {
 	char *i_name;
 	char *j_name;
-	char *i_value;
-	char *j_value;
 
 	i_name = ft_get_name(tabl[k]);
 	j_name = ft_get_name(tabl[l]);
-	if (ft_strchr(tabl[k], '='))
-		i_value = ft_strdup(ft_strchr(tabl[k], '='));
-	else
-		i_value = ft_strdup("");
-	if (ft_strchr(tabl[l], '='))
-		j_value = ft_strdup(ft_strchr(tabl[l], '='));
-	else
-		j_value = ft_strdup("");
 	if (l > k)
 	{
-		if (ft_strchr(tabl[l], '+') && ft_strchr(tabl[k], '=') &&
-		ft_strchr(tabl[l], '='))
-		{
-			free(tabl[l]);
-			tabl[l] = join_a_free(join_a_free(join_a_free(j_name, "\
-+="), &i_value[1]), &j_value[1]);
-			free(i_name);
-		}
-		else
-		{
-			free(i_name);
-			free(j_name);
-		}
+		add_to_env_l(tabl[k], tabl[l], i_name, j_name);
+		tabl[k][0] = '\0';
 	}
 	else if (l < k)
 	{
-		if (ft_strchr(tabl[k], '+') && ft_strchr(tabl[k], '=') &&
-		ft_strchr(tabl[l], '='))
-		{
-			free(tabl[k]);
-			tabl[k] = join_a_free(join_a_free(join_a_free(i_name, "\
-+="), &j_value[1]), &i_value[1]);
-			free(j_name);
-		}
-		else
-		{
-			free(i_name);
-			free(j_name);
-		}
+		add_to_env_k(tabl[k], tabl[l], i_name, j_name);
+		tabl[l][0] = '\0';
 	}
 	else
 	{
 		free(i_name);
 		free(j_name);
 	}
-	free(i_value);
-	free(j_value);
 }
 
-void check_doublons_cl(char **tabl)
+void check_doublons_cl(char **tabl, char *i_name, char *j_name, int j)
 {
 	int k;
 	int l;
-	int j;
-	char *i_name;
-	char *j_name;
 
-	j = 0;
-	i_name = NULL;
-	j_name = NULL;
 	while (tabl[j])
 		j++;
 	k = j - 1;
@@ -113,13 +73,7 @@ void check_doublons_cl(char **tabl)
 			i_name = ft_get_name(tabl[k]);
 			j_name = ft_get_name(tabl[l]);
 			if (ft_strcmp(i_name, j_name) == 0)
-			{
 				add_to_env(tabl, k, l);
-				if (l > k)
-					tabl[k][0] = '\0';
-				else if (l < k)
-					tabl[l][0] = '\0';
-			}
 			l--;
 			free(i_name);
 			free(j_name);

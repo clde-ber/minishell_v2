@@ -122,7 +122,7 @@ void print_env(t_list *environ);
 **env_utils
 */
 char *ft_get_name(char *str);
-void check_doublons_cl(char **tabl);
+void check_doublons_cl(char **tabl, char *i_name, char *j_name, int j);
 t_list *check_doublons(int k, int j, char **tabl, t_list *var_env);
 void replace_env(char *tabl, t_list *var_env);
 void add_to_env(char **tabl, int k, int l);
@@ -135,6 +135,14 @@ char **sort_list(char **list, int i, int j);
 void print_sorted_env(t_list *environ);
 int is_valid_env_name(char *str);
 int is_valid_env_name_c(char c);
+
+/*
+**env_utils3
+*/
+void add_to_env_k(char **tab_k, char **tab_l, char *i_name, char *j_name);
+void add_to_env_l(char *tab_k, char *tab_l, char *i_name, char *j_name);
+char *create_i_value(char *tab_k, char *i_value);
+char *create_j_value(char *tab_l, char *j_value);
 
 /*
 **path

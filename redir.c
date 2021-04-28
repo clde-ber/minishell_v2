@@ -48,7 +48,7 @@ int go_e(char **tabl, t_list *var_env, t_command *cmd)
 		ft_echo(tabl, var_env);
 	else if (ft_strcmp(tabl[0], "export") == 0 && tabl[1])
 	{
-		check_doublons_cl(tabl);
+		check_doublons_cl(tabl, NULL, NULL, 0);
 		set_env(tabl, var_env, cmd);
 	}
 	else if (ft_strcmp(tabl[0], "export") == 0 && tabl[1])
