@@ -51,3 +51,22 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	free(s2);
 	return (ptr);
 }
+
+int ft_is_empty_string(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_isspace(str[i]) == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}

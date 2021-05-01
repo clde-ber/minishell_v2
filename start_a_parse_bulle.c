@@ -2,20 +2,6 @@
 
 sig = 0;
 
-int ft_is_empty_string(char *str)
-{
-	int i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (ft_isspace(str[i]) == 0)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 char *getcommand(char *str)
 {
 	int i;
@@ -71,10 +57,10 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 
 	init_fds(f);
 	if (ft_is_empty_string(str))
-    {
-        cmd->cmd_rv = 127;
-        return (0);
-    }
+	{
+		cmd->cmd_rv = 127;
+		return (0);
+	}
 	else
 	{	
 		res = ft_split(str, "\t\n\r\v\f ");
@@ -89,38 +75,8 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 	}
 }
 
-char  **save_input(char *str, char **save)
-{
-	int i;
-	char **buf;
-	int j;
-
-	j = 0;
-	if (save == NULL)
-	{
-		i = 0;
-		if (!(save = malloc(sizeof(char *) * 2)))
-			return (NULL);
-		save[i] = ft_strdup(str);
-		save[i + 1] = NULL;
-		return (save);
-	}
-	i = count_tabs(save);
-	if (!(buf = malloc(sizeof(char *) * (i + 2))))
-		return (NULL);
-	buf[j] = ft_strdup(str);
-	while (save[j])
-	{
-		buf[j + 1] = ft_strdup(save[j]);
-		j++;
-	}
-	buf[j + 1] = NULL;
-	free_tabtab(save);
-	return (buf);
-}
-
-int main(int ac, char **av, char **env)
-{
+/*int main(int ac, char **av, char **env)
+ {
  	char *line;
  	char *command;
  	t_list *var_env;
@@ -128,7 +84,6 @@ int main(int ac, char **av, char **env)
  	char **save;
  	char *buf;
  	char *buf2;
-	int end;
 
  	line = NULL;
  	save = NULL;
@@ -170,83 +125,102 @@ int main(int ac, char **av, char **env)
  	free(cmd->path);
  	free(cmd);
  	return (0);
-}
+}*/
+
 
 //get cursor space and set it after prompt before writing line, then at end of line
+// Clean up the rowscols (from \033[rows;cols -- the R at end was eaten)
+// rowscols="${rowscols//[^0-9;]/}"
+// rowscols=("${rowscols//;/ }")
 
 char *go_line(char **save)
 {
-	struct termios s_termios;
-    struct termios s_termios_backup;
-    char buf[2];
-    char *term_type = getenv("TERM");
-    char *end;
-    char *buf1;
+	t_term term[1];
+	char buf[2];
+	char *term_type = getenv("TERM");
+	char *end;
+	char *buf1;
 	int i;
-	int col;
-	int li;
+	char *last;
 
+	init_term(term);
 	i = 0;
 	end = NULL;
-    tgetent(NULL, getenv("TERM"));
-	tcgetattr(STDOUT_FILENO, &s_termios);
-	tcgetattr(STDOUT_FILENO, &s_termios_backup);
-	col = tgetnum("co");
-	li = tgetnum("li");
-    s_termios.c_lflag &= ~(ICANON);
-    if (tcsetattr(0, 0, &s_termios) == -1)
-        return (-1);
-    s_termios.c_lflag &= ~(ECHO);
-    while (read(0, buf, 1) > 0)
-    {
-        buf[1] = '\0';
-        if (buf[0] == '\n')
-        {
-            if (end == NULL)
-                end = ft_strdup("\0");
-            return (end);
-        }
-        else if ((int)buf[0] == 27)
-        {
-            read(0, buf, 1);
-            if ((int)buf[0] == 91)
-            {
-                read(0, buf, 1);
-				//haut
-                if ((int)buf[0] == 65)
+	term->s_termios.c_lflag &= ~(ICANON);
+	if (tcsetattr(0, 0, &term->s_termios) == -1)
+		return (-1);
+	term->s_termios.c_lflag &= ~(ECHO);
+	tcsetattr(STDOUT_FILENO, TCSANOW, &term->s_termios);
+	get_cursor_space(term);
+	while (read(0, buf, 1) > 0)
+	{
+		buf[1] = '\0';
+		if (buf[0] == '\n')
+		{	
+			restore_term(term);
+			if (end == NULL)
+				end = ft_strdup("\0");
+			else
+				save = save_input(end, save);
+			return (end);
+		}
+		else if ((int)buf[0] == 27)
+		{
+			read(0, buf, 1);
+			if ((int)buf[0] == 91)
+			{
+				read(0, buf, 1);
+				if ((int)buf[0] == 65)
 				{
-					i++;
-					// tputs(tgoto(tgetstr("cm", NULL), g_info->cursor.posx, g_info->cursor.posy), 1, ft_putchar)
-					ft_putstr_fd(save[i], 1);
+					if (end != NULL)
+						last = ft_strdup(end);
+					tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y), 1, ft_putchar);
+					if (save[i])
+					{
+						ft_putstr_fd(save[i], 1);
+						i++;
+					}
 				}
-                    // write(1, "up", 2);
-                else if ((int)buf[0] == 66)
+				else if ((int)buf[0] == 66)
 				{
-					i--;
-					ft_putstr_fd(save[i], 1);
+					// if (end != NULL)
+					// 	save = save_input(end, save);
+					tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y), 1, ft_putchar);
+					if (save[i])
+					{
+						ft_putstr_fd(save[i], 1);
+						i--;
+					}
+					else
+						ft_putstr_fd(end, 1);
 				}
-                    // write(1, "do", 2);
-                else
-                    ;
-            }
-        }
-        else
-        {
-            if (end == NULL)
-                end = ft_strdup(buf);
-            else
-            {
-                buf1 = ft_strdup(end);
-                free(end);
-                end = ft_strjoin(buf1, buf);
-                free(buf1);
-            }
-        }
-    }
+				else
+					;
+				restore_term(term);
+			}
+		}
+		else
+		{
+			restore_term(term);
+			write(1, &buf[0], 1);
+			if (end == NULL)
+				end = ft_strdup(buf);
+			else
+			{
+				buf1 = ft_strdup(end);
+				free(end);
+				end = ft_strjoin(buf1, buf);
+				free(buf1);
+			}
+		}
+		term->s_termios.c_lflag &= ~(ICANON);
+		term->s_termios.c_lflag &= ~(ECHO);
+		tcsetattr(STDOUT_FILENO, TCSANOW, &term->s_termios);
+	}
 	return (NULL);
 }
 
-/*int main(int ac, char **av, char **env)
+int main(int ac, char **av, char **env)
 {
 	char *line;
 	char *command;
@@ -270,7 +244,7 @@ char *go_line(char **save)
 		line = go_line(save);
 		if ((ft_strcmp(line, "$?")))
 			cmd->cmd_rv = 0;
-		save = save_input(line, save);
+		// save = save_input(line, save);
 		if (ft_strcmp(line, "exit") == 0) //builtin à coder
 			exit(0);
 		buf = ft_strdup(line);
@@ -295,4 +269,4 @@ char *go_line(char **save)
 	free(cmd->path);
 	free(cmd);
 	return (0);
-}*/
+}

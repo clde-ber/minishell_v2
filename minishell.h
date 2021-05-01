@@ -36,6 +36,17 @@ typedef struct s_fd
 	int fds[2];
 }               t_fd;
 
+typedef struct	s_term
+{
+	struct termios s_termios;
+    struct termios s_termios_backup;
+	int col;
+	int li;
+	int	x;
+	int	y;
+	int size;
+}				t_term;
+
 typedef struct s_command
 {
 	char *path;
@@ -192,6 +203,15 @@ char **environment(char *path);
 int exit_status(int status);
 
 /*
+**termcap
+*/
+char  **save_input(char *str, char **save);
+void	restore_term(t_term *term);
+void	get_cursor_pos(t_term *term, char **res);
+void get_cursor_space(t_term *term);
+void	init_term(t_term *term);
+
+/*
 **parse_path
 */
 char **parse_path(char *s, char c);
@@ -262,6 +282,13 @@ char			*ft_strtrim(char const *s1, char const *set);
 int	ft_strlcpy(char *dst, const char *src, int dstsize);
 int	ft_isalnum(int c);
 char	*ft_strjoin_free(char *s1, char *s2);
+int ft_is_empty_string(char *str);
+void	ft_putchar(char c);
+
+/*
+**libft_utils5
+*/
+int				ft_atoi(const char *str);
 
 /*
 **libft_list
