@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   gnl.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/28 13:55:45 by clde-ber          #+#    #+#             */
+/*   Updated: 2021/04/28 13:57:06 by clde-ber         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*
 ** Functions that read each line from a specific file descriptor. Returns 0 when EOF is read and 1 when a line terminating '\n' is read.
 ** Fills a '\0'-terminating char * with all characters of the line except '\n'.

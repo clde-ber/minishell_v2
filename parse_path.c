@@ -1,8 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_path.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/28 13:56:17 by clde-ber          #+#    #+#             */
+/*   Updated: 2021/04/28 16:34:54 by clde-ber         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
-** Functions that ouput a two dimensional array from a string with a single character as separator. Useful for getting all possible locations for shell command
-** binaries.
+** Functions that ouput a two dimensional array from a string with a single
+** character as separator. Useful for getting all possible locations for shell
+** command binaries.
 */
 
 static size_t	len_word(char *str, int c)

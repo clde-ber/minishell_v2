@@ -139,8 +139,8 @@ int is_valid_env_name_c(char c);
 /*
 **env_utils3
 */
-void add_to_env_k(char **tab_k, char **tab_l, char *i_name, char *j_name);
-void add_to_env_l(char *tab_k, char *tab_l, char *i_name, char *j_name);
+void add_to_env_k(char **tabl, char *i_name, int k, int l);
+void add_to_env_l(char **tabl, char *j_name, int k, int l);
 char *create_i_value(char *tab_k, char *i_value);
 char *create_j_value(char *tab_l, char *j_value);
 

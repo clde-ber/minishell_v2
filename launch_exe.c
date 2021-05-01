@@ -1,67 +1,82 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   launch_exe.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
+/*   Updated: 2021/04/28 16:34:19 by clde-ber         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
-** Functions that search and launch an executable when first command line agurment begins with "./". The program reads directories and compares
-** their names to the ones in path. At the end, it checks whether the filename is correct or exists. If the last directory can't be opened, it returns
-** an error. If execve - that executes the command - returns an error, it prints error accordingly. If command is interrupted by a signal, it prints an error.
+** Functions that search and launch an executable when first command line
+** agurment begins with "./". The program reads directories and compares
+** their names to the ones in path. At the end, it checks whether the
+** filename is correct or exists. If the last directory can't be opened,
+** it returns an error. If execve - that executes the command - returns an
+** error, it prints error accordingly. If command is interrupted by a signal,
+** it prints an error.
 */
 
-int launch_exe(char *exe, char *path, char **env, t_command *cmd)
+int		launch_exe(char *exe, char *path, char **env, t_command *cmd)
 {
-    pid_t pid;
-    int ret;
-    int status;
-    char **argv;
-    char **envp;
+	pid_t	pid;
+	int		ret;
+	int		status;
+	char	**argv;
+	char	**envp;
 
-    pid = 0;
-    ret = 0;
-    errno = 0;
-    status = 0;
-    argv = arg_tab(exe, path, env);
-    envp = env_tab(path);
-    if ((pid = fork()) == 0)
-    {
-        if ((ret = execve(argv[0], argv, envp)) == -1)
+	pid = 0;
+	ret = 0;
+	errno = 0;
+	status = 0;
+	argv = arg_tab(exe, path, env);
+	envp = env_tab(path);
+	if ((pid = fork()) == 0)
+	{
+		if ((ret = execve(argv[0], argv, envp)) == -1)
 		{
-		    printf("%s\n", strerror(errno));
-            cmd->cmd_rv = 1;
+			printf("%s\n", strerror(errno));
+			cmd->cmd_rv = 1;
 			return (0);
 		}
-        exit(status);
-    }
-    waitpid(ret, &status, 0);
+		exit(status);
+	}
+	waitpid(ret, &status, 0);
 	return (exit_status(status));
-// waitpid attd que le programme se termine 
 }
 
-void find_exe(char *path, char **env, t_command *cmd)
+void	find_exe(char *path, char **env, t_command *cmd)
 {
-    DIR *dir;
-    char *str;
-    struct dirent *st_dir;
+	DIR				*dir;
+	char			*str;
+	struct dirent	*st_dir;
 
-    st_dir = NULL;
-    str = ft_get_filename(path, '/');
-    errno = 0;
-    if (!(dir = opendir(get_path(path, '/'))))
+	st_dir = NULL;
+	str = ft_get_filename(path, '/');
+	errno = 0;
+	if (!(dir = opendir(get_path(path, '/'))))
 	{
-	    printf("%s\n", strerror(errno));
-        cmd->cmd_rv = 1;
+		printf("%s\n", strerror(errno));
+		cmd->cmd_rv = 1;
 		return ;
 	}
-    while ((st_dir = readdir(dir)))
-        if (ft_strcmp(st_dir->d_name, str) == 0)
-        {
-            launch_exe(st_dir->d_name, path, env, cmd);
-            closedir(dir);
-            return ;
-        }
-    if (errno)
-    {
-        printf("%s\n", strerror(errno));
-        cmd->cmd_rv = 1;
-    }
-    else
-        launch_exe(str, path, env, cmd);
+	while ((st_dir = readdir(dir)))
+		if (ft_strcmp(st_dir->d_name, str) == 0)
+		{
+			launch_exe(st_dir->d_name, path, env, cmd);
+			closedir(dir);
+			return ;
+		}
+	if (errno)
+	{
+		printf("%s\n", strerror(errno));
+		cmd->cmd_rv = 1;
+	}
+	else
+		launch_exe(str, path, env, cmd);
 }

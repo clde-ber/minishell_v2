@@ -51,8 +51,6 @@ int go_e(char **tabl, t_list *var_env, t_command *cmd)
 		check_doublons_cl(tabl, NULL, NULL, 0);
 		set_env(tabl, var_env, cmd);
 	}
-	else if (ft_strcmp(tabl[0], "export") == 0 && tabl[1])
-		errors(cmd);
 	else if (ft_strcmp(tabl[0], "export") == 0 && (!(tabl[1])))
 		print_sorted_env(var_env);
 	else if (ft_strcmp(tabl[0], "env") == 0)
@@ -121,15 +119,19 @@ int go_pipe(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env)
 
 int redir_and_send(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
-	if (chrtabtab(res, "|") == -1 && chrtabtab(res, ">") == -1 && chrtabtab(res, "<") == -1 && chrtabtab(res, ">>") == -1)
-		return (go_instruction(res, var_env, cmd, env));
-	else if (chrtabtab(res, "|") == -1)
-		return (go_instruction(end_redir(res, f), var_env, cmd, env));
-	else
-	{
-		// if (count_pipes(res) == 1)
-			return (go_pipe(res, f, var_env, cmd, env));
-		// else
-		//     return (multiple_pipes(res, f));
+	if (res)
+		{
+		if (chrtabtab(res, "|") == -1 && chrtabtab(res, ">") == -1 && chrtabtab(res, "<") == -1 && chrtabtab(res, ">>") == -1)
+			return (go_instruction(res, var_env, cmd, env));
+		else if (chrtabtab(res, "|") == -1)
+			return (go_instruction(end_redir(res, f), var_env, cmd, env));
+		else
+		{
+			// if (count_pipes(res) == 1)
+				return (go_pipe(res, f, var_env, cmd, env));
+			// else
+			//     return (multiple_pipes(res, f));
+		}
 	}
+	return (res);
 }

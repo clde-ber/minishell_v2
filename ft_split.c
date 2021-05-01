@@ -1,13 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/28 13:55:31 by clde-ber          #+#    #+#             */
+/*   Updated: 2021/04/28 16:30:01 by clde-ber         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
-** Functions that play the role of the lexer & the tokenizer. It splits the command line string into words according to whether there is any types of spacing.
-** It may also sparate words according to whether there are into quotes, even if no spacing, and whether there are >> > < $ ? | characters. It returns a
-** two dimensional array to be used by expander functions. Each word in that array comes with some identifiers - for example $ ' " - that help binding it
-** with its value.
+** Functions that play the role of the lexer & the tokenizer. It splits the
+** command line string into words according to whether there is any types of
+** spacing. It may also sparate words according to whether there are into
+** quotes, even if no spacing, and whether there are >> > < $ ? | characters.
+** It returns a two dimensional array to be used by expander functions. Each
+** word in that array comes with some identifiers - for example $ ' " - that
+** help binding it with its value.
 */
 
-int is_symbol(char c, char comp)
+int		is_symbol(char c, char comp)
 {
 	if (c == '<' || c == '>' || c == '|')
 		return (1);
@@ -16,7 +31,7 @@ int is_symbol(char c, char comp)
 	return (0);
 }
 
-size_t parse_command(size_t i, char *str, int *res, char *charset)
+size_t	parse_command(size_t i, char *str, int *res, char *charset)
 {
 	if (is_symbol(str[i], str[i + 1]) && (*res = 1))
 	{
@@ -24,21 +39,25 @@ size_t parse_command(size_t i, char *str, int *res, char *charset)
 			i += is_symbol(str[i], str[i + 1]);
 		i--;
 	}
-	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\'') && (*res = 1))
+	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\'')
+	&& (*res = 1))
 	{
 		i++;
-    	while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i] == '\''))
+		while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i]
+		== '\''))
 			i++;
 	}
-	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\"') && (*res = 1))
-    {
-        i++;
-        while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i] == '\"'))
-            i++;
-    }
+	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\"')
+	&& (*res = 1))
+	{
+		i++;
+		while (i < ft_strlen(str) && !(str[i - 1] != '\\' &&
+		str[i] == '\"'))
+			i++;
+	}
 	else if (((!i && ft_ischarset(charset, str[i])) || (i &&
-		ft_ischarset(charset, str[i]) && str[i - 1] != '\\')) && (*res = 1))
-			i--;
+	ft_ischarset(charset, str[i]) && str[i - 1] != '\\')) && (*res = 1))
+		i--;
 	else if (str[i + 1] && (is_symbol(str[i + 1], str[i + 2]) == 1 ||
 	is_symbol(str[i + 1], str[i + 2]) == 2))
 		*res = 1;
@@ -47,8 +66,8 @@ size_t parse_command(size_t i, char *str, int *res, char *charset)
 
 size_t	len_wd(char *str, char *charset)
 {
-	size_t i;
-	int res;
+	size_t	i;
+	int		res;
 
 	res = 0;
 	i = 0;
@@ -64,8 +83,8 @@ size_t	len_wd(char *str, char *charset)
 
 size_t	count_malloc(char *s, char *str)
 {
-	size_t i;
-	size_t count;
+	size_t	i;
+	size_t	count;
 
 	i = 0;
 	count = 0;
@@ -83,7 +102,7 @@ size_t	count_malloc(char *s, char *str)
 	return (count);
 }
 
-void		*ft_free(char **res, int j)
+void	*ft_free(char **res, int j)
 {
 	int	i;
 
@@ -97,7 +116,7 @@ void		*ft_free(char **res, int j)
 	return (NULL);
 }
 
-char			**ft_split(char *s, char *str)
+char	**ft_split(char *s, char *str)
 {
 	size_t	i;
 	size_t	j;
@@ -111,7 +130,8 @@ char			**ft_split(char *s, char *str)
 		return (0);
 	while (i < ft_strlen((char *)s))
 	{
-		while (i < ft_strlen((char *)s) && j < count_malloc(s, str) && ft_ischarset(str, s[i]) == 0)
+		while (i < ft_strlen((char *)s) && j < count_malloc(s, str) &&
+		ft_ischarset(str, s[i]) == 0)
 		{
 			if (!(res[j] = malloc(sizeof(char) * (len_wd(&s[i], str) + 1))))
 				return (ft_free(res, j));

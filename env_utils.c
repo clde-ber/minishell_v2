@@ -1,39 +1,53 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/28 13:54:39 by clde-ber          #+#    #+#             */
+/*   Updated: 2021/05/01 15:17:51 by clde-ber         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
-** Functions that help managing environment variables linked list. Output variable name, check whether there are doublons in environement variable
-** names in the command line itself or compare new variables names with existing ones. If so, variable values are replaced by the last one that are set.
-** If += symbols, associated env varibale value is added to existing one.
+** Functions that help managing environment variables linked list. Output
+** variable name, check whether there are doublons in environement variable
+** names in the command line itself or compare new variables names with
+** existing ones. If so, variable values are replaced by the last one that are
+** set. If += symbols, associated env varibale value is added to existing one.
 */
 
-char *ft_get_name(char *str)
+char	*ft_get_name(char *str)
 {
-    int i;
-    int boolean;
-    char *copy;
+	int		i;
+	int		boolean;
+	char	*copy;
 
-    i = 0;
-    boolean = 0;
-    copy = ft_strdup(str);
-    while (copy[i] && boolean == 0)
-    {
-        if (copy[i] == '=' || (copy[i] == '+' && copy[i + 1] == '=') ||
-		(copy[i] == '+' && copy[i + 1] == '\0'))
-        {
-            copy[i] = '\0';
-            boolean = 1;
-        }
-        i++;
-    }
-    while (copy[i])
-    {
-        copy[i] = '\0';
-        i++;
-    }
-    return (copy);
+	i = 0;
+	boolean = 0;
+	copy = ft_strdup(str);
+	while (copy[i] && boolean == 0)
+	{
+		if (copy[i] == '=' || (copy[i] == '+' && copy[i + 1] == '=') ||
+				(copy[i] == '+' && copy[i + 1] == '\0'))
+		{
+			copy[i] = '\0';
+			boolean = 1;
+		}
+		i++;
+	}
+	while (copy[i])
+	{
+		copy[i] = '\0';
+		i++;
+	}
+	return (copy);
 }
 
-void add_to_env(char **tabl, int k, int l)
+void	add_to_env(char **tabl, int k, int l)
 {
 	char *i_name;
 	char *j_name;
@@ -42,13 +56,15 @@ void add_to_env(char **tabl, int k, int l)
 	j_name = ft_get_name(tabl[l]);
 	if (l > k)
 	{
-		add_to_env_l(tabl[k], tabl[l], i_name, j_name);
+		add_to_env_l(tabl, j_name, k, l);
 		tabl[k][0] = '\0';
+		free(i_name);
 	}
 	else if (l < k)
 	{
-		add_to_env_k(tabl[k], tabl[l], i_name, j_name);
+		add_to_env_k(tabl, i_name, k, l);
 		tabl[l][0] = '\0';
+		free(j_name);
 	}
 	else
 	{
@@ -57,7 +73,7 @@ void add_to_env(char **tabl, int k, int l)
 	}
 }
 
-void check_doublons_cl(char **tabl, char *i_name, char *j_name, int j)
+void	check_doublons_cl(char **tabl, char *i_name, char *j_name, int j)
 {
 	int k;
 	int l;
@@ -72,18 +88,24 @@ void check_doublons_cl(char **tabl, char *i_name, char *j_name, int j)
 		{
 			i_name = ft_get_name(tabl[k]);
 			j_name = ft_get_name(tabl[l]);
+			printf("iname %s\n", i_name);
+			printf("jname %s\n", j_name);
+			printf("tabk %s\n", tabl[k]);
+			printf("tabl %s\n", tabl[l]);
+			printf("l %d\n", l);
 			if (ft_strcmp(i_name, j_name) == 0)
 				add_to_env(tabl, k, l);
-			l--;
 			free(i_name);
 			free(j_name);
+			l--;
 		}
+		printf("k %d\n", k);
 		l = j - 1;
 		k--;
 	}
 }
 
-t_list *check_doublons(int k, int j, char **tabl, t_list *var_env)
+t_list	*check_doublons(int k, int j, char **tabl, t_list *var_env)
 {
 	k = j - 1;
 	while (var_env->next)
@@ -105,7 +127,7 @@ t_list *check_doublons(int k, int j, char **tabl, t_list *var_env)
 	return (var_env);
 }
 
-void replace_env(char *tabl, t_list *var_env)
+void	replace_env(char *tabl, t_list *var_env)
 {
 	char *name;
 
@@ -114,7 +136,7 @@ void replace_env(char *tabl, t_list *var_env)
 	{
 		if (ft_strchr(tabl, '+') && ft_strchr(tabl, '='))
 			var_env->value = ft_strjoin(var_env->value,
-			&ft_strchr(tabl, '=')[1]);
+					&ft_strchr(tabl, '=')[1]);
 		else if (ft_strchr(tabl, '='))
 			var_env->value = ft_strdup(&ft_strchr(tabl, '=')[1]);
 		else
