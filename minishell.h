@@ -86,6 +86,7 @@ int strings_to_join(char **res, int i);
 char **parse_first_arg(char **res, char **parsed_res);
 char *expander(char *res, t_list *var_env, char **args, t_command *cmd);
 char **parse_res(char **res, t_list *var_env, t_command *cmd);
+char *handled_unset(char *res, t_list *var_env, t_command *cmd);
 
 /*
 **expander_utils

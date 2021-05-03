@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/03 09:09:06 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/03 11:39:18 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,115 +148,101 @@ char		*find_op(char *str)
 		return ("");
 }
 
+char		*export_errors(char *str_first, char *str_secd, int bool1, int bool2, char *res)
+{
+	char *operator;
+	
+	operator = find_op(res);
+	write(1, "bash: export: '", 16);
+	if (bool1 == 0)
+		write(1, ft_strtrim(str_first, "\'"), ft_strlen(ft_strtrim(str_first, "\'")));
+	else
+		write(1, str_first, ft_strlen(str_first));
+	write(1, operator, ft_strlen(operator));
+	if (bool2 == 0)
+		write(1, ft_strtrim(str_secd, "\'"), ft_strlen(ft_strtrim(str_secd, "\'")));
+	else
+		write(1, str_secd, ft_strlen(str_secd));
+	write(1, "': not a valid identifier\n", 26);
+	return (NULL);
+}
+
+char		*valid_export(char *str_first, char *str_secd, int bool1, int bool2)
+{
+	if (bool1 == 0)
+		str_first = ft_strtrim(str_first, "\'");
+	if (bool2 == 0)
+		str_secd = ft_strtrim(str_secd, "\'");
+	return (ft_strjoin_free(join_a_free(str_first, "="), str_secd));}
+
+void		env_quotes_a_values(char **str_first, char **str_secd, int *bool1, int *bool2)
+{
+	if (ft_strlen(*str_first) != ft_strlen(ft_strtrim(*str_first, "\"")))
+		*bool1 = 1;
+	if (ft_strlen(*str_secd) != ft_strlen(ft_strtrim(*str_secd, "\"")))
+		*bool2 = 1;
+	*str_first = ft_strtrim(*str_first, "\"");
+	*str_secd = ft_strtrim(*str_secd, "\"");
+}
+
+char		*get_env_name(int bool1, char *str_first)
+{
+	char *name;
+	char *trim_cmp;
+
+	name = NULL;
+	trim_cmp = NULL;
+	if (str_first)
+	{
+		if (bool1 == 0)
+			trim_cmp = ft_strtrim(str_first, "\'");
+		else
+			trim_cmp = ft_strdup(str_first);
+		name = ft_get_name(trim_cmp);
+	}
+	return (name);
+}
+
+void		split_env_name_a_value(char **str_first, char **str_secd, char **p_bin, char *res)
+{
+	if (ft_strchr(res, '='))
+	{
+		*str_first = ft_strdup(p_bin[0]);
+		*str_secd = ft_strdup(&ft_strchr(res, '=')[1]);
+	}
+	else
+	{
+		*str_first = ft_strdup(res);
+		*str_secd = ft_strdup("");
+	}
+}
+
 char		*handled_export(char *res, t_list *var_env, t_command *cmd)
 {
-	int		i;
-	int		j;
-	int		count;
-	char	*trim_first;
-	char	*trim_secd;
 	char	*str_first;
 	char	*str_secd;
-	char	*name;
-	char	*trim_cmp;
-	char	*str;
 	char	**p_bin;
-	char	*operator;
 	int		bool1;
 	int		bool2;
 
 	bool1 = 0;
 	bool2 = 0;
-	operator = NULL;
-	str = NULL;
-	i = 0;
-	j = 0;
-	count = 0;
-	trim_first = NULL;
-	trim_secd = NULL;
 	str_first = NULL;
 	str_secd = NULL;
-	name = NULL;
-	trim_cmp = NULL;
 	p_bin = parse_path(res, '=');
-	while (p_bin[i])
-		i++;
-	if (ft_strchr(res, '='))
+	split_env_name_a_value(&str_first, &str_secd, p_bin, res);
+	env_quotes_a_values(&str_first, &str_secd, &bool1, &bool2);
+	if (str_first[0] != '\'')
+		str_first = replace_by_env(str_first, var_env, cmd, 0);
+	if (str_secd[0] != '\'')
+		str_secd = replace_by_env_value(str_secd, var_env, cmd);
+	if (!(get_env_name(bool1, str_first)))
+		str_first = NULL;
+	if ((!(str_first)) || (!(is_valid_env_name(get_env_name(bool1, str_first)))))
 	{
-		str_first = ft_strdup(p_bin[0]);
-		str_secd = ft_strdup(&ft_strchr(res, '=')[1]);
-	}
-	else
-	{
-		str_first = ft_strdup(res);
-		str_secd = ft_strdup("");
-	}
-	if (ft_strlen(str_first) != ft_strlen(ft_strtrim(str_first, "\"")))
-		bool1 = 1;
-	if (ft_strlen(str_secd) != ft_strlen(ft_strtrim(str_secd, "\"")))
-		bool2 = 1;
-	trim_first = ft_strtrim(str_first, "\"");
-	trim_secd = ft_strtrim(str_secd, "\"");
-	if (trim_first[0] != '\'')
-		trim_first = replace_by_env(trim_first, var_env, cmd, 0);
-	if (trim_secd[0] != '\'')
-		trim_secd = replace_by_env_value(trim_secd, var_env, cmd);
-	if (trim_first)
-	{
-		if (bool1 == 0)
-			trim_cmp = ft_strtrim(trim_first, "\'");
-		else
-			trim_cmp = ft_strdup(trim_first);
-		name = ft_get_name(trim_cmp);
-	}
-	if ((!(trim_first)) || (!(is_valid_env_name(name))))
-	{
-		if (trim_first)
-		{
-			free(name);
-			free(trim_cmp);
-		}
-		while (((str = ft_strtrim(res, "\'")) && (is_valid_env_name_c(str[j])
-		|| (j == 0 && str[j] == '$'))))
-		{
-			j++;
-			free(str);
-		}
-		operator = find_op(res);
-		write(1, "bash: export: '", 16);
-		if (bool1 == 0)
-			write(1, ft_strtrim(trim_first, "\'"), ft_strlen(ft_strtrim(trim_first, "\'")));
-		else
-			write(1, trim_first, ft_strlen(trim_first));
-		write(1, operator, ft_strlen(operator));
-		if (bool2 == 0)
-			write(1, ft_strtrim(trim_secd, "\'"), ft_strlen(ft_strtrim(trim_secd, "\'")));
-		else
-			write(1, trim_secd, ft_strlen(trim_secd));
-		write(1, "': not a valid identifier\n", 26);
 		cmd->cmd_rv = 1;
-		free(trim_secd);
-		free(str_first);
-		free(str_secd);
-		free(str);
-		free(trim_first);
-		ft_free(p_bin, i + 1);
-		return (NULL);
+		return (export_errors(str_first, str_secd, bool1, bool2, res));
 	}
-	free(str_first);
-	free(str_secd);
-	if (bool1 == 0)
-		str_first = ft_strtrim(trim_first, "\'");
-	else
-		str_first = ft_strdup(trim_first);
-	if (bool2 == 0)
-		str_secd = ft_strtrim(trim_secd, "\'");
-	else
-		str_secd = ft_strdup(trim_secd);
-	free(trim_first);
-	free(trim_secd);
-	free(name);
-	free(trim_cmp);
-	ft_free(p_bin, i + 1);
-	return (ft_strjoin_free(join_a_free(str_first, "="), str_secd));
+	free_tabtab(p_bin);
+	return (valid_export(str_first, str_secd, bool1, bool2));
 }

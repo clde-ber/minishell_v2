@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/03 09:25:15 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/03 11:34:07 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,33 @@
 ** array is returned to be used either in the fonctions that are shell commands
 ** recreated builtins or in the execve function.
 */
+
+char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
+{
+	char *trim;
+	int bool1;
+
+	bool1 = 0;
+	trim = NULL;
+	if (ft_strlen(ft_strtrim(res, "\"")) != ft_strlen(res))
+		bool1 = 1;
+	trim = ft_strtrim(res, "\"");
+	if (bool1 == 0)
+		trim = replace_by_env(trim, var_env, cmd, 0);
+	if (trim && trim[0] != '\"' && trim[0] != '\'')
+		return (trim);
+	else
+	{
+		cmd->cmd_rv = 1;
+		write(1, "bash: export: '", 16);
+		if (bool1 == 0)
+			write(1, ft_strtrim(trim, "\'"), ft_strlen(ft_strtrim(trim, "\'")));
+		else
+			write(1, trim, ft_strlen(trim));
+		write(1, "': not a valid identifier\n", 26);
+		return (ft_strdup(""));
+	}
+}
 
 char	*expander(char *res, t_list *var_env, char **args, t_command *cmd)
 {
@@ -40,26 +67,7 @@ char	*expander(char *res, t_list *var_env, char **args, t_command *cmd)
 		if (ft_strcmp(args[0], "export") == 0 && ft_strcmp(res, "export"))
 			return (handled_export(res, var_env, cmd));
 		else if (ft_strcmp(args[0], "unset") == 0 && ft_strcmp(res, "unset"))
-		{
-			if (ft_strlen(ft_strtrim(res, "\"")) != ft_strlen(res))
-				bool1 = 1;
-			trim = ft_strtrim(res, "\"");
-			if (trim[0] != '\'' && trim[0] != '\"')
-				trim = replace_by_env(trim, var_env, cmd, 0);
-			if (trim && trim[0] != '\"' && trim[0] != '\'')
-				return (trim);
-			else
-			{
-				cmd->cmd_rv = 1;
-				write(1, "bash: export: '", 16);
-				if (bool1 == 0)
-					write(1, ft_strtrim(trim, "\'"), ft_strlen(ft_strtrim(trim, "\'")));
-				else
-					write(1, trim, ft_strlen(trim));
-				write(1, "': not a valid identifier\n", 26);
-				return (ft_strdup(""));
-			}
-		}
+			return (handled_unset(res, var_env, cmd));
 	}
 	return (ft_strdup(res));
 }
