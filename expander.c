@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/01 19:15:52 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/03 09:25:15 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ char	*expander(char *res, t_list *var_env, char **args, t_command *cmd)
 	char	*trim;
 	char	*name;
 	char	*str;
+	int		bool1;
 
+	bool1 = 0;
 	trim = NULL;
 	name = NULL;
 	str = NULL;
@@ -39,30 +41,23 @@ char	*expander(char *res, t_list *var_env, char **args, t_command *cmd)
 			return (handled_export(res, var_env, cmd));
 		else if (ft_strcmp(args[0], "unset") == 0 && ft_strcmp(res, "unset"))
 		{
-			if (res[0] == '\'')
-				trim = ft_strtrim(res, "\'");
-			else
-				trim = ft_strtrim(res, "\"");
-			str = ft_strtrim(trim, "\'");
-			name = ft_get_name(str);
-			if (trim[0] == '\'')
-			{
-				free(name);
-				free(trim);
-				return (str);
-			}
-			else
-			{
-				free(name);
-				free(str);
+			if (ft_strlen(ft_strtrim(res, "\"")) != ft_strlen(res))
+				bool1 = 1;
+			trim = ft_strtrim(res, "\"");
+			if (trim[0] != '\'' && trim[0] != '\"')
 				trim = replace_by_env(trim, var_env, cmd, 0);
-				if (trim)
-					return (trim);
+			if (trim && trim[0] != '\"' && trim[0] != '\'')
+				return (trim);
+			else
+			{
+				cmd->cmd_rv = 1;
+				write(1, "bash: export: '", 16);
+				if (bool1 == 0)
+					write(1, ft_strtrim(trim, "\'"), ft_strlen(ft_strtrim(trim, "\'")));
 				else
-				{
-					cmd->cmd_rv = 0;
-					return (ft_strdup(""));
-				}
+					write(1, trim, ft_strlen(trim));
+				write(1, "': not a valid identifier\n", 26);
+				return (ft_strdup(""));
 			}
 		}
 	}
@@ -127,7 +122,7 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 			parsed_res[j] = expander(res[i], var_env, res, cmd);
 		if (parsed_res[j] == NULL)
 		{
-			ft_free(parsed_res, i + 1);
+			ft_free(parsed_res, j + 1);
 			return (NULL);
 		}
 		printf("parsed_res %s\n", parsed_res[j]);

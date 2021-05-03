@@ -67,12 +67,13 @@ char	**end_redir(char **res, t_fd *f)
 	j = 0;
 	if (chrtabtab(res, ">") == -1 && chrtabtab(res, ">>") == -1 && chrtabtab(res, "<") == -1)
 		return (res);
+	printf("%d\n", handle_fds);
 	if (handle_fds(res, f) < 0)
 	{
 		restore_fds(f);
-		return (NULL);
+	//	return (NULL);
 	}
-	while (ft_strcmp(res[i], "<") != 0 && ft_strcmp(res[i], ">") != 0 && ft_strcmp(res[i], ">>") != 0)
+	while (res[i] && ft_strcmp(res[i], "<") != 0 && ft_strcmp(res[i], ">") != 0 && ft_strcmp(res[i], ">>") != 0)
 		i++;
 	if (!(tabl = malloc(sizeof(char *) * (i + 1))))
 		return (NULL);

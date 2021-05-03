@@ -1,0 +1,40 @@
+0 /home/user42/.local/bin/cat
+1 result.txt
+0 /usr/local/sbin/cat
+1 result.txt
+0 /usr/local/bin/cat
+1 result.txt
+0 /usr/sbin/cat
+1 result.txt
+0 /usr/bin/cat
+1 result.txt
+0 /sbin/cat
+1 result.txt
+0 /bin/cat
+1 result.txt
+
+hello there
+hello
+salut hello la
+hello
+/home/budal-bi/Workspace/C/minishell_v2bebe
+0 /home/user42/.local/bin/cat
+1 result.txt
+0 /usr/local/sbin/cat
+1 result.txt
+0 /usr/local/bin/cat
+1 result.txt
+0 /usr/sbin/cat
+1 result.txt
+0 /usr/bin/cat
+1 result.txt
+0 /sbin/cat
+1 result.txt
+0 /bin/cat
+1 result.txt
+
+hello there
+hello
+salut hello la
+hello
+/home/budal-bi/Workspace/C/minishell_v2bebe

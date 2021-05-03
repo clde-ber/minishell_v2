@@ -75,7 +75,7 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 	}
 }
 
-/*int main(int ac, char **av, char **env)
+int main(int ac, char **av, char **env)
  {
  	char *line;
  	char *command;
@@ -84,6 +84,7 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
  	char **save;
  	char *buf;
  	char *buf2;
+	char *end;
 
  	line = NULL;
  	save = NULL;
@@ -93,6 +94,8 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
  		return (0);
  	init_structs(cmd);
  	var_env = set_new_env(env, var_env, cmd);
+	signal(SIGINT, handle_signal);
+	signal(SIGQUIT, handle_signal);
  	while (end == 0)
  	{
  		if (!(sig))
@@ -125,7 +128,7 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
  	free(cmd->path);
  	free(cmd);
  	return (0);
-}*/
+}
 
 
 //get cursor space and set it after prompt before writing line, then at end of line
@@ -220,7 +223,7 @@ char *go_line(char **save)
 	return (NULL);
 }
 
-int main(int ac, char **av, char **env)
+/*int main(int ac, char **av, char **env)
 {
 	char *line;
 	char *command;
@@ -269,4 +272,4 @@ int main(int ac, char **av, char **env)
 	free(cmd->path);
 	free(cmd);
 	return (0);
-}
+}*/

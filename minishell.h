@@ -98,6 +98,7 @@ char *non_handled_commands(char *res, t_list *var_env, t_command *cmd);
 char *handled_export(char *res, t_list *var_env, t_command *cmd);
 char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd);
 char *get_string_value(char *str);
+char *find_op(char *str);
 
 /*
 **expander_utils2
