@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/03 11:47:32 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/04 07:30:59 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,21 +107,31 @@ char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 	return (tmp);
 }
 
+int			even_or_odd(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] && str[i] == '\'')
+		i++;
+	return (i);
+}
+
 char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 {
 	char	*tmp;
 	char	*tmp_sub;
-	char	*ret;
+	int		boolean;
 
+	boolean = 0;
 	tmp = ft_strdup(res);
+	if (even_or_odd(tmp) && even_or_odd(tmp) % 2)
+		boolean = 1;
 	tmp_sub = ft_strtrim(tmp, "\"");
-	ret = NULL;
 	free(tmp);
-	if (ft_strchr(tmp_sub, '$'))
-		tmp_sub = replace_by_env_value(tmp_sub, var_env, cmd);
-	ret = ft_strtrim(tmp_sub, "\'");
-	free(tmp_sub);
-	return (ret);
+	if (boolean == 0 && ft_strchr(tmp_sub, '$'))
+		tmp_sub = replace_by_env_value(ft_strtrim(tmp_sub, "\'"), var_env, cmd);
+	return (tmp_sub);
 }
 
 char		*find_op(char *str)
