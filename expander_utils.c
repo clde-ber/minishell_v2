@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/03 11:39:18 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/03 11:47:32 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,11 +238,9 @@ char		*handled_export(char *res, t_list *var_env, t_command *cmd)
 		str_secd = replace_by_env_value(str_secd, var_env, cmd);
 	if (!(get_env_name(bool1, str_first)))
 		str_first = NULL;
-	if ((!(str_first)) || (!(is_valid_env_name(get_env_name(bool1, str_first)))))
-	{
-		cmd->cmd_rv = 1;
+	if (((!(str_first)) || (!(is_valid_env_name(get_env_name(bool1,
+	str_first))))) && (cmd->cmd_rv = 1))
 		return (export_errors(str_first, str_secd, bool1, bool2, res));
-	}
 	free_tabtab(p_bin);
 	return (valid_export(str_first, str_secd, bool1, bool2));
 }
