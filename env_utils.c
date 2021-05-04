@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:39 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/01 15:17:51 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/04 11:15:10 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,18 +88,12 @@ void	check_doublons_cl(char **tabl, char *i_name, char *j_name, int j)
 		{
 			i_name = ft_get_name(tabl[k]);
 			j_name = ft_get_name(tabl[l]);
-			printf("iname %s\n", i_name);
-			printf("jname %s\n", j_name);
-			printf("tabk %s\n", tabl[k]);
-			printf("tabl %s\n", tabl[l]);
-			printf("l %d\n", l);
 			if (ft_strcmp(i_name, j_name) == 0)
 				add_to_env(tabl, k, l);
 			free(i_name);
 			free(j_name);
 			l--;
 		}
-		printf("k %d\n", k);
 		l = j - 1;
 		k--;
 	}

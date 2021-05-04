@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:26 by user42            #+#    #+#             */
-/*   Updated: 2021/05/01 18:43:24 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/04 12:12:28 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@
 
 #include "minishell.h"
 
+void	name_a_value_var(char **name, char **value, char **env, int k)
+{
+	*name = ft_get_name(env[k]);
+	*value = ft_strdup(&ft_strchr(env[k], '=')[1]);
+}
+
 t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd)
 {
 	int		k;
@@ -30,11 +36,9 @@ t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd)
 	name = NULL;
 	value = NULL;
 	tmp = NULL;
-	while (env[k])
+	while (env[k + 1])
 		k++;
-	k--;
-	name = ft_get_name(env[k]);
-	value = ft_strdup(&ft_strchr(env[k], '=')[1]);
+	name_a_value_var(&name, &value, env, k);
 	var_env = ft_lstnew(name, value);
 	k--;
 	while (k >= 0)
@@ -58,12 +62,13 @@ void	set_env(char **tabl, t_list *var_env, t_command *cmd)
 	t_list	*tmp;
 
 	j = 0;
-	i = 1;
+	i = 0;
 	tmp_new = NULL;
+	tmp = NULL;
 	while (tabl[j])
 		j++;
 	tmp = check_doublons(0, j, tabl, var_env);
-	while (i <= j - 1)
+	while (++i <= j - 1)
 	{
 		if (ft_strchr(tabl[i], '='))
 		{
@@ -74,9 +79,8 @@ ft_strdup(&ft_strchr(tabl[i], '=')[1]));
 		ft_lstiter(var_env, &ft_record, cmd);
 		tmp->prec = tmp;
 		tmp_new = tmp;
-		i++;
 	}
-	var_env = tmp_new;
+//	var_env = tmp_new;
 }
 
 void	unset(t_list *env, char **tabl)

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:50 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/04/28 14:12:21 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/04 12:25:07 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,28 @@
 
 char	**fill_list(t_list *environ, char **list, int i)
 {
+	t_list	*tmp;
+
+	tmp = environ;
+	i = 0;
 	while (environ->next)
-		environ = environ->next;
-	while (environ->prec)
 	{
-		environ = environ->prec;
+		environ = environ->next;
 		i++;
 	}
+	printf("%d\n", i);
 	if (!(list = malloc(sizeof(char *) * (i + 3))))
 		return (0);
 	i = 0;
-	while (environ)
+	while (tmp)
 	{
-		if (ft_strlen(environ->name))
+		if (ft_strlen(tmp->name))
 		{
 			list[i] = join_a_free(join_a_free(join_a_free(join_a_free(
-ft_strjoin("declare -x ", environ->name), "="), "\""), environ->value), "\"");
+ft_strjoin("declare -x ", tmp->name), "="), "\""), tmp->value), "\"");
 			i++;
 		}
-		environ = environ->next;
+		tmp = tmp->next;
 	}
 	list[i] = NULL;
 	return (list);
@@ -67,7 +70,7 @@ char	**sort_list(char **list, int i, int j)
 			free(i_name);
 			free(j_name);
 		}
-		j = 0;
+		j = -1;
 	}
 	return (list);
 }
@@ -78,7 +81,6 @@ void	print_sorted_env(t_list *environ)
 	int		i;
 	int		j;
 
-	list = NULL;
 	i = -1;
 	j = -1;
 	list = fill_list(environ, list, i);
