@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 14:14:28 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 14:20:31 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,16 +83,6 @@ char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 	return (tmp);
 }
 
-int			even_or_odd(char *str)
-{
-	int i;
-
-	i = 0;
-	while (str[i] && str[i] == '\'')
-		i++;
-	return (i);
-}
-
 char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 {
 	char	*tmp;
@@ -109,117 +99,6 @@ char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 		tmp_sub = replace_by_env_value(ft_strtrim(tmp_sub, "\'"), var_env, cmd);
 	tmp_sub = ft_strtrim(tmp_sub, "\'");
 	return (tmp_sub);
-}
-
-char		*find_op(char *str)
-{
-	int i;
-	char *ret;
-
-	i = 0;
-	ret = NULL;
-	if (ft_strchr(str, '+') && ft_strchr(str, '='))
-	{
-		ret = ft_strchr(str, '+');
-		if (ret[1] && ret[1] == '=')
-			return ("+=");
-		else
-			return ("=");
-	}
-	else if (ft_strchr(str, '='))
-	{
-		ret = ft_strchr(str, '=');
-			return ("=");
-	}
-	else
-		return ("");
-}
-
-char		*export_errors(char *str_first, char *str_secd, int quotes, char *res)
-{
-	char *operator;
-	
-	operator = find_op(res);
-	write(1, "bash: export: '", 16);
-	if (quotes % 2 == 0)
-		write(1, ft_strtrim(str_first, "\'"), ft_strlen(ft_strtrim(str_first, "\'")));
-	else
-		write(1, str_first, ft_strlen(str_first));
-	write(1, operator, ft_strlen(operator));
-	if (quotes == 1 || quotes == 4)
-		write(1, ft_strtrim(str_secd, "\'"), ft_strlen(ft_strtrim(str_secd, "\'")));
-	else
-		write(1, str_secd, ft_strlen(str_secd));
-	write(1, "': not a valid identifier\n", 26);
-	return (NULL);
-}
-
-char		*valid_export(char *str_first, char *str_secd, int quotes, char *res)
-{
-	char *operator;
-
-	operator = find_op(res);
-	if (quotes % 2 == 0)
-		str_first = ft_strtrim(str_first, "\'");
-	if (quotes == 1 || quotes == 4)
-		str_secd = ft_strtrim(str_secd, "\'");
-	return (ft_strjoin_free(join_a_free(str_first, operator), str_secd));
-}
-
-void		env_quotes_a_values(char **str_first, char **str_secd, int *quotes)
-{
-	if (ft_strlen(*str_first) != ft_strlen(ft_strtrim(*str_first, "\"")) &&
-	ft_strlen(*str_secd) == ft_strlen(ft_strtrim(*str_secd, "\"")))
-		*quotes = 1;
-	if (ft_strlen(*str_secd) != ft_strlen(ft_strtrim(*str_secd, "\"")) &&
-	ft_strlen(*str_first) == ft_strlen(ft_strtrim(*str_first, "\"")))
-		*quotes = 2;
-	if (ft_strlen(*str_first) != ft_strlen(ft_strtrim(*str_first, "\"")) &&
-	ft_strlen(*str_secd) != ft_strlen(ft_strtrim(*str_secd, "\"")))
-		*quotes = 3;
-	if (ft_strlen(*str_first) == ft_strlen(ft_strtrim(*str_first, "\"")) &&
-	ft_strlen(*str_secd) == ft_strlen(ft_strtrim(*str_secd, "\"")))
-		*quotes = 4;
-	*str_first = ft_strtrim(*str_first, "\"");
-	*str_secd = ft_strtrim(*str_secd, "\"");
-}
-
-char		*get_env_name(int quotes, char *str_first)
-{
-	char *name;
-
-	name = NULL;
-	if (str_first)
-	{
-		if (quotes % 2 == 0)
-			name = ft_strtrim(str_first, "\'");
-		else
-			name = ft_strdup(str_first);
-	}
-	return (name);
-}
-
-void		split_env_name_a_value(char **str_first, char **str_secd, char **p_bin, char *res)
-{
-	if (ft_strchr(res, '='))
-	{
-		*str_first = ft_strdup(p_bin[0]);
-		*str_secd = ft_strdup(&ft_strchr(res, '=')[1]);
-	}
-	else
-	{
-		*str_first = ft_strdup(res);
-		*str_secd = ft_strdup("");
-	}
-}
-
-void		export_replace_by_env_value(char **str_first, char **str_secd,
-t_list *var_env, t_command *cmd)
-{
-	if (*str_first[0] != '\'')
-		*str_first = replace_by_env(*str_first, var_env, cmd, 0);
-	if (*str_secd[0] != '\'')
-		*str_secd = replace_by_env_value(*str_secd, var_env, cmd);
 }
 
 char		*handled_export(char *res, t_list *var_env, t_command *cmd)

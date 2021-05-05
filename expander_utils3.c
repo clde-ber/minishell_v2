@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 14:30:34 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 11:57:59 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 14:18:49 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,43 +73,37 @@ char	*get_env_value(char *str, t_list *var_env, t_command *cmd)
 	free(test);
 	return (ret);
 }
-/*
-char	*get_env(char *str, t_list *var_env, t_command *cmd)
+
+int			even_or_odd(char *str)
 {
-	int		i;
-	char	*test;
-	char	*ret;
+	int i;
 
 	i = 0;
-	if (!(test = malloc(sizeof(char) * (ft_strlen(str) + 1))))
-		return (0);
-	test[i] = '\0';
-	while (str[i] && ft_strcmp((ret = search_env_value(test,
-	var_env)), "") == 0)
-	{
-		test[i] = str[i];
+	while (str[i] && str[i] == '\'')
 		i++;
-		test[i] = '\0';
-		free(ret);
-		ret = 0;
-	}
-	if (ret)
+	return (i);
+}
+
+char		*find_op(char *str)
+{
+	int i;
+	char *ret;
+
+	i = 0;
+	ret = NULL;
+	if (ft_strchr(str, '+') && ft_strchr(str, '='))
 	{
-		free(ret);
-		ret = 0;
+		ret = ft_strchr(str, '+');
+		if (ret[1] && ret[1] == '=')
+			return ("+=");
+		else
+			return ("=");
 	}
-	if (ft_strcmp((ret = search_env_value(test, var_env)), "") == 0)
+	else if (ft_strchr(str, '='))
 	{
-		free(ret);
-		ret = ft_strdup("");
-		cmd->index += ft_strlen(test);
-		free(test);
-		return (ret);
+		ret = ft_strchr(str, '=');
+			return ("=");
 	}
 	else
-	{
-		cmd->index += ft_strlen(test);
-		free(test);
-		return (ret);
-	}
-}*/
+		return ("");
+}

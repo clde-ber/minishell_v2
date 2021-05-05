@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:21 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/04/28 16:19:25 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 14:17:22 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,19 @@ int		is_valid_env_c(char c)
 	c == '+' || c == '\'')
 		return (1);
 	return (0);
+}
+
+char		*get_env_name(int quotes, char *str_first)
+{
+	char *name;
+
+	name = NULL;
+	if (str_first)
+	{
+		if (quotes % 2 == 0)
+			name = ft_strtrim(str_first, "\'");
+		else
+			name = ft_strdup(str_first);
+	}
+	return (name);
 }

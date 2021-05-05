@@ -9,6 +9,8 @@ SRCS =	./debug_to_delete.c\
 	./expander_utils.c\
 	./expander_utils2.c\
 	./expander_utils3.c\
+	./expander_utils4.c\
+	./expander_utils5.c\
 	./expander.c\
 	./ft_split.c\
 	./gnl_utils.c\

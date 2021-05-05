@@ -82,7 +82,6 @@ int is_symbol(char c, char comp);
 **expander
 */
 char **create_parsed_res(char **res);
-int strings_to_join(char **res, int i);
 char **parse_first_arg(char **res, char **parsed_res);
 char *expander(char *res, t_list *var_env, char **args, t_command *cmd);
 char **parse_res(char **res, t_list *var_env, t_command *cmd);
@@ -91,23 +90,47 @@ char *handled_unset(char *res, t_list *var_env, t_command *cmd);
 /*
 **expander_utils
 */
-char *get_string(char *str);
-// char *get_env(char *str, t_list *var_env, t_command *cmd);
-char *get_env_value(char *str, t_list *var_env, t_command *cmd);
+void join_string_value(char **str, char **tmp, char *trim, int *index);
 char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean);
 char *non_handled_commands(char *res, t_list *var_env, t_command *cmd);
 char *handled_export(char *res, t_list *var_env, t_command *cmd);
 char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd);
-char *get_string_value(char *str);
-char *find_op(char *str);
 
 /*
 **expander_utils2
 */
+char *get_env_name(int quotes, char *str_first);
 char *search_env_name(char *str, t_list *var_env);
 char *search_env_value(char *str, t_list *var_env);
 char *antislashes_a_quotes(char *str);
 int is_valid_env_c(char c);
+
+/*
+**expander_utils3
+*/
+char *get_string(char *str);
+char *get_string_value(char *str);
+char *get_env_value(char *str, t_list *var_env, t_command *cmd);
+int even_or_odd(char *str);
+char *find_op(char *str);
+
+/*
+**expander_utils4
+*/
+int strings_to_join(char **res, int i);
+char **create_parsed_res(char **res);
+char **parsed_res_error(char **parsed_res, int j);
+char **last_command_rv(char **res, char **parsed_res);
+
+/*
+**expander_utils5
+*/
+char *export_errors(char *str_first, char *str_secd, int quotes, char *res);
+char *valid_export(char *str_first, char *str_secd, int quotes, char *res);
+void env_quotes_a_values(char **str_first, char **str_secd, int *quotes);
+void split_env_name_a_value(char **str_first, char **str_secd, char **p_bin, char *res);
+void export_replace_by_env_value(char **str_first, char **str_secd,
+t_list *var_env, t_command *cmd);
 
 /*
 **launch_exe
@@ -118,7 +141,7 @@ void find_exe(char *path, char **env, t_command *cmd);
 /*
 **launch_exe_utils
 */
-char	*ft_get_filename(const char *s, int c);
+char *ft_get_filename(const char *s, int c);
 char *get_path(char *path, char c);
 char **arg_tab(char *exe, char *path, char **env);
 char **env_tab(char *path);
