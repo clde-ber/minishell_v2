@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/04/28 16:34:19 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 08:50:17 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@
 ** error, it prints error accordingly. If command is interrupted by a signal,
 ** it prints an error.
 */
+
+void	print_error(int errno, t_command *cmd)
+{
+	printf("%s\n", strerror(errno));
+	cmd->cmd_rv = 1;
+}
 
 int		launch_exe(char *exe, char *path, char **env, t_command *cmd)
 {
@@ -42,7 +48,6 @@ int		launch_exe(char *exe, char *path, char **env, t_command *cmd)
 		{
 			printf("%s\n", strerror(errno));
 			cmd->cmd_rv = 1;
-			return (0);
 		}
 		exit(status);
 	}
@@ -59,10 +64,9 @@ void	find_exe(char *path, char **env, t_command *cmd)
 	st_dir = NULL;
 	str = ft_get_filename(path, '/');
 	errno = 0;
-	if (!(dir = opendir(get_path(path, '/'))))
+	if (!(dir = opendir(get_path(path, '/'))) && (cmd->cmd_rv = 1))
 	{
 		printf("%s\n", strerror(errno));
-		cmd->cmd_rv = 1;
 		return ;
 	}
 	while ((st_dir = readdir(dir)))
@@ -72,11 +76,10 @@ void	find_exe(char *path, char **env, t_command *cmd)
 			closedir(dir);
 			return ;
 		}
-	if (errno)
+	if (errno && (cmd->cmd_rv = 1))
 	{
 		printf("%s\n", strerror(errno));
-		cmd->cmd_rv = 1;
+		return ;
 	}
-	else
-		launch_exe(str, path, env, cmd);
+	launch_exe(str, path, env, cmd);
 }

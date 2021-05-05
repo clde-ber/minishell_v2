@@ -4,3 +4,4 @@ hello
 salut hello la
 hello
 /home/budal-bi/Workspace/C/minishell_v2bebe
+hello
