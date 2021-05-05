@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 06:33:02 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 12:10:42 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,38 +102,47 @@ char	**create_parsed_res(char **res)
 	return (parsed_res);
 }
 
-char	**parse_res(char **res, t_list *var_env, t_command *cmd)
+char	**parsed_res_error(char **parsed_res, int j)
 {
-	int		i;
-	char	**parsed_res;
-	int		j;
+	if (parsed_res[j] == NULL)
+	{
+		ft_free(parsed_res, j + 1);
+		return (NULL);
+	}
+}
 
-	parsed_res = create_parsed_res(res);
+char	**last_command_rv(char **res, char **parsed_res)
+{
 	if (res[0][0] == '$' && res[0][1] == '?' && res[0][2] == '\0')
 	{
 		parsed_res[0] = ft_strdup("$?");
 		parsed_res[1] = NULL;
 		return (parsed_res);
 	}
+	return (NULL);
+}
+
+char	**parse_res(char **res, t_list *var_env, t_command *cmd)
+{
+	int		i;
+	char	**parsed_res;
+	int		j;
+
 	i = 0;
 	j = 0;
+	parsed_res = create_parsed_res(res);
+	if (last_command_rv(res, parsed_res))
+		return (parsed_res);
 	while (res[i])
 	{
 		if ((strings_to_join(res, i)) > 0)
-		{
 			parsed_res[j] = expander(ft_strjoin(res[i],
-						res[i + 1]), var_env, res, cmd);
-			i++;
-		}
+						res[++i]), var_env, res, cmd);
 		else if ((strings_to_join(res, i)) == -1)
 			parsed_res[j] = NULL;
 		else
 			parsed_res[j] = expander(res[i], var_env, res, cmd);
-		if (parsed_res[j] == NULL)
-		{
-			ft_free(parsed_res, j + 1);
-			return (NULL);
-		}
+		parsed_res_error(parsed_res, j);
 		printf("parsed_res %s\n", parsed_res[j]);
 		i++;
 		j++;

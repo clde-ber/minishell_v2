@@ -92,7 +92,7 @@ char *handled_unset(char *res, t_list *var_env, t_command *cmd);
 **expander_utils
 */
 char *get_string(char *str);
-char *get_env(char *str, t_list *var_env, t_command *cmd);
+// char *get_env(char *str, t_list *var_env, t_command *cmd);
 char *get_env_value(char *str, t_list *var_env, t_command *cmd);
 char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean);
 char *non_handled_commands(char *res, t_list *var_env, t_command *cmd);

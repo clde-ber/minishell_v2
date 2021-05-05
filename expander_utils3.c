@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 14:30:34 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/04/28 16:22:42 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 11:57:59 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ char	*get_env_value(char *str, t_list *var_env, t_command *cmd)
 	char	*ret;
 
 	i = 0;
+	ret = ft_strdup("");
 	if (!(test = malloc(sizeof(char) * (ft_strlen(str) + 1))))
 		return (0);
 	test[i] = '\0';
@@ -67,26 +68,12 @@ char	*get_env_value(char *str, t_list *var_env, t_command *cmd)
 		free(ret);
 		ret = 0;
 	}
-	if (ret)
-	{
-		free(ret);
-		ret = 0;
-	}
-	if (ft_strcmp((ret = search_env_value(test, var_env)), "") == 0)
-	{
-		free(ret);
-		ret = ft_strdup("");
-		free(test);
-		return (ret);
-	}
-	else
-	{
-		cmd->index += ft_strlen(test);
-		free(test);
-		return (ret);
-	}
+	ret = search_env_value(test, var_env);
+	cmd->index += ft_strlen(test);
+	free(test);
+	return (ret);
 }
-
+/*
 char	*get_env(char *str, t_list *var_env, t_command *cmd)
 {
 	int		i;
@@ -125,4 +112,4 @@ char	*get_env(char *str, t_list *var_env, t_command *cmd)
 		free(test);
 		return (ret);
 	}
-}
+}*/

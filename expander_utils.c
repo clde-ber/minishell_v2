@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 09:02:01 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 12:38:46 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char		*replace_by_env(char *trim, t_list *var_env, t_command *cmd,
 		}
 		else if (trim[i] == '$')
 		{
-			tmp = ft_strjoin_free(tmp, get_env(&trim[i + 1], var_env, cmd));
+			tmp = ft_strjoin_free(tmp, get_env_value(&trim[i + 1], var_env, cmd));
 			i += cmd->index + 1;
 		}
 		cmd->index = 0;
@@ -154,13 +154,16 @@ char		*export_errors(char *str_first, char *str_secd, int bool1, int bool2, char
 	return (NULL);
 }
 
-char		*valid_export(char *str_first, char *str_secd, int bool1, int bool2)
+char		*valid_export(char *str_first, char *str_secd, int bool1, int bool2, char *res)
 {
+	char *operator;
+
+	operator = find_op(res);
 	if (bool1 == 0)
 		str_first = ft_strtrim(str_first, "\'");
 	if (bool2 == 0)
 		str_secd = ft_strtrim(str_secd, "\'");
-	return (ft_strjoin_free(join_a_free(str_first, "="), str_secd));
+	return (ft_strjoin_free(join_a_free(str_first, operator), str_secd));
 }
 
 void		env_quotes_a_values(char **str_first, char **str_secd, int *bool1, int *bool2)
@@ -176,7 +179,6 @@ void		env_quotes_a_values(char **str_first, char **str_secd, int *bool1, int *bo
 char		*get_env_name(int bool1, char *str_first)
 {
 	char *name;
-	char *trim_cmp;
 
 	name = NULL;
 	if (str_first)
@@ -203,6 +205,15 @@ void		split_env_name_a_value(char **str_first, char **str_secd, char **p_bin, ch
 	}
 }
 
+void		export_replace_by_env_value(char **str_first, char **str_secd,
+t_list *var_env, t_command *cmd)
+{
+	if (*str_first[0] != '\'')
+		*str_first = replace_by_env(*str_first, var_env, cmd, 0);
+	if (*str_secd[0] != '\'')
+		*str_secd = replace_by_env_value(*str_secd, var_env, cmd);
+}
+
 char		*handled_export(char *res, t_list *var_env, t_command *cmd)
 {
 	char	*str_first;
@@ -215,19 +226,19 @@ char		*handled_export(char *res, t_list *var_env, t_command *cmd)
 	bool2 = 0;
 	str_first = NULL;
 	str_secd = NULL;
-	p_bin = parse_path(res, '=');
+	if (ft_strchr(res, '+'))
+		p_bin = parse_path(res, '+');
+	else
+		p_bin = parse_path(res, '=');
 	cmd->index = 0;
 	split_env_name_a_value(&str_first, &str_secd, p_bin, res);
 	env_quotes_a_values(&str_first, &str_secd, &bool1, &bool2);
-	if (str_first[0] != '\'')
-		str_first = replace_by_env(str_first, var_env, cmd, 0);
-	if (str_secd[0] != '\'')
-		str_secd = replace_by_env_value(str_secd, var_env, cmd);
+	export_replace_by_env_value(&str_first, &str_secd, var_env, cmd);
 	if (!(get_env_name(bool1, str_first)))
 		str_first = NULL;
+	free_tabtab(p_bin);
 	if (((!(str_first)) || (!(is_valid_env_name(get_env_name(bool1,
 	str_first))))) && (cmd->cmd_rv = 1))
 		return (export_errors(str_first, str_secd, bool1, bool2, res));
-	free_tabtab(p_bin);
-	return (valid_export(str_first, str_secd, bool1, bool2));
+	return (valid_export(str_first, str_secd, bool1, bool2, res));
 }
