@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 12:10:42 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 14:14:28 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,15 @@
 char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 {
 	char *trim;
-	int bool1;
+	int quotes;
 
-	bool1 = 0;
+	quotes = 0;
 	trim = NULL;
 	cmd->index = 0;
 	if (ft_strlen(ft_strtrim(res, "\"")) != ft_strlen(res))
-		bool1 = 1;
+		quotes = 1;
 	trim = ft_strtrim(res, "\"");
-	if (bool1 == 0 && ft_strchr(trim, '\"') == 0 && ft_strchr(trim, '\'') == 0)
+	if (quotes == 0 && ft_strchr(trim, '\"') == 0 && ft_strchr(trim, '\'') == 0)
 		trim = replace_by_env(trim, var_env, cmd, 0);
 	if (trim && ft_strchr(trim, '\"') == 0 && ft_strchr(trim, '\'') == 0)
 		return (trim);
@@ -39,7 +39,7 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 	{
 		cmd->cmd_rv = 1;
 		write(1, "bash: export: '", 16);
-		if (bool1 == 0)
+		if (quotes == 0)
 			write(1, ft_strtrim(trim, "\'"), ft_strlen(ft_strtrim(trim, "\'")));
 		else
 			write(1, trim, ft_strlen(trim));
@@ -53,9 +53,9 @@ char	*expander(char *res, t_list *var_env, char **args, t_command *cmd)
 	char	*trim;
 	char	*name;
 	char	*str;
-	int		bool1;
+	int		quotes;
 
-	bool1 = 0;
+	quotes = 0;
 	trim = NULL;
 	name = NULL;
 	str = NULL;

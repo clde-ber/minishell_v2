@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 12:38:46 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 14:14:28 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,18 +135,18 @@ char		*find_op(char *str)
 		return ("");
 }
 
-char		*export_errors(char *str_first, char *str_secd, int bool1, int bool2, char *res)
+char		*export_errors(char *str_first, char *str_secd, int quotes, char *res)
 {
 	char *operator;
 	
 	operator = find_op(res);
 	write(1, "bash: export: '", 16);
-	if (bool1 == 0)
+	if (quotes % 2 == 0)
 		write(1, ft_strtrim(str_first, "\'"), ft_strlen(ft_strtrim(str_first, "\'")));
 	else
 		write(1, str_first, ft_strlen(str_first));
 	write(1, operator, ft_strlen(operator));
-	if (bool2 == 0)
+	if (quotes == 1 || quotes == 4)
 		write(1, ft_strtrim(str_secd, "\'"), ft_strlen(ft_strtrim(str_secd, "\'")));
 	else
 		write(1, str_secd, ft_strlen(str_secd));
@@ -154,36 +154,44 @@ char		*export_errors(char *str_first, char *str_secd, int bool1, int bool2, char
 	return (NULL);
 }
 
-char		*valid_export(char *str_first, char *str_secd, int bool1, int bool2, char *res)
+char		*valid_export(char *str_first, char *str_secd, int quotes, char *res)
 {
 	char *operator;
 
 	operator = find_op(res);
-	if (bool1 == 0)
+	if (quotes % 2 == 0)
 		str_first = ft_strtrim(str_first, "\'");
-	if (bool2 == 0)
+	if (quotes == 1 || quotes == 4)
 		str_secd = ft_strtrim(str_secd, "\'");
 	return (ft_strjoin_free(join_a_free(str_first, operator), str_secd));
 }
 
-void		env_quotes_a_values(char **str_first, char **str_secd, int *bool1, int *bool2)
+void		env_quotes_a_values(char **str_first, char **str_secd, int *quotes)
 {
-	if (ft_strlen(*str_first) != ft_strlen(ft_strtrim(*str_first, "\"")))
-		*bool1 = 1;
-	if (ft_strlen(*str_secd) != ft_strlen(ft_strtrim(*str_secd, "\"")))
-		*bool2 = 1;
+	if (ft_strlen(*str_first) != ft_strlen(ft_strtrim(*str_first, "\"")) &&
+	ft_strlen(*str_secd) == ft_strlen(ft_strtrim(*str_secd, "\"")))
+		*quotes = 1;
+	if (ft_strlen(*str_secd) != ft_strlen(ft_strtrim(*str_secd, "\"")) &&
+	ft_strlen(*str_first) == ft_strlen(ft_strtrim(*str_first, "\"")))
+		*quotes = 2;
+	if (ft_strlen(*str_first) != ft_strlen(ft_strtrim(*str_first, "\"")) &&
+	ft_strlen(*str_secd) != ft_strlen(ft_strtrim(*str_secd, "\"")))
+		*quotes = 3;
+	if (ft_strlen(*str_first) == ft_strlen(ft_strtrim(*str_first, "\"")) &&
+	ft_strlen(*str_secd) == ft_strlen(ft_strtrim(*str_secd, "\"")))
+		*quotes = 4;
 	*str_first = ft_strtrim(*str_first, "\"");
 	*str_secd = ft_strtrim(*str_secd, "\"");
 }
 
-char		*get_env_name(int bool1, char *str_first)
+char		*get_env_name(int quotes, char *str_first)
 {
 	char *name;
 
 	name = NULL;
 	if (str_first)
 	{
-		if (bool1 == 0)
+		if (quotes % 2 == 0)
 			name = ft_strtrim(str_first, "\'");
 		else
 			name = ft_strdup(str_first);
@@ -219,11 +227,9 @@ char		*handled_export(char *res, t_list *var_env, t_command *cmd)
 	char	*str_first;
 	char	*str_secd;
 	char	**p_bin;
-	int		bool1;
-	int		bool2;
+	int		quotes;
 
-	bool1 = 0;
-	bool2 = 0;
+	quotes = 0;
 	str_first = NULL;
 	str_secd = NULL;
 	if (ft_strchr(res, '+'))
@@ -232,13 +238,13 @@ char		*handled_export(char *res, t_list *var_env, t_command *cmd)
 		p_bin = parse_path(res, '=');
 	cmd->index = 0;
 	split_env_name_a_value(&str_first, &str_secd, p_bin, res);
-	env_quotes_a_values(&str_first, &str_secd, &bool1, &bool2);
+	env_quotes_a_values(&str_first, &str_secd, &quotes);
 	export_replace_by_env_value(&str_first, &str_secd, var_env, cmd);
-	if (!(get_env_name(bool1, str_first)))
+	if (!(get_env_name(quotes, str_first)))
 		str_first = NULL;
 	free_tabtab(p_bin);
-	if (((!(str_first)) || (!(is_valid_env_name(get_env_name(bool1,
+	if (((!(str_first)) || (!(is_valid_env_name(get_env_name(quotes,
 	str_first))))) && (cmd->cmd_rv = 1))
-		return (export_errors(str_first, str_secd, bool1, bool2, res));
-	return (valid_export(str_first, str_secd, bool1, bool2, res));
+		return (export_errors(str_first, str_secd, quotes, res));
+	return (valid_export(str_first, str_secd, quotes, res));
 }
