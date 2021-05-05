@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 07:27:53 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 09:02:01 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,8 @@ char		*valid_export(char *str_first, char *str_secd, int bool1, int bool2)
 		str_first = ft_strtrim(str_first, "\'");
 	if (bool2 == 0)
 		str_secd = ft_strtrim(str_secd, "\'");
-	return (ft_strjoin_free(join_a_free(str_first, "="), str_secd));}
+	return (ft_strjoin_free(join_a_free(str_first, "="), str_secd));
+}
 
 void		env_quotes_a_values(char **str_first, char **str_secd, int *bool1, int *bool2)
 {

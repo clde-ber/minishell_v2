@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:31 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/04 07:13:18 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 09:00:10 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,14 @@ size_t	parse_command(size_t i, char *str, int *res, char *charset)
 			i += is_symbol(str[i], str[i + 1]);
 		i--;
 	}
-	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\''))
+	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\'') && ++i)
 	{
-		i++;
 		while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i]
 		== '\''))
 			i++;
 	}
-	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\"'))
+	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\"') && ++i)
 	{
-		i++;
 		while (i < ft_strlen(str) && !(str[i - 1] != '\\' &&
 		str[i] == '\"'))
 			i++;
@@ -120,13 +118,13 @@ char	**ft_split(char *s, char *str)
 	size_t	j;
 	char	**res;
 
-	i = 0;
+	i = -1;
 	j = 0;
 	if (!s || !*s)
 		return ((char **)ft_calloc(2, sizeof(char *)));
 	if (!(res = malloc(sizeof(char *) * (count_malloc(s, str) + 1))))
 		return (0);
-	while (i < ft_strlen((char *)s))
+	while (++i < ft_strlen((char *)s))
 	{
 		while (i < ft_strlen((char *)s) && j < count_malloc(s, str) &&
 		ft_ischarset(str, s[i]) == 0)
@@ -138,7 +136,6 @@ char	**ft_split(char *s, char *str)
 			j++;
 			i += len_wd(&s[i], str);
 		}
-		i++;
 	}
 	res[count_malloc(s, str)] = 0;
 	return (res);
