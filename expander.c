@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/04 07:32:52 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 06:33:02 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 
 	bool1 = 0;
 	trim = NULL;
+	cmd->index = 0;
 	if (ft_strlen(ft_strtrim(res, "\"")) != ft_strlen(res))
 		bool1 = 1;
 	trim = ft_strtrim(res, "\"");

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/04 07:36:36 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 07:27:53 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@
 ** variable name.
 */
 
+void		join_string_value(char **str, char **tmp, char *trim, int *index)
+{
+	*str = get_string_value(trim);
+	*tmp = join_a_free(*tmp, *str);
+	*index += ft_strlen(*str);
+}
+
 char		*replace_by_env(char *trim, t_list *var_env, t_command *cmd,
 		int boolean)
 {
@@ -26,44 +33,21 @@ char		*replace_by_env(char *trim, t_list *var_env, t_command *cmd,
 
 	i = 0;
 	tmp = ft_strdup("");
-	cmd->index = 0;
-	if (trim[0] == '\'')
-	{
-		str = join_a_free(tmp, trim);
-		tmp = ft_strtrim(str, "\'");
-		free(str);
-		return (tmp);
-	}
+	str = NULL;
 	while (i < ft_strlen(trim))
 	{
-		if (is_valid_env_c(trim[i]))
+		if (is_valid_env_c(trim[i]) && (boolean = 1))
 		{
-			str = get_string(&trim[i]);
-			tmp = join_a_free(tmp, str);
-			cmd->index += ft_strlen(str);
+			join_string_value(&str, &tmp, &trim[i], &cmd->index);
 			i += ft_strlen(str);
 			free(str);
-			boolean = 1;
 		}
 		else if (trim[i] == '$')
 		{
 			tmp = ft_strjoin_free(tmp, get_env(&trim[i + 1], var_env, cmd));
 			i += cmd->index + 1;
 		}
-		else
-		{
-			free(tmp);
-			free(trim);
-			return (NULL);
-		}
 		cmd->index = 0;
-	}
-	if (boolean == 0)
-	{
-		errors(cmd);
-		free(tmp);
-		free(trim);
-		return (NULL);
 	}
 	free(trim);
 	return (tmp);
@@ -77,21 +61,13 @@ char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 
 	i = 0;
 	tmp = ft_strdup("");
+	str = NULL;
 	cmd->index = 0;
-	if (trim[0] == '\'')
-	{
-		str = ft_strjoin_free(tmp, trim);
-		tmp = ft_strtrim(str, "\'");
-		free(str);
-		return (tmp);
-	}
 	while (i < ft_strlen(trim))
 	{
 		if (trim[i] != '$')
 		{
-			str = get_string_value(&trim[i]);
-			tmp = join_a_free(tmp, str);
-			cmd->index += ft_strlen(str);
+			join_string_value(&str, &tmp, &trim[i], &cmd->index);
 			i += ft_strlen(str);
 			free(str);
 		}
@@ -131,8 +107,7 @@ char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 	free(tmp);
 	if (boolean == 0 && ft_strchr(tmp_sub, '$'))
 		tmp_sub = replace_by_env_value(ft_strtrim(tmp_sub, "\'"), var_env, cmd);
-	else if (boolean == 0)	
-		tmp_sub = ft_strtrim(tmp_sub, "\'");
+	tmp_sub = ft_strtrim(tmp_sub, "\'");
 	return (tmp_sub);
 }
 
@@ -203,14 +178,12 @@ char		*get_env_name(int bool1, char *str_first)
 	char *trim_cmp;
 
 	name = NULL;
-	trim_cmp = NULL;
 	if (str_first)
 	{
 		if (bool1 == 0)
-			trim_cmp = ft_strtrim(str_first, "\'");
+			name = ft_strtrim(str_first, "\'");
 		else
-			trim_cmp = ft_strdup(str_first);
-		name = ft_get_name(trim_cmp);
+			name = ft_strdup(str_first);
 	}
 	return (name);
 }
@@ -242,6 +215,7 @@ char		*handled_export(char *res, t_list *var_env, t_command *cmd)
 	str_first = NULL;
 	str_secd = NULL;
 	p_bin = parse_path(res, '=');
+	cmd->index = 0;
 	split_env_name_a_value(&str_first, &str_secd, p_bin, res);
 	env_quotes_a_values(&str_first, &str_secd, &bool1, &bool2);
 	if (str_first[0] != '\'')
