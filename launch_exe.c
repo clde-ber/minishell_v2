@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 08:50:17 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 16:08:25 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,10 @@ void	find_exe(char *path, char **env, t_command *cmd)
 	st_dir = NULL;
 	str = ft_get_filename(path, '/');
 	errno = 0;
-	if (!(dir = opendir(get_path(path, '/'))) && (cmd->cmd_rv = 1))
+	if (!(dir = opendir(get_path(path, '/'))))
 	{
 		printf("%s\n", strerror(errno));
+		cmd->cmd_rv = 1;
 		return ;
 	}
 	while ((st_dir = readdir(dir)))
@@ -77,9 +78,7 @@ void	find_exe(char *path, char **env, t_command *cmd)
 			return ;
 		}
 	if (errno && (cmd->cmd_rv = 1))
-	{
 		printf("%s\n", strerror(errno));
-		return ;
-	}
-	launch_exe(str, path, env, cmd);
+	else
+		launch_exe(str, path, env, cmd);
 }

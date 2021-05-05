@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:31 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 09:00:10 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 15:54:40 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,6 @@
 ** word in that array comes with some identifiers - for example $ ' " - that
 ** help binding it with its value.
 */
-
-int		is_symbol(char c, char comp)
-{
-	if (c == '<' || c == '>' || c == '|')
-		return (1);
-	if (c == '$' && comp == '?')
-		return (2);
-	return (0);
-}
 
 size_t	parse_command(size_t i, char *str, int *res, char *charset)
 {

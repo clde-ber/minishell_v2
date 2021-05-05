@@ -76,7 +76,6 @@ size_t	count_malloc(char *s, char *str);
 void		*ft_free(char **res, int j);
 char			**ft_split(char *s, char *str);
 size_t parse_command(size_t i, char *str, int *res, char *charset);
-int is_symbol(char c, char comp);
 
 /*
 **expander
@@ -264,6 +263,11 @@ void init_structs(t_command *cmd);
 char    *cut_after_punct(char *dest, char *line);
 int     count_tabs(char **res);
 void    free_tabtab(char **res);
+
+/*
+**minishell_utils3
+*/
+int is_symbol(char c, char comp);
 
 /*
 **gnl

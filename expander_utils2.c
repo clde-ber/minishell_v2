@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:21 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 14:17:22 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 15:50:55 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 ** of an environment variable is correct and output strings without antislashes.
 */
 
-char	*search_env_name(char *str, t_list *var_env)
+char		*search_env_name(char *str, t_list *var_env)
 {
 	int		chg;
 	char	*ret;
@@ -36,7 +36,7 @@ char	*search_env_name(char *str, t_list *var_env)
 	return (NULL);
 }
 
-char	*search_env_value(char *str, t_list *var_env)
+char		*search_env_value(char *str, t_list *var_env)
 {
 	char	*ret;
 
@@ -53,7 +53,7 @@ char	*search_env_value(char *str, t_list *var_env)
 	return (ft_strdup(""));
 }
 
-char	*antislashes_a_quotes(char *str)
+char		*antislashes_a_quotes(char *str)
 {
 	char	*ret;
 	int		len;
@@ -79,7 +79,7 @@ char	*antislashes_a_quotes(char *str)
 	return (ret);
 }
 
-int		is_valid_env_c(char c)
+int			is_valid_env_c(char c)
 {
 	if (ft_isalnum(c) || c == '_' || c == '\t' || c == '\n'
 	|| c == '\r' || c == '\v' || c == '\f' || c == ' ' ||

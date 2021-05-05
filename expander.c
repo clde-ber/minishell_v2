@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 14:23:39 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 15:54:09 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 
 char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 {
-	char *trim;
-	int quotes;
+	char	*trim;
+	int		quotes;
 
 	quotes = 0;
 	trim = NULL;

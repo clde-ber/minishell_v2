@@ -26,6 +26,7 @@ SRCS =	./debug_to_delete.c\
 	./libft_utils5.c\
 	./minishell_utils.c\
 	./minishell_utils2.c\
+	./minishell_utils3.c\
 	./parse_path.c\
 	./path.c\
 	./redir.c\

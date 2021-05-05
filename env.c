@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:26 by user42            #+#    #+#             */
-/*   Updated: 2021/05/04 12:12:28 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 15:47:14 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ ft_strdup(&ft_strchr(tabl[i], '=')[1]));
 		tmp->prec = tmp;
 		tmp_new = tmp;
 	}
-//	var_env = tmp_new;
 }
 
 void	unset(t_list *env, char **tabl)

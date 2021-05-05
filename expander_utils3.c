@@ -6,13 +6,13 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 14:30:34 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 14:18:49 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/05 15:52:12 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_string(char *str)
+char		*get_string(char *str)
 {
 	int		i;
 	char	*res;
@@ -30,7 +30,7 @@ char	*get_string(char *str)
 	return (res);
 }
 
-char	*get_string_value(char *str)
+char		*get_string_value(char *str)
 {
 	int		i;
 	char	*res;
@@ -48,7 +48,7 @@ char	*get_string_value(char *str)
 	return (res);
 }
 
-char	*get_env_value(char *str, t_list *var_env, t_command *cmd)
+char		*get_env_value(char *str, t_list *var_env, t_command *cmd)
 {
 	int		i;
 	char	*test;
@@ -76,7 +76,7 @@ char	*get_env_value(char *str, t_list *var_env, t_command *cmd)
 
 int			even_or_odd(char *str)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	while (str[i] && str[i] == '\'')
@@ -86,8 +86,8 @@ int			even_or_odd(char *str)
 
 char		*find_op(char *str)
 {
-	int i;
-	char *ret;
+	int		i;
+	char	*ret;
 
 	i = 0;
 	ret = NULL;
@@ -102,7 +102,7 @@ char		*find_op(char *str)
 	else if (ft_strchr(str, '='))
 	{
 		ret = ft_strchr(str, '=');
-			return ("=");
+		return ("=");
 	}
 	else
 		return ("");
