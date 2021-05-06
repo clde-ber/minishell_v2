@@ -183,7 +183,7 @@ char *create_j_value(char *tab_l, char *j_value);
 **path
 */
 void    ft_pwd(char **res);
-char *minus_path(char **res, char *path, int i);
+char *minus_path(char **res, char *path, int j);
 void    ft_cd(char **res);
 
 /*

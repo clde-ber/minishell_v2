@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 15:53:38 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/06 11:13:03 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,9 @@ void		export_replace_by_env_value(char **str_first, char **str_secd,
 t_list *var_env, t_command *cmd)
 {
 	cmd->index = 0;
-	if (*str_first[0] != '\'')
+	if ((*str_first)[0] != '\'')
 		*str_first = replace_by_env(*str_first, var_env, cmd, 0);
 	cmd->index = 0;
-	if (*str_secd[0] != '\'')
+	if ((*str_secd)[0] != '\'')
 		*str_secd = replace_by_env_value(*str_secd, var_env, cmd);
 }
