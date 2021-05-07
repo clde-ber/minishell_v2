@@ -29,6 +29,7 @@ SRCS =	./debug_to_delete.c\
 	./minishell_utils3.c\
 	./parse_path.c\
 	./path.c\
+	./path_utils.c\
 	./redir.c\
 	./redir_utils.c\
 	./sig_a_errors.c\

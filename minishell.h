@@ -185,6 +185,16 @@ char *create_j_value(char *tab_l, char *j_value);
 void    ft_pwd(char **res);
 char *cd_front_a_back(char **res, char *path, int j, t_list *var_env);
 void    ft_cd(char **res, t_list *var_env);
+char *get_cwd(void);
+
+/*
+**path_utils
+*/
+int		count_back(char *str, int *j);
+void	path_copy(char **buf, int m, int k);
+void	cd_go_back(int *i, int k, char **buf);
+int		cd_go_front(char *res, int *i, int k, char **buf);
+void 	set_pwd_env(char *path, char *buf, t_list *var_env);
 
 /*
 **redir
