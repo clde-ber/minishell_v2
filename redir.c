@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/04/28 13:06:53 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/07 07:33:33 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	else if (ft_strcmp(tabl[0], "pwd") == 0)
 		ft_pwd(tabl);
 	else if (ft_strcmp(tabl[0], "cd") == 0)
-		ft_cd(tabl);
+		ft_cd(tabl, var_env);
 	else if (tabl[0][0] == '.' && tabl[0][1] == '/')
 		find_exe(tabl[0], env, cmd);
 	else if (ft_strcmp(tabl[0], "unset") == 0 && tabl[1])

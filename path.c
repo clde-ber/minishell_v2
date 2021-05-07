@@ -87,15 +87,30 @@ int		cd_go_front(char *res, int *i, int k, char **buf)
 		(*i)++;
 }
 
+void 	set_pwd_env(char *path, char *buf, t_list *var_env)
+{
+	while (var_env->next)
+	{
+		if (ft_strcmp(var_env->name, "OLDPWD") == 0)
+		{
+			free(var_env->value);
+			var_env->value = ft_strdup(path);
+		}
+		if (ft_strcmp(var_env->name, "PWD") == 0)
+		{
+			free(var_env->value);
+			var_env->value = ft_strdup(buf);
+		}
+		var_env = var_env->next;
+	}
+}
 
-char *minus_path(char **res, char *path, int j)
+char *cd_front_a_back(char **res, char *path, int j, t_list *var_env)
 {
 	int k;
 	int i;
-	int tmp;
 	int count;
 	char *buf;
-	int m;
 
 	i = 0;
 	k = 0;
@@ -112,6 +127,9 @@ char *minus_path(char **res, char *path, int j)
 		printf("buf %s\n", buf);
 		printf("i %d\n", i);}
 	}
+	if (buf[ft_strlen(buf) - 1] == '/')
+		buf[ft_strlen(buf) - 1] = '\0';
+	set_pwd_env(path, buf, var_env);
 	return (buf);
 }
 
@@ -125,7 +143,7 @@ char *get_cwd()
 	return (path);
 }
 
-void    ft_cd(char **res)
+void    ft_cd(char **res, t_list *var_env)
 {
 	char *path;
 	char *buf;
@@ -138,7 +156,7 @@ void    ft_cd(char **res)
 	}
 	path = get_cwd();
 	buf2 = ft_strjoin(path, "\0");
-	buf = minus_path(res, buf2, 1);
+	buf = cd_front_a_back(res, buf2, 1, var_env);
 	if (chdir(buf) == -1)
 	{
 		ft_putstr_fd("bash : cd : ", 1);
