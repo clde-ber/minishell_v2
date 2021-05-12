@@ -68,10 +68,10 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 		num = redir_and_send(parsed_res, f, var_env, cmd, env);
 		restore_fds(f);
 		free_tabtab(res);
-		if (parsed_res);
-			free_tabtab(parsed_res);
-		if (f->save_pipe != NULL)
-			free_tabtab(f->save_pipe);
+		// if (parsed_res);
+		// 	free_tabtab(parsed_res);
+		// if (f->save_pipe != NULL)
+		// 	free_tabtab(f->save_pipe);
 	}
 }
 
@@ -126,95 +126,71 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 // 	return (0);
 // }
 
-
-//get cursor space and set it after prompt before writing line, then at end of line
-// Clean up the rowscols (from \033[rows;cols -- the R at end was eaten)
-// rowscols="${rowscols//[^0-9;]/}"
-// rowscols=("${rowscols//;/ }")
-
-char *go_line(char **save)
+char *end_line(char *current, t_save *save, t_term *term)
 {
-	t_term term[1];
+	restore_term(term);
+	// int k = 0;
+	// while (save->done[k])
+	// 	ft_putstr_fd(save->done[k++], 1);
+	if (current == NULL)
+		current = ft_strdup("\0");
+	// if (save->size == 0)
+	// {
+	// 	if (!(save->done = malloc(sizeof(char *) * 2)))
+	// 		return (NULL);
+	// 	save->done[0] = ft_strdup(current);
+	// 	save->done[1] = NULL;
+	// }
+	// else
+		save->done = save_input(current, save->done);
+	write(1, "\n", 1);
+	return (current);
+}
+
+char *go_line(t_save *save, t_term *term)
+{
 	char buf[2];
 	char *term_type = getenv("TERM");
-	char *end;
+	char *current;
 	char *buf1;
-	int i;
-	char *last;
 
 	init_term(term);
-	i = 0;
-	end = NULL;
-	term->s_termios.c_lflag &= ~(ICANON);
-	if (tcsetattr(0, 0, &term->s_termios) == -1)
-		return (-1);
-	term->s_termios.c_lflag &= ~(ECHO);
-	tcsetattr(STDOUT_FILENO, TCSANOW, &term->s_termios);
+	current = NULL;
+	save->where = -1;
+	if (save->done)
+		save->size = count_tabs(save->done);
+	else
+		save->size = 0;
+	save->mtline = 0;
 	get_cursor_space(term);
-	while (read(0, buf, 1) > 0)
+	while (read(0, buf, 1) != -1)
 	{
 		buf[1] = '\0';
-		if (buf[0] == '\n')
-		{	
-			restore_term(term);
-			if (end == NULL)
-				end = ft_strdup("\0");
-			else
-				save = save_input(end, save);
-			return (end);
-		}
+		if (buf[0] == '\n' || (int)buf[0] == 13)
+			return (end_line(current, save, term));
 		else if ((int)buf[0] == 27)
+			current = handle_arrow(term, save, current);
+		else if ((int)buf[0] == 4)
 		{
-			read(0, buf, 1);
-			if ((int)buf[0] == 91)
-			{
-				read(0, buf, 1);
-				if ((int)buf[0] == 65)
-				{
-					if (end != NULL)
-						last = ft_strdup(end);
-					tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y), 1, ft_putchar);
-					if (save[i])
-					{
-						ft_putstr_fd(save[i], 1);
-						i++;
-					}
-				}
-				else if ((int)buf[0] == 66)
-				{
-					// if (end != NULL)
-					// 	save = save_input(end, save);
-					tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y), 1, ft_putchar);
-					if (save[i])
-					{
-						ft_putstr_fd(save[i], 1);
-						i--;
-					}
-					else
-						ft_putstr_fd(end, 1);
-				}
-				else
-					;
-				restore_term(term);
-			}
+			restore_term(term);
+			write(1, "\n", 1);
+			exit(0);
 		}
 		else
 		{
-			restore_term(term);
+			save->mtline = 1;
 			write(1, &buf[0], 1);
-			if (end == NULL)
-				end = ft_strdup(buf);
+			if (current == NULL)
+				current = ft_strdup(buf);
 			else
 			{
-				buf1 = ft_strdup(end);
-				free(end);
-				end = ft_strjoin(buf1, buf);
+				buf1 = ft_strdup(current);
+				free(current);
+				current = ft_strjoin(buf1, buf);
 				free(buf1);
 			}
 		}
-		term->s_termios.c_lflag &= ~(ICANON);
-		term->s_termios.c_lflag &= ~(ECHO);
-		tcsetattr(STDOUT_FILENO, TCSANOW, &term->s_termios);
+		buf[0] = '\0';
 	}
 	return (NULL);
 }
@@ -225,27 +201,35 @@ int main(int ac, char **av, char **env)
 	char *command;
 	t_list *var_env;
 	t_command *cmd;
-	char **save;
+	t_save save[1];
+	t_term term[1];
 	char *buf;
 	char *buf2;
 
 	line = NULL;
-	save = NULL;
 	buf = NULL;
 	if (!(cmd = malloc(sizeof(t_command))))
 		return (0);
 	init_structs(cmd);
 	var_env = set_new_env(env, var_env, cmd);
+	signal(SIGINT, handle_signal);
+	signal(SIGQUIT, handle_signal);
+	// get_cursor_space(term);
+	save->done = NULL;
+	// save->size = 0;
 	while (1)
 	{
 		if (!(sig))
 			write(1, "***minishell*** > ", 18);
-		line = go_line(save);
+		line = go_line(save, term);
+		// restore_term(term);
 		if ((ft_strcmp(line, "$?")))
 			cmd->cmd_rv = 0;
-		// save = save_input(line, save);
 		if (ft_strcmp(line, "exit") == 0) //builtin à coder
+		{
+			// restore_term(term);
 			exit(0);
+		}
 		buf = ft_strdup(line);
 		while ((command = getcommand(buf)) != NULL)
 		{
@@ -263,6 +247,8 @@ int main(int ac, char **av, char **env)
 		if (buf != NULL)
 			free(buf);
 	}
+	// restore_term(term);
+	free_tabtab(save->done);
 	ft_lstdel(var_env);
 	init_structs(cmd);
 	free(cmd->path);

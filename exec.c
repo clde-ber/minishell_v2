@@ -94,15 +94,15 @@ int exec_command(char **args, char **res, char *path, int j)
             free(tabl[0]);
             str = ft_strjoin(p_bin[i], "/");
             tabl[0] = ft_strjoin(str, res[0]);
-            int x = 0;
-            while (tabl[x])
-            {
-                ft_putstr_nbr(x, 1);
-                ft_putstr_fd(" ", 1);
-                ft_putstr_fd(tabl[x], 1);
-                ft_putstr_fd("\n", 1);
-                x++;
-            }
+            // int x = 0;
+            // while (tabl[x])
+            // {
+            //     ft_putstr_nbr(x, 1);
+            //     ft_putstr_fd(" ", 1);
+            //     ft_putstr_fd(tabl[x], 1);
+            //     ft_putstr_fd("\n", 1);
+            //     x++;
+            // }
             if ((ret = execve(tabl[0], tabl, env)) == -1)
                 count++;
             i++;

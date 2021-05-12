@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 21:57:53 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/04/11 22:11:20 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/02 18:11:10 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,12 @@ char	*echo_option(char *output, int option)
 	char	*buf;
 
 	if (option == 0 && output != NULL)
-		output = ft_strjoin_free(output, ft_strdup("\n"));
+	{
+		buf = ft_strdup(output);
+		free(output);
+		output = ft_strjoin(buf, "\n");
+		free(buf);
+	}
 	if (output == NULL)
 	{
 		if (option == 0)

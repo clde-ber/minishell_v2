@@ -120,7 +120,7 @@ char **parse_res(char **res, t_list *var_env, t_command *cmd)
             ft_free(parsed_res, i + 1);
             return (NULL);
         }
-        printf("parsed_res %s\n", parsed_res[j]);
+        // printf("parsed_res %s\n", parsed_res[j]);
         i++;
         j++;
     }

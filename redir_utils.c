@@ -23,6 +23,8 @@ int		open_fds_in(char **res, int i)
 	return (fd);
 }
 
+//check < redir si marche bien
+
 int		handle_fds(char **res, t_fd *f)
 {
 	int		i;

@@ -100,7 +100,9 @@ void print_env(t_list *environ)
     	{
 			name = ft_strjoin(environ->name, "=");
 			value = ft_strjoin(name, environ->value);
-			printf("%s\n", value);
+			// printf("%s\n", value);
+			ft_putstr_fd(value, 1);
+			ft_putstr_fd("\n", 1);
 			free(value);
 			free(name);
 		}

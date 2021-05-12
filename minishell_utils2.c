@@ -41,7 +41,7 @@ int		count_tabs(char **res)
 	int		j;
 
 	j = 0;
-	if (!res[j])
+	if (!res[j] || !res)
 		return (j);
 	while (res[j] != NULL)
 		j++;

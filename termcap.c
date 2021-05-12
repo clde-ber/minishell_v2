@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 15:13:21 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/04/28 15:14:40 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/11 12:45:50 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,10 @@ char  **save_input(char *str, char **save)
 	j = 0;
 	if (save == NULL)
 	{
-		i = 0;
 		if (!(save = malloc(sizeof(char *) * 2)))
 			return (NULL);
-		save[i] = ft_strdup(str);
-		save[i + 1] = NULL;
+		save[0] = ft_strdup(str);
+		save[1] = NULL;
 		return (save);
 	}
 	i = count_tabs(save);
@@ -44,9 +43,9 @@ char  **save_input(char *str, char **save)
 
 void	restore_term(t_term *term)
 {
-	term->s_termios.c_lflag = term->s_termios_backup.c_lflag;
-	term->s_termios.c_lflag = term->s_termios_backup.c_lflag;
-	tcsetattr(STDOUT_FILENO, TCSANOW, &term->s_termios);
+	term->s_termios.c_lflag |= ~(ECHO);
+	term->s_termios.c_lflag |= ~(ICANON);
+	tcsetattr(0, TCSANOW, &term->s_termios);
 }
 
 void	get_cursor_pos(t_term *term, char **res)
@@ -56,19 +55,16 @@ void	get_cursor_pos(t_term *term, char **res)
 	
 	i = 0;
 	if ((int)res[0][0] != 27 || res[0][1] != '[')
+	{
+		free_tabtab(res);
 		return;
+	}
 	temp = ft_strdup(&res[0][2]);
 	term->y = ft_atoi(temp);
 	term->x = ft_atoi(res[1]);
 	term->size = ft_strlen(res[0]) + ft_strlen(res[1]);
 	free(temp);
 	free_tabtab(res);
-	// tputs(tgoto(tgetstr("cm", NULL), (term->x - term->size) + 6, term->y), 1, ft_putchar);
-	// while (i < (term->x - term->size) + 6)
-	// {
-	// 	write(1, " ", 1);
-	// 	i++;
-	// }
 }
 
 void get_cursor_space(t_term *term)
@@ -96,15 +92,19 @@ void get_cursor_space(t_term *term)
 	if (ft_strlen(check) < 2)
 		return;
 	get_cursor_pos(term, ft_split(check, ";"));
+	free(check);
 }
 
 void	init_term(t_term *term)
 {
 	tgetent(NULL, getenv("TERM"));
-	tcgetattr(STDOUT_FILENO, &term->s_termios);
-	tcgetattr(STDOUT_FILENO, &term->s_termios_backup);
-	term->col = tgetnum("co");
-	term->li = tgetnum("li");
+	// term->col = tgetnum("co");
+	// term->li = tgetnum("li");
 	term->x = 0;
 	term->y = 0;
+	tcgetattr(0, &term->s_termios);
+	term->s_termios.c_lflag &= ~(ICANON);
+	term->s_termios.c_lflag &= ~(ECHO);
+	if (tcsetattr(0, TCSANOW, &term->s_termios) == -1)
+		return (-1);
 }

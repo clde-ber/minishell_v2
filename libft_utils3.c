@@ -20,7 +20,7 @@ char			*ft_substr(char const *s, unsigned int start, size_t len)
 	unsigned long	l;
 	char			*dest;
 
-	i = (s) ? ft_strlen(s) : 0;
+	i = (s) ? ft_strlen((char *)s) : 0;
 	l = 0;
 	if (!s || start > i)
 	{
@@ -88,7 +88,7 @@ char			*ft_strtrim(char const *s1, char const *set)
 
 	if (!set)
 		return (ft_strdup(s1));
-	k = ft_strlen(s1);
+	k = ft_strlen((char *)s1);
 	i = trim_first(s1, set);
 	if (i == k)
 	{

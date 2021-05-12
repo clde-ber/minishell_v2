@@ -14,6 +14,7 @@ void    ft_pwd(char **res)
 	free(path);
 	// if (check_redir(res, i++, buf) == 0)
 	ft_putstr_fd(buf, 1);
+	free(buf);
 }
 
 int		count_back(char *str)

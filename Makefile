@@ -23,6 +23,7 @@ SRCS =	./debug_to_delete.c\
 	./libft_utils5.c\
 	./minishell_utils.c\
 	./minishell_utils2.c\
+	./multipipe.c\
 	./parse_path.c\
 	./path.c\
 	./redir.c\
@@ -30,6 +31,7 @@ SRCS =	./debug_to_delete.c\
 	./sig_a_errors.c\
 	./start_a_parse_bulle.c\
 	./termcap.c\
+	./termcap_arrow.c\
 
 RENAME		= mv a.out minishell
 OBJ			= $(SRCS:.c=.o)

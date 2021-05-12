@@ -5,7 +5,7 @@ int		ft_strrchr(const char *s, int c)
 	char			to_find;
 	int				i;
 
-	i = ft_strlen(s);
+	i = ft_strlen((char *)s);
 	to_find = c;
 	while (i)
 	{
