@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
+/*   Updated: 2021/05/12 13:46:48 by budal-bi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*
@@ -48,88 +60,92 @@ char **environment(char *path)
     return (envp);
 }
 
+int    command_not_found(char **tabl, char **env, char **p_bin, char **res)
+{
+    free(tabl[0]);
+    free_tabtab(env);
+    free_tabtab(p_bin);
+    printf("%s : Command not found\n", res[0]);
+    return (1);
+}
+
+int    command_found(char **tabl, char **env, char **p_bin)
+{
+    free(tabl[0]);
+    free_tabtab(env);
+    free_tabtab(p_bin);
+    return (0);
+}
+
 int exit_status(int status)
 {
     return (status % 255);
 }
 
+void    test_write(char **tabl, int x)
+{
+    ft_putstr_nbr(x, 1);
+    ft_putstr_fd(" ", 1);
+    ft_putstr_fd(tabl[x], 1);
+    ft_putstr_fd("\n", 1);
+}
+
+int    test_shell_bin(char **tabl, char **p_bin, char **res, char **env)
+{
+    char *str;
+    int count;
+    int x;
+    int i;
+    int ret;
+
+    ret = 0;
+    i = -1;
+    x = -1;
+    count = 0;
+    str = NULL;
+    while (p_bin[++i])
+    {
+        x = -1;
+        free(tabl[0]);
+        str = ft_strjoin(p_bin[i], "/");
+        tabl[0] = ft_strjoin(str, res[0]);
+        while (tabl[++x])
+            test_write(tabl, x);
+        if ((ret = execve(tabl[0], tabl, env)) == -1)
+            count++;
+        free(str);
+    }
+    if (i == count)
+        return (command_not_found(tabl, env, p_bin, res));
+    return (command_found(tabl, env, p_bin));
+}
+
 int exec_command(char **args, char **res, char *path, int j)
 {
     pid_t pid;
-    int ret;
     int status;
-    int i;
-    int k;
     char **tabl;
-    int count;
-    char *str;
     char **p_bin;
     char **env;
 
     pid = 0;
-    ret = 0;
     errno = 0;
     status = 0;
     tabl = arguments(res, j, args, path);
-    i = 0;
-    count = 0;
-    str = NULL;
-    p_bin = NULL;
-    env = NULL;
-    k = 0;
-    while (tabl[k])
-        k++;
-// readdir must be called to print correct error.
+    p_bin = parse_path(path, ':');;
+    env = environment(path);
 // Fork duplicates the process so the parent process doesn't return when the child process does.
     if ((pid = fork()) == 0)
     {
-        i = 0;
-        k = 0;
-        p_bin = parse_path(path, ':');
-        env = environment(path);
-        while(env[k])
-            k++;
-        while (p_bin[i])
-		{
-            free(tabl[0]);
-            str = ft_strjoin(p_bin[i], "/");
-            tabl[0] = ft_strjoin(str, res[0]);
-            // int x = 0;
-            // while (tabl[x])
-            // {
-            //     ft_putstr_nbr(x, 1);
-            //     ft_putstr_fd(" ", 1);
-            //     ft_putstr_fd(tabl[x], 1);
-            //     ft_putstr_fd("\n", 1);
-            //     x++;
-            // }
-            if ((ret = execve(tabl[0], tabl, env)) == -1)
-                count++;
-            i++;
-            free(str);
-        }
-        if (i == count)
-        {
-            free(tabl[0]);
-            ft_free(env, k + 1);
-            ft_free(p_bin, i + 1);
-            printf("%s : Command not found\n", res[0]);
+        if (test_shell_bin(tabl, p_bin, res, env))
             exit(33151);
-        }
-        free(tabl[0]);
-        ft_free(env, k + 1);
-        ft_free(p_bin, i + 1);
         exit(status);
     }
-//    if (ret == -1)
-//        return (-1);
-    ft_free(tabl, k + 1);
-    waitpid(ret, &status, 0);
+    free_tabtab(tabl);
+    waitpid(-1, &status, 0);
     return (exit_status(status));
 // waitpid waits for the program to be finished. 
 }
-
-//res[0] needs to be trimed so strings with simple or double quotes are managed.
 
 int set_args(char **res, char *path, t_command *cmd)
 {

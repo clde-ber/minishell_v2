@@ -75,56 +75,60 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 	}
 }
 
-// int main(int ac, char **av, char **env)
-// {
-// 	char *line;
-// 	char *command;
-// 	t_list *var_env;
-// 	t_command *cmd;
-// 	char **save;
-// 	char *buf;
-// 	char *buf2;
+int main(int ac, char **av, char **env)
+ {
+ 	char *line;
+ 	char *command;
+ 	t_list *var_env;
+ 	t_command *cmd;
+ 	char **save;
+ 	char *buf;
+ 	char *buf2;
+	char *end;
 
-// 	line = NULL;
-// 	save = NULL;
-// 	buf = NULL;
-// 	if (!(cmd = malloc(sizeof(t_command))))
-// 		return (0);
-// 	init_structs(cmd);
-// 	var_env = set_new_env(env, var_env, cmd);
-// 	while (1)
-// 	{
-// 		if (!(sig))
-// 			write(1, "***minishell*** > ", 18);
-// 		get_next_line(0, &line);
-// 		if ((ft_strcmp(line, "$?")))
-// 			cmd->cmd_rv = 0;
-// 		save = save_input(line, save);
-// 		if (ft_strcmp(line, "exit") == 0) //builtin à coder
-// 			exit(0);
-// 		buf = ft_strdup(line);
-// 		while ((command = getcommand(buf)) != NULL)
-// 		{
-// 			dispatch(command, env, var_env, cmd);
-// 			buf2 = cut_after_punct(buf2, buf);
-// 			if (buf2 == NULL)
-// 				buf = NULL;
-// 			else
-// 				buf = ft_strdup(buf2);
-// 			free(buf2);
-// 			free(command);
-// 			command = NULL;
-// 		}
-// 		free(line);
-// 		if (buf != NULL)
-// 			free(buf);
-// 	}
-// 	ft_lstdel(var_env);
-// 	init_structs(cmd);
-// 	free(cmd->path);
-// 	free(cmd);
-// 	return (0);
-// }
+ 	line = NULL;
+ 	save = NULL;
+ 	buf = NULL;
+	end = 0;
+ 	if (!(cmd = malloc(sizeof(t_command))))
+ 		return (0);
+ 	init_structs(cmd);
+ 	var_env = set_new_env(env, var_env, cmd);
+	signal(SIGINT, handle_signal);
+	signal(SIGQUIT, handle_signal);
+ 	while (end == 0)
+ 	{
+ 		if (!(sig))
+ 			write(1, "***minishell*** > ", 18);
+ 		get_next_line(0, &line);
+ 		if ((ft_strcmp(line, "$?")))
+ 			cmd->cmd_rv = 0;
+ 		save = save_input(line, save);
+ 		if (ft_strcmp(line, "exit") == 0) //builtin à coder
+ 			end = 1;
+ 		buf = ft_strdup(line);
+ 		while ((command = getcommand(buf)) != NULL)
+ 		{
+ 			dispatch(command, env, var_env, cmd);
+ 			buf2 = cut_after_punct(buf2, buf);
+ 			if (buf2 == NULL)
+ 				buf = NULL;
+ 			else
+ 				buf = ft_strdup(buf2);
+ 			free(buf2);
+ 			free(command);
+ 			command = NULL;
+ 		}
+ 		free(line);
+ 		if (buf != NULL)
+ 			free(buf);
+ 	}
+ 	ft_lstdel(var_env);
+ 	init_structs(cmd);
+ 	free(cmd->path);
+ 	free(cmd);
+ 	return (0);
+}
 
 char *end_line(char *current, t_save *save, t_term *term)
 {
@@ -195,7 +199,7 @@ char *go_line(t_save *save, t_term *term)
 	return (NULL);
 }
 
-int main(int ac, char **av, char **env)
+/*int main(int ac, char **av, char **env)
 {
 	char *line;
 	char *command;
@@ -254,4 +258,4 @@ int main(int ac, char **av, char **env)
 	free(cmd->path);
 	free(cmd);
 	return (0);
-}
+}*/

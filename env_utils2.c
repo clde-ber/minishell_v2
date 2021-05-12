@@ -1,36 +1,52 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils2.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/28 13:54:50 by clde-ber          #+#    #+#             */
+/*   Updated: 2021/05/04 12:25:07 by clde-ber         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*
-** Functions that output a two dimensional array for environment values, sort it and print it.
+** Functions that output a two dimensional array for environment values, sort it
+** and print it.
 */
 
 #include "minishell.h"
 
-char **fill_list(t_list *environ, char **list, int i)
+char	**fill_list(t_list *environ, char **list, int i)
 {
+	t_list	*tmp;
+
+	tmp = environ;
+	i = 0;
 	while (environ->next)
-		environ = environ->next;
-	while (environ->prec)
 	{
-		environ = environ->prec;
+		environ = environ->next;
 		i++;
 	}
+	printf("%d\n", i);
 	if (!(list = malloc(sizeof(char *) * (i + 3))))
 		return (0);
 	i = 0;
-	while (environ)
+	while (tmp)
 	{
-		if (ft_strlen(environ->name))
-    	{
-			list[i] = join_a_free(join_a_free(join_a_free(join_a_free(ft_strjoin("de\
-clare -x ", environ->name), "="), "\""), environ->value), "\"");
+		if (ft_strlen(tmp->name))
+		{
+			list[i] = join_a_free(join_a_free(join_a_free(join_a_free(
+ft_strjoin("declare -x ", tmp->name), "="), "\""), tmp->value), "\"");
 			i++;
 		}
-		environ = environ->next;
+		tmp = tmp->next;
 	}
 	list[i] = NULL;
 	return (list);
 }
 
-char **sort_list(char **list, int i, int j)
+char	**sort_list(char **list, int i, int j)
 {
 	char *tmp;
 	char *i_name;
@@ -54,18 +70,17 @@ char **sort_list(char **list, int i, int j)
 			free(i_name);
 			free(j_name);
 		}
-		j = 0;
+		j = -1;
 	}
 	return (list);
 }
 
-void print_sorted_env(t_list *environ)
+void	print_sorted_env(t_list *environ)
 {
-	char **list;
-	int i;
-	int j;
+	char	**list;
+	int		i;
+	int		j;
 
-	list = NULL;
 	i = -1;
 	j = -1;
 	list = fill_list(environ, list, i);
@@ -76,7 +91,7 @@ void print_sorted_env(t_list *environ)
 	list = NULL;
 }
 
-int is_valid_env_name(char *str)
+int		is_valid_env_name(char *str)
 {
 	int i;
 
@@ -90,7 +105,7 @@ int is_valid_env_name(char *str)
 	return (1);
 }
 
-int is_valid_env_name_c(char c)
+int		is_valid_env_name_c(char c)
 {
 	if (!(c == '_' || ft_isalnum(c)))
 		return (0);

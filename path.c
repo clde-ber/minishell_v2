@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   path.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
+/*   Updated: 2021/05/07 07:48:32 by clde-ber         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void    ft_pwd(char **res)
+void	ft_pwd(char **res)
 {
-	char *path;
-	char *buf;
-	int i;
+	char	*path;
+	char	*buf;
+	int		i;
 
 	i = 0;
 	if (!(path = malloc(sizeof(char) * 1000)))
@@ -17,71 +29,33 @@ void    ft_pwd(char **res)
 	free(buf);
 }
 
-int		count_back(char *str)
+char	*cd_front_a_back(char **res, char *path, int j, t_list *var_env)
 {
-	int k;
-	int j;
+	int		k;
+	int		i;
+	int		count;
+	char	*buf;
 
+	i = 0;
 	k = 0;
-	j = 0;
-	while(str[j])
+	count = 0;
+	buf = ft_strjoin(path, "/");
+	while (i < ft_strlen(res[j]))
 	{
-		if (str[j] == '.' && str[j + 1] == '.')
-		{
-			j +=2;
-			k +=1;
-			if (str[j] == '/')
-				j++;
-			else
-				return (k);
-		}
+		if ((k = count_back(res[j], &i)))
+			cd_go_back(&i, k, &buf);
 		else
-			return (k);
+			cd_go_front(res[j], &i, k, &buf);
 	}
-	return (k);
-}
-
-char	*path_copy(char *buf, int m, int i, char **res)
-{
-	int j;
-
-	j = 0;
-	if (!(buf = malloc(sizeof(char) * m)))
-		return (NULL);
-	while (j < m)
-	{
-		buf[j] = res[i][j];
-		j++;
-	}
-	buf[j] = '\0';
+	if (buf[ft_strlen(buf) - 1] == '/')
+		buf[ft_strlen(buf) - 1] = '\0';
+	set_pwd_env(path, buf, var_env);
 	return (buf);
 }
 
-char *minus_path(char **res, char *path, int i)
+char	*get_cwd(void)
 {
-	int k;
-	char *buf;
-	int m;
-
-	buf = NULL;
-	k = count_back(res[i]);
-	while (k > 0)
-	{
-		if (buf)
-			free(buf);
-		m = ft_strrchr(path, '/');
-		if (m == 0)
-			return (buf = ft_strdup("/"));
-		else
-			buf = path_copy(buf, m, i, res);
-		k--;
-	}
-	return (buf);
-}
-
-char *get_cwd()
-{
-	char *path;
+	char	*path;
 
 	if (!(path = malloc(sizeof(char) * 1000)))
 		return (NULL);
@@ -89,30 +63,26 @@ char *get_cwd()
 	return (path);
 }
 
-void    ft_cd(char **res)
+void	ft_cd(char **res, t_list *var_env)
 {
-	char *path;
-	char *buf;
-	char *buf2;
+	char	*path;
+	char	*buf;
+	char	*buf2;
 
 	if (!res[1])
 	{
 		write(1, "\n", 2);
-		return;
+		return ;
 	}
 	path = get_cwd();
-	if (res[1][0] == '.')
-	{
-		buf2 = ft_strjoin(path, "\0");
-		buf = minus_path(res, buf2, 1);
-	}
-	else
-	{
-		buf2 = ft_strjoin(path, "/");
-		buf = ft_strjoin(buf2, res[1]);
-	}
+	buf2 = ft_strjoin(path, "\0");
+	buf = cd_front_a_back(res, buf2, 1, var_env);
 	if (chdir(buf) == -1)
-		ft_putstr_fd("FAIL", 1);
+	{
+		ft_putstr_fd("bash : cd : ", 1);
+		ft_putstr_fd(res[1], 1);
+		ft_putstr_fd(": No such file or directory", 1);
+	}
 	free(path);
 	free(buf);
 	free(buf2);

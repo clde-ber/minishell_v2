@@ -1,30 +1,52 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/04/28 13:48:26 by user42            #+#    #+#             */
+/*   Updated: 2021/05/05 15:47:14 by clde-ber         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*
-** Functions that manage environment variables linked list - create, amend it & print it. Once the main variable list with environment variables
-** imported from computer is created, it is amended with new entries if export is invoked, updated when unset is called, and printed when env is.
+** Functions that manage environment variables linked list - create, amend it
+** & print it. Once the main variable list with environment variables imported
+** from computer is created, it is amended with new entries if export is
+** invoked, updated when unset is called, and printed when env is.
 */
 
 #include "minishell.h"
 
-t_list *set_new_env(char **env, t_list *var_env, t_command *cmd)
+void	name_a_value_var(char **name, char **value, char **env, int k)
 {
-	int k;
-    char *name;
-	char *value;
-	t_list *tmp;
+	*name = ft_get_name(env[k]);
+	*value = ft_strdup(&ft_strchr(env[k], '=')[1]);
+}
+
+t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd)
+{
+	int		k;
+	char	*name;
+	char	*value;
+	t_list	*tmp;
 
 	k = 0;
 	name = NULL;
 	value = NULL;
 	tmp = NULL;
-	while (env[k])
+	while (env[k + 1])
 		k++;
-	k--;
-	var_env = ft_lstnew((name = ft_get_name(env[k])), (value = ft_strdup(&ft_strchr(env[k], '=')[1])));
+	name_a_value_var(&name, &value, env, k);
+	var_env = ft_lstnew(name, value);
 	k--;
 	while (k >= 0)
 	{
 		tmp = var_env;
-		ft_lstadd_front(&var_env, ft_lstnew((name = ft_get_name(env[k])), (value = ft_strdup(&ft_strchr(env[k], '=')[1]))));
+		name = ft_get_name(env[k]);
+		value = ft_strdup(&ft_strchr(env[k], '=')[1]);
+		ft_lstadd_front(&var_env, ft_lstnew(name, value));
 		ft_lstiter(var_env, &ft_record, cmd);
 		tmp->prec = var_env;
 		k--;
@@ -32,44 +54,45 @@ t_list *set_new_env(char **env, t_list *var_env, t_command *cmd)
 	return (var_env);
 }
 
-void set_env(char **tabl, t_list *var_env, t_command *cmd)
+void	set_env(char **tabl, t_list *var_env, t_command *cmd)
 {
-    int i;
-	int j;
-	t_list *tmp_new;
-	t_list *tmp;
+	int		i;
+	int		j;
+	t_list	*tmp_new;
+	t_list	*tmp;
 
 	j = 0;
+	i = 0;
 	tmp_new = NULL;
 	tmp = NULL;
 	while (tabl[j])
 		j++;
-    i = 1;
 	tmp = check_doublons(0, j, tabl, var_env);
-	while (i <= j - 1)
-    {
+	while (++i <= j - 1)
+	{
 		if (ft_strchr(tabl[i], '='))
-			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tabl[i]), ft_strdup(&ft_strchr(tabl[i], '=')[1]))));
-		else
-			ft_lstadd_back(&var_env, (tmp_new = ft_lstnew(ft_get_name(tabl[i]), ft_strdup(""))));
+		{
+			tmp_new = ft_lstnew(ft_get_name(tabl[i]),
+ft_strdup(&ft_strchr(tabl[i], '=')[1]));
+			ft_lstadd_back(&var_env, tmp_new);
+		}
 		ft_lstiter(var_env, &ft_record, cmd);
 		tmp->prec = tmp;
 		tmp_new = tmp;
-		i++;
 	}
-	var_env = tmp_new;
 }
 
 void	unset(t_list *env, char **tabl)
 {
-	int i;
-	int j = 0;
-	char *name;
+	int		i;
+	int		j;
+	char	*name;
 
 	name = NULL;
+	i = 1;
+	j = 0;
 	while (tabl[j])
 		j++;
-	i = 1;
 	while (env)
 	{
 		while (i < j)
@@ -87,7 +110,7 @@ void	unset(t_list *env, char **tabl)
 	}
 }
 
-void print_env(t_list *environ)
+void	print_env(t_list *environ)
 {
 	char *name;
 	char *value;
@@ -97,7 +120,7 @@ void print_env(t_list *environ)
 	while (environ)
 	{
 		if (ft_strlen(environ->name))
-    	{
+		{
 			name = ft_strjoin(environ->name, "=");
 			value = ft_strjoin(name, environ->value);
 			// printf("%s\n", value);

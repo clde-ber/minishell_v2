@@ -81,39 +81,63 @@ char	*go_line(t_save *save, t_term *term);
 */
 size_t	len_wd(char *str, char *charset);
 size_t	count_malloc(char *s, char *str);
-void	*ft_free(char **res, int j);
-char	**ft_split(char *s, char *str);
-size_t	parse_command(size_t i, char *str, int *res, char *charset);
-int		is_symbol(char c, char comp);
+void		*ft_free(char **res, int j);
+char			**ft_split(char *s, char *str);
+size_t parse_command(size_t i, char *str, int *res, char *charset);
 
 /*
 **expander
 */
-char	**create_parsed_res(char **res);
-int		strings_to_join(char **res, int i);
-char	**parse_first_arg(char **res, char **parsed_res);
-char	*expander(char *res, t_list *var_env, char **args, t_command *cmd);
-char	**parse_res(char **res, t_list *var_env, t_command *cmd);
+char **create_parsed_res(char **res);
+char **parse_first_arg(char **res, char **parsed_res);
+char *expander(char *res, t_list *var_env, char **args, t_command *cmd);
+char **parse_res(char **res, t_list *var_env, t_command *cmd);
+char *handled_unset(char *res, t_list *var_env, t_command *cmd);
 
 /*
 **expander_utils
 */
-char	*get_string(char *str);
-char	*get_env(char *str, t_list *var_env, t_command *cmd);
-char	*get_env_value(char *str, t_list *var_env, t_command *cmd);
-char	*replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean);
-char	*non_handled_commands(char *res, t_list *var_env, t_command *cmd);
-char	*handled_export(char *res, t_list *var_env, t_command *cmd);
-char	*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd);
-char	*get_string_value(char *str);
+void join_string_value(char **str, char **tmp, char *trim, int *index);
+char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean);
+char *non_handled_commands(char *res, t_list *var_env, t_command *cmd);
+char *handled_export(char *res, t_list *var_env, t_command *cmd);
+char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd);
 
 /*
 **expander_utils2
 */
-char	*search_env_name(char *str, t_list *var_env);
-char	*search_env_value(char *str, t_list *var_env);
-char	*antislashes_a_quotes(char *str);
-int		is_valid_env_c(char c);
+char *get_env_name(int quotes, char *str_first);
+char *search_env_name(char *str, t_list *var_env);
+char *search_env_value(char *str, t_list *var_env);
+char *antislashes_a_quotes(char *str);
+int is_valid_env_c(char c);
+
+/*
+**expander_utils3
+*/
+char *get_string(char *str);
+char *get_string_value(char *str);
+char *get_env_value(char *str, t_list *var_env, t_command *cmd);
+int even_or_odd(char *str);
+char *find_op(char *str);
+
+/*
+**expander_utils4
+*/
+int strings_to_join(char **res, int i);
+char **create_parsed_res(char **res);
+char **parsed_res_error(char **parsed_res, int j);
+char **last_command_rv(char **res, char **parsed_res);
+
+/*
+**expander_utils5
+*/
+char *export_errors(char *str_first, char *str_secd, int quotes, char *res);
+char *valid_export(char *str_first, char *str_secd, int quotes, char *res);
+void env_quotes_a_values(char **str_first, char **str_secd, int *quotes);
+void split_env_name_a_value(char **str_first, char **str_secd, char **p_bin, char *res);
+void export_replace_by_env_value(char **str_first, char **str_secd,
+t_list *var_env, t_command *cmd);
 
 /*
 **launch_exe
@@ -124,10 +148,10 @@ void	find_exe(char *path, char **env, t_command *cmd);
 /*
 **launch_exe_utils
 */
-char	*ft_get_filename(const char *s, int c);
-char	*get_path(char *path, char c);
-char	**arg_tab(char *exe, char *path, char **env);
-char	**env_tab(char *path);
+char *ft_get_filename(const char *s, int c);
+char *get_path(char *path, char c);
+char **arg_tab(char *exe, char *path, char **env);
+char **env_tab(char *path);
 
 /*
 **env
@@ -158,26 +182,27 @@ int		is_valid_env_name_c(char c);
 /*
 **env_utils3
 */
-void	add_to_env_k(char **tab_k, char **tab_l, char *i_name, char *j_name);
-void	add_to_env_l(char *tab_k, char *tab_l, char *i_name, char *j_name);
-char	*create_i_value(char *tab_k, char *i_value);
-char	*create_j_value(char *tab_l, char *j_value);
-
-/*
-**multipipe
-*/
-char **first_pipe(char **res);
-char **last_pipe(char **res);
-char **middle_pipe(char **res, int i);
-void print_tabtab(char **res);
-int handle_multipipes(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env);
+void add_to_env_k(char **tabl, char *i_name, int k, int l);
+void add_to_env_l(char **tabl, char *j_name, int k, int l);
+char *create_i_value(char *tab_k, char *i_value);
+char *create_j_value(char *tab_l, char *j_value);
 
 /*
 **path
 */
-void	ft_pwd(char **res);
-char	*minus_path(char **res, char *path, int i);
-void	ft_cd(char **res);
+void    ft_pwd(char **res);
+char *cd_front_a_back(char **res, char *path, int j, t_list *var_env);
+void    ft_cd(char **res, t_list *var_env);
+char *get_cwd(void);
+
+/*
+**path_utils
+*/
+int		count_back(char *str, int *j);
+void	path_copy(char **buf, int m, int k);
+void	cd_go_back(int *i, int k, char **buf);
+int		cd_go_front(char *res, int *i, int k, char **buf);
+void 	set_pwd_env(char *path, char *buf, t_list *var_env);
 
 /*
 **redir
@@ -265,6 +290,11 @@ void	init_structs(t_command *cmd);
 char	*cut_after_punct(char *dest, char *line);
 int		count_tabs(char **res);
 void	free_tabtab(char **res);
+
+/*
+**minishell_utils3
+*/
+int is_symbol(char c, char comp);
 
 /*
 **gnl

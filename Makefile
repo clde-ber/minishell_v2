@@ -8,6 +8,9 @@ SRCS =	./debug_to_delete.c\
 	./exec.c\
 	./expander_utils.c\
 	./expander_utils2.c\
+	./expander_utils3.c\
+	./expander_utils4.c\
+	./expander_utils5.c\
 	./expander.c\
 	./ft_split.c\
 	./gnl_utils.c\
@@ -24,8 +27,10 @@ SRCS =	./debug_to_delete.c\
 	./minishell_utils.c\
 	./minishell_utils2.c\
 	./multipipe.c\
+	./minishell_utils3.c\
 	./parse_path.c\
 	./path.c\
+	./path_utils.c\
 	./redir.c\
 	./redir_utils.c\
 	./sig_a_errors.c\
