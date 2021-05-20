@@ -6,11 +6,24 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/12 12:47:13 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/15 20:00:15 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	get_k(int k, char **res, int i, int j)
+{
+	if (count_pipes(res) == i)
+		k = count_tabs(res);
+	else
+	{
+		k = j;
+		while (ft_strcmp(res[k], "|") != 0)
+			k++;
+	}
+	return (k);
+}
 
 char **middle_pipe(char **res, int i)
 {
@@ -26,14 +39,7 @@ char **middle_pipe(char **res, int i)
 			k++;
 		j++;
 	}
-	if (count_pipes(res) == i)
-		k = count_tabs(res);
-	else
-	{
-		k = j;
-		while (ft_strcmp(res[k], "|") != 0)
-			k++;
-	}
+	k = get_k(k, res, i, j);
 	if (!(tabl = malloc(sizeof(char *) * ((k - j) + 1))))
 		return (NULL);
 	i = 0;

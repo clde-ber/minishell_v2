@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/06 19:52:28 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/17 15:41:16 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 	char	*tmp;
 	char	*tmp_sub;
 	int		boolean;
+	char	*buf;
 
 	boolean = 0;
 	cmd->index = 0;
@@ -96,9 +97,12 @@ char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 		boolean = 1;
 	tmp_sub = ft_strtrim(tmp, "\"");
 	free(tmp);
-	if (boolean == 0 && ft_strchr(tmp_sub, '$'))
-		tmp_sub = replace_by_env_value(ft_strtrim(tmp_sub, "\'"), var_env, cmd);
-	tmp_sub = ft_strtrim(tmp_sub, "\'");
+	buf = ft_strdup(tmp_sub);
+	free(tmp_sub);
+	if (boolean == 0 && ft_strchr(buf, '$'))
+		tmp_sub = replace_by_env_value(ft_strtrim(buf, "\'"), var_env, cmd);
+	tmp_sub = ft_strtrim(buf, "\'");
+	free(buf);
 	return (tmp_sub);
 }
 

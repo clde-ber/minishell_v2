@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/12 13:48:09 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/17 15:17:26 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,9 @@ int go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	int sig;
 
 	sig = 0;
-	if (tabl[0][0] == 'e')
+	if (tabl == NULL)
+		;
+	else if (tabl[0][0] == 'e')
 		go_e(tabl, var_env, cmd);
 	else if (ft_strcmp(tabl[0], "pwd") == 0)
 		ft_pwd(tabl);
@@ -102,16 +104,11 @@ int go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	return (0);
 }
 
-//marche pas avec redirs, a traiter
-//atterntion prompt affiche avec pipe
-
 int go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
-	// char	**one;
 	pid_t	pid;
 	int		pipe_fd[2];
 
-	// one = divide_pipe(res, f);
 	pipe(pipe_fd);
 	if ((pid = fork()) == -1)
 		return -1;
@@ -121,7 +118,6 @@ int go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char **env)
 		dup2(pipe_fd[1], 1);
 		go_instruction(end_redir(one, f), var_env, cmd, env);
 		close(pipe_fd[1]);
-		// free_tabtab(one);
 		return 1;
 	}
 	else
@@ -131,23 +127,21 @@ int go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char **env)
 		go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);
 		close(pipe_fd[0]);
 	}
-	// free_tabtab(f->save_pipe);
 }
 
 int redir_and_send(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
 	if (chrtabtab(res, "|") == -1 && chrtabtab(res, ">") == -1 && chrtabtab(res, "<") == -1 && chrtabtab(res, ">>") == -1)
-		return (go_instruction(res, var_env, cmd, env));
+		return (go_instruction(copy_tabtab(res), var_env, cmd, env));
 	else if (chrtabtab(res, "|") == -1)
 		return (go_instruction(end_redir(res, f), var_env, cmd, env));
 	else
 	{
 		if (count_pipes(res) == 1)
 			return (go_pipe(divide_pipe(res, f), f, var_env, cmd, env));
-			// return (go_pipe(res, f, var_env, cmd, env));
 		else
 			return (handle_multipipes(res, f, var_env, cmd, env));
-		//     return (multiple_pipes(res, f));
 	}
-	return (res);
+	free_tabtab(res);
+	return (2);
 }

@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 19:16:23 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/06 17:10:01 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/19 16:59:55 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,27 @@
 
 char **replace_tabtab(char **tabl, int i, char *str)
 {
-    char **buf;
-    int j;
+	char **buf;
+	int j;
 
-    j = 0;
-    if (!(buf = sizeof(char *) * (count_tabs(tabl) + 1)))
-        return (NULL);
-    while (j < i && tabl[j])
-    {
-        buf[j] = ft_strdup(tabl[j]);
-        j++;
-    }
-    buf[j] = ft_strdup(str);
-    j++;
-    while (tabl[j])
-    {
-        buf[j] = ft_strdup(tabl[j]);
-        j++;
-    }
-    buf[j] = NULL;
-    free_tabtab(tabl);
-    return (buf);
+	j = 0;
+	if (!(buf = malloc(sizeof(char *) * (count_tabs(tabl) + 1))))
+		return (NULL);
+	while (tabl[j] && j < i)
+	{
+		buf[j] = ft_strdup(tabl[j]);
+		j++;
+	}
+	buf[j] = ft_strdup(str);
+	j++;
+	while (tabl[j])
+	{
+		buf[j] = ft_strdup(tabl[j]);
+		j++;
+	}
+	buf[j] = NULL;
+	free_tabtab(tabl);
+	return (buf);
 }
 
 void	erase_line(int i, int j, t_term *term)
@@ -47,57 +47,67 @@ void	erase_line(int i, int j, t_term *term)
 		write(1, " ", 1);
 		k++;
 	}
-	tputs(tgoto(tgetstr("cm", NULL), (term->x - 1) + i, term->y), 1, ft_putchar);
+	tputs(tgoto(tgetstr("cm", NULL), (term->x - 1) + i, term->y - 1), 1, ft_putchar);
 }
 
-char *handle_arrow_up(t_term *term, t_save *save, char *end)
+char *handle_arrow_up(t_term *term, char *end)
 {
-	if (save->where == save->size - 1)
-        return (end);
-    tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y), 1, ft_putchar);
-	if (save->where != -1 && end != NULL && ft_strcmp(end, save->done[save->where]) != 0)
-        save->done = replace_tabtab(save->done, save->where, end);
-    save->where++;
-    ft_putstr_fd(save->done[save->where], 1);
-    if (save->where == 0)
-        erase_line(ft_strlen(save->done[save->where]), ft_strlen(save->last), term);
-    else
-		erase_line(ft_strlen(save->done[save->where]), ft_strlen(save->done[save->where - 1]), term);
+	if (term->where == term->len - 1)
+		return (end);
+	tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 1), 1, ft_putchar);
+	if (term->where != -1 && end != NULL && ft_strcmp(end, term->done[term->where]) != 0)
+		term->done = replace_tabtab(term->done, term->where, end);
+	term->where++;
+	ft_putstr_fd(term->done[term->where], 1);
+	if (term->where == 0)
+		erase_line(ft_strlen(term->done[term->where]), ft_strlen(term->last), term);
+	else
+		erase_line(ft_strlen(term->done[term->where]), ft_strlen(term->done[term->where - 1]), term);
 	if (end != NULL)
-        free(end);
-	end = ft_strdup(save->done[save->where]);;
+		free(end);
+	end = ft_strdup(term->done[term->where]);
 	return (end);
 }
 
-char *handle_arrow_down(t_term *term, t_save *save, char *end)
+char *handle_arrow_down_bis(t_term *term, char *end, int i)
 {
-	if (save->where == -1)
-        return (end);
-    tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y), 1, ft_putchar);
-    if (save->where != -1 && end != NULL && ft_strcmp(end, save->done[save->where]) != 0)
-        save->done = replace_tabtab(save->done, save->where, end);
-    save->where--;
-    if (save->where == -1 && save->mtline == 0)
-    {
-        erase_line(0, ft_strlen(save->done[0]), term);
-        return (NULL);
-    }
-    else if (save->where == -1 && end != NULL)
-    {
-        ft_putstr_fd(save->last, 1);
-        erase_line(ft_strlen(save->last), ft_strlen(save->done[0]), term);
-        if (end != NULL)
-            free(end);
-	    end = ft_strdup(save->last);
-    }
-    else
-    {
-        ft_putstr_fd(save->done[save->where], 1);
-        if (save->where != save->size)
-            erase_line(ft_strlen(save->done[save->where]), ft_strlen(save->done[save->where + 1]), term);
-        free(end);
-        end = ft_strdup(save->done[save->where]);
-    }
+	if (i == 0)
+	{
+		ft_putstr_fd(term->last, 1);
+		erase_line(ft_strlen(term->last), ft_strlen(term->done[0]), term);
+		if (end != NULL)
+			free(end);
+		end = ft_strdup(term->last);
+	}
+	else
+	{
+		ft_putstr_fd(term->done[term->where], 1);
+		if (term->where != term->len)
+			erase_line(ft_strlen(term->done[term->where]), ft_strlen(term->done[term->where + 1]), term);
+		free(end);
+		end = ft_strdup(term->done[term->where]);
+	}
+	return (end);
+}
+
+char *handle_arrow_down(t_term *term, char *end)
+{
+	if (term->where == -1)
+		return (end);
+	tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 1), 1, ft_putchar);
+	if (term->where != -1 && end != NULL && ft_strcmp(end, term->done[term->where]) != 0)
+		term->done = replace_tabtab(term->done, term->where, end);
+	term->where--;
+	if (term->where == -1 && term->mtline == 0)
+	{
+		erase_line(0, ft_strlen(term->done[0]), term);
+		free(end);
+		return (NULL);
+	}
+	else if (term->where == -1 && end != NULL)
+		end = handle_arrow_down_bis(term, end, 0);
+	else
+		end = handle_arrow_down_bis(term, end, 1);
 	return (end);
 }
 
@@ -123,7 +133,7 @@ void not_arrow(int i, char c, t_term *term)
 
 //if save dispay avec arrow et apres entrée, que faire?
 
-char *handle_arrow(t_term *term, t_save *save, char *current)
+char *handle_arrow(t_term *term, char *current)
 {
 	char buf[2];
 	
@@ -131,19 +141,19 @@ char *handle_arrow(t_term *term, t_save *save, char *current)
 	if ((int)buf[0] == 91)
 	{
 		read(0, buf, 1);
-        if ((int)buf[0] != 66 && (int)buf[0] != 65)
+		if ((int)buf[0] != 66 && (int)buf[0] != 65)
 			not_arrow(1, buf[0], term);
-        else
-        {
-            if (save->size == 0)
-                return (current);
-            if (current != NULL && save->where == -1)
-                save->last = ft_strdup(current);
-            if ((int)buf[0] == 65)
-                current = handle_arrow_up(term, save, current);
-            else if ((int)buf[0] == 66)
-                current = handle_arrow_down(term, save, current);
-        }
+		else
+		{
+			if (term->len == 0)
+				return (current);
+			if (current != NULL && term->where == -1)
+				term->last = ft_strdup(current);
+			if ((int)buf[0] == 65)
+				current = handle_arrow_up(term, current);
+			else if ((int)buf[0] == 66)
+				current = handle_arrow_down(term, current);
+		}
 	}
 	else
 		not_arrow(0, buf[0], term);

@@ -23,8 +23,6 @@ int		open_fds_in(char **res, int i)
 	return (fd);
 }
 
-//check < redir si marche bien
-
 int		handle_fds(char **res, t_fd *f)
 {
 	int		i;
@@ -69,11 +67,11 @@ char	**end_redir(char **res, t_fd *f)
 	j = 0;
 	if (chrtabtab(res, ">") == -1 && chrtabtab(res, ">>") == -1 && chrtabtab(res, "<") == -1)
 		return (res);
-	printf("%d\n", handle_fds);
 	if (handle_fds(res, f) < 0)
 	{
 		restore_fds(f);
-	//	return (NULL);
+		ft_putstr_fd("Error: file cannot be opened\n", 2);
+		return (NULL);
 	}
 	while (res[i] && ft_strcmp(res[i], "<") != 0 && ft_strcmp(res[i], ">") != 0 && ft_strcmp(res[i], ">>") != 0)
 		i++;

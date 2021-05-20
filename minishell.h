@@ -40,21 +40,15 @@ typedef struct	s_term
 {
 	struct		termios s_termios;
 	struct		termios s_termios_backup;
-	int			col;
-	int			li;
 	int			x;
 	int			y;
 	int			size;
-}				t_term;
-
-typedef struct	s_save
-{
 	char		**done;
 	char		*last;
-	int			size;
+	int			len;
 	int			where;
 	int			mtline;
-}				t_save;
+}				t_term;
 
 typedef struct s_command
 {
@@ -74,7 +68,7 @@ char	*getcommand(char *str);
 void	restore_fds(t_fd *f);
 void	init_fds(t_fd *f);
 int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd);
-char	*go_line(t_save *save, t_term *term);
+char	*go_line(t_term *term);
 
 /*
 **ft_split
@@ -205,6 +199,14 @@ int		cd_go_front(char *res, int *i, int k, char **buf);
 void 	set_pwd_env(char *path, char *buf, t_list *var_env);
 
 /*
+**prep_line
+*/
+char *end_line(char *current, t_term *term);
+char *get_char(char *current, t_term *term, char *buf);
+char *go_line(t_term *term);
+char *getcommand(char *str);
+
+/*
 **redir
 */
 int		chrtabtab(char **res, char *str);
@@ -226,14 +228,9 @@ char	**end_redir(char **res, t_fd *f);
 /*
 **echo
 */
-void	ft_echo(char **res, t_list *var_env);
-
-/*
-**echo_utils
-*/
 char	*echo_option(char *output, int option);
-void	go_trim(char **res, int i, int c);
-char	*get_word(char **res, int i, int j);
+char	*get_echo_output(char *output, char **res, int i);
+void	ft_echo(char **res, t_list *var_env);
 
 /*
 **exec
@@ -257,10 +254,10 @@ void	init_term(t_term *term);
 **termcap_arrow
 */
 void	erase_line(int i, int j, t_term *term);
-char	*handle_arrow_up(t_term *term, t_save *save, char *end);
-char	*handle_arrow_down(t_term *term, t_save *save, char *end);
+char	*handle_arrow_up(t_term *term, char *end);
+char	*handle_arrow_down(t_term *term, char *end);
 void	not_arrow(int i, char c, t_term *term);
-char	*handle_arrow(t_term *term, t_save *save, char *end);
+char	*handle_arrow(t_term *term, char *end);
 
 /*
 **parse_path

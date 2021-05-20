@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 15:13:21 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/11 12:45:50 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/19 16:54:01 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,13 +98,18 @@ void get_cursor_space(t_term *term)
 void	init_term(t_term *term)
 {
 	tgetent(NULL, getenv("TERM"));
-	// term->col = tgetnum("co");
-	// term->li = tgetnum("li");
+	term->where = -1;
 	term->x = 0;
 	term->y = 0;
 	tcgetattr(0, &term->s_termios);
 	term->s_termios.c_lflag &= ~(ICANON);
 	term->s_termios.c_lflag &= ~(ECHO);
 	if (tcsetattr(0, TCSANOW, &term->s_termios) == -1)
-		return (-1);
+		return ;
+	if (term->done)
+		term->len = count_tabs(term->done);
+	else
+		term->len = 0;
+	term->mtline = 0;
+	// term->last = NULL;
 }

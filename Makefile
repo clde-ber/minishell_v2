@@ -1,6 +1,5 @@
 SRCS =	./debug_to_delete.c\
 	./echo.c\
-	./echo_utils.c\
 	./env_utils.c\
 	./env_utils2.c\
 	./env_utils3.c\
@@ -31,6 +30,7 @@ SRCS =	./debug_to_delete.c\
 	./parse_path.c\
 	./path.c\
 	./path_utils.c\
+	./prep_line.c\
 	./redir.c\
 	./redir_utils.c\
 	./sig_a_errors.c\
