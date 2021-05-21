@@ -120,7 +120,7 @@ char *find_op(char *str);
 */
 int strings_to_join(char **res, int i);
 char **create_parsed_res(char **res);
-char **parsed_res_error(char **parsed_res, int j);
+int parsed_res_error(char **parsed_res, int j);
 char **last_command_rv(char **res, char **parsed_res);
 
 /*

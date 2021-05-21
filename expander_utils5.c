@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:38 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 15:53:52 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/21 03:50:24 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,11 @@ char	**create_parsed_res(char **res)
 	return (parsed_res);
 }
 
-char	**parsed_res_error(char **parsed_res, int j)
+int		parsed_res_error(char **parsed_res, int j)
 {
 	if (parsed_res[j] == NULL)
-	{
-		ft_free(parsed_res, j + 1);
-		return (NULL);
-	}
+		return (1);
+	return (0);
 }
 
 char	**last_command_rv(char **res, char **parsed_res)
