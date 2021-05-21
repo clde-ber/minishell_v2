@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/12 13:46:58 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/21 05:54:23 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,47 +23,53 @@
 char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 {
 	char	*trim;
+	char	*trim2;
 	int		quotes;
 
 	quotes = 0;
 	trim = NULL;
+	trim2 = NULL;
 	cmd->index = 0;
-	if (ft_strlen(ft_strtrim(res, "\"")) != ft_strlen(res))
-		quotes = 1;
 	trim = ft_strtrim(res, "\"");
-	if (quotes == 0 && ft_strchr(trim, '\"') == 0 && ft_strchr(trim, '\'') == 0)
-		trim = replace_by_env(trim, var_env, cmd, 0);
-	if (trim && ft_strchr(trim, '\"') == 0 && ft_strchr(trim, '\'') == 0)
-		return (trim);
-	else
+	if (is_valid_env_name(res))
 	{
-		cmd->cmd_rv = 1;
-		write(1, "bash: export: '", 16);
-		if (quotes == 0)
-			write(1, ft_strtrim(trim, "\'"), ft_strlen(ft_strtrim(trim, "\'")));
-		else
-			write(1, trim, ft_strlen(trim));
-		write(1, "': not a valid identifier\n", 26);
-		return (ft_strdup(""));
+		if (ft_strlen(trim) != ft_strlen(res))
+			quotes = 1;
+		if (quotes == 0 && ft_strchr(trim, '\"') == 0 && ft_strchr(trim, '\'') == 0)
+			trim = replace_by_env(trim, var_env, cmd, 0);
+		if (trim && ft_strchr(trim, '\"') == 0 && ft_strchr(trim, '\'') == 0)
+			return (trim);
 	}
+	cmd->cmd_rv = 1;
+	write(1, "bash: unset: '", 15);
+	trim2 = ft_strtrim(trim, "\'");
+	if (quotes == 0)
+		write(1, trim2, ft_strlen(trim2));
+	else
+		write(1, trim, ft_strlen(trim));
+	write(1, "': not a valid identifier\n", 26);
+	free(trim);
+	free(trim2);
+	return (NULL);
 }
 
 char	*expander(char *res, t_list *var_env, char **args, t_command *cmd)
 {
 	char	*trim;
-	char	*name;
 	char	*str;
 	int		quotes;
 
 	quotes = 0;
 	trim = NULL;
-	name = NULL;
 	str = NULL;
 	cmd->index = 0;
 	if (is_handled_cmd(args[0]) == 0 || ft_strcmp(args[0], "echo") == 0 ||
 			ft_strcmp(args[0], "pwd") == 0 || ft_strcmp(args[0], "cd") == 0)
 		return (non_handled_commands(res, var_env, cmd));
-	else
+	else if (((ft_strcmp(args[0], "export") == 0 && ft_strcmp(res, "export"))
+	|| (ft_strcmp(args[0], "unset") == 0 && ft_strcmp(args, "unset"))) &&
+	chrtabtab(args, "|") == -1 && chrtabtab(args, ">") == -1 && chrtabtab(args, "<")
+	== -1 && chrtabtab(args, ">>") == -1)
 	{
 		if (ft_strcmp(args[0], "export") == 0 && ft_strcmp(res, "export"))
 			return (handled_export(res, var_env, cmd));
@@ -90,10 +96,11 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 			parsed_res[j] = expander(ft_strjoin(res[i],
 						res[++i]), var_env, res, cmd);
 		else if ((strings_to_join(res, i)) == -1)
-			parsed_res[j] = NULL;
+			parsed_res[j] = ft_strdup("");
 		else
 			parsed_res[j] = expander(res[i], var_env, res, cmd);
-		parsed_res_error(parsed_res, j);
+		if (parsed_res_error(parsed_res, j))
+			parsed_res[j] = ft_strdup("");
 		printf("parsed_res %s\n", parsed_res[j]);
 		i++;
 		j++;

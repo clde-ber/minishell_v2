@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/05/20 18:58:48 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/21 17:21:23 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,18 +122,18 @@ int    test_shell_bin(char **tabl, char **p_bin, char **res, char **env)
 
 int exec_command(char **args, char **res, char *path, int j)
 {
-	pid_t pid;
-	int status;
-	char **tabl;
-	char **p_bin;
-	char **env;
+    pid_t pid;
+    int status;
+    char **tabl;
+    char **p_bin;
+    char **env;
 
-	pid = 0;
-	errno = 0;
-	status = 0;
-	tabl = arguments(res, j, args, path);
-	p_bin = parse_path(path, ':');;
-	env = environment(path);
+    pid = 0;
+    errno = 0;
+    status = 0;
+    tabl = arguments(res, j, args, path);
+    p_bin = parse_path(path, ':');
+    env = environment(path);
 // Fork duplicates the process so the parent process doesn't return when the child process does.
 	if ((pid = fork()) == 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/06 11:13:03 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/21 03:47:30 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ char *res)
 	else
 		write(1, str_secd, ft_strlen(str_secd));
 	write(1, "': not a valid identifier\n", 26);
+	free(str_first);
+	free(str_secd);
 	return (NULL);
 }
 
@@ -38,37 +40,55 @@ char		*valid_export(char *str_first, char *str_secd, int quotes,
 char *res)
 {
 	char *operator;
+	char *str_f;
+	char *str_s;
 
+	str_f = NULL;
+	str_s = NULL;
 	operator = find_op(res);
 	if (quotes % 2 == 0)
-		str_first = ft_strtrim(str_first, "\'");
+	{
+		str_f = ft_strtrim(str_first, "\'");
+		free(str_first);
+	}
 	if (quotes == 1 || quotes == 4)
-		str_secd = ft_strtrim(str_secd, "\'");
-	return (ft_strjoin_free(join_a_free(str_first, operator), str_secd));
+	{
+		str_s = ft_strtrim(str_secd, "\'");
+		free(str_secd);
+	}
+	return (ft_strjoin_free(join_a_free(str_f, operator), str_s));
 }
 
 void		env_quotes_a_values(char **str_first, char **str_secd,
 int *quotes)
 {
-	if (ft_strlen(*str_first) != ft_strlen(ft_strtrim(*str_first, "\"")) &&
-	ft_strlen(*str_secd) == ft_strlen(ft_strtrim(*str_secd, "\"")))
+	char *str_f;
+	char *str_s;
+
+	str_f = ft_strtrim(*str_first, "\"");
+	str_s = ft_strtrim(*str_secd, "\"");
+	if (ft_strlen(*str_first) != ft_strlen(str_f) &&
+	ft_strlen(*str_secd) == ft_strlen(str_s))
 		*quotes = 1;
-	if (ft_strlen(*str_secd) != ft_strlen(ft_strtrim(*str_secd, "\"")) &&
-	ft_strlen(*str_first) == ft_strlen(ft_strtrim(*str_first, "\"")))
+	if (ft_strlen(*str_secd) != ft_strlen(str_s) &&
+	ft_strlen(*str_first) == ft_strlen(str_f))
 		*quotes = 2;
-	if (ft_strlen(*str_first) != ft_strlen(ft_strtrim(*str_first, "\"")) &&
-	ft_strlen(*str_secd) != ft_strlen(ft_strtrim(*str_secd, "\"")))
+	if (ft_strlen(*str_first) != ft_strlen(str_f) &&
+	ft_strlen(*str_secd) != ft_strlen(str_s))
 		*quotes = 3;
-	if (ft_strlen(*str_first) == ft_strlen(ft_strtrim(*str_first, "\"")) &&
-	ft_strlen(*str_secd) == ft_strlen(ft_strtrim(*str_secd, "\"")))
+	if (ft_strlen(*str_first) == ft_strlen(str_f) &&
+	ft_strlen(*str_secd) == ft_strlen(str_s))
 		*quotes = 4;
-	*str_first = ft_strtrim(*str_first, "\"");
-	*str_secd = ft_strtrim(*str_secd, "\"");
+	free(*str_first);
+	free(*str_secd);
+	*str_first = str_f;
+	*str_secd = str_s;
 }
 
 void		split_env_name_a_value(char **str_first, char **str_secd,
 char **p_bin, char *res)
 {
+
 	if (ft_strchr(res, '='))
 	{
 		*str_first = ft_strdup(p_bin[0]);

@@ -37,6 +37,13 @@ int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 	else
 	{	
 		res = ft_split(str, "\t\n\r\v\f ");
+		int i;
+		i = 0;
+		while (res[i])
+		{
+			printf("%s\n", res[i]);
+			i++;
+		}
 		parsed_res = parse_res(res, var_env, cmd);
 		num = redir_and_send(parsed_res, f, var_env, cmd, env);
 		restore_fds(f);
@@ -71,7 +78,6 @@ void finish_line(t_command *cmd, t_term *term,t_list *var_env)
 	ft_lstdel(var_env);
 	init_structs(cmd);
 	free(cmd->path);
-	free(cmd);
 }
 
 int main(int ac, char **av, char **env)
