@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multipipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/15 20:00:15 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/21 05:41:00 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int handle_multipipes(char **res, t_fd *f, t_list *var_env, t_command *cmd, char
 	int fd[2];
 	pid_t pid;
 	int fdd;
+	int *status;
 
 	i = count_pipes(res);
 	j = 0;
@@ -88,14 +89,11 @@ int handle_multipipes(char **res, t_fd *f, t_list *var_env, t_command *cmd, char
 				dup2(fd[1], 1);
 			close(fd[0]);
 			go_instruction(end_redir(middle_pipe(res, j), f), var_env, cmd, env);
-			exit(1);
+			exit(status);
 		}
-		else
-		{
-			// wait(NULL);
-			close(fd[1]);
-			fdd = fd[0];
-			j++;
-		}
+		waitpid(-1, &status, 0);
+		close(fd[1]);
+		fdd = fd[0];
+		j++;
 	}
 }
