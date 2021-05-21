@@ -41,7 +41,7 @@ SRCS =	./debug_to_delete.c\
 RENAME		= mv a.out minishell
 OBJ			= $(SRCS:.c=.o)
 NAME		= minishell
-FS		= a.out.dSYM minishell.dSYM valgrind_log
+FS			= a.out.dSYM minishell.dSYM valgrind_log
 CC			= gcc
 RM			= rm -f
 RM_DIR		= rm -rf

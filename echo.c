@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 22:13:10 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/16 15:41:00 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/20 19:29:05 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*echo_option(char *output, int option)
 	return (output);
 }
 
-char *get_echo_output(char *output, char **res, int i)
+char	*get_echo_output(char *output, char **res, int i)
 {
 	if (output == NULL)
 		output = ft_strdup(res[i]);
@@ -66,5 +66,4 @@ void	ft_echo(char **res, t_list *var_env)
 	output = echo_option(output, option);
 	ft_putstr_fd(output, 1);
 	free(output);
-	// free_tabtab(res);
 }

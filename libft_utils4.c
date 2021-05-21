@@ -66,7 +66,7 @@ int ft_is_empty_string(char *str)
 	return (1);
 }
 
-void	ft_putchar(char c)
+int	ft_putchar(int c)
 {
 	write(1, &c, 1);
 }

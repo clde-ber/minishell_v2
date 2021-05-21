@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/07 07:48:32 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/20 18:05:43 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	ft_pwd(char **res)
 	getcwd(path, 1000);
 	buf = ft_strjoin(path, "\n");
 	free(path);
-	// if (check_redir(res, i++, buf) == 0)
 	ft_putstr_fd(buf, 1);
 	free(buf);
 }
@@ -69,10 +68,15 @@ void	ft_cd(char **res, t_list *var_env)
 	char	*buf;
 	char	*buf2;
 
-	if (!res[1])
+	// if (!res[1])
+	// {
+	// 	write(1, "\n", 2);
+	// 	return ;
+	// }
+	if (res[2])
 	{
-		write(1, "\n", 2);
-		return ;
+		ft_putstr_fd("Too many arguments", 2);
+		return;
 	}
 	path = get_cwd();
 	buf2 = ft_strjoin(path, "\0");

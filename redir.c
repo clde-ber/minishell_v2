@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/17 15:17:26 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/20 19:38:38 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char **env)
 		dup2(pipe_fd[1], 1);
 		go_instruction(end_redir(one, f), var_env, cmd, env);
 		close(pipe_fd[1]);
-		return 1;
+		exit;
 	}
 	else
 	{
