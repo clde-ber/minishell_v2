@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/21 03:50:28 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/21 05:35:03 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,10 @@ char	*expander(char *res, t_list *var_env, char **args, t_command *cmd)
 	if (is_handled_cmd(args[0]) == 0 || ft_strcmp(args[0], "echo") == 0 ||
 			ft_strcmp(args[0], "pwd") == 0 || ft_strcmp(args[0], "cd") == 0)
 		return (non_handled_commands(res, var_env, cmd));
-	else if (ft_strcmp(args[0], "export") == 0 && ft_strcmp(res, "export") ||
-	ft_strcmp(args[0], "unset") == 0 && ft_strcmp(res, "unset"))
+	else if (((ft_strcmp(args[0], "export") == 0 && ft_strcmp(res, "export"))
+	|| (ft_strcmp(args[0], "unset") == 0 && ft_strcmp(args, "unset"))) &&
+	chrtabtab(args, "|") == -1 && chrtabtab(args, ">") == -1 && chrtabtab(args, "<")
+	== -1 && chrtabtab(args, ">>") == -1)
 	{
 		if (ft_strcmp(args[0], "export") == 0 && ft_strcmp(res, "export"))
 			return (handled_export(res, var_env, cmd));
