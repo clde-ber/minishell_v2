@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:26 by user42            #+#    #+#             */
-/*   Updated: 2021/05/05 15:47:14 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/21 06:07:17 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,12 @@ void	set_env(char **tabl, t_list *var_env, t_command *cmd)
 	{
 		if (ft_strchr(tabl[i], '='))
 		{
-			tmp_new = ft_lstnew(ft_get_name(tabl[i]),
+			if (is_valid_env_name(ft_get_name(tabl[i])))
+			{
+				tmp_new = ft_lstnew(ft_get_name(tabl[i]),
 ft_strdup(&ft_strchr(tabl[i], '=')[1]));
 			ft_lstadd_back(&var_env, tmp_new);
+			}
 		}
 		ft_lstiter(var_env, &ft_record, cmd);
 		tmp->prec = tmp;
