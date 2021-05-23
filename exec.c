@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/05/21 15:31:43 by clde-ber         ###   ########.fr       */
-=======
-/*   Updated: 2021/05/21 17:21:23 by budal-bi         ###   ########.fr       */
->>>>>>> 5fcbdda80c91194ab8c7e7561ad035540ddf03ae
+/*   Updated: 2021/05/23 09:13:10 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,18 +135,6 @@ int exec_command(char **args, char **res, char *path, int j)
     p_bin = parse_path(path, ':');
     env = environment(path);
 // Fork duplicates the process so the parent process doesn't return when the child process does.
-<<<<<<< HEAD
-    if ((pid = fork()) == 0)
-    {
-        if (test_shell_bin(tabl, p_bin, res, env))
-            exit(33151);
-        exit(status);
-    }
-    free_tabtab(tabl);
-    free_tabtab(p_bin);
-    waitpid(-1, &status, 0);
-    return (exit_status(status));
-=======
 	if ((pid = fork()) == 0)
 	{
 		if (test_shell_bin(tabl, p_bin, res, env))
@@ -160,7 +144,6 @@ int exec_command(char **args, char **res, char *path, int j)
 	free_tabtab(tabl);
 	waitpid(-1, &status, 0);
 	return (exit_status(status));
->>>>>>> 5fcbdda80c91194ab8c7e7561ad035540ddf03ae
 // waitpid waits for the program to be finished. 
 }
 
