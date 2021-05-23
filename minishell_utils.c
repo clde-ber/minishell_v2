@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/20 18:57:35 by budal-bi          #+#    #+#             */
+/*   Updated: 2021/05/20 18:57:37 by budal-bi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*
 **Useful functions created for minishell
 **check word and search word detect keywords in commands

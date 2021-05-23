@@ -6,7 +6,11 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2021/05/20 19:38:38 by budal-bi         ###   ########.fr       */
+=======
 /*   Updated: 2021/05/21 05:41:33 by clde-ber         ###   ########.fr       */
+>>>>>>> e9887c9058b68b0a2935e4204b2877a7f02d2c92
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +123,18 @@ int go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char **env)
 		dup2(pipe_fd[1], 1);
 		go_instruction(end_redir(one, f), var_env, cmd, env);
 		close(pipe_fd[1]);
+<<<<<<< HEAD
+		exit;
+	}
+	else
+	{
+		close(pipe_fd[1]);
+		dup2(pipe_fd[0], 0);
+		go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);
+		close(pipe_fd[0]);
+=======
 		exit(status);
+>>>>>>> e9887c9058b68b0a2935e4204b2877a7f02d2c92
 	}
 	waitpid(-1, &status, 0);
 	close(pipe_fd[1]);

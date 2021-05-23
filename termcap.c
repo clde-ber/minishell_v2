@@ -6,17 +6,17 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 15:13:21 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/19 16:54:01 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/20 19:26:57 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char  **save_input(char *str, char **save)
+char	**save_input(char *str, char **save)
 {
-	int i;
-	char **buf;
-	int j;
+	int		i;
+	char	**buf;
+	int		j;
 
 	j = 0;
 	if (save == NULL)
@@ -50,14 +50,14 @@ void	restore_term(t_term *term)
 
 void	get_cursor_pos(t_term *term, char **res)
 {
-	char *temp;
-	int i;
-	
+	char	*temp;
+	int		i;
+
 	i = 0;
 	if ((int)res[0][0] != 27 || res[0][1] != '[')
 	{
 		free_tabtab(res);
-		return;
+		return ;
 	}
 	temp = ft_strdup(&res[0][2]);
 	term->y = ft_atoi(temp);
@@ -67,12 +67,12 @@ void	get_cursor_pos(t_term *term, char **res)
 	free_tabtab(res);
 }
 
-void get_cursor_space(t_term *term)
+void	get_cursor_space(t_term *term)
 {
-	int i;
-	char buf[2];
-	char *check;
-	char *buf1;
+	int		i;
+	char	buf[2];
+	char	*check;
+	char	*buf1;
 
 	i = 0;
 	check = NULL;
@@ -90,7 +90,7 @@ void get_cursor_space(t_term *term)
 		}
 	}
 	if (ft_strlen(check) < 2)
-		return;
+		return ;
 	get_cursor_pos(term, ft_split(check, ";"));
 	free(check);
 }
@@ -111,5 +111,4 @@ void	init_term(t_term *term)
 	else
 		term->len = 0;
 	term->mtline = 0;
-	// term->last = NULL;
 }

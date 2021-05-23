@@ -260,6 +260,14 @@ void	not_arrow(int i, char c, t_term *term);
 char	*handle_arrow(t_term *term, char *end);
 
 /*
+**multipipe
+*/
+int	get_k(int k, char **res, int i, int j);
+char **middle_pipe(char **res, int i);
+void print_tabtab(char **res);
+int handle_multipipes(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env);
+
+/*
 **parse_path
 */
 char	**parse_path(char *s, char c);
@@ -291,7 +299,8 @@ void	free_tabtab(char **res);
 /*
 **minishell_utils3
 */
-int is_symbol(char c, char comp);
+int		is_symbol(char c, char comp);
+int		count_pipes(char **res);
 
 /*
 **gnl
@@ -336,7 +345,7 @@ int		ft_strlcpy(char *dst, const char *src, int dstsize);
 int		ft_isalnum(int c);
 char	*ft_strjoin_free(char *s1, char *s2);
 int		ft_is_empty_string(char *str);
-void	ft_putchar(char c);
+int	ft_putchar(int c);
 
 /*
 **libft_utils5
