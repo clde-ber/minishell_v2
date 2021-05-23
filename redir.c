@@ -3,38 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/05/20 19:38:38 by budal-bi         ###   ########.fr       */
-=======
-/*   Updated: 2021/05/21 05:41:33 by clde-ber         ###   ########.fr       */
->>>>>>> e9887c9058b68b0a2935e4204b2877a7f02d2c92
+/*   Updated: 2021/05/22 17:22:02 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int chrtabtab(char **res, char *str)
+char	**divide_pipe(char **res, t_fd *f)
 {
-	int i;
-
-	i = 0;
-	while (res[i])
-	{
-		if (ft_strcmp(res[i], str) == 0)
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-char **divide_pipe(char **res, t_fd *f)
-{
-	int m;
-	int i;
-	char **tabl;
+	int		m;
+	int		i;
+	char	**tabl;
 
 	i = 0;
 	m = count_tabs(res) - chrtabtab(res, "|");
@@ -58,7 +40,7 @@ char **divide_pipe(char **res, t_fd *f)
 	return (tabl);
 }
 
-int go_e(char **tabl, t_list *var_env, t_command *cmd)
+int		go_e(char **tabl, t_list *var_env, t_command *cmd)
 {
 	if (ft_strcmp(tabl[0], "echo") == 0)
 		ft_echo(tabl, var_env);
@@ -75,9 +57,9 @@ int go_e(char **tabl, t_list *var_env, t_command *cmd)
 		set_args(tabl, cmd->path, cmd);
 }
 
-int go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
+int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 {
-	int sig;
+	int		sig;
 
 	sig = 0;
 	if (tabl == NULL)
@@ -108,7 +90,8 @@ int go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	return (0);
 }
 
-int go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char **env)
+int		go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char
+**env)
 {
 	pid_t	pid;
 	int		pipe_fd[2];
@@ -123,29 +106,21 @@ int go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char **env)
 		dup2(pipe_fd[1], 1);
 		go_instruction(end_redir(one, f), var_env, cmd, env);
 		close(pipe_fd[1]);
-<<<<<<< HEAD
-		exit;
-	}
-	else
-	{
-		close(pipe_fd[1]);
-		dup2(pipe_fd[0], 0);
-		go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);
-		close(pipe_fd[0]);
-=======
 		exit(status);
->>>>>>> e9887c9058b68b0a2935e4204b2877a7f02d2c92
 	}
 	waitpid(-1, &status, 0);
 	close(pipe_fd[1]);
 	dup2(pipe_fd[0], 0);
 	go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);
 	close(pipe_fd[0]);
+	free_tabtab(one);
 }
 
-int redir_and_send(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env)
+int		redir_and_send(char **res, t_fd *f, t_list *var_env, t_command *cmd,
+char **env)
 {
-	if (chrtabtab(res, "|") == -1 && chrtabtab(res, ">") == -1 && chrtabtab(res, "<") == -1 && chrtabtab(res, ">>") == -1)
+	if (chrtabtab(res, "|") == -1 && chrtabtab(res, ">") == -1 && chrtabtab(res,
+	"<") == -1 && chrtabtab(res, ">>") == -1)
 		return (go_instruction(copy_tabtab(res), var_env, cmd, env));
 	else if (chrtabtab(res, "|") == -1)
 		return (go_instruction(end_redir(res, f), var_env, cmd, env));

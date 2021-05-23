@@ -1,342 +1,11 @@
-
-
-
-
-
-Norme: ./redir.c
-Error: global scope bad aligned
-Error: file must end with a single empty line
-Error: 6 functions in the file
-Error (line 15): Space before function name
-Error (line 29): Space before function name
-Error (line 29): declarations in divide_pipe are bad aligned
-Error (line 38, col 9): missing parentheses in return statement
-Error (line 57): Space before function name
-Error (line 74): Space before function name
-Error (line 74): function go_instruction has 29 lines
-Error (line 107): Space before function name
-Error (line 107): go_pipe have 5 parameters
-Error (line 114, col 9): missing parentheses in return statement
-Error (line 121, col 9): missing parentheses in return statement
-Error (line 132): Space before function name
-Error (line 132): line has 85 characters
-Error (line 132): redir_and_send have 5 parameters
-Error (line 134): line has 123 characters
-Error (line 147, col 0): no newline after block
-
-Norme: ./termcap_arrow.c
-Error: global scope bad aligned
-Error: 7 functions in the file
-Error (line 15): Space before function name
-Error (line 15): declarations in replace_tabtab are bad aligned
-Error (line 50): line has 86 characters
-Error (line 53): Space before function name
-Error (line 58): line has 90 characters
-Error (line 63): line has 85 characters
-Error (line 65): line has 102 characters
-Error (line 72): Space before function name
-Error (line 86): line has 106 characters
-Error (line 93): Space before function name
-Error (line 98): line has 90 characters
-Error (line 114): Space before function name
-Error (line 129): C++ comment
-Error (line 129): line has 84 characters
-Error (line 130): C++ comment
-Error (line 131): C++ comment
-Error (line 132): C++ comment
-Error (line 134): C++ comment
-Error (line 136): Space before function name
-Error (line 136): declarations must be followed by one empty line in handle_arrow
-Error (line 139): spaces at the end of line
-
+Norme: ./echo.c
 Norme: ./env.c
-Error (line 126): C++ comment
-Norme: ./libft_utils3.c
-Error: 42 header not at top of the file
-Norme: ./prep_line.c
-Error: file must end with a single empty line
-Error (line 15): multiple empty lines
-Error (line 16): Space before function name
-Error (line 16): bad spacing before end_line
-Error (line 21): line has 85 characters
-Error (line 24): C++ comment
-Error (line 25): C++ comment
-Error (line 29): Space before function name
-Error (line 48): Space before function name
-Error (line 48): function go_line has 26 lines
-Error (line 78): Space before function name
-Error (line 78): declarations in getcommand are bad aligned
-Error (line 103, col 0): no newline after block
-
-
-Norme: ./minishell.h
-Error: 42 header not at top of the file
-Error: global scope bad aligned
-Error: file must end with a single empty line
-Error (line 2): wrong number of spaces in preprocessor indentation
-Error (line 4): wrong number of spaces in preprocessor indentation
-Error (line 5): wrong number of spaces in preprocessor indentation
-Error (line 6): wrong number of spaces in preprocessor indentation
-Error (line 7): wrong number of spaces in preprocessor indentation
-Error (line 8): wrong number of spaces in preprocessor indentation
-Error (line 9): wrong number of spaces in preprocessor indentation
-Error (line 10): wrong number of spaces in preprocessor indentation
-Error (line 11): wrong number of spaces in preprocessor indentation
-Error (line 12): wrong number of spaces in preprocessor indentation
-Error (line 13): wrong number of spaces in preprocessor indentation
-Error (line 14): wrong number of spaces in preprocessor indentation
-Error (line 15): wrong number of spaces in preprocessor indentation
-Error (line 16): wrong number of spaces in preprocessor indentation
-Error (line 18): wrong number of spaces in preprocessor indentation
-Error (line 20): Struct s_list bad aligned
-Error (line 24): struct and s_list not separated by a single space.
-Error (line 25): struct and s_list not separated by a single space.
-Error (line 28): Struct s_fd bad aligned
-Error (line 39): Struct s_term bad aligned
-Error (line 41): struct and termios not separated by a single space.
-Error (line 42): struct and termios not separated by a single space.
-Error (line 53): s_command and t_command not aligned.
-Error (line 53): must have only tabulations between struct and s_command.
-Error (line 60): C++ comment
-Error (line 61): C++ comment
-Error (line 132): line has 89 characters
-Error (line 187, col 4): bad spacing
-Error (line 189, col 4): bad spacing
-Error (line 199, col 4): bad spacing
-Error (line 215): line has 82 characters
-Error (line 216): line has 83 characters
-Error (line 217): line has 90 characters
-Error (line 268): line has 89 characters
-Error (line 370, col 11): global named sig is not well prefixed
-Norme: ./libft_utils2.c
-Error: 42 header not at top of the file
-Norme: ./libft_utils5.c
-Error: 42 header not at top of the file
-Error: file must end with a single empty line
-Error (line 36, col 0): no newline after block
-Norme: ./expander_utils.c
-Norme: ./path.c
-Error (line 65): function ft_cd has 26 lines
-Error (line 71): C++ comment
-Error (line 72): C++ comment
-Error (line 73): C++ comment
-Error (line 74): C++ comment
-Error (line 75): C++ comment
-Error (line 79, col 2): missing space after return
-Norme: ./libft_utils4.c
-Error: 42 header not at top of the file
-Error: global scope bad aligned
-Error (line 55): Space before function name
-
-
-Norme: ./launch_exe.c
-Norme: ./sig_a_errors.c
-Error (line 17): C++ comment
-Error (line 21): C++ comment
-Error (line 22): C++ comment
-Error (line 23): C++ comment
-Error (line 28): C++ comment
-Error (line 34): C++ comment
-Norme: ./debug_to_delete.c
-Error: 42 header not at top of the file
-Error: global scope bad aligned
-Error: file must end with a single empty line
-Error (line 76): declarations in ft_putstr_nbr are bad aligned
-Error (line 78): 2 instructions
-Error (line 78, col 6): bad character after ;
-Error (line 89, col 0): no newline after block
-Norme: ./launch_exe_utils.c
-Norme: ./test.c
-Error: 42 header not at top of the file
-Error: global scope bad aligned
-Error: file must end with a single empty line
-Error (line 11): C++ comment
-Error (line 12): C++ comment
-Error (line 13): C++ comment
-Error (line 14): C++ comment
-Error (line 15): C++ comment
-Error (line 17): C++ comment
-Error (line 18): C++ comment
-Error (line 19): C++ comment
-Error (line 19): spaces at the end of line
-Error (line 21): Space before function name
-Error (line 23): must begin only by tabulations
-Error (line 23): bad indentation
-Error (line 26): Space before function name
-Error (line 26): function main has 50 lines
-Error (line 26): declarations in main are bad aligned
-Error (line 26): declarations in main must be at the top of the function
-Error (line 26, col 0): main has 8 variables
-Error (line 28): must begin only by tabulations
-Error (line 28): bad indentation
-Error (line 29): must begin only by tabulations
-Error (line 29): bad indentation
-Error (line 30): must begin only by tabulations
-Error (line 30): bad indentation
-Error (line 31): must begin only by tabulations
-Error (line 31): bad indentation
-Error (line 31, col 10): term_type is instanciated during declaration
-Error (line 32): must begin only by tabulations
-Error (line 32): bad indentation
-Error (line 33): must begin only by tabulations
-Error (line 33): bad indentation
-Error (line 35): must begin only by tabulations
-Error (line 35): bad indentation
-Error (line 44): C++ comment
-Error (line 45): C++ comment
-Error (line 47): spaces at the end of line
-Error (line 47): must begin only by tabulations
-Error (line 47): bad indentation
-Error (line 48): must begin only by tabulations
-Error (line 48): bad indentation
-Error (line 55): C++ comment
-Error (line 55): must begin only by tabulations
-Error (line 55): bad indentation
-Error (line 60): C++ comment
-Error (line 61): must begin only by tabulations
-Error (line 61): bad indentation
-Error (line 80): C++ comment
-Error (line 82): C++ comment
-Error (line 83): C++ comment
-Error (line 84): C++ comment
-Error (line 84): line has 176 characters
-Error (line 85): C++ comment
-Error (line 86): C++ comment
-Error (line 87): C++ comment
-Error (line 88): C++ comment
-Error (line 89): C++ comment
-Error (line 90): C++ comment
-Error (line 91): C++ comment
-Error (line 92): C++ comment
-Error (line 93): C++ comment
-Error (line 94): C++ comment
-Error (line 95): C++ comment
-Error (line 96): C++ comment
-Error (line 97): C++ comment
-Error (line 98): C++ comment
-Error (line 99): C++ comment
-Error (line 100): C++ comment
-Error (line 101): C++ comment
-Error (line 102): C++ comment
-Error (line 103): C++ comment
-Error (line 104): C++ comment
-Error (line 105): C++ comment
-Error (line 106): C++ comment
-Error (line 107): C++ comment
-Error (line 108): C++ comment
-Error (line 109): C++ comment
-Error (line 110): C++ comment
-Error (line 111): C++ comment
-Error (line 113): C++ comment
-Error (line 114): C++ comment
-Error (line 115): spaces at the end of line
-Error (line 115): must begin only by tabulations
-Error (line 116): C++ comment
-Error (line 118): multiple empty lines
-Error (line 119): C++ comment
-Error (line 121): C++ comment
-Error (line 122): C++ comment
-Error (line 123): C++ comment
-Error (line 125): C++ comment
-Error (line 126): C++ comment
-Norme: ./gnl.c
-Error: file must end with a single empty line
-Error (line 14): line has 137 characters
-Error (line 58): function get_next_line has 30 lines
-Error (line 90, col 0): no newline after block
-Norme: ./libft_utils.c
-Error: 42 header not at top of the file
-Norme: ./multipipe.c
-Error: global scope bad aligned
-Error (line 28): Space before function name
-Error (line 28): declarations in middle_pipe are bad aligned
-Error (line 55): Space before function name
-Error (line 67): Space before function name
-Error (line 67): function handle_multipipes has 32 lines
-Error (line 67): declarations in handle_multipipes are bad aligned
-Error (line 67): line has 88 characters
-Error (line 67): handle_multipipes have 5 parameters
-Error (line 90): line has 82 characters
-Error (line 95): C++ comment
-Error (line 95): bad indentation
-Norme: ./start_a_parse_bulle.c
-Warning: /home/budal-bi/Workspace/C/minishell_v2/start_a_parse_bulle.c may not compile or is invalid for some reasons.
-Norme: ./testtest.c
-Error: 42 header not at top of the file
-Error: global scope bad aligned
-Error: file must end with a single empty line
-Error (line 9): preprocessor block must be followed by one empty line
-Error (line 10): declaration of ft_strlen forbidden in .c
-Error (line 11): declaration of ft_strjoin forbidden in .c
-Error (line 12): declaration of ft_strcmp forbidden in .c
-Error (line 13): declaration of ft_strchr forbidden in .c
-Error (line 14): declaration of ft_strdup forbidden in .c
-Error (line 15): declaration of ft_putstr_fd forbidden in .c
-Error (line 17): multiple empty lines
-Error (line 18): multiple empty lines
-Error (line 19): Space before function name
-Error (line 19): function main has 26 lines
-Error (line 19): declarations in main are bad aligned
-Error (line 19): bad spacing before main
-Error (line 21): must begin only by tabulations
-Error (line 21): bad indentation
-Error (line 22): must begin only by tabulations
-Error (line 22): bad indentation
-Error (line 23): must begin only by tabulations
-Error (line 23): bad indentation
-Error (line 24): must begin only by tabulations
-Error (line 24): bad indentation
-Error (line 26): must begin only by tabulations
-Error (line 26): bad indentation
-Error (line 27): must begin only by tabulations
-Error (line 27): bad indentation
-Error (line 28): must begin only by tabulations
-Error (line 28): bad indentation
-Error (line 29): must begin only by tabulations
-Error (line 29): bad indentation
-Error (line 30): must begin only by tabulations
-Error (line 30): bad indentation
-Error (line 31): must begin only by tabulations
-Error (line 31): bad indentation
-Error (line 32): must begin only by tabulations
-Error (line 32): bad indentation
-Error (line 33): must begin only by tabulations
-Error (line 33): bad indentation
-Error (line 34): must begin only by tabulations
-Error (line 34): bad indentation
-Error (line 35): must begin only by tabulations
-Error (line 35): bad indentation
-Error (line 36): must begin only by tabulations
-Error (line 36): bad indentation
-Error (line 37): must begin only by tabulations
-Error (line 37): bad indentation
-Error (line 38): must begin only by tabulations
-Error (line 38): bad indentation
-Error (line 39): must begin only by tabulations
-Error (line 39): bad indentation
-Error (line 40): must begin only by tabulations
-Error (line 40): bad indentation
-Error (line 41): must begin only by tabulations
-Error (line 41): bad indentation
-Error (line 42): must begin only by tabulations
-Error (line 42): bad indentation
-Error (line 43): must begin only by tabulations
-Error (line 43): bad indentation
-Error (line 44): must begin only by tabulations
-Error (line 44): bad indentation
-Error (line 45): must begin only by tabulations
-Error (line 45): bad indentation
-Error (line 46): must begin only by tabulations
-Error (line 46): bad indentation
-Error (line 47, col 0): no newline after block
-Norme: ./parse_path.c
-Norme: ./gnl_utils.c
-Error: file must end with a single empty line
-Error (line 48, col 0): no newline after block
-Norme: ./ft_split.c
-Norme: ./libft_list.c
-Norme: ./minishell_utils.c
-
+Error (line 57): function set_env has 27 lines
+Error (line 79): bad indentation
+Error (line 129): C++ comment
+Norme: ./env_utils2.c
+Norme: ./env_utils3.c
+Norme: ./env_utils.c
 Norme: ./exec.c
 Error: global scope bad aligned
 Error: 9 functions in the file
@@ -347,113 +16,23 @@ Error (line 18): line has 148 characters
 Error (line 19): line has 85 characters
 Error (line 22): Space before function name
 Error (line 22): declarations in arguments are bad aligned
-Error (line 24): must begin only by tabulations
-Error (line 24): bad indentation
-Error (line 25): must begin only by tabulations
-Error (line 25): bad indentation
-Error (line 26): must begin only by tabulations
-Error (line 26): bad indentation
-Error (line 27): must begin only by tabulations
-Error (line 27): bad indentation
-Error (line 28): must begin only by tabulations
-Error (line 28): bad indentation
-Error (line 30): must begin only by tabulations
-Error (line 30): bad indentation
-Error (line 31): must begin only by tabulations
-Error (line 31): bad indentation
-Error (line 32): must begin only by tabulations
-Error (line 32): bad indentation
-Error (line 33): must begin only by tabulations
-Error (line 33): bad indentation
-Error (line 34): must begin only by tabulations
-Error (line 34): bad indentation
-Error (line 35): must begin only by tabulations
-Error (line 35): bad indentation
-Error (line 36): must begin only by tabulations
-Error (line 36): bad indentation
-Error (line 37): must begin only by tabulations
-Error (line 37): bad indentation
-Error (line 38): must begin only by tabulations
-Error (line 38): bad indentation
-Error (line 39): must begin only by tabulations
-Error (line 39): bad indentation
-Error (line 40): must begin only by tabulations
-Error (line 40): bad indentation
-Error (line 41): must begin only by tabulations
-Error (line 41): bad indentation
-Error (line 42): must begin only by tabulations
-Error (line 42): bad indentation
-Error (line 43): must begin only by tabulations
-Error (line 43): bad indentation
-Error (line 44): must begin only by tabulations
-Error (line 44): bad indentation
-Error (line 45): must begin only by tabulations
-Error (line 45): bad indentation
-Error (line 46): must begin only by tabulations
-Error (line 46): bad indentation
-Error (line 47): must begin only by tabulations
-Error (line 47): bad indentation
-Error (line 48): must begin only by tabulations
-Error (line 48): bad indentation
 Error (line 51): Space before function name
-Error (line 53): must begin only by tabulations
-Error (line 53): bad indentation
-Error (line 55): must begin only by tabulations
-Error (line 55): bad indentation
-Error (line 56): must begin only by tabulations
-Error (line 56): bad indentation
-Error (line 57): must begin only by tabulations
-Error (line 57): bad indentation
-Error (line 58): must begin only by tabulations
-Error (line 58): bad indentation
-Error (line 59): must begin only by tabulations
-Error (line 59): bad indentation
-Error (line 60): must begin only by tabulations
-Error (line 60): bad indentation
 Error (line 63): Space before function name
 Error (line 63): Space before function name
 Error (line 63): Space before function name
 Error (line 63): Space before function name
 Error (line 63, col 3): bad spacing
-Error (line 65): must begin only by tabulations
-Error (line 65): bad indentation
-Error (line 66): must begin only by tabulations
-Error (line 66): bad indentation
-Error (line 67): must begin only by tabulations
-Error (line 67): bad indentation
-Error (line 68): must begin only by tabulations
-Error (line 68): bad indentation
-Error (line 69): must begin only by tabulations
-Error (line 69): bad indentation
 Error (line 72): Space before function name
 Error (line 72): Space before function name
 Error (line 72): Space before function name
 Error (line 72): Space before function name
 Error (line 72, col 3): bad spacing
-Error (line 74): must begin only by tabulations
-Error (line 74): bad indentation
-Error (line 75): must begin only by tabulations
-Error (line 75): bad indentation
-Error (line 76): must begin only by tabulations
-Error (line 76): bad indentation
-Error (line 77): must begin only by tabulations
-Error (line 77): bad indentation
 Error (line 80): Space before function name
-Error (line 82): must begin only by tabulations
-Error (line 82): bad indentation
 Error (line 85): Space before function name
 Error (line 85): Space before function name
 Error (line 85): Space before function name
 Error (line 85): Space before function name
 Error (line 85, col 4): bad spacing
-Error (line 87): must begin only by tabulations
-Error (line 87): bad indentation
-Error (line 88): must begin only by tabulations
-Error (line 88): bad indentation
-Error (line 89): must begin only by tabulations
-Error (line 89): bad indentation
-Error (line 90): must begin only by tabulations
-Error (line 90): bad indentation
 Error (line 93): Space before function name
 Error (line 93): Space before function name
 Error (line 93): Space before function name
@@ -461,56 +40,6 @@ Error (line 93): Space before function name
 Error (line 93): function test_shell_bin has 26 lines
 Error (line 93): declarations in test_shell_bin are bad aligned
 Error (line 93, col 3): bad spacing
-Error (line 95): must begin only by tabulations
-Error (line 95): bad indentation
-Error (line 96): must begin only by tabulations
-Error (line 96): bad indentation
-Error (line 97): must begin only by tabulations
-Error (line 97): bad indentation
-Error (line 98): must begin only by tabulations
-Error (line 98): bad indentation
-Error (line 99): must begin only by tabulations
-Error (line 99): bad indentation
-Error (line 101): must begin only by tabulations
-Error (line 101): bad indentation
-Error (line 102): must begin only by tabulations
-Error (line 102): bad indentation
-Error (line 103): must begin only by tabulations
-Error (line 103): bad indentation
-Error (line 104): must begin only by tabulations
-Error (line 104): bad indentation
-Error (line 105): must begin only by tabulations
-Error (line 105): bad indentation
-Error (line 106): must begin only by tabulations
-Error (line 106): bad indentation
-Error (line 107): must begin only by tabulations
-Error (line 107): bad indentation
-Error (line 108): must begin only by tabulations
-Error (line 108): bad indentation
-Error (line 109): must begin only by tabulations
-Error (line 109): bad indentation
-Error (line 110): must begin only by tabulations
-Error (line 110): bad indentation
-Error (line 111): must begin only by tabulations
-Error (line 111): bad indentation
-Error (line 112): must begin only by tabulations
-Error (line 112): bad indentation
-Error (line 113): must begin only by tabulations
-Error (line 113): bad indentation
-Error (line 114): must begin only by tabulations
-Error (line 114): bad indentation
-Error (line 115): must begin only by tabulations
-Error (line 115): bad indentation
-Error (line 116): must begin only by tabulations
-Error (line 116): bad indentation
-Error (line 117): must begin only by tabulations
-Error (line 117): bad indentation
-Error (line 118): must begin only by tabulations
-Error (line 118): bad indentation
-Error (line 119): must begin only by tabulations
-Error (line 119): bad indentation
-Error (line 120): must begin only by tabulations
-Error (line 120): bad indentation
 Error (line 123): Space before function name
 Error (line 123): declarations in exec_command are bad aligned
 Error (line 125): must begin only by tabulations
@@ -531,203 +60,205 @@ Error (line 133): must begin only by tabulations
 Error (line 133): bad indentation
 Error (line 134): must begin only by tabulations
 Error (line 134): bad indentation
-Error (line 135): 2 instructions
 Error (line 135): must begin only by tabulations
 Error (line 135): bad indentation
-Error (line 135, col 33): bad character after ;
 Error (line 136): must begin only by tabulations
 Error (line 136): bad indentation
 Error (line 137): C++ comment
 Error (line 137): line has 97 characters
-Error (line 138): must begin only by tabulations
-Error (line 138): bad indentation
-Error (line 139): must begin only by tabulations
-Error (line 139): bad indentation
-Error (line 140): must begin only by tabulations
-Error (line 140): bad indentation
-Error (line 141): must begin only by tabulations
-Error (line 141): bad indentation
-Error (line 142): must begin only by tabulations
-Error (line 142): bad indentation
-Error (line 143): must begin only by tabulations
-Error (line 143): bad indentation
-Error (line 144): must begin only by tabulations
-Error (line 144): bad indentation
-Error (line 145): must begin only by tabulations
-Error (line 145): bad indentation
-Error (line 146): must begin only by tabulations
-Error (line 146): bad indentation
 Error (line 147): C++ comment
 Error (line 147): spaces at the end of line
 Error (line 148, col 0): no empty line before block
 Error (line 150): Space before function name
-Error (line 150): function set_args has 63 lines
+Error (line 150): function set_args has 64 lines
 Error (line 150): declarations in set_args are bad aligned
 Error (line 150, col 0): set_args has 6 variables
-Error (line 152): must begin only by tabulations
-Error (line 152): bad indentation
-Error (line 153): must begin only by tabulations
-Error (line 153): bad indentation
-Error (line 154): must begin only by tabulations
-Error (line 154): bad indentation
-Error (line 155): must begin only by tabulations
-Error (line 155): bad indentation
-Error (line 156): must begin only by tabulations
-Error (line 156): bad indentation
-Error (line 157): must begin only by tabulations
-Error (line 157): bad indentation
-Error (line 159): must begin only by tabulations
-Error (line 159): bad indentation
-Error (line 160): must begin only by tabulations
-Error (line 160): bad indentation
-Error (line 161): must begin only by tabulations
-Error (line 161): bad indentation
-Error (line 162): must begin only by tabulations
-Error (line 162): bad indentation
-Error (line 163): must begin only by tabulations
-Error (line 163): bad indentation
 Error (line 164): C++ comment
-Error (line 164): must begin only by tabulations
-Error (line 164): bad indentation
 Error (line 165): C++ comment
-Error (line 165): must begin only by tabulations
-Error (line 165): bad indentation
 Error (line 166): C++ comment
-Error (line 166): must begin only by tabulations
-Error (line 166): bad indentation
 Error (line 167): C++ comment
-Error (line 167): must begin only by tabulations
-Error (line 167): bad indentation
 Error (line 168): C++ comment
-Error (line 168): must begin only by tabulations
-Error (line 168): bad indentation
 Error (line 169): C++ comment
-Error (line 169): must begin only by tabulations
-Error (line 169): bad indentation
 Error (line 170): C++ comment
-Error (line 170): must begin only by tabulations
-Error (line 170): bad indentation
 Error (line 171): C++ comment
-Error (line 171): must begin only by tabulations
-Error (line 171): bad indentation
 Error (line 172): C++ comment
-Error (line 172): must begin only by tabulations
-Error (line 172): bad indentation
 Error (line 173): C++ comment
-Error (line 173): must begin only by tabulations
-Error (line 173): bad indentation
 Error (line 174): C++ comment
-Error (line 174): must begin only by tabulations
-Error (line 174): bad indentation
 Error (line 175): C++ comment
-Error (line 175): must begin only by tabulations
-Error (line 175): bad indentation
 Error (line 176): C++ comment
-Error (line 176): must begin only by tabulations
-Error (line 176): bad indentation
 Error (line 177): C++ comment
-Error (line 177): must begin only by tabulations
-Error (line 177): bad indentation
 Error (line 178): C++ comment
-Error (line 178): must begin only by tabulations
-Error (line 178): bad indentation
 Error (line 179): C++ comment
-Error (line 179): must begin only by tabulations
-Error (line 179): bad indentation
 Error (line 180): C++ comment
-Error (line 180): must begin only by tabulations
-Error (line 180): bad indentation
 Error (line 181): C++ comment
-Error (line 181): must begin only by tabulations
-Error (line 181): bad indentation
 Error (line 182): C++ comment
-Error (line 182): must begin only by tabulations
-Error (line 182): bad indentation
 Error (line 183): C++ comment
 Error (line 183): line has 84 characters
-Error (line 183): must begin only by tabulations
-Error (line 183): bad indentation
 Error (line 184): C++ comment
-Error (line 184): must begin only by tabulations
-Error (line 184): bad indentation
 Error (line 185): C++ comment
-Error (line 185): must begin only by tabulations
-Error (line 185): bad indentation
 Error (line 186): C++ comment
-Error (line 186): must begin only by tabulations
-Error (line 186): bad indentation
 Error (line 187): C++ comment
-Error (line 187): must begin only by tabulations
-Error (line 187): bad indentation
 Error (line 188): C++ comment
-Error (line 188): must begin only by tabulations
-Error (line 188): bad indentation
 Error (line 189): C++ comment
-Error (line 189): must begin only by tabulations
-Error (line 189): bad indentation
-Error (line 190): must begin only by tabulations
-Error (line 190): bad indentation
-Error (line 191): must begin only by tabulations
-Error (line 191): bad indentation
-Error (line 192): must begin only by tabulations
-Error (line 192): bad indentation
-Error (line 193): must begin only by tabulations
-Error (line 193): bad indentation
-Error (line 194): must begin only by tabulations
-Error (line 194): bad indentation
-Error (line 195): must begin only by tabulations
-Error (line 195): bad indentation
-Error (line 196): must begin only by tabulations
-Error (line 196): bad indentation
-Error (line 197): must begin only by tabulations
-Error (line 197): bad indentation
-Error (line 198): must begin only by tabulations
-Error (line 198): bad indentation
-Error (line 199): must begin only by tabulations
-Error (line 199): bad indentation
-Error (line 200): must begin only by tabulations
-Error (line 200): bad indentation
-Error (line 201): must begin only by tabulations
-Error (line 201): bad indentation
-Error (line 202): must begin only by tabulations
-Error (line 202): bad indentation
-Error (line 203): must begin only by tabulations
-Error (line 203): bad indentation
-Error (line 204): must begin only by tabulations
-Error (line 204): bad indentation
-Error (line 205): must begin only by tabulations
-Error (line 205): bad indentation
-Error (line 206): must begin only by tabulations
-Error (line 206): bad indentation
-Error (line 207): must begin only by tabulations
-Error (line 207): bad indentation
 Error (line 208): 2 assignations
-Error (line 208): must begin only by tabulations
-Error (line 208): bad indentation
-Error (line 209): must begin only by tabulations
-Error (line 209): bad indentation
-Error (line 210): must begin only by tabulations
-Error (line 210): bad indentation
-Error (line 211): must begin only by tabulations
-Error (line 211): bad indentation
-Error (line 212): must begin only by tabulations
-Error (line 212): bad indentation
-Error (line 213): must begin only by tabulations
-Error (line 213): bad indentation
-Error (line 214): must begin only by tabulations
-Error (line 214): bad indentation
-Norme: ./expander_utils4.c
-Norme: ./minishell_utils2.c
-Norme: ./env_utils3.c
-Norme: ./libft_list2.c
+Error (line 214): C++ comment
 Norme: ./expander.c
-Norme: ./expander_utils5.c
-Norme: ./env_utils2.c
-Norme: ./expander_utils3.c
-Norme: ./path_utils.c
+Error (line 23): function handled_unset has 29 lines
+Error (line 38): line has 85 characters
+Error (line 71): line has 85 characters
+Error (line 82): function parse_res has 26 lines
 Norme: ./expander_utils2.c
+Norme: ./expander_utils3.c
+Norme: ./expander_utils4.c
+Error (line 91): Empty line
+Norme: ./expander_utils5.c
+Norme: ./expander_utils.c
+Error (line 109): function handled_export has 27 lines
+Norme: ./ft_split.c
+Norme: ./gnl.c
+Error: file must end with a single empty line
+Error (line 14): line has 137 characters
+Error (line 58): function get_next_line has 30 lines
+Error (line 90, col 0): no newline after block
+Norme: ./gnl_utils.c
+Error: file must end with a single empty line
+Error (line 48, col 0): no newline after block
+Norme: ./launch_exe.c
+Norme: ./launch_exe_utils.c
+Norme: ./libft_list2.c
+Norme: ./libft_list.c
+Norme: ./libft_utils2.c
+Norme: ./libft_utils3.c
+Norme: ./libft_utils4.c
+Error: global scope bad aligned
+Error (line 67): Space before function name
+Norme: ./libft_utils5.c
+Error: file must end with a single empty line
+Error (line 48, col 0): no newline after block
+Norme: ./libft_utils.c
+Error: 42 header not at top of the file
+Norme: ./minishell_utils2.c
 Norme: ./minishell_utils3.c
-Norme: ./env_utils.c
+Error: file must end with a single empty line
+Error (line 91, col 0): no newline after block
+Norme: ./minishell_utils.c
+Norme: ./multipipe.c
+Error: global scope bad aligned
+Error (line 28): Space before function name
+Error (line 28): declarations in middle_pipe are bad aligned
+Error (line 55): Space before function name
+Error (line 67): Space before function name
+Error (line 67): function handle_multipipes has 30 lines
+Error (line 67): declarations in handle_multipipes are bad aligned
+Error (line 67): line has 88 characters
+Error (line 67): handle_multipipes have 5 parameters
+Error (line 67, col 0): handle_multipipes has 6 variables
+Error (line 91): line has 82 characters
+Norme: ./notes.c
+Error: 42 header not at top of the file
+Error: file must end with a single empty line
+Error (line 1): C++ comment
+Error (line 1): line has 170 characters
+Error (line 3): C++ comment
+Error (line 3): line has 342 characters
+Error (line 5): C++ comment
+Error (line 7): C++ comment
+Error (line 8): C++ comment
+Error (line 8): line has 189 characters
+Error (line 10): multiple empty lines
+Error (line 11): C++ comment
+Error (line 12): C++ comment
+Error (line 12): line has 194 characters
+Error (line 13): C++ comment
+Error (line 14): C++ comment
+Error (line 15): C++ comment
+Error (line 16): C++ comment
+Error (line 17): C++ comment
+Error (line 18): C++ comment
+Error (line 19): C++ comment
+Error (line 20): C++ comment
+Error (line 21): C++ comment
+Error (line 22): C++ comment
+Error (line 23): C++ comment
+Error (line 24): C++ comment
+Error (line 26): C++ comment
+Error (line 27): C++ comment
+Error (line 27): line has 112 characters
+Error (line 29): C++ comment
+Error (line 31): C++ comment
+Error (line 31): line has 103 characters
+Error (line 32): C++ comment
+Error (line 32): spaces at the end of line
+Error (line 33): C++ comment
+Error (line 34): C++ comment
+Error (line 35): C++ comment
+Error (line 36): C++ comment
+Error (line 37): C++ comment
+Error (line 37): line has 135 characters
+Error (line 38): C++ comment
+Error (line 39): C++ comment
+Norme: ./parse_path.c
+Norme: ./path.c
+Error (line 65): function ft_cd has 26 lines
+Error (line 71): C++ comment
+Error (line 72): C++ comment
+Error (line 73): C++ comment
+Error (line 74): C++ comment
+Error (line 75): C++ comment
+Error (line 79, col 2): missing space after return
+Norme: ./path_utils.c
+Norme: ./prep_line.c
+Error: file must end with a single empty line
+Error (line 15): multiple empty lines
+Error (line 16): Space before function name
+Error (line 16): bad spacing before end_line
+Error (line 21): line has 85 characters
+Error (line 24): C++ comment
+Error (line 25): C++ comment
+Error (line 29): Space before function name
+Error (line 48): Space before function name
+Error (line 48): function go_line has 26 lines
+Error (line 78): Space before function name
+Error (line 78): declarations in getcommand are bad aligned
+Error (line 103, col 0): no newline after block
+Norme: ./redir.c
+Error (line 24, col 9): missing parentheses in return statement
+Error (line 60): function go_instruction has 29 lines
+Error (line 93): go_pipe have 5 parameters
+Error (line 96): Bad spacing for argument env
+Error (line 102, col 9): missing parentheses in return statement
+Error (line 119): redir_and_send have 5 parameters
 Norme: ./redir_utils.c
+Norme: ./sig_a_errors.c
+Error (line 17): C++ comment
+Error (line 21): C++ comment
+Error (line 22): C++ comment
+Error (line 23): C++ comment
+Error (line 28): C++ comment
+Error (line 34): C++ comment
+Norme: ./start_a_parse_bulle.c
+Error: 42 header not at top of the file
+Error: global scope bad aligned
+Error: 6 functions in the file
+Error (line 22): Space before function name
+Error (line 22): Space before function name
+Error (line 22): Space before function name
+Error (line 22): Space before function name
+Error (line 22): function dispatch has 28 lines
+Error (line 22): declarations in dispatch are bad aligned
+Error (line 22): declarations in dispatch must be at the top of the function
+Error (line 22): declarations must be followed by one empty line in dispatch
+Error (line 22, col 3): bad spacing
+Error (line 36): spaces at the end of line
+Error (line 36, col 1): no newline after block
+Error (line 50): C++ comment
+Error (line 54): Space before function name
+Error (line 73): Space before function name
+Error (line 73, col 45): bad character after ,
+Error (line 81): Space before function name
+Error (line 81): function main has 28 lines
+Error (line 81): declarations in main are bad aligned
+Error (line 101): C++ comment
+Error (line 101): missing newline after if
+Norme: ./termcap_arrow.c
 Norme: ./termcap.c
-Norme: ./echo.c
