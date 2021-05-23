@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/21 06:08:56 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/22 09:19:22 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 	i = 0;
 	tmp = ft_strdup("");
 	str = NULL;
+	printf("trim[i] %c\n", trim[i]);
 	while (i < ft_strlen(trim))
 	{
 		if (trim[i] != '$')
@@ -73,9 +74,11 @@ char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 		}
 		else
 		{
+			printf("get env");
 			tmp = ft_strjoin_free(tmp, get_env_value(&trim[i + 1],
 						var_env, cmd));
 			i += cmd->index + 1;
+			printf("i %d\n", i);
 		}
 		cmd->index = 0;
 	}
@@ -93,17 +96,23 @@ char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 	boolean = 0;
 	cmd->index = 0;
 	tmp = ft_strdup(res);
-	if (even_or_odd(tmp) && even_or_odd(tmp) % 2)
+	if ((even_or_odd(tmp)) && even_or_odd(tmp) % 2)
 		boolean = 1;
 	tmp_sub = ft_strtrim(tmp, "\"");
 	free(tmp);
 	buf = ft_strdup(tmp_sub);
-	free(tmp_sub);
 	if (boolean == 0 && ft_strchr(buf, '$'))
-		tmp_sub = replace_by_env_value(ft_strtrim(buf, "\'"), var_env, cmd);
-	tmp_sub = ft_strtrim(buf, "\'");
+	{
+		printf("test\n");
+		printf("buf %s\n", ft_strtrim(buf, "\'"));
+		tmp = ft_strtrim(buf, "\'");
+		free(tmp_sub);
+		tmp_sub = replace_by_env_value(tmp, var_env, cmd);
+	}
+	tmp = ft_strtrim(tmp_sub, "\'");
+	free(tmp_sub);
 	free(buf);
-	return (tmp_sub);
+	return (tmp);
 }
 
 char		*handled_export(char *res, t_list *var_env, t_command *cmd)

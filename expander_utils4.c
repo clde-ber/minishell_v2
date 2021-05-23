@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/21 03:47:30 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/23 08:49:03 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,27 @@ char		*export_errors(char *str_first, char *str_secd, int quotes,
 char *res)
 {
 	char *operator;
+	char *str_f;
+	char *str_s;
 
+	str_f = ft_strtrim(str_first, "\'");
+	str_s = ft_strtrim(str_secd, "\'");
 	operator = find_op(res);
 	write(1, "bash: export: '", 16);
 	if (quotes % 2 == 0)
-		write(1, ft_strtrim(str_first, "\'"), ft_strlen(ft_strtrim(str_first,
-		"\'")));
+		write(1, str_f, ft_strlen(str_f));
 	else
 		write(1, str_first, ft_strlen(str_first));
 	write(1, operator, ft_strlen(operator));
 	if (quotes == 1 || quotes == 4)
-		write(1, ft_strtrim(str_secd, "\'"), ft_strlen(ft_strtrim(str_secd,
-		"\'")));
+		write(1, str_s, ft_strlen(str_s));
 	else
 		write(1, str_secd, ft_strlen(str_secd));
 	write(1, "': not a valid identifier\n", 26);
 	free(str_first);
 	free(str_secd);
+	free(str_f);
+	free(str_s);
 	return (NULL);
 }
 
@@ -43,16 +47,18 @@ char *res)
 	char *str_f;
 	char *str_s;
 
-	str_f = NULL;
-	str_s = NULL;
+	str_f = ft_strdup(str_first);
+	str_s = ft_strdup(str_secd);
 	operator = find_op(res);
 	if (quotes % 2 == 0)
 	{
+		free(str_f);
 		str_f = ft_strtrim(str_first, "\'");
 		free(str_first);
 	}
 	if (quotes == 1 || quotes == 4)
 	{
+		free(str_s);
 		str_s = ft_strtrim(str_secd, "\'");
 		free(str_secd);
 	}
@@ -105,9 +111,9 @@ void		export_replace_by_env_value(char **str_first, char **str_secd,
 t_list *var_env, t_command *cmd)
 {
 	cmd->index = 0;
-	if ((*str_first)[0] != '\'')
+	if (even_or_odd(*str_first) % 2 == 0 || even_or_odd(*str_first) == 0)
 		*str_first = replace_by_env(*str_first, var_env, cmd, 0);
 	cmd->index = 0;
-	if ((*str_secd)[0] != '\'')
+	if (even_or_odd(*str_secd) % 2 == 0 || even_or_odd(*str_secd) == 0)
 		*str_secd = replace_by_env_value(*str_secd, var_env, cmd);
 }

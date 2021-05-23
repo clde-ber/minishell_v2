@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:50 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/04 12:25:07 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/21 15:20:15 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ char	**fill_list(t_list *environ, char **list, int i)
 		environ = environ->next;
 		i++;
 	}
-	printf("%d\n", i);
 	if (!(list = malloc(sizeof(char *) * (i + 3))))
 		return (0);
 	i = 0;
