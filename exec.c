@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/05/20 19:42:11 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/21 15:31:43 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ int exec_command(char **args, char **res, char *path, int j)
         exit(status);
     }
     free_tabtab(tabl);
+    free_tabtab(p_bin);
     waitpid(-1, &status, 0);
     return (exit_status(status));
 // waitpid waits for the program to be finished. 
