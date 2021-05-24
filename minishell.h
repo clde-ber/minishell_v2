@@ -307,6 +307,9 @@ void	free_tabtab(char **res);
 */
 int		is_symbol(char c, char comp);
 int		count_pipes(char **res);
+int		chrtabtab(char **res, char *str);
+char	**replace_tabtab(char **tabl, int i, char *str);
+void	erase_line(int i, int j, t_term *term);
 
 /*
 **gnl

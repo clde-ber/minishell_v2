@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 19:01:15 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/20 19:03:59 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/23 12:37:10 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int		open_fds_out(char **res, int i, int m)
 {
 	int		fd;
 
+	if (!res[i + 1])
+		return (-2);
 	i++;
 	close(1);
 	if (m == 0)
@@ -33,6 +35,8 @@ int		open_fds_in(char **res, int i)
 {
 	int		fd;
 
+	if (!res[i + 1])
+		return (-2);
 	i++;
 	close(0);
 	fd = open(res[i], O_RDONLY, 0777);
@@ -92,7 +96,10 @@ char	**end_redir(char **res, t_fd *f)
 	if (handle_fds(res, f) < 0)
 	{
 		restore_fds(f);
-		ft_putstr_fd("Error: file cannot be opened\n", 2);
+		if (handle_fds(res, f) == -1)
+			ft_putstr_fd("Error: file cannot be opened\n", 2);
+		else
+			ft_putstr_fd("Error: no specified file\n", 2);
 		return (NULL);
 	}
 	tabl = get_redir_ready(res);

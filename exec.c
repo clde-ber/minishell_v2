@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/05/24 06:36:16 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/24 07:24:31 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,8 @@ int exec_command(char **args, char **res, char *path, int j)
 		exit(status);
 	}
 	free_tabtab(tabl);
+	free_tabtab(p_bin);
+	free_tabtab(env);
 	waitpid(-1, &status, 0);
 	return (exit_status(status));
 // waitpid waits for the program to be finished. 
@@ -211,5 +213,6 @@ int set_args(char **res, char *path, t_command *cmd)
 			k++;
 		ft_free(clc, k + 1);
 	}
+	// free_tabtab(ret);
 	return (0);
 }
