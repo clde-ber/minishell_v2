@@ -37,3 +37,5 @@
 // ctrl c d sigkill etc gréer une variable globale signaux = fonctions spécialisées qui dit observe si t'as des signaux fais attention
 // derriere tu mets les autres fct sig
 //faire le write sur le stderr ?
+
+//bash: exit: afk: numeric argument required (working, 0 if no nb, 2 not found if not a nb, 1 if nb 1, 0 if nb 0) bash: exit: too many arguments

@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/24 16:56:54 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/24 18:20:38 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ int		go_e(char **tabl, t_list *var_env, t_command *cmd)
 		print_sorted_env(var_env);
 	else if (ft_strcmp(tabl[0], "env") == 0)
 		print_env(var_env);
+	else if (ft_strcmp(tabl[0], "exit") == 0)
+		ft_exit(tabl, cmd);
 	else
 		set_args(tabl, cmd->path, cmd);
 }
@@ -77,7 +79,10 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	else if (ft_strcmp(tabl[0], "unset") == 0)
 		errors(cmd);
 	else if (ft_strcmp(tabl[0], "$?") == 0)
+	{
 		printf("%d : Command not found\n", cmd->cmd_rv);
+		cmd->cmd_rv = 127;
+	}
 	else
 		set_args(tabl, cmd->path, cmd);
 	if (sig == 1)
