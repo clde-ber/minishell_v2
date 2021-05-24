@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 15:13:21 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/20 19:26:57 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/24 11:19:03 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,9 @@ char	**save_input(char *str, char **save)
 
 void	restore_term(t_term *term)
 {
-	term->s_termios.c_lflag |= ~(ECHO);
-	term->s_termios.c_lflag |= ~(ICANON);
-	tcsetattr(0, TCSANOW, &term->s_termios);
+	// term->s_termios.c_lflag |= ~(ECHO);
+	// term->s_termios.c_lflag |= ~(ICANON);
+	tcsetattr(0, TCSANOW, &term->s_termios_backup);
 }
 
 void	get_cursor_pos(t_term *term, char **res)
@@ -102,6 +102,7 @@ void	init_term(t_term *term)
 	term->x = 0;
 	term->y = 0;
 	tcgetattr(0, &term->s_termios);
+	term->s_termios_backup = term->s_termios;
 	term->s_termios.c_lflag &= ~(ICANON);
 	term->s_termios.c_lflag &= ~(ECHO);
 	if (tcsetattr(0, TCSANOW, &term->s_termios) == -1)

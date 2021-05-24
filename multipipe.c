@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   multipipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/21 05:41:00 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/24 17:16:27 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	get_k(int k, char **res, int i, int j)
+int		get_k(int k, char **res, int i, int j)
 {
 	if (count_pipes(res) == i)
 		k = count_tabs(res);
@@ -25,11 +25,11 @@ int	get_k(int k, char **res, int i, int j)
 	return (k);
 }
 
-char **middle_pipe(char **res, int i)
+char	**middle_pipe(char **res, int i)
 {
-	int j;
-	int k;
-	char **tabl;
+	int		j;
+	int		k;
+	char	**tabl;
 
 	j = 0;
 	k = 0;
@@ -52,9 +52,9 @@ char **middle_pipe(char **res, int i)
 	return (tabl);
 }
 
-void print_tabtab(char **res)
+void	print_tabtab(char **res)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	while (res[i])
@@ -64,20 +64,19 @@ void print_tabtab(char **res)
 	}
 }
 
-int handle_multipipes(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env)
+int		handle_multipipes(char **res, t_fd *f, t_list *var_env, t_command *cmd,
+char **env)
 {
-	int i;
-	int j;
-	int fd[2];
-	pid_t pid;
-	int fdd;
-	int *status;
+	int		j;
+	int		fd[2];
+	pid_t	pid;
+	int		fdd;
+	int		*status;
 
-	i = count_pipes(res);
 	j = 0;
 	fdd = 0;
 	pid = 0;
-	while (j < i + 1)
+	while (j < count_pipes(res) + 1)
 	{
 		pipe(fd);
 		if ((pid = fork()) == -1)
@@ -85,10 +84,11 @@ int handle_multipipes(char **res, t_fd *f, t_list *var_env, t_command *cmd, char
 		else if (pid == 0)
 		{
 			dup2(fdd, 0);
-			if (j < i)
+			if (j < count_pipes(res))
 				dup2(fd[1], 1);
 			close(fd[0]);
-			go_instruction(end_redir(middle_pipe(res, j), f), var_env, cmd, env);
+			go_instruction(end_redir(middle_pipe(res, j), f), var_env, cmd,
+			env);
 			exit(status);
 		}
 		waitpid(-1, &status, 0);

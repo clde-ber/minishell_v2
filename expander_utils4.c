@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils4.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/23 08:49:03 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/24 16:51:47 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ int *quotes)
 void		split_env_name_a_value(char **str_first, char **str_secd,
 char **p_bin, char *res)
 {
-
 	if (ft_strchr(res, '='))
 	{
 		*str_first = ft_strdup(p_bin[0]);

@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/23 14:10:54 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/24 16:56:54 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	**divide_pipe(char **res, t_fd *f)
 	i = 0;
 	m = count_tabs(res) - chrtabtab(res, "|");
 	if (!(f->save_pipe = malloc(sizeof(char *) * (m + 2))))
-		return NULL;
+		return (NULL);
 	if (!(tabl = malloc(sizeof(char *) * (chrtabtab(res, "|") + 2))))
 		return (NULL);
 	while (i < chrtabtab(res, "|"))
@@ -90,8 +90,8 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	return (0);
 }
 
-int		go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char
-**env)
+int		go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd,
+char **env)
 {
 	pid_t	pid;
 	int		pipe_fd[2];
@@ -99,7 +99,7 @@ int		go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char
 
 	pipe(pipe_fd);
 	if ((pid = fork()) == -1)
-		return -1;
+		return (-1);
 	else if (pid == 0)
 	{
 		close(pipe_fd[0]);

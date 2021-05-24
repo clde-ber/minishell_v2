@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launch_exe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 16:08:25 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/23 17:42:16 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ int		launch_exe(char *exe, char *path, char **env, t_command *cmd)
 		}
 		exit(status);
 	}
+	free_tabtab(envp);
+	// free_tabtab(argv);
 	waitpid(ret, &status, 0);
 	return (exit_status(status));
 }
@@ -80,5 +82,8 @@ void	find_exe(char *path, char **env, t_command *cmd)
 	if (errno && (cmd->cmd_rv = 1))
 		printf("%s\n", strerror(errno));
 	else
+	{
 		launch_exe(str, path, env, cmd);
+		free(str);
+	}
 }

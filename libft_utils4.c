@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:48:34 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/23 12:48:35 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/24 16:58:11 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (ptr);
 }
 
-int ft_is_empty_string(char *str)
+int		ft_is_empty_string(char *str)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	while (str[i])
@@ -78,7 +78,7 @@ int ft_is_empty_string(char *str)
 	return (1);
 }
 
-int	ft_putchar(int c)
+int		ft_putchar(int c)
 {
 	write(1, &c, 1);
 }
