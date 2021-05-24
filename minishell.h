@@ -242,6 +242,12 @@ char	**environment(char *path);
 int		exit_status(int status);
 
 /*
+**exit
+*/
+int     ft_isdigit(int c);
+void    ft_exit(char **res, t_command *cmd);
+
+/*
 **termcap
 */
 char	**save_input(char *str, char **save);
