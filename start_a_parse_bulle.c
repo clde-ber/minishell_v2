@@ -95,7 +95,7 @@ int main(int ac, char **av, char **env)
 	term->done = NULL;
 	while (1)
 	{
-		if (!(sig))
+		// if (!(sig))
 			write(1, "***minishell*** > ", 18);
 		line = go_line(term);
 		if ((ft_strcmp(line, "$?")))
