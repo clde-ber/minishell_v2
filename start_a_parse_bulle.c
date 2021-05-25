@@ -96,8 +96,7 @@ int main(int ac, char **av, char **env)
 	signal(SIGQUIT, handle_signal);
 	while (1)
 	{
-		if (!(g_sig))
-			write(1, "***minishell*** > ", 18);
+		write(1, "***minishell*** > ", 18);
 		line = go_line(term);
 		if ((ft_strcmp(line, "$?")))
 			cmd->cmd_rv = 0;

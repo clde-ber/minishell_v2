@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:56:27 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/25 11:56:34 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/25 14:03:16 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ void	handle_signal(int code)
 	//ctrl-c
 	{
 		g_sig = 1;
-		write(1, "^C\n", 3);
+		write(1, "\n", 1);
 	}
 	else if (code == 3)
 	//ctrl-antislash
 	{
 		g_sig = 2;
-		write(1, "^\\Quit (core dumped)\n***minishell*** > ", 39);
+		write(1, "Quit (core dumped)\n", 19);
 	}
 }
