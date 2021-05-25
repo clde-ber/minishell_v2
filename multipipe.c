@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/21 05:41:00 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/25 11:07:22 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int handle_multipipes(char **res, t_fd *f, t_list *var_env, t_command *cmd, char
 	int fd[2];
 	pid_t pid;
 	int fdd;
-	int *status;
+	int status;
 
 	i = count_pipes(res);
 	j = 0;

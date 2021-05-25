@@ -377,6 +377,6 @@ void	ft_record(void *lst, void *cmd);
 void	ft_lstiter(t_list *lst, void (*f)(void *, void *), t_command *cmd);
 void	ft_lstdel(t_list *lst);
 
-extern int sig;
+extern int g_sig;
 
 #endif

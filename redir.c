@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/24 07:24:04 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/25 11:58:25 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,6 @@ int		go_e(char **tabl, t_list *var_env, t_command *cmd)
 
 int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 {
-	int		sig;
-
-	sig = 0;
 	if (tabl == NULL)
 		;
 	else if (tabl[0][0] == 'e')
@@ -85,12 +82,12 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	}
 	else
 		set_args(tabl, cmd->path, cmd);
-	if (sig == 1)
+	if (g_sig == 1)
 		cmd->cmd_rv = 130;
-	if (sig == 2)
+	if (g_sig == 2)
 		cmd->cmd_rv = 131;
-	if (sig == 1 || sig == 2)
-		sig = 0;
+	if (g_sig == 1 || g_sig == 2)
+		g_sig = 0;
 	free_tabtab(tabl);
 	return (0);
 }
@@ -100,11 +97,11 @@ int		go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char
 {
 	pid_t	pid;
 	int		pipe_fd[2];
-	int		*status;
+	int		status;
 
 	pipe(pipe_fd);
 	if ((pid = fork()) == -1)
-		return -1;
+		exit(1);
 	else if (pid == 0)
 	{
 		close(pipe_fd[0]);
