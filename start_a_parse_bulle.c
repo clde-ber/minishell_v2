@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int g_sig;
+t_sig g_sig;
 
 void	restore_fds(t_fd *f)
 {
@@ -91,7 +91,8 @@ int main(int ac, char **av, char **env)
 	init_structs(cmd);
 	var_env = set_new_env(env, var_env, cmd);
 	term->done = NULL;
-	g_sig = 0;
+	g_sig.sig = 0;
+	g_sig.boolean = 0;
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, handle_signal);
 	while (1)
@@ -107,6 +108,7 @@ int main(int ac, char **av, char **env)
 		}
 		main_loop(ft_strdup(line), env, var_env, cmd);
 		free(line);
+		g_sig.boolean = 0;
 	}
 	finish_line(cmd, term, var_env);
 	return (0);

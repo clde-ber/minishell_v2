@@ -17,6 +17,12 @@
 
 #define BUFFER_SIZE 50
 
+typedef struct	s_sig
+{
+	int			sig;
+	int			boolean;
+}				t_sig;
+
 typedef struct	s_list
 {
 	char		*name;
@@ -377,6 +383,6 @@ void	ft_record(void *lst, void *cmd);
 void	ft_lstiter(t_list *lst, void (*f)(void *, void *), t_command *cmd);
 void	ft_lstdel(t_list *lst);
 
-extern int g_sig;
+extern t_sig g_sig;
 
 #endif

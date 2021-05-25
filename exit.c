@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 06:40:46 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/25 17:33:48 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/25 17:45:45 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int     ft_isdigit(int c)
 	return (0);
 }
 
-
 void    ft_exit(char **res, t_command *cmd)
 {
     int i;
@@ -31,11 +30,11 @@ void    ft_exit(char **res, t_command *cmd)
             i++;
         if (i == ft_strlen(res[1]))
         {
-            if (g_sig == 0)
+            if (g_sig.sig == 0)
                 cmd->cmd_rv = ft_atoi(res[1]);
             else
             {
-                if (g_sig == 1)
+                if (g_sig.sig == 1)
                     cmd->cmd_rv = 130;
                 else
                     cmd->cmd_rv = 131;
@@ -51,7 +50,7 @@ void    ft_exit(char **res, t_command *cmd)
             exit(2);
         }
     }
-    else if (res[1] && res[2] && g_sig == 0)
+    else if (res[1] && res[2] && g_sig.sig == 0)
     {
         write(1, "bash: exit: too many arguments\n", 30);
         cmd->cmd_rv = 1;

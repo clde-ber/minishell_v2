@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/25 12:06:38 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/25 17:49:27 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,12 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	}
 	else
 		set_args(tabl, cmd->path, cmd);
-	if (g_sig == 1)
+	if (g_sig.sig == 1)
 		cmd->cmd_rv = 130;
-	if (g_sig == 2)
+	if (g_sig.sig == 2)
 		cmd->cmd_rv = 131;
-	if (g_sig == 1 || g_sig == 2)
-		g_sig = 0;
+	if (g_sig.sig == 1 || g_sig.sig == 2)
+		g_sig.sig = 0;
 	free_tabtab(tabl);
 	return (0);
 }
@@ -121,6 +121,7 @@ char **env)
 int		redir_and_send(char **res, t_fd *f, t_list *var_env, t_command *cmd,
 char **env)
 {
+	g_sig.boolean = 1;
 	if (chrtabtab(res, "|") == -1 && chrtabtab(res, ">") == -1 && chrtabtab(res,
 	"<") == -1 && chrtabtab(res, ">>") == -1)
 		return (go_instruction(copy_tabtab(res), var_env, cmd, env));
