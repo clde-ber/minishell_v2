@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multipipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/24 17:16:27 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/25 12:06:48 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,12 @@ void	print_tabtab(char **res)
 int		handle_multipipes(char **res, t_fd *f, t_list *var_env, t_command *cmd,
 char **env)
 {
-	int		j;
-	int		fd[2];
-	pid_t	pid;
-	int		fdd;
-	int		*status;
+	int i;
+	int j;
+	int fd[2];
+	pid_t pid;
+	int fdd;
+	int status;
 
 	j = 0;
 	fdd = 0;

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-sig = 0;
+int g_sig;
 
 void	restore_fds(t_fd *f)
 {
@@ -90,13 +90,13 @@ int main(int ac, char **av, char **env)
 	line = NULL;
 	init_structs(cmd);
 	var_env = set_new_env(env, var_env, cmd);
+	term->done = NULL;
+	g_sig = 0;
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, handle_signal);
-	term->done = NULL;
 	while (1)
 	{
-		// if (!(sig))
-			write(1, "***minishell*** > ", 18);
+		write(1, "***minishell*** > ", 18);
 		line = go_line(term);
 		if ((ft_strcmp(line, "$?")))
 			cmd->cmd_rv = 0;
