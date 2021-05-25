@@ -21,7 +21,7 @@ void	init_fds(t_fd *f)
 	pipe(f->fds);
 }
 
-int    dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
+int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 {
 	char **res;
 	char **parsed_res;

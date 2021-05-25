@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/05/25 11:58:25 by clde-ber         ###   ########.fr       */
+=======
+/*   Updated: 2021/05/24 18:20:38 by budal-bi         ###   ########.fr       */
+>>>>>>> 4e3f14af289db9823aec940b854d280d3040ea20
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +25,7 @@ char	**divide_pipe(char **res, t_fd *f)
 	i = 0;
 	m = count_tabs(res) - chrtabtab(res, "|");
 	if (!(f->save_pipe = malloc(sizeof(char *) * (m + 2))))
-		return NULL;
+		return (NULL);
 	if (!(tabl = malloc(sizeof(char *) * (chrtabtab(res, "|") + 2))))
 		return (NULL);
 	while (i < chrtabtab(res, "|"))
@@ -92,8 +96,8 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	return (0);
 }
 
-int		go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char
-**env)
+int		go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd,
+char **env)
 {
 	pid_t	pid;
 	int		pipe_fd[2];

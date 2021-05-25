@@ -14,7 +14,6 @@ SRCS =	./debug_to_delete.c\
 	./expander.c\
 	./ft_split.c\
 	./gnl_utils.c\
-	./gnl.c\
 	./launch_exe_utils.c\
 	./launch_exe.c\
 	./libft_list.c\

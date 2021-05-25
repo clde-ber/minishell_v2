@@ -1,11 +1,35 @@
+Norme: ./env_utils2.c
+Norme: ./env_utils3.c
+Norme: ./env_utils.c
+Norme: ./expander_utils2.c
+Norme: ./expander_utils3.c
+Norme: ./launch_exe.c
+Norme: ./launch_exe_utils.c
+Norme: ./libft_list2.c
+Norme: ./path_utils.c
+Norme: ./parse_path.c
+Norme: ./expander_utils4.c
+Norme: ./expander_utils5.c
+Norme: ./libft_list.c
+Norme: ./termcap_arrow.c
+Norme: ./termcap.c
+Norme: ./redir_utils.c
+Norme: ./ft_split.c
+Norme: ./libft_utils4.c
+Norme: ./libft_utils5.c
+Norme: ./libft_utils.c
+Norme: ./minishell_utils2.c
+Norme: ./minishell_utils3.c
+Norme: ./minishell_utils.c
+Norme: ./libft_utils2.c
+Norme: ./libft_utils3.c
 Norme: ./echo.c
+
 Norme: ./env.c
 Error (line 57): function set_env has 27 lines
 Error (line 79): bad indentation
 Error (line 129): C++ comment
-Norme: ./env_utils2.c
-Norme: ./env_utils3.c
-Norme: ./env_utils.c
+
 Norme: ./exec.c
 Error: global scope bad aligned
 Error: 9 functions in the file
@@ -102,102 +126,24 @@ Error (line 188): C++ comment
 Error (line 189): C++ comment
 Error (line 208): 2 assignations
 Error (line 214): C++ comment
+
 Norme: ./expander.c
 Error (line 23): function handled_unset has 29 lines
 Error (line 38): line has 85 characters
 Error (line 71): line has 85 characters
 Error (line 82): function parse_res has 26 lines
-Norme: ./expander_utils2.c
-Norme: ./expander_utils3.c
-Norme: ./expander_utils4.c
-Error (line 91): Empty line
-Norme: ./expander_utils5.c
 Norme: ./expander_utils.c
 Error (line 109): function handled_export has 27 lines
-Norme: ./ft_split.c
-Norme: ./gnl.c
-Error: file must end with a single empty line
-Error (line 14): line has 137 characters
-Error (line 58): function get_next_line has 30 lines
-Error (line 90, col 0): no newline after block
+
 Norme: ./gnl_utils.c
 Error: file must end with a single empty line
 Error (line 48, col 0): no newline after block
-Norme: ./launch_exe.c
-Norme: ./launch_exe_utils.c
-Norme: ./libft_list2.c
-Norme: ./libft_list.c
-Norme: ./libft_utils2.c
-Norme: ./libft_utils3.c
-Norme: ./libft_utils4.c
-Error: global scope bad aligned
-Error (line 67): Space before function name
-Norme: ./libft_utils5.c
-Error: file must end with a single empty line
-Error (line 48, col 0): no newline after block
-Norme: ./libft_utils.c
-Error: 42 header not at top of the file
-Norme: ./minishell_utils2.c
-Norme: ./minishell_utils3.c
-Error: file must end with a single empty line
-Error (line 91, col 0): no newline after block
-Norme: ./minishell_utils.c
+
 Norme: ./multipipe.c
-Error: global scope bad aligned
-Error (line 28): Space before function name
-Error (line 28): declarations in middle_pipe are bad aligned
-Error (line 55): Space before function name
-Error (line 67): Space before function name
-Error (line 67): function handle_multipipes has 30 lines
-Error (line 67): declarations in handle_multipipes are bad aligned
-Error (line 67): line has 88 characters
+Error (line 67): function handle_multipipes has 28 lines
 Error (line 67): handle_multipipes have 5 parameters
-Error (line 67, col 0): handle_multipipes has 6 variables
-Error (line 91): line has 82 characters
-Norme: ./notes.c
-Error: 42 header not at top of the file
-Error: file must end with a single empty line
-Error (line 1): C++ comment
-Error (line 1): line has 170 characters
-Error (line 3): C++ comment
-Error (line 3): line has 342 characters
-Error (line 5): C++ comment
-Error (line 7): C++ comment
-Error (line 8): C++ comment
-Error (line 8): line has 189 characters
-Error (line 10): multiple empty lines
-Error (line 11): C++ comment
-Error (line 12): C++ comment
-Error (line 12): line has 194 characters
-Error (line 13): C++ comment
-Error (line 14): C++ comment
-Error (line 15): C++ comment
-Error (line 16): C++ comment
-Error (line 17): C++ comment
-Error (line 18): C++ comment
-Error (line 19): C++ comment
-Error (line 20): C++ comment
-Error (line 21): C++ comment
-Error (line 22): C++ comment
-Error (line 23): C++ comment
-Error (line 24): C++ comment
-Error (line 26): C++ comment
-Error (line 27): C++ comment
-Error (line 27): line has 112 characters
-Error (line 29): C++ comment
-Error (line 31): C++ comment
-Error (line 31): line has 103 characters
-Error (line 32): C++ comment
-Error (line 32): spaces at the end of line
-Error (line 33): C++ comment
-Error (line 34): C++ comment
-Error (line 35): C++ comment
-Error (line 36): C++ comment
-Error (line 37): C++ comment
-Error (line 37): line has 135 characters
-Error (line 38): C++ comment
-Error (line 39): C++ comment
-Norme: ./parse_path.c
+Error (line 90): line has 82 characters
+
 Norme: ./path.c
 Error (line 65): function ft_cd has 26 lines
 Error (line 71): C++ comment
@@ -206,7 +152,7 @@ Error (line 73): C++ comment
 Error (line 74): C++ comment
 Error (line 75): C++ comment
 Error (line 79, col 2): missing space after return
-Norme: ./path_utils.c
+
 Norme: ./prep_line.c
 Error: file must end with a single empty line
 Error (line 15): multiple empty lines
@@ -221,14 +167,12 @@ Error (line 48): function go_line has 26 lines
 Error (line 78): Space before function name
 Error (line 78): declarations in getcommand are bad aligned
 Error (line 103, col 0): no newline after block
+
 Norme: ./redir.c
-Error (line 24, col 9): missing parentheses in return statement
 Error (line 60): function go_instruction has 29 lines
 Error (line 93): go_pipe have 5 parameters
-Error (line 96): Bad spacing for argument env
-Error (line 102, col 9): missing parentheses in return statement
 Error (line 119): redir_and_send have 5 parameters
-Norme: ./redir_utils.c
+
 Norme: ./sig_a_errors.c
 Error (line 17): C++ comment
 Error (line 21): C++ comment
@@ -236,6 +180,7 @@ Error (line 22): C++ comment
 Error (line 23): C++ comment
 Error (line 28): C++ comment
 Error (line 34): C++ comment
+
 Norme: ./start_a_parse_bulle.c
 Error: 42 header not at top of the file
 Error: global scope bad aligned
@@ -260,5 +205,3 @@ Error (line 81): function main has 28 lines
 Error (line 81): declarations in main are bad aligned
 Error (line 101): C++ comment
 Error (line 101): missing newline after if
-Norme: ./termcap_arrow.c
-Norme: ./termcap.c
