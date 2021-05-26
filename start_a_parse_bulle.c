@@ -30,10 +30,7 @@ int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 
 	init_fds(f);
 	if (ft_is_empty_string(str))
-	{
-		cmd->cmd_rv = 127;
 		return (0);
-	}
 	else
 	{	
 		res = ft_split(str, "\t\n\r\v\f ");
@@ -86,8 +83,10 @@ int main(int ac, char **av, char **env)
 	t_list *var_env;
 	t_command cmd[1];
 	t_term term[1];
+	int ret;
 
 	line = NULL;
+	ret = 0;
 	init_structs(cmd);
 	var_env = set_new_env(env, var_env, cmd);
 	term->done = NULL;
@@ -99,8 +98,6 @@ int main(int ac, char **av, char **env)
 	{
 		write(1, "***minishell*** > ", 18);
 		line = go_line(term);
-		if ((ft_strcmp(line, "$?")))
-			cmd->cmd_rv = 0;
 		if (ft_strcmp(line, "exit") == 0) //builtin à coder
 		{
 			free(line);

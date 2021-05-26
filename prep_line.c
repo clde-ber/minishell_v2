@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/26 09:39:58 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/26 16:32:13 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char *go_line(t_term *term)
 			if (current != NULL)
 				free(current);
 			write(1, "\n", 1);
-			exit(0);
+			exit(126);
 		}
 		else
 			current = get_char(current, term, buf);

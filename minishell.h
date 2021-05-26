@@ -61,6 +61,8 @@ typedef struct s_command
 	char		*path;
 	int			index;
 	int			cmd_rv;
+	int			start;
+	int			ret;
 }				t_command;
 
 //A DELETE

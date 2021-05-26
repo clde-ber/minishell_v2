@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/25 17:49:27 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/26 16:42:05 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,9 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 {
 	if (tabl == NULL)
 		;
-	else if (tabl[0][0] == 'e')
+	if (ft_strcmp(tabl[0], "$?"))
+	{
+	if (tabl[0][0] == 'e')
 		go_e(tabl, var_env, cmd);
 	else if (ft_strcmp(tabl[0], "pwd") == 0)
 		ft_pwd(tabl);
@@ -75,17 +77,19 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 		unset(var_env, tabl);
 	else if (ft_strcmp(tabl[0], "unset") == 0)
 		errors(cmd);
-	else if (ft_strcmp(tabl[0], "$?") == 0)
-	{
-		printf("%d : Command not found\n", cmd->cmd_rv);
-		cmd->cmd_rv = 127;
-	}
 	else
 		set_args(tabl, cmd->path, cmd);
+	}
 	if (g_sig.sig == 1)
 		cmd->cmd_rv = 130;
 	if (g_sig.sig == 2)
 		cmd->cmd_rv = 131;
+	if (ft_strcmp(tabl[0], "$?") == 0)
+	{
+		printf("rv %d\n", cmd->cmd_rv);
+		printf("%d : Command not found\n", cmd->cmd_rv);
+		cmd->cmd_rv = 127;
+	}
 	if (g_sig.sig == 1 || g_sig.sig == 2)
 		g_sig.sig = 0;
 	free_tabtab(tabl);
