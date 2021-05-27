@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/20 18:05:43 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/27 10:10:19 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,19 +67,37 @@ void	ft_cd(char **res, t_list *var_env)
 	char	*path;
 	char	*buf;
 	char	*buf2;
+	DIR		*dir;
+	char	*cut_path;
+	int i;
 
 	// if (!res[1])
 	// {
 	// 	write(1, "\n", 2);
 	// 	return ;
 	// }
+	i = 1;
 	if (res[2])
 	{
 		ft_putstr_fd("Too many arguments", 2);
 		return;
 	}
 	path = get_cwd();
-	buf2 = ft_strjoin(path, "\0");
+	if (res[1][0] != '.')
+	{
+		buf = ft_strdup(path);
+		while (buf[i])
+		{
+			if (buf[i] == '/')
+				buf[i + 1] = '\0';
+			i++;
+		}
+		chdir(buf);
+		free(path);
+		path = ft_strdup(ft_strchr(&buf[1], '/'));
+		free(buf);
+	}
+	buf2 = ft_strdup(path);
 	buf = cd_front_a_back(res, buf2, 1, var_env);
 	if (chdir(buf) == -1)
 	{
