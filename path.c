@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/27 18:27:09 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/27 18:53:27 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	ft_pwd(char **res)
 	free(buf);
 }
 
-char	*cd_front_a_back(char **res, char *path, int j, t_list *var_env)
+char	*cd_front_a_back(char **res, char *path, int j, t_list *var_env, char *old_pwd)
 {
 	int		k;
 	int		i;
@@ -48,7 +48,7 @@ char	*cd_front_a_back(char **res, char *path, int j, t_list *var_env)
 	}
 	if (buf[ft_strlen(buf) - 1] == '/')
 		buf[ft_strlen(buf) - 1] = '\0';
-	set_pwd_env(path, buf, var_env);
+	set_pwd_env(old_pwd, buf, var_env);
 	return (buf);
 }
 
@@ -71,6 +71,7 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 	char	*cut_path;
 	int 	i;
 	char	*str;
+	char 	*old_pwd;
 
 	// if (!res[1])
 	// {
@@ -86,12 +87,14 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 		return;
 	}
 	path = get_cwd();
+	old_pwd = ft_strdup(path);
 	if (res[1][0] == '-')
 	{
 		if (ft_strlen(res[1]) == 2 && res[1][0] == '-' && res[1][1] == '-')
 		{
 			chdir((str = replace_by_env_value(ft_strdup("$OLDPWD"), var_env, cmd)));
 			free(str);
+			cmd->cmd_rv = 0;
 		}
 		else if (res[1][0] == '-' && res[1][1] == '\0')
 		{
@@ -99,6 +102,7 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 			ft_putstr_fd(str, 1);
 			ft_putstr_fd("\n", 1);
 			free(str);
+			cmd->cmd_rv = 0;
 		}
 		else
 		{
@@ -106,17 +110,18 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 			ft_putstr_fd(res[1], 1);
 			ft_putstr_fd(": invalid option\ncd: usage: cd\
 [-L] [-P] [-e] [-@] [dir]\n", 1);
+			cmd->cmd_rv = 2;
 		}
 		free(path);
 		return ;
 	}	
-	if (res[1][0] != '.' && res[1][0])
+	if (res[1][0] != '.' && res[1][0] && ft_strchr(res[1], '/'))
 	{
 		buf = ft_strdup(path);
 		while (buf[i])
 		{
 			if (buf[i] == '/')
-				buf[i + 1] = '\0';
+				buf[i] = '\0';
 			i++;
 		}
 		chdir(buf);
@@ -128,12 +133,18 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 		free(buf);
 	}
 	buf2 = ft_strdup(path);
-	buf = cd_front_a_back(res, buf2, 1, var_env);
+	buf = cd_front_a_back(res, buf2, 1, var_env, old_pwd);
+	cmd->cmd_rv = 0;
 	if (chdir(buf) == -1)
 	{
 		ft_putstr_fd("bash : cd : ", 1);
 		ft_putstr_fd(res[1], 1);
 		ft_putstr_fd(": No such file or directory\n", 1);
+		cmd->cmd_rv = 1;
+		free(path);
+		free(buf);
+		free(buf2);
+		return ;
 	}
 	free(path);
 	free(buf);

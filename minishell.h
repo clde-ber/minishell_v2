@@ -193,7 +193,7 @@ char *create_j_value(char *tab_l, char *j_value);
 **path
 */
 void    ft_pwd(char **res);
-char *cd_front_a_back(char **res, char *path, int j, t_list *var_env);
+char *cd_front_a_back(char **res, char *path, int j, t_list *var_env, char *old_pwd);
 void    ft_cd(char **res, t_list *var_env, t_command *cmd);
 char *get_cwd(void);
 
