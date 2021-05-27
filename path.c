@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/27 17:43:40 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/27 17:52:08 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*get_cwd(void)
 	return (path);
 }
 
-void	ft_cd(char **res, t_list *var_env)
+void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 {
 	char	*path;
 	char	*buf;
@@ -79,7 +79,8 @@ void	ft_cd(char **res, t_list *var_env)
 	i = 1;
 	if (res[2])
 	{
-		ft_putstr_fd("Too many arguments", 2);
+		ft_putstr_fd("Too many arguments\n", 2);
+		cmd->cmd_rv = 1;
 		return;
 	}
 	path = get_cwd();
