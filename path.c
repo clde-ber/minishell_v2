@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/27 10:10:19 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/27 17:43:40 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	ft_cd(char **res, t_list *var_env)
 		return;
 	}
 	path = get_cwd();
-	if (res[1][0] != '.')
+	if (res[1][0] != '.' && res[1][0])
 	{
 		buf = ft_strdup(path);
 		while (buf[i])
@@ -94,7 +94,10 @@ void	ft_cd(char **res, t_list *var_env)
 		}
 		chdir(buf);
 		free(path);
-		path = ft_strdup(ft_strchr(&buf[1], '/'));
+		if (res[1][0] == '/')
+			path = ft_strdup(ft_strchr(&buf[1], '/'));
+		else
+			path = ft_strdup(ft_strchr(buf, '/'));
 		free(buf);
 	}
 	buf2 = ft_strdup(path);
