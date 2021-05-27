@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/27 17:52:08 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/27 18:27:09 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 	char	*buf2;
 	DIR		*dir;
 	char	*cut_path;
-	int i;
+	int 	i;
+	char	*str;
 
 	// if (!res[1])
 	// {
@@ -77,6 +78,7 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 	// 	return ;
 	// }
 	i = 1;
+	str = NULL;
 	if (res[2])
 	{
 		ft_putstr_fd("Too many arguments\n", 2);
@@ -84,6 +86,30 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 		return;
 	}
 	path = get_cwd();
+	if (res[1][0] == '-')
+	{
+		if (ft_strlen(res[1]) == 2 && res[1][0] == '-' && res[1][1] == '-')
+		{
+			chdir((str = replace_by_env_value(ft_strdup("$OLDPWD"), var_env, cmd)));
+			free(str);
+		}
+		else if (res[1][0] == '-' && res[1][1] == '\0')
+		{
+			chdir((str = replace_by_env_value(ft_strdup("$OLDPWD"), var_env, cmd)));
+			ft_putstr_fd(str, 1);
+			ft_putstr_fd("\n", 1);
+			free(str);
+		}
+		else
+		{
+			ft_putstr_fd("bash : cd : ", 1);
+			ft_putstr_fd(res[1], 1);
+			ft_putstr_fd(": invalid option\ncd: usage: cd\
+[-L] [-P] [-e] [-@] [dir]\n", 1);
+		}
+		free(path);
+		return ;
+	}	
 	if (res[1][0] != '.' && res[1][0])
 	{
 		buf = ft_strdup(path);
@@ -107,7 +133,7 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 	{
 		ft_putstr_fd("bash : cd : ", 1);
 		ft_putstr_fd(res[1], 1);
-		ft_putstr_fd(": No such file or directory", 1);
+		ft_putstr_fd(": No such file or directory\n", 1);
 	}
 	free(path);
 	free(buf);
