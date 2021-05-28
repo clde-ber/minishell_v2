@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/28 10:09:47 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/28 10:28:17 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,11 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 	char	*path;
 	char	*buf;
 	char	*buf2;
-	DIR		*dir;
 	char	*cut_path;
 	int 	i;
 	char	*str;
 	char 	*old_pwd;
+	char	*ret;
 
 	// if (!res[1])
 	// {
@@ -113,6 +113,7 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 			cmd->cmd_rv = 2;
 		}
 		free(path);
+		free(old_pwd);
 		return ;
 	}	
 	buf = ft_strdup(path);
@@ -125,18 +126,16 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 			i++;
 		}
 		chdir(buf);
-		printf("buf %s\n", buf);
 		free(path);
 		if (res[1][0] == '/')
 			path = ft_strdup(ft_strchr(&res[1][1], '/'));
 		else
 			path = ft_strdup(ft_strchr(res[1], '/'));
 	}
-	printf("path = %s\n", path);
 	buf2 = ft_strdup(path);
-	buf = cd_front_a_back(res, ft_strjoin(buf, buf2), 1, var_env, old_pwd);
-	printf("BUF %s\n", buf);
+	buf = cd_front_a_back(res, (ret = ft_strjoin_free(buf, buf2)), 1, var_env, old_pwd);
 	cmd->cmd_rv = 0;
+	free(ret);
 	if (chdir(buf) == -1 && ft_strcmp(buf, ""))
 	{
 		chdir(old_pwd);
@@ -146,10 +145,10 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 		cmd->cmd_rv = 1;
 		free(path);
 		free(buf);
-		free(buf2);
+		free(old_pwd);
 		return ;
 	}
 	free(path);
 	free(buf);
-	free(buf2);
+	free(old_pwd);
 }
