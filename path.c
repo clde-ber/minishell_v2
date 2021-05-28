@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/27 18:53:27 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/28 10:09:47 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,9 +115,9 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 		free(path);
 		return ;
 	}	
-	if (res[1][0] != '.' && res[1][0] && ft_strchr(res[1], '/'))
+	buf = ft_strdup(path);
+	if (ft_strchr(&res[1][1], '/'))
 	{
-		buf = ft_strdup(path);
 		while (buf[i])
 		{
 			if (buf[i] == '/')
@@ -125,18 +125,21 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 			i++;
 		}
 		chdir(buf);
+		printf("buf %s\n", buf);
 		free(path);
 		if (res[1][0] == '/')
-			path = ft_strdup(ft_strchr(&buf[1], '/'));
+			path = ft_strdup(ft_strchr(&res[1][1], '/'));
 		else
-			path = ft_strdup(ft_strchr(buf, '/'));
-		free(buf);
+			path = ft_strdup(ft_strchr(res[1], '/'));
 	}
+	printf("path = %s\n", path);
 	buf2 = ft_strdup(path);
-	buf = cd_front_a_back(res, buf2, 1, var_env, old_pwd);
+	buf = cd_front_a_back(res, ft_strjoin(buf, buf2), 1, var_env, old_pwd);
+	printf("BUF %s\n", buf);
 	cmd->cmd_rv = 0;
-	if (chdir(buf) == -1)
+	if (chdir(buf) == -1 && ft_strcmp(buf, ""))
 	{
+		chdir(old_pwd);
 		ft_putstr_fd("bash : cd : ", 1);
 		ft_putstr_fd(res[1], 1);
 		ft_putstr_fd(": No such file or directory\n", 1);
