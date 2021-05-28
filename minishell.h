@@ -196,11 +196,6 @@ void    ft_cd(char **res, t_list *var_env, t_command *cmd);
 void	free_cd(char *path, char *buf, char *old_pwd);
 int		if_too_many_args(char **res, t_command *cmd);
 void	init_cd_strings(char **path, char **old_pwd, char **buf, char **ret);
-void	free_path_a_old_pwd(char *path, char *old_pwd);
-
-/*
-**pwd
-*/
 void    ft_pwd(char **res);
 
 /*

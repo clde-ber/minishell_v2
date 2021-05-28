@@ -6,11 +6,27 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/28 15:02:38 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/28 15:22:54 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_pwd(char **res)
+{
+	char	*path;
+	char	*buf;
+	int		i;
+
+	i = 0;
+	if (!(path = malloc(sizeof(char) * 1000)))
+		return ;
+	getcwd(path, 1000);
+	buf = ft_strjoin(path, "\n");
+	free(path);
+	ft_putstr_fd(buf, 1);
+	free(buf);
+}
 
 void	free_cd(char *path, char *buf, char *old_pwd)
 {
@@ -36,12 +52,6 @@ void	init_cd_strings(char **path, char **old_pwd, char **buf, char **ret)
 	*old_pwd = ft_strdup(*path);
 	*buf = ft_strdup(*path);
 	*ret = NULL;
-}
-
-void	free_path_a_old_pwd(char *path, char *old_pwd)
-{
-	free(old_pwd);
-	free(path);
 }
 
 void	ft_cd(char **res, t_list *var_env, t_command *cmd)
