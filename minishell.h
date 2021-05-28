@@ -192,10 +192,16 @@ char *create_j_value(char *tab_l, char *j_value);
 /*
 **path
 */
-void    ft_pwd(char **res);
-char *cd_front_a_back(char **res, char *path, int j, t_list *var_env, char *old_pwd);
 void    ft_cd(char **res, t_list *var_env, t_command *cmd);
-char *get_cwd(void);
+void	free_cd(char *path, char *buf, char *old_pwd);
+int		if_too_many_args(char **res, t_command *cmd);
+void	init_cd_strings(char **path, char **old_pwd, char **buf, char **ret);
+void	free_path_a_old_pwd(char *path, char *old_pwd);
+
+/*
+**pwd
+*/
+void    ft_pwd(char **res);
 
 /*
 **path_utils
@@ -205,6 +211,15 @@ void	path_copy(char **buf, int m, int k);
 void	cd_go_back(int *i, int k, char **buf);
 int		cd_go_front(char *res, int *i, int k, char **buf);
 void 	set_pwd_env(char *path, char *buf, t_list *var_env);
+
+/*
+**path_utils2
+*/
+char *cd_front_a_back(char **res, char *path, t_list *var_env, char *old_pwd);
+char *get_cwd(void);
+void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd);
+void	set_root_path(char **buf, char **path, char **res, char **str);
+void	cd_failure(char **res, t_command *cmd, char *old_pwd, char *buf);
 
 /*
 **prep_line
