@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/28 10:28:17 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/28 10:47:21 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,21 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 			path = ft_strdup(ft_strchr(res[1], '/'));
 	}
 	buf2 = ft_strdup(path);
-	buf = cd_front_a_back(res, (ret = ft_strjoin_free(buf, buf2)), 1, var_env, old_pwd);
+	if (chdir(buf = cd_front_a_back(res, (ret = join_a_free(buf, buf2)), 1, var_env, old_pwd)) == -1)
+	{
+		free(buf);
+		buf = cd_front_a_back(res, buf2, 1, var_env, old_pwd);
+		free(ret);
+		free(buf2);
+		chdir(buf);
+	}
+	else
+	{
+		free(ret);
+		free(buf2);
+	}
+	printf("buf %s\n", buf);
 	cmd->cmd_rv = 0;
-	free(ret);
 	if (chdir(buf) == -1 && ft_strcmp(buf, ""))
 	{
 		chdir(old_pwd);
