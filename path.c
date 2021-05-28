@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/28 10:47:21 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/28 10:58:05 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 	}
 	printf("buf %s\n", buf);
 	cmd->cmd_rv = 0;
-	if (chdir(buf) == -1 && ft_strcmp(buf, ""))
+	if (chdir(buf) == -1)
 	{
 		chdir(old_pwd);
 		ft_putstr_fd("bash : cd : ", 1);
