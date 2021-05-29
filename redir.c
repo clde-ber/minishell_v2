@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/29 13:24:18 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/29 13:27:11 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,11 +133,11 @@ char **env)
 int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
 	g_sig.boolean = 1;
-	if (chrtabtab(res, "|") == -1 && chrtabtab(res, ">") == -1 && chrtabtab(res,
-	"<") == -1 && chrtabtab(res, ">>") == -1)
-		return (go_instruction(copy_tabtab(res), var_env, cmd, env));
-	else if (chrtabtab(res, "|") == -1)
-		return (go_instruction(end_redir(res, f), var_env, cmd, env));
+	if (chrtabtab(f->res, "|") == -1 && chrtabtab(f->res, ">") == -1 && chrtabtab(f->res,
+	"<") == -1 && chrtabtab(f->res, ">>") == -1)
+		return (go_instruction(copy_tabtab(f->res), var_env, cmd, env));
+	else if (chrtabtab(f->res, "|") == -1)
+		return (go_instruction(end_redir(f->res, f), var_env, cmd, env));
 	else
 	{
 		if (count_pipes(f->res) == 1)
