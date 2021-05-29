@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   prep_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/05/27 18:42:33 by budal-bi         ###   ########.fr       */
+=======
+/*   Updated: 2021/05/26 16:32:13 by clde-ber         ###   ########.fr       */
+>>>>>>> 3d7cfac17c68703ab8a57ed994227c6b9f58ab3b
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +70,7 @@ char *go_line(t_term *term)
 			if (current != NULL)
 				free(current);
 			write(1, "\n", 1);
-			exit(0);
+			exit(126);
 		}
 		else if((int)buf[0] == 127)
 		{

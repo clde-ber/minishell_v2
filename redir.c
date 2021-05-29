@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/25 17:53:21 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/29 13:24:18 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,31 +63,37 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 {
 	if (tabl == NULL)
 		;
-	else if (tabl[0][0] == 'e')
-		go_e(tabl, var_env, cmd);
-	else if (ft_strcmp(tabl[0], "pwd") == 0)
-		ft_pwd(tabl);
-	else if (ft_strcmp(tabl[0], "cd") == 0)
-		ft_cd(tabl, var_env);
-	else if (tabl[0][0] == '.' && tabl[0][1] == '/')
-		find_exe(tabl[0], env, cmd);
-	else if (ft_strcmp(tabl[0], "unset") == 0 && tabl[1])
-		unset(var_env, tabl);
-	else if (ft_strcmp(tabl[0], "unset") == 0)
-		errors(cmd);
-	else if (ft_strcmp(tabl[0], "$?") == 0)
+	if (ft_strcmp(tabl[0], "$?"))
 	{
+		if (tabl[0][0] == 'e')
+			go_e(tabl, var_env, cmd);
+		else if (ft_strcmp(tabl[0], "pwd") == 0)
+			ft_pwd(tabl);
+		else if (ft_strcmp(tabl[0], "cd") == 0 && tabl[1])
+			ft_cd(tabl, var_env, cmd);
+		else if (ft_strcmp(tabl[0], "cd") == 0 && !tabl[1])
+			cd_no_arg(var_env, cmd);
+		else if (tabl[0][0] == '.' && tabl[0][1] == '/')
+			find_exe(tabl[0], env, cmd);
+		else if (ft_strcmp(tabl[0], "unset") == 0 && tabl[1])
+			unset(var_env, tabl);
+		else if (ft_strcmp(tabl[0], "unset") == 0)
+			errors(cmd);
+		else
+			set_args(tabl, cmd->path, cmd);
+	}
+	if (g_sig.sig == 1)
+		cmd->cmd_rv = 130;
+	if (g_sig.sig == 2)
+		cmd->cmd_rv = 131;
+	if (ft_strcmp(tabl[0], "$?") == 0)
+	{
+		printf("rv %d\n", cmd->cmd_rv);
 		printf("%d : Command not found\n", cmd->cmd_rv);
 		cmd->cmd_rv = 127;
 	}
-	else
-		set_args(tabl, cmd->path, cmd);
-	if (g_sig == 1)
-		cmd->cmd_rv = 130;
-	if (g_sig == 2)
-		cmd->cmd_rv = 131;
-	if (g_sig == 1 || g_sig == 2)
-		g_sig = 0;
+	if (g_sig.sig == 1 || g_sig.sig == 2)
+		g_sig.sig = 0;
 	free_tabtab(tabl);
 	return (0);
 }
@@ -126,11 +132,12 @@ char **env)
 
 int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
-	if (chrtabtab(f->res, "|") == -1 && chrtabtab(f->res, ">") == -1 && chrtabtab(f->res,
-	"<") == -1 && chrtabtab(f->res, ">>") == -1)
-		return (go_instruction(copy_tabtab(f->res), var_env, cmd, env));
-	else if (chrtabtab(f->res, "|") == -1)
-		return (go_instruction(end_redir(f->res, f), var_env, cmd, env));
+	g_sig.boolean = 1;
+	if (chrtabtab(res, "|") == -1 && chrtabtab(res, ">") == -1 && chrtabtab(res,
+	"<") == -1 && chrtabtab(res, ">>") == -1)
+		return (go_instruction(copy_tabtab(res), var_env, cmd, env));
+	else if (chrtabtab(res, "|") == -1)
+		return (go_instruction(end_redir(res, f), var_env, cmd, env));
 	else
 	{
 		if (count_pipes(f->res) == 1)

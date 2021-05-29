@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/20 18:05:43 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/29 07:40:11 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,66 +28,57 @@ void	ft_pwd(char **res)
 	free(buf);
 }
 
-char	*cd_front_a_back(char **res, char *path, int j, t_list *var_env)
+void	free_cd(char *path, char *buf, char *old_pwd)
 {
-	int		k;
-	int		i;
-	int		count;
-	char	*buf;
-
-	i = 0;
-	k = 0;
-	count = 0;
-	buf = ft_strjoin(path, "/");
-	while (i < ft_strlen(res[j]))
-	{
-		if ((k = count_back(res[j], &i)))
-			cd_go_back(&i, k, &buf);
-		else
-			cd_go_front(res[j], &i, k, &buf);
-	}
-	if (buf[ft_strlen(buf) - 1] == '/')
-		buf[ft_strlen(buf) - 1] = '\0';
-	set_pwd_env(path, buf, var_env);
-	return (buf);
-}
-
-char	*get_cwd(void)
-{
-	char	*path;
-
-	if (!(path = malloc(sizeof(char) * 1000)))
-		return (NULL);
-	getcwd(path, 1000);
-	return (path);
-}
-
-void	ft_cd(char **res, t_list *var_env)
-{
-	char	*path;
-	char	*buf;
-	char	*buf2;
-
-	// if (!res[1])
-	// {
-	// 	write(1, "\n", 2);
-	// 	return ;
-	// }
-	if (res[2])
-	{
-		ft_putstr_fd("Too many arguments", 2);
-		return;
-	}
-	path = get_cwd();
-	buf2 = ft_strjoin(path, "\0");
-	buf = cd_front_a_back(res, buf2, 1, var_env);
-	if (chdir(buf) == -1)
-	{
-		ft_putstr_fd("bash : cd : ", 1);
-		ft_putstr_fd(res[1], 1);
-		ft_putstr_fd(": No such file or directory", 1);
-	}
 	free(path);
 	free(buf);
-	free(buf2);
+	free(old_pwd);
+}
+
+int		if_too_many_args(char **res, t_command *cmd)
+{
+	if (res[1] && res[2])
+	{
+		ft_putstr_fd("Too many arguments\n", 2);
+		cmd->cmd_rv = 1;
+		return (1);
+	}
+	return (0);
+}
+
+void	init_cd_strings(char **path, char **old_pwd, char **buf, char **ret)
+{
+	*path = get_cwd();
+	*old_pwd = ft_strdup(*path);
+	*buf = ft_strdup(*path);
+	*ret = NULL;
+}
+
+void	ft_cd(char **res, t_list *var_env, t_command *cmd)
+{
+	char	*path;
+	char	*buf;
+	char	*str;
+	char	*old_pwd;
+	char	*ret;
+
+	if (if_too_many_args(res, cmd))
+		return ;
+	if (res[1] && res[1][0] == '-')
+	{
+		ft_cd_minus(res, var_env, cmd, get_cwd());
+		return ;
+	}
+	init_cd_strings(&path, &old_pwd, &buf, &ret);
+	set_root_path(&buf, &path, res, &str);
+	ret = join_a_free(buf, str);
+	if (chdir(buf = cd_front_a_back(res, ret, var_env, old_pwd)) == -1)
+	{
+		free(buf);
+		chdir((buf = cd_front_a_back(res, str, var_env, old_pwd)));
+	}
+	else
+		free(str);
+	cd_failure(res, cmd, old_pwd, buf);
+	free_cd(path, buf, old_pwd);
 }

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:21 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/22 09:07:19 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/25 18:05:33 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ char		*search_env_value(char *str, t_list *var_env)
 	char	*ret;
 
 	ret = NULL;
-	printf("str %s\n", str);
 	while (var_env->next)
 	{
 		if (ft_strcmp(var_env->name, str) == 0)

@@ -6,7 +6,11 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:56:27 by clde-ber          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/05/25 16:52:04 by budal-bi         ###   ########.fr       */
+=======
+/*   Updated: 2021/05/26 09:39:36 by clde-ber         ###   ########.fr       */
+>>>>>>> 3d7cfac17c68703ab8a57ed994227c6b9f58ab3b
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +31,19 @@ void	handle_signal(int code)
 	if (code == 2)
 	//ctrl-c
 	{
-		g_sig = 1;
-		write(1, "\n", 1);
-		write(1, "***minishall*** > ", 18);
+		g_sig.sig = 1;
+		if (g_sig.boolean == 1)
+			write(1, "\n", 1);
+		else
+			write(1, "\n***minishell*** > ", 19);
 	}
 	else if (code == 3)
 	//ctrl-antislash
 	{
-		g_sig = 2;
-		write(1, "Quit (core dumped)\n", 19);
+		if (g_sig.boolean == 1)
+		{
+			g_sig.sig = 2;
+			write(1, "Quit (core dumped)\n", 19);
+		}
 	}
 }

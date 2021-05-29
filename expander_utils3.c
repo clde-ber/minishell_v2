@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 14:30:34 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/22 08:56:21 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/26 09:47:56 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char		*get_env_value(char *str, t_list *var_env, t_command *cmd)
 	char	*ret;
 
 	i = 0;
-	ret = ft_strdup("");
+	ret = NULL;
 	if (!(test = malloc(sizeof(char) * (ft_strlen(str) + 1))))
 		return (0);
 	test[i] = '\0';
@@ -68,6 +68,8 @@ char		*get_env_value(char *str, t_list *var_env, t_command *cmd)
 		free(ret);
 		ret = 0;
 	}
+	free(ret);
+	ret = 0;
 	ret = search_env_value(test, var_env);
 	cmd->index += ft_strlen(test);
 	free(test);

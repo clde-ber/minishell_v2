@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/23 09:05:49 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/29 07:15:40 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 	int		quotes;
 
 	quotes = 0;
-	trim = NULL;
 	trim2 = NULL;
 	cmd->index = 0;
 	trim = ft_strtrim(res, "\"");
@@ -51,8 +50,13 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 	if ((quotes == 0 && ft_strchr(trim, '\"') == 0) ||
 	(quotes == 1 && ft_strchr(trim, '\'') == 0))
 	{
-		if (ft_strcmp(trim = replace_by_env(ft_strtrim(trim, "\'"), var_env, cmd, 0), "") == 0)
+		trim2 = ft_strtrim(trim, "\'");
+		free(trim);
+		if (ft_strcmp(trim = replace_by_env(trim2, var_env, cmd, 0), "") == 0)
+		{
+			free(trim);
 			return (NULL);
+		}
 		else
 			return (trim);
 	}
@@ -60,6 +64,7 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 	if (!(is_valid_env_name(trim)))
 	{
 		write_error(trim, quotes);
+		free(trim);
 		return (NULL);
 	}
 	return (trim);
@@ -97,24 +102,24 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 	char	**parsed_res;
 	int		j;
 
-	i = 0;
+	i = -1;
 	j = 0;
 	parsed_res = create_parsed_res(res);
 	if (last_command_rv(res, parsed_res))
 		return (parsed_res);
-	while (res[i])
+	while (res[++i])
 	{
-		if ((strings_to_join(res, i)) > 0)
+		if (ft_strcmp(res[j], "$?") == 0)
+			parsed_res[j] = rv_itoa(cmd->cmd_rv);
+		else if ((strings_to_join(res, i)) > 0)
 			parsed_res[j] = expander(ft_strjoin(res[i],
 						res[++i]), var_env, res, cmd);
 		else if ((strings_to_join(res, i)) == -1)
 			parsed_res[j] = ft_strdup("");
 		else
 			parsed_res[j] = expander(res[i], var_env, res, cmd);
-		if (parsed_res_error(parsed_res, j))
-			parsed_res[j] = ft_strdup("");
+		parsed_res[j] = parsed_res_error(parsed_res, j);
 		printf("parsed_res %s\n", parsed_res[j]);
-		i++;
 		j++;
 	}
 	parsed_res[j] = NULL;

@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/25 15:51:13 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/29 13:23:25 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,6 @@
 ** it prints an error.
 */
 
-void	print_error(int errno, t_command *cmd)
-{
-	printf("%s\n", strerror(errno));
-	cmd->cmd_rv = 1;
-}
-
 int		launch_exe(char *exe, char *path, char **env, t_command *cmd)
 {
 	pid_t	pid;
@@ -38,24 +32,30 @@ int		launch_exe(char *exe, char *path, char **env, t_command *cmd)
 
 	pid = 0;
 	ret = 0;
-	errno = 0;
 	status = 0;
 	argv = arg_tab(exe, path, env);
+	printf("argv[0] %s\n", argv[0]);
 	envp = env_tab(path);
 	if ((pid = fork()) == 0)
 	{
 		if ((ret = execve(argv[0], argv, envp)) == -1)
 		{
+			write(1, "bash: ", 6);
+			write(1, path, ft_strlen(path));
+			write(1, ": ", 2);
 			printf("%s\n", strerror(errno));
-			cmd->cmd_rv = 1;
+			if (errno == 2)
+				exit(127);
+			if (errno == 13)
+				exit(126);
 		}
-		exit(status);
+		else
+			exit(status);
 	}
 	free_tabtab(envp);
-	free(argv[0]);
-	// free(argv[1]);
-	free(argv);
+	free_tabtab(argv);
 	waitpid(ret, &status, 0);
+	cmd->cmd_rv = status % 255;
 	return (exit_status(status));
 }
 
@@ -64,14 +64,21 @@ void	find_exe(char *path, char **env, t_command *cmd)
 	DIR				*dir;
 	char			*str;
 	struct dirent	*st_dir;
+	char			*path_mod;
 
 	st_dir = NULL;
 	str = ft_get_filename(path, '/');
+	path_mod = get_path(path, '/');
 	errno = 0;
-	if (!(dir = opendir(get_path(path, '/'))))
+	if (!(dir = opendir(path_mod)))
 	{
+		write(1, "bash: ", 6);
+		write(1, path, ft_strlen(path));
+		write(1, ": ", 2);
 		printf("%s\n", strerror(errno));
-		cmd->cmd_rv = 1;
+		cmd->cmd_rv = 127;
+		free(str);
+		free(path_mod);
 		return ;
 	}
 	while ((st_dir = readdir(dir)))
@@ -81,15 +88,15 @@ void	find_exe(char *path, char **env, t_command *cmd)
 			launch_exe(st_dir->d_name, path, env, cmd);
 			closedir(dir);
 			free(str);
+			free(path_mod);
 			return ;
 		}
 	}
-	if (errno && (cmd->cmd_rv = 1))
+	if (errno)
 		printf("%s\n", strerror(errno));
 	else
-	{
 		launch_exe(str, path, env, cmd);
-		free(str);
-	}
-	free(dir);
+	closedir(dir);
+	free(path_mod);
+	free(str);
 }

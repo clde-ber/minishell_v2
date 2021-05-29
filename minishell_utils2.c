@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 18:59:08 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/20 18:59:14 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/26 12:23:18 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,6 @@ void	init_structs(t_command *cmd)
 	cmd->path = NULL;
 	cmd->index = 0;
 	cmd->cmd_rv = 0;
+	cmd->start = 0;
+	cmd->ret = 0;
 }

@@ -17,6 +17,12 @@
 
 #define BUFFER_SIZE 50
 
+typedef struct	s_sig
+{
+	int			sig;
+	int			boolean;
+}				t_sig;
+
 typedef struct	s_list
 {
 	char		*name;
@@ -52,6 +58,8 @@ typedef struct s_command
 	char		*path;
 	int			index;
 	int			cmd_rv;
+	int			start;
+	int			ret;
 }				t_command;
 
 //A DELETE
@@ -117,7 +125,7 @@ char *find_op(char *str);
 */
 int strings_to_join(char **res, int i);
 char **create_parsed_res(char **res);
-int parsed_res_error(char **parsed_res, int j);
+char *parsed_res_error(char **parsed_res, int j);
 char **last_command_rv(char **res, char **parsed_res);
 
 /*
@@ -181,10 +189,11 @@ char *create_j_value(char *tab_l, char *j_value);
 /*
 **path
 */
+void    ft_cd(char **res, t_list *var_env, t_command *cmd);
+void	free_cd(char *path, char *buf, char *old_pwd);
+int		if_too_many_args(char **res, t_command *cmd);
+void	init_cd_strings(char **path, char **old_pwd, char **buf, char **ret);
 void    ft_pwd(char **res);
-char *cd_front_a_back(char **res, char *path, int j, t_list *var_env);
-void    ft_cd(char **res, t_list *var_env);
-char *get_cwd(void);
 
 /*
 **path_utils
@@ -194,6 +203,20 @@ void	path_copy(char **buf, int m, int k);
 void	cd_go_back(int *i, int k, char **buf);
 int		cd_go_front(char *res, int *i, int k, char **buf);
 void 	set_pwd_env(char *path, char *buf, t_list *var_env);
+
+/*
+**path_utils2
+*/
+char *cd_front_a_back(char **res, char *path, t_list *var_env, char *old_pwd);
+char *get_cwd(void);
+void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd, char *old_pwd);
+void	set_root_path(char **buf, char **path, char **res, char **str);
+void	cd_failure(char **res, t_command *cmd, char *old_pwd, char *buf);
+
+/*
+**path_utils3
+*/
+void    cd_no_arg(t_list *var_env, t_command *cmd);
 
 /*
 **prep_line
@@ -357,6 +380,7 @@ int	ft_putchar(int c);
 **libft_utils5
 */
 int		ft_atoi(const char *str);
+char	*rv_itoa(int n);
 
 /*
 **libft_list
@@ -374,6 +398,6 @@ void	ft_record(void *lst, void *cmd);
 void	ft_lstiter(t_list *lst, void (*f)(void *, void *), t_command *cmd);
 void	ft_lstdel(t_list *lst);
 
-extern int g_sig;
+extern t_sig g_sig;
 
 #endif

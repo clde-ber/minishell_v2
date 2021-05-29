@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/22 09:19:22 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/27 17:44:42 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 	i = 0;
 	tmp = ft_strdup("");
 	str = NULL;
-	printf("trim[i] %c\n", trim[i]);
 	while (i < ft_strlen(trim))
 	{
 		if (trim[i] != '$')
@@ -74,11 +73,9 @@ char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 		}
 		else
 		{
-			printf("get env");
 			tmp = ft_strjoin_free(tmp, get_env_value(&trim[i + 1],
 						var_env, cmd));
 			i += cmd->index + 1;
-			printf("i %d\n", i);
 		}
 		cmd->index = 0;
 	}
@@ -103,8 +100,6 @@ char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 	buf = ft_strdup(tmp_sub);
 	if (boolean == 0 && ft_strchr(buf, '$'))
 	{
-		printf("test\n");
-		printf("buf %s\n", ft_strtrim(buf, "\'"));
 		tmp = ft_strtrim(buf, "\'");
 		free(tmp_sub);
 		tmp_sub = replace_by_env_value(tmp, var_env, cmd);
