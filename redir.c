@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/27 17:52:57 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/29 07:01:45 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,10 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 			go_e(tabl, var_env, cmd);
 		else if (ft_strcmp(tabl[0], "pwd") == 0)
 			ft_pwd(tabl);
-		else if (ft_strcmp(tabl[0], "cd") == 0)
+		else if (ft_strcmp(tabl[0], "cd") == 0 && tabl[1])
 			ft_cd(tabl, var_env, cmd);
+		else if (ft_strcmp(tabl[0], "cd") == 0 && !tabl[1])
+			cd_no_arg(var_env, cmd);
 		else if (tabl[0][0] == '.' && tabl[0][1] == '/')
 			find_exe(tabl[0], env, cmd);
 		else if (ft_strcmp(tabl[0], "unset") == 0 && tabl[1])

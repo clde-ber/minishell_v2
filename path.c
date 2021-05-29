@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/28 15:22:54 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/29 07:40:11 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	free_cd(char *path, char *buf, char *old_pwd)
 
 int		if_too_many_args(char **res, t_command *cmd)
 {
-	if (res[2])
+	if (res[1] && res[2])
 	{
 		ft_putstr_fd("Too many arguments\n", 2);
 		cmd->cmd_rv = 1;
@@ -64,9 +64,9 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 
 	if (if_too_many_args(res, cmd))
 		return ;
-	if (res[1][0] == '-')
+	if (res[1] && res[1][0] == '-')
 	{
-		ft_cd_minus(res, var_env, cmd);
+		ft_cd_minus(res, var_env, cmd, get_cwd());
 		return ;
 	}
 	init_cd_strings(&path, &old_pwd, &buf, &ret);

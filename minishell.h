@@ -128,7 +128,7 @@ char *find_op(char *str);
 */
 int strings_to_join(char **res, int i);
 char **create_parsed_res(char **res);
-int parsed_res_error(char **parsed_res, int j);
+char *parsed_res_error(char **parsed_res, int j);
 char **last_command_rv(char **res, char **parsed_res);
 
 /*
@@ -212,9 +212,14 @@ void 	set_pwd_env(char *path, char *buf, t_list *var_env);
 */
 char *cd_front_a_back(char **res, char *path, t_list *var_env, char *old_pwd);
 char *get_cwd(void);
-void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd);
+void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd, char *old_pwd);
 void	set_root_path(char **buf, char **path, char **res, char **str);
 void	cd_failure(char **res, t_command *cmd, char *old_pwd, char *buf);
+
+/*
+**path_utils3
+*/
+void    cd_no_arg(t_list *var_env, t_command *cmd);
 
 /*
 **prep_line
@@ -378,6 +383,7 @@ int	ft_putchar(int c);
 **libft_utils5
 */
 int		ft_atoi(const char *str);
+char	*rv_itoa(int n);
 
 /*
 **libft_list

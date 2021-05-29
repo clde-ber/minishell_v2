@@ -31,6 +31,7 @@ SRCS =	./debug_to_delete.c\
 	./path.c\
 	./path_utils.c\
 	./path_utils2.c\
+	./path_utils3.c\
 	./prep_line.c\
 	./redir.c\
 	./redir_utils.c\
