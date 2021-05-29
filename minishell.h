@@ -29,11 +29,8 @@ typedef struct	s_fd
 {
 	int			save_in;
 	int			save_out;
-	char			**save_pipe;
-	int			num_pipe;
-	int			save_pipe_in;
-	int			save_pipe_out;
-	int			fds[2];
+	char		**save_pipe;
+	char		**res;
 }				t_fd;
 
 typedef struct	s_term
@@ -210,11 +207,11 @@ char *getcommand(char *str);
 **redir
 */
 int		chrtabtab(char **res, char *str);
-char	**divide_pipe(char **res, t_fd *f);
+char	**divide_pipe(t_fd *f);
 int		go_e(char **tabl, t_list *var_env, t_command *cmd);
 int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env);
 int		go_pipe(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env);
-int		redir_and_send(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env);
+int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env);
 
 /*
 **redir_utils
@@ -271,7 +268,7 @@ char	*handle_arrow(t_term *term, char *end);
 int	get_k(int k, char **res, int i, int j);
 char **middle_pipe(char **res, int i);
 void print_tabtab(char **res);
-int handle_multipipes(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env);
+int handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd, char **env);
 
 /*
 **parse_path

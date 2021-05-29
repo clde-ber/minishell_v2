@@ -3,37 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/25 12:06:38 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/25 17:53:21 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**divide_pipe(char **res, t_fd *f)
+char	**divide_pipe(t_fd *f)
 {
 	int		m;
 	int		i;
 	char	**tabl;
 
 	i = 0;
-	m = count_tabs(res) - chrtabtab(res, "|");
+	m = count_tabs(f->res) - chrtabtab(f->res, "|");
 	if (!(f->save_pipe = malloc(sizeof(char *) * (m + 2))))
 		return (NULL);
-	if (!(tabl = malloc(sizeof(char *) * (chrtabtab(res, "|") + 2))))
+	if (!(tabl = malloc(sizeof(char *) * (chrtabtab(f->res, "|") + 2))))
 		return (NULL);
-	while (i < chrtabtab(res, "|"))
+	while (i < chrtabtab(f->res, "|"))
 	{
-		tabl[i] = ft_strdup(res[i]);
+		tabl[i] = ft_strdup(f->res[i]);
 		i++;
 	}
 	tabl[i] = NULL;
 	i = 0;
-	while (res[chrtabtab(res, "|") + i + 1])
+	while (f->res[chrtabtab(f->res, "|") + i + 1])
 	{
-		f->save_pipe[i] = ft_strdup(res[chrtabtab(res, "|") + i + 1]);
+		f->save_pipe[i] = ft_strdup(f->res[chrtabtab(f->res, "|") + i + 1]);
 		i++;
 	}
 	f->save_pipe[i] = NULL;
@@ -99,6 +99,12 @@ char **env)
 	int		pipe_fd[2];
 	int		status;
 
+	if (f->save_pipe[0] == NULL)
+	{
+		go_instruction(end_redir(one, f), var_env, cmd, env);
+		free_tabtab(f->save_pipe);
+		return ;
+	}
 	pipe(pipe_fd);
 	if ((pid = fork()) == -1)
 		exit(1);
@@ -118,21 +124,20 @@ char **env)
 	free_tabtab(one);
 }
 
-int		redir_and_send(char **res, t_fd *f, t_list *var_env, t_command *cmd,
-char **env)
+int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
-	if (chrtabtab(res, "|") == -1 && chrtabtab(res, ">") == -1 && chrtabtab(res,
-	"<") == -1 && chrtabtab(res, ">>") == -1)
-		return (go_instruction(copy_tabtab(res), var_env, cmd, env));
-	else if (chrtabtab(res, "|") == -1)
-		return (go_instruction(end_redir(res, f), var_env, cmd, env));
+	if (chrtabtab(f->res, "|") == -1 && chrtabtab(f->res, ">") == -1 && chrtabtab(f->res,
+	"<") == -1 && chrtabtab(f->res, ">>") == -1)
+		return (go_instruction(copy_tabtab(f->res), var_env, cmd, env));
+	else if (chrtabtab(f->res, "|") == -1)
+		return (go_instruction(end_redir(f->res, f), var_env, cmd, env));
 	else
 	{
-		if (count_pipes(res) == 1)
-			return (go_pipe(divide_pipe(res, f), f, var_env, cmd, env));
+		if (count_pipes(f->res) == 1)
+			return (go_pipe(divide_pipe(f), f, var_env, cmd, env));
 		else
-			return (handle_multipipes(res, f, var_env, cmd, env));
+			return (handle_multipipes(f, var_env, cmd, env));
 	}
-	free_tabtab(res);
+	free_tabtab(f->res);
 	return (2);
 }

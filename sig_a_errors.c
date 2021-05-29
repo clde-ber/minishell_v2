@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig_a_errors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:56:27 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/25 14:03:16 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/25 16:52:04 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	handle_signal(int code)
 	{
 		g_sig = 1;
 		write(1, "\n", 1);
+		write(1, "***minishall*** > ", 18);
 	}
 	else if (code == 3)
 	//ctrl-antislash

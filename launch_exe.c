@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/23 17:42:16 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/25 15:51:13 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ int		launch_exe(char *exe, char *path, char **env, t_command *cmd)
 		exit(status);
 	}
 	free_tabtab(envp);
-	// free_tabtab(argv);
+	free(argv[0]);
+	// free(argv[1]);
+	free(argv);
 	waitpid(ret, &status, 0);
 	return (exit_status(status));
 }
@@ -73,12 +75,15 @@ void	find_exe(char *path, char **env, t_command *cmd)
 		return ;
 	}
 	while ((st_dir = readdir(dir)))
+	{
 		if (ft_strcmp(st_dir->d_name, str) == 0)
 		{
 			launch_exe(st_dir->d_name, path, env, cmd);
 			closedir(dir);
+			free(str);
 			return ;
 		}
+	}
 	if (errno && (cmd->cmd_rv = 1))
 		printf("%s\n", strerror(errno));
 	else
@@ -86,4 +91,5 @@ void	find_exe(char *path, char **env, t_command *cmd)
 		launch_exe(str, path, env, cmd);
 		free(str);
 	}
+	free(dir);
 }

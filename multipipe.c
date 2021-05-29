@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multipipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/25 12:06:48 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/25 17:56:27 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	print_tabtab(char **res)
 	}
 }
 
-int		handle_multipipes(char **res, t_fd *f, t_list *var_env, t_command *cmd,
+int		handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd,
 char **env)
 {
 	int i;
@@ -77,7 +77,7 @@ char **env)
 	j = 0;
 	fdd = 0;
 	pid = 0;
-	while (j < count_pipes(res) + 1)
+	while (j < count_pipes(f->res) + 1)
 	{
 		pipe(fd);
 		if ((pid = fork()) == -1)
@@ -85,10 +85,10 @@ char **env)
 		else if (pid == 0)
 		{
 			dup2(fdd, 0);
-			if (j < count_pipes(res))
+			if (j < count_pipes(f->res))
 				dup2(fd[1], 1);
 			close(fd[0]);
-			go_instruction(end_redir(middle_pipe(res, j), f), var_env, cmd,
+			go_instruction(end_redir(middle_pipe(f->res, j), f), var_env, cmd,
 			env);
 			exit(status);
 		}

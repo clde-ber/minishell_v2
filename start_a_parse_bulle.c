@@ -15,10 +15,6 @@ void	init_fds(t_fd *f)
 	f->save_in = dup(STDIN_FILENO);
 	f->save_out = dup(STDOUT_FILENO);
 	f->save_pipe = NULL;
-	f->num_pipe = 0;
-	f->save_pipe_in = 127;
-	f->save_pipe_out = 127;
-	pipe(f->fds);
 }
 
 int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
@@ -44,12 +40,11 @@ int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 			printf("%s\n", res[i]);
 			i++;
 		}
-		parsed_res = parse_res(res, var_env, cmd);
-		num = redir_and_send(parsed_res, f, var_env, cmd, env);
+		f->res = parse_res(res, var_env, cmd);
+		num = redir_and_send(f, var_env, cmd, env);
 		restore_fds(f);
 		free_tabtab(res);
-		free_tabtab(parsed_res);
-		// free(parsed_res);
+		free_tabtab(f->res);
 	}
 }
 
@@ -96,11 +91,12 @@ int main(int ac, char **av, char **env)
 	signal(SIGQUIT, handle_signal);
 	while (1)
 	{
-		write(1, "***minishell*** > ", 18);
+		if (g_sig != 1 && g_sig != 2)
+			write(1, "***minishell*** > ", 18);
 		line = go_line(term);
 		if ((ft_strcmp(line, "$?")))
 			cmd->cmd_rv = 0;
-		if (ft_strcmp(line, "exit") == 0) //builtin à coder
+		if (ft_strcmp(line, "exit") == 0)
 		{
 			free(line);
 			exit(0);
