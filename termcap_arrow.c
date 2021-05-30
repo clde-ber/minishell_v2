@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 19:16:23 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/22 17:08:53 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/27 15:23:47 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,17 +80,17 @@ char	*handle_arrow_down(t_term *term, char *end)
 
 void	not_arrow(int i, char c, t_term *term)
 {
-	if (i == 0)
-	{
-		ft_putchar(27);
-		write(1, &c, 1);
-	}
-	else
-	{
-		ft_putchar(27);
-		ft_putchar(91);
-		write(1, &c, 1);
-	}
+	// if (i == 0)
+	// {
+	// 	ft_putchar(27);
+	// 	write(1, &c, 1);
+	// }
+	// else
+	// {
+	// 	ft_putchar(27);
+	// 	ft_putchar(91);
+	// 	write(1, &c, 1);
+	// }
 }
 
 char	*handle_arrow(t_term *term, char *current)

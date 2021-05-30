@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prep_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/26 16:32:13 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/29 13:26:07 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,15 @@ char *go_line(t_term *term)
 				free(current);
 			write(1, "\n", 1);
 			exit(126);
+		}
+		else if((int)buf[0] == 127)
+		{
+			tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2), term->y - 1), 1,
+	ft_putchar);
+			write(1, " ", 1);
+			tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2), term->y - 1), 1,
+	ft_putchar);
+			current[ft_strlen(current) - 1] = '\0';
 		}
 		else
 			current = get_char(current, term, buf);
