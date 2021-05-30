@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/29 13:27:11 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/30 16:53:33 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,23 @@ char	**divide_pipe(t_fd *f)
 
 int		go_e(char **tabl, t_list *var_env, t_command *cmd)
 {
-	if (ft_strcmp(tabl[0], "echo") == 0)
-		ft_echo(tabl, var_env);
-	else if (ft_strcmp(tabl[0], "export") == 0 && tabl[1])
+	if (ft_strcmp(tabl[0], "echo") == 0 || ft_strcmp(tabl[0], "export") == 0
+	|| ft_strcmp(tabl[0], "env") == 0 || ft_strcmp(tabl[0], "exit") == 0)
 	{
-		check_doublons_cl(tabl, NULL, NULL, 0);
-		set_env(tabl, var_env, cmd);
+		if (ft_strcmp(tabl[0], "echo") == 0)
+			ft_echo(tabl, var_env);
+		if ((ft_strcmp(tabl[0], "export") == 0 && tabl[1]) || (!tabl[1] && cmd->cmd_rv == 127))
+		{
+			check_doublons_cl(tabl, NULL, NULL, 0);
+			set_env(tabl, var_env, cmd);
+		}
+		if (ft_strcmp(tabl[0], "export") == 0 && cmd->cmd_rv == 127)
+			print_sorted_env(var_env, cmd);
+		if (ft_strcmp(tabl[0], "env") == 0)
+			print_env(var_env);
+		if (ft_strcmp(tabl[0], "exit") == 0)
+			ft_exit(tabl, cmd);
 	}
-	else if (ft_strcmp(tabl[0], "export") == 0 && (!(tabl[1])))
-		print_sorted_env(var_env);
-	else if (ft_strcmp(tabl[0], "env") == 0)
-		print_env(var_env);
-	else if (ft_strcmp(tabl[0], "exit") == 0)
-		ft_exit(tabl, cmd);
 	else
 		set_args(tabl, cmd->path, cmd);
 }

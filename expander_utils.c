@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/29 14:17:29 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/30 16:41:53 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,14 +132,12 @@ char		*handled_export(char *res, t_list *var_env, t_command *cmd)
 		str_first = NULL;
 	free_tabtab(p_bin);
 	printf("name %s\n", name);
-	if ((!(str_first)) || (!(is_valid_env_name(name))) ||
+	if ((!(str_first)) || (!(is_valid_env_name(replace_by_env(name, var_env, cmd, 0)))) ||
 	(!(ft_strcmp(str_first, ""))))
 	{
-		free(name);
 		cmd->cmd_rv = 1;
 		return (export_errors(str_first, str_secd, quotes, res));
 	}
-	free(name);
 	export_replace_by_env_value(&str_first, &str_secd, var_env, cmd);
 	if (cmd->cmd_rv != 1)
 		cmd->cmd_rv = 0;

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/30 09:56:00 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/30 17:42:26 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 	trim = ft_strtrim(res, "\"");
 	if (ft_strlen(trim) != ft_strlen(res))
 		quotes = 1;
-	if ((quotes == 0 && ft_strchr(trim, '\"') == 0) ||
-	(quotes == 1 && ft_strchr(trim, '\'') == 0))
+	if (((quotes == 0 && ft_strchr(trim, '\"') == 0) ||
+	(quotes == 1 && ft_strchr(trim, '\'') == 0)) && ft_strcmp(trim, ""))
 	{
 		trim2 = ft_strtrim(trim, "\'");
 		free(trim);
@@ -65,7 +65,6 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 	if (!(is_valid_env_name(trim)))
 	{
 		write_error(trim, quotes, cmd);
-		free(trim);
 		return (NULL);
 	}
 	return (trim);
@@ -129,7 +128,7 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 		else
 			parsed_res[j] = expander(res[i], var_env, res, cmd);
 		parsed_res[j] = parsed_res_error(parsed_res, j, cmd);
-		remove_empty_string(parsed_res[j], &j);
+//		remove_empty_string(parsed_res[j], &j);
 		j++;
 	}
 	parsed_res[j] = NULL;

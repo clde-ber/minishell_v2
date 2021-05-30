@@ -1,0 +1,31 @@
+0 /home/user42/.local/bin/coyotte
+1 
+2 
+0 /usr/local/sbin/coyotte
+1 
+2 
+0 /usr/local/bin/coyotte
+1 
+2 
+0 /usr/sbin/coyotte
+1 
+2 
+0 /usr/bin/coyotte
+1 
+2 
+0 /sbin/coyotte
+1 
+2 
+0 /bin/coyotte
+1 
+2 
+0 /usr/games/coyotte
+1 
+2 
+0 /usr/local/games/coyotte
+1 
+2 
+0 /snap/bin/coyotte
+1 
+2 
+coyotte : Command not found

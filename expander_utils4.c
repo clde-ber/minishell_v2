@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/29 14:00:50 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/30 18:07:27 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,17 @@ int *quotes)
 void		split_env_name_a_value(char **str_first, char **str_secd,
 char **p_bin, char *res)
 {
+	char *str_f;
+	char *str_s;
+
+	str_f = NULL;
+	str_s = NULL;
 	if (ft_strchr(res, '='))
 	{
 		*str_first = ft_strdup(p_bin[0]);
-		*str_secd = ft_strdup(&ft_strchr(res, '=')[1]);
+		*str_secd = ft_strdup(p_bin[1]);
+		printf("p_bin0 %s\n", p_bin[0]);
+		printf("p_bin1 %s\n", p_bin[1]);
 	}
 	else
 	{

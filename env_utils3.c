@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:10 by user42            #+#    #+#             */
-/*   Updated: 2021/05/01 15:17:08 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/30 16:56:06 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	add_to_env_l(char **tabl, char *j_name, int k, int l)
 	{
 		free(tabl[l]);
 		tabl[l] = join_a_free(join_a_free(join_a_free(j_name, "\
-+="), &i_value[1]), &j_value[1]);
+="), &i_value[1]), &j_value[1]);
 	}
 	else
 		free(j_name);
@@ -67,7 +67,7 @@ void	add_to_env_k(char **tabl, char *i_name, int k, int l)
 	{
 		free(tabl[k]);
 		tabl[k] = join_a_free(join_a_free(join_a_free(i_name, "\
-+="), &j_value[1]), &i_value[1]);
+="), &j_value[1]), &i_value[1]);
 	}
 	else
 		free(i_name);

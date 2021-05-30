@@ -173,7 +173,7 @@ void	add_to_env(char **tabl, int k, int l);
 */
 char	**fill_list(t_list *environ, char **list, int i);
 char	**sort_list(char **list, int i, int j);
-void	print_sorted_env(t_list *environ);
+void	print_sorted_env(t_list *environ, t_command *cmd);
 int		is_valid_env_name(char *str);
 int		is_valid_env_name_c(char c);
 
