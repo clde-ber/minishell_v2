@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils4.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/24 16:51:47 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/29 14:00:50 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ char *res)
 	{
 		free(str_f);
 		str_f = ft_strtrim(str_first, "\'");
-		free(str_first);
 	}
 	if (quotes == 1 || quotes == 4)
 	{
 		free(str_s);
 		str_s = ft_strtrim(str_secd, "\'");
-		free(str_secd);
 	}
+	free(str_first);
+	free(str_secd);
 	return (ft_strjoin_free(join_a_free(str_f, operator), str_s));
 }
 

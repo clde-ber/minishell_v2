@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/29 07:15:40 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/30 09:56:00 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 ** recreated builtins or in the execve function.
 */
 
-void	write_error(char *trim, int quotes)
+void	write_error(char *trim, int quotes, t_command *cmd)
 {
 	char *str;
 
@@ -31,6 +31,7 @@ void	write_error(char *trim, int quotes)
 	else
 		write(1, trim, ft_strlen(trim));
 	write(1, "': not a valid identifier\n", 26);
+	cmd->cmd_rv = 1;
 	free(trim);
 	free(str);
 }
@@ -63,7 +64,7 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 	cmd->cmd_rv = 1;
 	if (!(is_valid_env_name(trim)))
 	{
-		write_error(trim, quotes);
+		write_error(trim, quotes, cmd);
 		free(trim);
 		return (NULL);
 	}
@@ -96,6 +97,15 @@ char	*expander(char *res, t_list *var_env, char **args, t_command *cmd)
 	return (ft_strdup(res));
 }
 
+void	remove_empty_string(char *str, int *j)
+{
+	if (ft_strcmp(str, "") == 0)
+	{
+		free(str);
+		(*j)--;
+	}
+}
+
 char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 {
 	int		i;
@@ -104,7 +114,7 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 
 	i = -1;
 	j = 0;
-	parsed_res = create_parsed_res(res);
+	parsed_res = create_parsed_res(res, cmd);
 	if (last_command_rv(res, parsed_res))
 		return (parsed_res);
 	while (res[++i])
@@ -118,8 +128,8 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 			parsed_res[j] = ft_strdup("");
 		else
 			parsed_res[j] = expander(res[i], var_env, res, cmd);
-		parsed_res[j] = parsed_res_error(parsed_res, j);
-		printf("parsed_res %s\n", parsed_res[j]);
+		parsed_res[j] = parsed_res_error(parsed_res, j, cmd);
+		remove_empty_string(parsed_res[j], &j);
 		j++;
 	}
 	parsed_res[j] = NULL;

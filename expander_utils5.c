@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:38 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/29 07:15:04 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/29 14:17:10 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,14 @@ int		strings_to_join(char **res, int i)
 {
 	if (((res[i][0] == '\'' && res[i][ft_strlen(res[i]) - 1] == '\'')
 				|| (res[i][0] == '\"' && res[i][ft_strlen(res[i]) - 1] == '\"'))
-			&& res[i + 1] && ft_strchr(res[i + 1], '='))
+			&& ft_strlen(res) > 2 && res[i + 1] && ft_strchr(res[i + 1], '='))
 		return (1);
 	else if (ft_strchr(res[i], '=') == 0 && res[i + 1] && res[i + 1][0] == '=')
 		return (-1);
 	return (0);
 }
 
-char	**create_parsed_res(char **res)
+char	**create_parsed_res(char **res, t_command *cmd)
 {
 	int		i;
 	char	**tmp;
@@ -41,11 +41,19 @@ char	**create_parsed_res(char **res)
 	return (parsed_res);
 }
 
-char		*parsed_res_error(char **parsed_res, int j)
+char		*parsed_res_error(char **parsed_res, int j, t_command *cmd)
 {
-	if (parsed_res[j] == NULL)
-		return (ft_strdup(""));
-	return (parsed_res[j]);
+	char *tmp;
+
+	tmp = NULL;
+	if (parsed_res[j])
+	{
+		tmp = ft_strdup(parsed_res[j]);
+		free(parsed_res[j]);
+	}
+	else
+		tmp = ft_strdup("");
+	return (tmp);
 }
 
 char	**last_command_rv(char **res, char **parsed_res)

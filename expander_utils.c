@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/27 17:44:42 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/29 14:17:29 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,16 +127,21 @@ char		*handled_export(char *res, t_list *var_env, t_command *cmd)
 		p_bin = parse_path(res, '=');
 	split_env_name_a_value(&str_first, &str_secd, p_bin, res);
 	env_quotes_a_values(&str_first, &str_secd, &quotes);
+	printf("str_first %s\n", str_first);
 	if (!(name = get_env_name(quotes, str_first)))
 		str_first = NULL;
 	free_tabtab(p_bin);
-	if ((((!(str_first)) || (!(is_valid_env_name(name)))) &&
-	(cmd->cmd_rv = 1)))
+	printf("name %s\n", name);
+	if ((!(str_first)) || (!(is_valid_env_name(name))) ||
+	(!(ft_strcmp(str_first, ""))))
 	{
 		free(name);
+		cmd->cmd_rv = 1;
 		return (export_errors(str_first, str_secd, quotes, res));
 	}
 	free(name);
 	export_replace_by_env_value(&str_first, &str_secd, var_env, cmd);
+	if (cmd->cmd_rv != 1)
+		cmd->cmd_rv = 0;
 	return (valid_export(str_first, str_secd, quotes, res));
 }
