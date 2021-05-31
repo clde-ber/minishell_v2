@@ -89,7 +89,6 @@ size_t parse_command(size_t i, char *str, int *res, char *charset);
 /*
 **expander
 */
-char **create_parsed_res(char **res);
 char **parse_first_arg(char **res, char **parsed_res);
 char *expander(char *res, t_list *var_env, char **args, t_command *cmd);
 char **parse_res(char **res, t_list *var_env, t_command *cmd);
@@ -126,8 +125,8 @@ char *find_op(char *str);
 **expander_utils4
 */
 int strings_to_join(char **res, int i);
-char **create_parsed_res(char **res);
-char *parsed_res_error(char **parsed_res, int j);
+char **create_parsed_res(char **res, t_command *cmd);
+char *parsed_res_error(char **parsed_res, int j, t_command *cmd);
 char **last_command_rv(char **res, char **parsed_res);
 
 /*
@@ -176,7 +175,7 @@ void	add_to_env(char **tabl, int k, int l);
 */
 char	**fill_list(t_list *environ, char **list, int i);
 char	**sort_list(char **list, int i, int j);
-void	print_sorted_env(t_list *environ);
+void	print_sorted_env(t_list *environ, t_command *cmd);
 int		is_valid_env_name(char *str);
 int		is_valid_env_name_c(char c);
 
@@ -192,7 +191,7 @@ char *create_j_value(char *tab_l, char *j_value);
 **path
 */
 void    ft_cd(char **res, t_list *var_env, t_command *cmd);
-void	free_cd(char *path, char *buf, char *old_pwd);
+void	free_cd(char *path, char *buf, char *old_pwd, char *ret);
 int		if_too_many_args(char **res, t_command *cmd);
 void	init_cd_strings(char **path, char **old_pwd, char **buf, char **ret);
 void    ft_pwd(char **res);

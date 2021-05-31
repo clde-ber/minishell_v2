@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils4.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/24 16:51:47 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/31 09:23:58 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,14 @@ char *res)
 	char *str_f;
 	char *str_s;
 
-	str_f = ft_strtrim(str_first, "\'");
-	str_s = ft_strtrim(str_secd, "\'");
+	if (str_first[0] == '\'')
+		str_f = ft_strtrim(str_first, "\'");
+	else
+		str_f = ft_strdup(str_first);
+	if (str_secd[0] == '\'')
+		str_s = ft_strtrim(str_secd, "\'");
+	else
+		str_s = ft_strdup(str_secd);
 	operator = find_op(res);
 	write(1, "bash: export: '", 16);
 	if (quotes % 2 == 0)
@@ -52,16 +58,22 @@ char *res)
 	operator = find_op(res);
 	if (quotes % 2 == 0)
 	{
-		free(str_f);
-		str_f = ft_strtrim(str_first, "\'");
-		free(str_first);
+		if (str_first[0] == '\'')
+		{
+			free(str_f);
+			str_f = ft_strtrim(str_first, "\'");
+		}
 	}
 	if (quotes == 1 || quotes == 4)
 	{
-		free(str_s);
-		str_s = ft_strtrim(str_secd, "\'");
-		free(str_secd);
+		if (str_secd[0] == '\'')
+		{
+			free(str_s);
+			str_s = ft_strtrim(str_secd, "\'");
+		}
 	}
+	free(str_first);
+	free(str_secd);
 	return (ft_strjoin_free(join_a_free(str_f, operator), str_s));
 }
 
@@ -71,8 +83,14 @@ int *quotes)
 	char *str_f;
 	char *str_s;
 
-	str_f = ft_strtrim(*str_first, "\"");
-	str_s = ft_strtrim(*str_secd, "\"");
+	if ((*str_first)[0] == '\"')
+		str_f = ft_strtrim(*str_first, "\"");
+	else
+		str_f = ft_strdup(*str_first);
+	if ((*str_secd)[0] == '\"')
+		str_s = ft_strtrim(*str_secd, "\"");
+	else
+		str_s = ft_strdup(*str_secd);
 	if (ft_strlen(*str_first) != ft_strlen(str_f) &&
 	ft_strlen(*str_secd) == ft_strlen(str_s))
 		*quotes = 1;
@@ -94,10 +112,17 @@ int *quotes)
 void		split_env_name_a_value(char **str_first, char **str_secd,
 char **p_bin, char *res)
 {
+	char *str_f;
+	char *str_s;
+
+	str_f = NULL;
+	str_s = NULL;
 	if (ft_strchr(res, '='))
 	{
 		*str_first = ft_strdup(p_bin[0]);
-		*str_secd = ft_strdup(&ft_strchr(res, '=')[1]);
+		*str_secd = ft_strdup(p_bin[1]);
+		printf("p_bin0 %s\n", p_bin[0]);
+		printf("p_bin1 %s\n", p_bin[1]);
 	}
 	else
 	{

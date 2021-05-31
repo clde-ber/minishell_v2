@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/28 15:00:41 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/29 07:40:58 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/30 09:55:02 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ char	*cd_front_a_back(char **res, char *path, t_list *var_env, char *old_pwd)
 	if (buf[ft_strlen(buf) - 1] == '/')
 		buf[ft_strlen(buf) - 1] = '\0';
 	set_pwd_env(old_pwd, buf, var_env);
-	free(path);
 	return (buf);
 }
 
@@ -91,6 +90,7 @@ void	set_root_path(char **buf, char **path, char **res, char **str)
 			i++;
 		}
 		chdir(*buf);
+		printf("BUF %s\n", *buf);
 		free(*path);
 		if (res[1][0] == '/')
 			*path = ft_strdup(ft_strchr(&res[1][1], '/'));
@@ -103,6 +103,9 @@ void	set_root_path(char **buf, char **path, char **res, char **str)
 void	cd_failure(char **res, t_command *cmd, char *old_pwd, char *buf)
 {
 	cmd->cmd_rv = 0;
+	printf("buf %s\n", buf);
+//	if (ft_strcmp(, "") == 0)
+//		cmd->cmd_rv = 1;
 	if (chdir(buf) == -1)
 	{
 		chdir(old_pwd);

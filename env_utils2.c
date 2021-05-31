@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:50 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/21 15:20:15 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/30 16:44:35 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	**sort_list(char **list, int i, int j)
 	return (list);
 }
 
-void	print_sorted_env(t_list *environ)
+void	print_sorted_env(t_list *environ, t_command *cmd)
 {
 	char	**list;
 	int		i;
@@ -88,6 +88,7 @@ void	print_sorted_env(t_list *environ)
 		printf("%s\n", list[i]);
 	ft_free(list, i + 1);
 	list = NULL;
+	cmd->cmd_rv = 0;
 }
 
 int		is_valid_env_name(char *str)
@@ -95,9 +96,11 @@ int		is_valid_env_name(char *str)
 	int i;
 
 	i = 0;
+	if (str[i] == '\0')
+		return (0);
 	while (str[i])
 	{
-		if (!(str[i] == '_' || ft_isalnum(str[i])))
+		if (!(str[i] == '_' || ft_isalnum(str[i]) || str[i] == '$'))
 			return (0);
 		i++;
 	}

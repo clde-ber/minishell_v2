@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/29 07:15:40 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/31 09:19:19 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,21 @@
 ** recreated builtins or in the execve function.
 */
 
-void	write_error(char *trim, int quotes)
+void	write_error(char *trim, int quotes, t_command *cmd)
 {
 	char *str;
 
-	str = ft_strtrim(trim, "\'");
+	if (trim[0] == '\'')
+		str = ft_strtrim(trim, "\'");
+	else
+		str = ft_strdup(trim);
 	write(1, "bash: unset: '", 15);
 	if (quotes == 0)
 		write(1, str, ft_strlen(str));
 	else
 		write(1, trim, ft_strlen(trim));
 	write(1, "': not a valid identifier\n", 26);
+	cmd->cmd_rv = 1;
 	free(trim);
 	free(str);
 }
@@ -44,27 +48,31 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 	quotes = 0;
 	trim2 = NULL;
 	cmd->index = 0;
-	trim = ft_strtrim(res, "\"");
+	if (res[0] == '\"')
+		trim = ft_strtrim(res, "\"");
+	else
+		trim = ft_strdup(res);
 	if (ft_strlen(trim) != ft_strlen(res))
 		quotes = 1;
-	if ((quotes == 0 && ft_strchr(trim, '\"') == 0) ||
-	(quotes == 1 && ft_strchr(trim, '\'') == 0))
+	if (((quotes == 0 && ft_strchr(trim, '\"') == 0) ||
+	(quotes == 1 && ft_strchr(trim, '\'') == 0)) && ft_strcmp(trim, ""))
 	{
-		trim2 = ft_strtrim(trim, "\'");
+		if (trim[0] == '\'')
+			trim2 = ft_strtrim(trim, "\'");
+		else
+			trim2 = ft_strdup(trim);
 		free(trim);
 		if (ft_strcmp(trim = replace_by_env(trim2, var_env, cmd, 0), "") == 0)
 		{
 			free(trim);
 			return (NULL);
 		}
-		else
-			return (trim);
 	}
+	printf("trim = %s\n", trim);
 	cmd->cmd_rv = 1;
 	if (!(is_valid_env_name(trim)))
 	{
-		write_error(trim, quotes);
-		free(trim);
+		write_error(trim, quotes, cmd);
 		return (NULL);
 	}
 	return (trim);
@@ -96,6 +104,15 @@ char	*expander(char *res, t_list *var_env, char **args, t_command *cmd)
 	return (ft_strdup(res));
 }
 
+void	remove_empty_string(char *str, int *j)
+{
+	if (ft_strcmp(str, "") == 0)
+	{
+		free(str);
+		(*j)--;
+	}
+}
+
 char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 {
 	int		i;
@@ -104,7 +121,7 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 
 	i = -1;
 	j = 0;
-	parsed_res = create_parsed_res(res);
+	parsed_res = create_parsed_res(res, cmd);
 	if (last_command_rv(res, parsed_res))
 		return (parsed_res);
 	while (res[++i])
@@ -118,8 +135,8 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 			parsed_res[j] = ft_strdup("");
 		else
 			parsed_res[j] = expander(res[i], var_env, res, cmd);
-		parsed_res[j] = parsed_res_error(parsed_res, j);
-		printf("parsed_res %s\n", parsed_res[j]);
+		parsed_res[j] = parsed_res_error(parsed_res, j, cmd);
+//		remove_empty_string(parsed_res[j], &j);
 		j++;
 	}
 	parsed_res[j] = NULL;

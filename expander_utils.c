@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/27 17:44:42 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/31 09:10:48 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,25 @@ char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 	tmp = ft_strdup(res);
 	if ((even_or_odd(tmp)) && even_or_odd(tmp) % 2)
 		boolean = 1;
-	tmp_sub = ft_strtrim(tmp, "\"");
-	free(tmp);
+	if (tmp[0] == '\"')
+		tmp_sub = ft_strtrim(tmp, "\"");
+	else
+		tmp_sub = ft_strdup(tmp);
 	buf = ft_strdup(tmp_sub);
 	if (boolean == 0 && ft_strchr(buf, '$'))
 	{
+		free(tmp);
 		tmp = ft_strtrim(buf, "\'");
 		free(tmp_sub);
 		tmp_sub = replace_by_env_value(tmp, var_env, cmd);
+		boolean = 1;
+		tmp = ft_strdup(tmp_sub);
 	}
-	tmp = ft_strtrim(tmp_sub, "\'");
+	if (tmp_sub[0] == '\'')
+	{
+		free(tmp);
+		tmp = ft_strtrim(tmp_sub, "\'");
+	}
 	free(tmp_sub);
 	free(buf);
 	return (tmp);
@@ -127,16 +136,19 @@ char		*handled_export(char *res, t_list *var_env, t_command *cmd)
 		p_bin = parse_path(res, '=');
 	split_env_name_a_value(&str_first, &str_secd, p_bin, res);
 	env_quotes_a_values(&str_first, &str_secd, &quotes);
+	printf("str_first %s\n", str_first);
 	if (!(name = get_env_name(quotes, str_first)))
 		str_first = NULL;
 	free_tabtab(p_bin);
-	if ((((!(str_first)) || (!(is_valid_env_name(name)))) &&
-	(cmd->cmd_rv = 1)))
+	printf("name %s\n", name);
+	if ((!(str_first)) || (!(is_valid_env_name(replace_by_env(name, var_env, cmd, 0)))) ||
+	(!(ft_strcmp(str_first, ""))))
 	{
-		free(name);
+		cmd->cmd_rv = 1;
 		return (export_errors(str_first, str_secd, quotes, res));
 	}
-	free(name);
 	export_replace_by_env_value(&str_first, &str_secd, var_env, cmd);
+	if (cmd->cmd_rv != 1)
+		cmd->cmd_rv = 0;
 	return (valid_export(str_first, str_secd, quotes, res));
 }
