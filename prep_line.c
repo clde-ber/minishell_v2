@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/31 15:51:09 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/31 16:28:06 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ int check_ok_quote(char *str, int i)
 	j = 0;
 	k = 0;
 	l = 0;
+	if (ft_strchr_bis(str, ';') == -1)
+		return (i);
 	while (j <= i)
 	{
 		if (str[j] == '\"')

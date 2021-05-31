@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 18:59:08 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/31 16:09:33 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/31 16:24:38 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ char	*cut_after_punct(char *dest, char *line)
 	i = ft_strchr_bis(line, ';');
 	j = check_ok_quote(line, i);
 	if (j == ft_strlen(line))
-	// j == i || 
 		i = -1;
 	if (i == -1)
 	{
