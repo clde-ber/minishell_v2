@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/31 09:09:55 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/31 09:23:58 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,12 @@ char *res)
 
 	if (str_first[0] == '\'')
 		str_f = ft_strtrim(str_first, "\'");
+	else
+		str_f = ft_strdup(str_first);
 	if (str_secd[0] == '\'')
 		str_s = ft_strtrim(str_secd, "\'");
+	else
+		str_s = ft_strdup(str_secd);
 	operator = find_op(res);
 	write(1, "bash: export: '", 16);
 	if (quotes % 2 == 0)
