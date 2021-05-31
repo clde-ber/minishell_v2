@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/30 16:41:53 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/31 09:10:48 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,16 +95,25 @@ char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 	tmp = ft_strdup(res);
 	if ((even_or_odd(tmp)) && even_or_odd(tmp) % 2)
 		boolean = 1;
-	tmp_sub = ft_strtrim(tmp, "\"");
-	free(tmp);
+	if (tmp[0] == '\"')
+		tmp_sub = ft_strtrim(tmp, "\"");
+	else
+		tmp_sub = ft_strdup(tmp);
 	buf = ft_strdup(tmp_sub);
 	if (boolean == 0 && ft_strchr(buf, '$'))
 	{
+		free(tmp);
 		tmp = ft_strtrim(buf, "\'");
 		free(tmp_sub);
 		tmp_sub = replace_by_env_value(tmp, var_env, cmd);
+		boolean = 1;
+		tmp = ft_strdup(tmp_sub);
 	}
-	tmp = ft_strtrim(tmp_sub, "\'");
+	if (tmp_sub[0] == '\'')
+	{
+		free(tmp);
+		tmp = ft_strtrim(tmp_sub, "\'");
+	}
 	free(tmp_sub);
 	free(buf);
 	return (tmp);

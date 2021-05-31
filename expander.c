@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/30 17:42:26 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/31 09:19:19 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@ void	write_error(char *trim, int quotes, t_command *cmd)
 {
 	char *str;
 
-	str = ft_strtrim(trim, "\'");
+	if (trim[0] == '\'')
+		str = ft_strtrim(trim, "\'");
+	else
+		str = ft_strdup(trim);
 	write(1, "bash: unset: '", 15);
 	if (quotes == 0)
 		write(1, str, ft_strlen(str));
@@ -45,22 +48,27 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 	quotes = 0;
 	trim2 = NULL;
 	cmd->index = 0;
-	trim = ft_strtrim(res, "\"");
+	if (res[0] == '\"')
+		trim = ft_strtrim(res, "\"");
+	else
+		trim = ft_strdup(res);
 	if (ft_strlen(trim) != ft_strlen(res))
 		quotes = 1;
 	if (((quotes == 0 && ft_strchr(trim, '\"') == 0) ||
 	(quotes == 1 && ft_strchr(trim, '\'') == 0)) && ft_strcmp(trim, ""))
 	{
-		trim2 = ft_strtrim(trim, "\'");
+		if (trim[0] == '\'')
+			trim2 = ft_strtrim(trim, "\'");
+		else
+			trim2 = ft_strdup(trim);
 		free(trim);
 		if (ft_strcmp(trim = replace_by_env(trim2, var_env, cmd, 0), "") == 0)
 		{
 			free(trim);
 			return (NULL);
 		}
-		else
-			return (trim);
 	}
+	printf("trim = %s\n", trim);
 	cmd->cmd_rv = 1;
 	if (!(is_valid_env_name(trim)))
 	{

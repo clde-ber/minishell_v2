@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:56:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/30 18:05:45 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/31 08:43:44 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static size_t	len_word(char *str, int c)
 	size_t i;
 
 	i = 0;
-	while (str[i])
+	while (i < ft_strlen(str))
 	{
 		if (str[i] == '\'')
 		{
@@ -55,19 +55,19 @@ static size_t	count_tab(char *s, char c)
 		return (1);
 	while (s[i])
 	{
-		if (s[i] == '\'')
+		if (s[i] == '\'' && s[i + 1])
 		{
 			i++;
 			while (s[i] && s[i] != '\'')
 				i++;
 		}
-		if (s[i] == '\"')
+		if (s[i] == '\"' && s[i + 1])
 		{
 			i++;
 			while (s[i] && s[i] != '\"')
 				i++;
 		}
-		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
+		if (s[i] && s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
 			count++;
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/30 18:07:27 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/31 09:09:55 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@ char *res)
 	char *str_f;
 	char *str_s;
 
-	str_f = ft_strtrim(str_first, "\'");
-	str_s = ft_strtrim(str_secd, "\'");
+	if (str_first[0] == '\'')
+		str_f = ft_strtrim(str_first, "\'");
+	if (str_secd[0] == '\'')
+		str_s = ft_strtrim(str_secd, "\'");
 	operator = find_op(res);
 	write(1, "bash: export: '", 16);
 	if (quotes % 2 == 0)
@@ -52,13 +54,19 @@ char *res)
 	operator = find_op(res);
 	if (quotes % 2 == 0)
 	{
-		free(str_f);
-		str_f = ft_strtrim(str_first, "\'");
+		if (str_first[0] == '\'')
+		{
+			free(str_f);
+			str_f = ft_strtrim(str_first, "\'");
+		}
 	}
 	if (quotes == 1 || quotes == 4)
 	{
-		free(str_s);
-		str_s = ft_strtrim(str_secd, "\'");
+		if (str_secd[0] == '\'')
+		{
+			free(str_s);
+			str_s = ft_strtrim(str_secd, "\'");
+		}
 	}
 	free(str_first);
 	free(str_secd);
@@ -71,8 +79,14 @@ int *quotes)
 	char *str_f;
 	char *str_s;
 
-	str_f = ft_strtrim(*str_first, "\"");
-	str_s = ft_strtrim(*str_secd, "\"");
+	if ((*str_first)[0] == '\"')
+		str_f = ft_strtrim(*str_first, "\"");
+	else
+		str_f = ft_strdup(*str_first);
+	if ((*str_secd)[0] == '\"')
+		str_s = ft_strtrim(*str_secd, "\"");
+	else
+		str_s = ft_strdup(*str_secd);
 	if (ft_strlen(*str_first) != ft_strlen(str_f) &&
 	ft_strlen(*str_secd) == ft_strlen(str_s))
 		*quotes = 1;
