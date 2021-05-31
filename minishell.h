@@ -64,6 +64,8 @@ typedef struct s_command
 	int			ret;
 }				t_command;
 
+
+int ft_is_fail_char(char *str);
 //A DELETE
 // dans debug_to_delete
 void	ft_putstr_nbr(int i, int fd);

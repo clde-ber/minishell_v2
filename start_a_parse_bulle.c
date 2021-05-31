@@ -45,6 +45,20 @@ int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 	}
 }
 
+int ft_is_fail_char(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != '>' && str[i] != '<' && str[i] != '|' && str[i] != ' ' && str[i] != ';')
+			return (0);
+		i++;
+	}
+	return (i);
+}
+
 void main_loop(char *buf, char **env, t_list *var_env, t_command *cmd)
 {
 	char *command;
@@ -55,17 +69,18 @@ void main_loop(char *buf, char **env, t_list *var_env, t_command *cmd)
 		free(buf);
 		return ;
 	}
+	if (ft_is_fail_char(buf))
+	{
+		ft_putstr_fd("failed char\n", 2);
+		free(buf);
+		return ;
+	}
 	while ((command = getcommand(buf)) != NULL)
 	{
-		ft_putstr_fd("command is", 1);
-		ft_putstr_fd(command, 1);
 		dispatch(command, env, var_env, cmd);
 		buf2 = cut_after_punct(buf2, buf);
 		if (buf2 == NULL)
-		{
-
 			buf = NULL;
-		}
 		else
 			buf = ft_strdup(buf2);
 		free(buf2);

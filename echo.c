@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 22:13:10 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/20 19:29:05 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/31 17:00:52 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,31 @@ char	*echo_option(char *output, int option)
 
 char	*get_echo_output(char *output, char **res, int i)
 {
+	int j;
+	int k;
+
+	j = 2;
+	k = 0;
+	if (res[i][0] == '-' && res[i][1] == 'n' && output == NULL)
+	{
+		k = 1;
+		while (res[i][j])
+		{
+			if (res[i][j] != 'n')
+				k = 0;
+			j++;
+		}
+	}
+	if (k == 1)
+		return (output);
 	if (output == NULL)
 		output = ft_strdup(res[i]);
 	else
-	{
+	{	
 		output = ft_strjoin_free(output, ft_strdup(" "));
 		output = ft_strjoin_free(output, ft_strdup(res[i]));
 	}
+	return (output);
 }
 
 void	ft_echo(char **res, t_list *var_env)
