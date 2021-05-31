@@ -45,6 +45,8 @@ typedef struct	s_term
 	struct		termios s_termios_backup;
 	int			x;
 	int			y;
+	int			col;
+	int			lin;
 	int			size;
 	char		**done;
 	char		*last;

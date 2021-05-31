@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/29 13:26:07 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/31 15:51:09 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,11 @@ char *end_line(char *current, t_term *term)
 {
 	restore_term(term);
 	if (current == NULL)
-		current = ft_strdup("\0");
+	{
+		// current = ft_strdup("\0");
+		write(1, "\n", 1);
+		return (current);
+	}
 	if ((term->len > 0 && ft_strcmp(current, term->done[0]) != 0) || term->len == 0)
 		term->done = save_input(current, term->done);
 	write(1, "\n", 1);
@@ -53,6 +57,9 @@ char *go_line(t_term *term)
 	init_term(term);
 	current = NULL;
 	get_cursor_space(term);
+	// ft_putstr_nbr(term->lin, 1);
+	// ft_putstr_fd(" ", 1);
+	// ft_putstr_nbr(term->col, 1);
 	while (read(0, buf, 1) != -1)
 	{
 		buf[1] = '\0';
@@ -70,18 +77,53 @@ char *go_line(t_term *term)
 		}
 		else if((int)buf[0] == 127)
 		{
-			tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2), term->y - 1), 1,
+			if (current == NULL || ft_strlen(current) == 0)
+				;
+			else
+			{
+				tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2), term->y - 1), 1,
 	ft_putchar);
-			write(1, " ", 1);
-			tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2), term->y - 1), 1,
+				write(1, " ", 1);
+				tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2), term->y - 1), 1,
 	ft_putchar);
-			current[ft_strlen(current) - 1] = '\0';
+				current[ft_strlen(current) - 1] = '\0';
+			}
 		}
 		else
 			current = get_char(current, term, buf);
 		buf[0] = '\0';
 	}
 	return (NULL);
+}
+
+int check_ok_quote(char *str, int i)
+{
+	int j;
+	int k;
+	int l;
+
+	j = 0;
+	k = 0;
+	l = 0;
+	while (j <= i)
+	{
+		if (str[j] == '\"')
+			k++;
+		if (str[j] == '\'')
+			l++;
+		j++;
+	}
+	if ((l % 2 == 0 && k % 2 == 0) || (k == 0 && l == 0))
+		return (i);
+	else
+	{
+		if (ft_strchr_bis(&str[i + 1], ';') != -1)
+		{
+			return (check_ok_quote(str, ft_strchr_bis(&str[i + 1], ';')));
+		}
+		else
+			return (i = ft_strlen(str));
+	}
 }
 
 char *getcommand(char *str)
@@ -96,6 +138,7 @@ char *getcommand(char *str)
 		return (NULL);
 	while (str[i] && str[i] != ';')
 		i++;
+	i = check_ok_quote(str, i);
 	if (i == 0)
 		return (NULL);
 	if (i == ft_strlen(str))

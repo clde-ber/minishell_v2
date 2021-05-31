@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 15:13:21 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/24 11:19:03 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/29 14:57:39 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ void	init_term(t_term *term)
 	tgetent(NULL, getenv("TERM"));
 	term->where = -1;
 	term->x = 0;
+	term->col = tgetnum("co");
+	term->lin = tgetnum("li");
 	term->y = 0;
 	tcgetattr(0, &term->s_termios);
 	term->s_termios_backup = term->s_termios;

@@ -50,18 +50,29 @@ void main_loop(char *buf, char **env, t_list *var_env, t_command *cmd)
 	char *command;
 	char *buf2;
 
+	if (buf == NULL)
+	{
+		free(buf);
+		return ;
+	}
 	while ((command = getcommand(buf)) != NULL)
 	{
+		ft_putstr_fd("command is", 1);
+		ft_putstr_fd(command, 1);
 		dispatch(command, env, var_env, cmd);
 		buf2 = cut_after_punct(buf2, buf);
 		if (buf2 == NULL)
+		{
+
 			buf = NULL;
+		}
 		else
 			buf = ft_strdup(buf2);
 		free(buf2);
 		free(command);
 		command = NULL;
 	}
+	free(buf);
 }
 
 void finish_line(t_command *cmd, t_term *term,t_list *var_env)
@@ -93,13 +104,14 @@ int main(int ac, char **av, char **env)
 	{
 		write(1, "***minishell*** > ", 18);
 		line = go_line(term);
-		if (ft_strcmp(line, "exit") == 0) //builtin à coder
+		if (line != NULL && ft_strcmp(line, "exit") == 0) //builtin à coder
 		{
 			free(line);
 			exit(0);
 		}
-		main_loop(ft_strdup(line), env, var_env, cmd);
-		free(line);
+		if (line != NULL)
+			main_loop(line, env, var_env, cmd);
+		// free(line);
 		g_sig.boolean = 0;
 	}
 	finish_line(cmd, term, var_env);

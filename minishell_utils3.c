@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 15:55:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/24 17:02:14 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/05/29 14:57:15 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,10 @@ void	erase_line(int i, int j, t_term *term)
 		write(1, " ", 1);
 		k++;
 	}
+	// if (j + 18 > term->lin)
+	// {
+		
+	// }
 	tputs(tgoto(tgetstr("cm", NULL), (term->x - 1) + i, term->y - 1), 1,
 	ft_putchar);
 }

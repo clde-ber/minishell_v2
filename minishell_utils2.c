@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils2.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 18:59:08 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/26 12:23:18 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/05/31 15:51:46 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,13 @@ char	*cut_after_punct(char *dest, char *line)
 {
 	int		i;
 	char	*buf;
+	int		j;
 
 	i = ft_strchr_bis(line, ';');
+	j = check_ok_quote(line, i);
+	if (j == ft_strlen(line))
+	// j == i || 
+		i = -1;
 	if (i == -1)
 	{
 		dest = NULL;
