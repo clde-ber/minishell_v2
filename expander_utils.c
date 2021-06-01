@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/01 15:51:52 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/01 16:40:42 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,35 +100,39 @@ char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 	char	*tmp;
 	char	*tmp_sub;
 	int		boolean;
+	int		bool2;
 	char	*buf;
 
 	boolean = 0;
 	cmd->index = 0;
+	bool2 = 0;
 	tmp = ft_strdup(res);
-	if ((even_or_odd(tmp)) && even_or_odd(tmp) % 2)
-		boolean = 1;
 	if (tmp[0] == '\"')
+	{
+		bool2 = 1;
 		tmp_sub = ft_strtrim(tmp, "\"");
+	}
 	else
 		tmp_sub = ft_strdup(tmp);
+	if ((even_or_odd(tmp_sub)) && even_or_odd(tmp_sub) % 2)
+		boolean = 1;
 	buf = ft_strdup(tmp_sub);
-	if (boolean == 0 && ft_strchr(buf, '$'))
+	if ((boolean == 0 || bool2 == 1) && ft_strchr(buf, '$'))
 	{
 		free(tmp);
 		tmp = ft_strtrim(buf, "\'");
 		free(tmp_sub);
-		tmp_sub = antislashes_dolls(replace_by_env_value(tmp, var_env, cmd));
-		boolean = 1;
-		tmp = ft_strdup(tmp_sub);
+		tmp_sub = antislashes_dolls(replace_by_env_value(buf, var_env, cmd));
+		buf = ft_strdup(tmp_sub);
 	}
-	if (tmp_sub[0] == '\'')
+	if (buf[0] == '\'' && bool2 == 0)
 	{
 		free(tmp);
-		tmp = ft_strtrim(tmp_sub, "\'");
+		free(buf);
+		buf = ft_strtrim(tmp_sub, "\'");
 	}
 	free(tmp_sub);
-	free(buf);
-	return (tmp);
+	return (buf);
 }
 
 char		*handled_export(char *res, t_list *var_env, t_command *cmd)
