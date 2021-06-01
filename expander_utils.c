@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/01 16:40:42 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/01 17:58:51 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,9 +128,12 @@ char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 	if (buf[0] == '\'' && bool2 == 0)
 	{
 		free(tmp);
+		tmp = NULL;
 		free(buf);
 		buf = ft_strtrim(tmp_sub, "\'");
 	}
+	if (tmp != NULL)
+		free(tmp);
 	free(tmp_sub);
 	return (buf);
 }

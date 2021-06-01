@@ -30,13 +30,13 @@ int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 	else
 	{	
 		res = ft_split(str, "\t\n\r\v\f ");
-		int i;
-		i = 0;
-		while (res[i])
-		{
-			printf("%s\n", res[i]);
-			i++;
-		}
+		// int i;
+		// i = 0;
+		// while (res[i])
+		// {
+		// 	printf("%s\n", res[i]);
+		// 	i++;
+		// }
 		f->res = parse_res(res, var_env, cmd);
 		num = redir_and_send(f, var_env, cmd, env);
 		restore_fds(f);

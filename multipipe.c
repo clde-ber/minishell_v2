@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/29 13:23:39 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/01 17:21:50 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ char **env)
 			env);
 			exit(status);
 		}
-		waitpid(-1, &status, 0);
+		// waitpid(-1, &status, 0);
 		close(fd[1]);
 		fdd = fd[0];
 		j++;
