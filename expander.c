@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/31 09:19:19 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/01 15:52:42 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 		else
 			trim2 = ft_strdup(trim);
 		free(trim);
-		if (ft_strcmp(trim = replace_by_env(trim2, var_env, cmd, 0), "") == 0)
+		if (ft_strcmp(trim = antislashes_dolls(replace_by_env(trim2, var_env, cmd, 0)), "") == 0)
 		{
 			free(trim);
 			return (NULL);

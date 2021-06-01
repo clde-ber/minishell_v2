@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:21 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/29 12:28:18 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/01 15:41:04 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,30 @@ char		*search_env_value(char *str, t_list *var_env)
 	return (ft_strdup(""));
 }
 
+char    *antislashes_dolls(char *str)
+{
+    int i;
+    int j;
+    char *tmp;
+
+    i = 0;
+    j = 0;
+    if (!(tmp = malloc(sizeof(char) * (ft_strlen(str) + 1))))
+        return (0);
+    while (str[i])
+    {
+        if (str[i] == '\\' && str[i + 1] == '$')
+            i++;
+        tmp[j] = str[i];
+        i++;
+        j++;
+    }
+    tmp[j] = '\0';
+	free(str);
+	str = tmp;
+    return (str);
+}
+
 char		*antislashes_a_quotes(char *str)
 {
 	char	*ret;
@@ -72,7 +96,7 @@ char		*antislashes_a_quotes(char *str)
 		return (0);
 	while (i < len)
 	{
-		if (str[i] == '\\')
+		if (str[i] == '\\' && str[i + 1] != '$')
 			i++;
 		ret[j] = str[i];
 		j++;

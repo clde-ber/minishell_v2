@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/31 09:23:58 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/01 15:52:17 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,8 @@ t_list *var_env, t_command *cmd)
 {
 	cmd->index = 0;
 	if (even_or_odd(*str_first) % 2 == 0 || even_or_odd(*str_first) == 0)
-		*str_first = replace_by_env(*str_first, var_env, cmd, 0);
+		*str_first = antislashes_dolls(replace_by_env(*str_first, var_env, cmd, 0));
 	cmd->index = 0;
 	if (even_or_odd(*str_secd) % 2 == 0 || even_or_odd(*str_secd) == 0)
-		*str_secd = replace_by_env_value(*str_secd, var_env, cmd);
+		*str_secd = antislashes_dolls(replace_by_env_value(*str_secd, var_env, cmd));
 }

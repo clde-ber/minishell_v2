@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/28 15:00:41 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/30 09:55:02 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/01 15:53:20 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,10 @@ void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd, char *old_pwd)
 	str = NULL;
 	cmd->cmd_rv = 0;
 	if (ft_strlen(res[1]) == 2 && res[1][0] == '-' && res[1][1] == '-')
-		chdir((str = replace_by_env_value(ft_strdup("$HOME"), var_env, cmd)));
+		chdir((str = antislashes_dolls(replace_by_env_value(ft_strdup("$HOME"), var_env, cmd))));
 	else if (res[1][0] == '-' && res[1][1] == '\0')
 	{
-		chdir((str = replace_by_env_value(ft_strdup("$OLDPWD"), var_env, cmd)));
+		chdir((str = antislashes_dolls(replace_by_env_value(ft_strdup("$OLDPWD"), var_env, cmd))));
 		ft_putstr_fd(str, 1);
 		ft_putstr_fd("\n", 1);
 	}

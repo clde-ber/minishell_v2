@@ -112,6 +112,7 @@ char *get_env_name(int quotes, char *str_first);
 char *search_env_name(char *str, t_list *var_env);
 char *search_env_value(char *str, t_list *var_env);
 char *antislashes_a_quotes(char *str);
+char *antislashes_dolls(char *str);
 int is_valid_env_c(char c);
 
 /*

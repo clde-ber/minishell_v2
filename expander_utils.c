@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/31 09:10:48 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/01 15:51:52 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,16 @@ char		*replace_by_env(char *trim, t_list *var_env, t_command *cmd,
 	char	*str;
 
 	i = 0;
+	if (ft_strlen(trim) == 1 && trim[0] == '$')
+	{
+		free(trim);
+		return (ft_strdup("$"));
+	}
 	tmp = ft_strdup("");
 	str = NULL;
 	while (i < ft_strlen(trim))
 	{
-		if (is_valid_env_c(trim[i]) && (boolean = 1))
+		if ((is_valid_env_c(trim[i]) || (trim[i] == '\\')) && (boolean = 1))
 		{
 			join_string_value(&str, &tmp, &trim[i], &cmd->index);
 			i += ft_strlen(str);
@@ -48,6 +53,8 @@ char		*replace_by_env(char *trim, t_list *var_env, t_command *cmd,
 			var_env, cmd));
 			i += cmd->index + 1;
 		}
+		else
+			return (tmp);
 		cmd->index = 0;
 	}
 	free(trim);
@@ -61,11 +68,16 @@ char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 	char	*str;
 
 	i = 0;
+	if (ft_strlen(trim) == 1 && trim[0] == '$')
+	{
+		free(trim);
+		return (ft_strdup("$"));
+	}
 	tmp = ft_strdup("");
 	str = NULL;
 	while (i < ft_strlen(trim))
 	{
-		if (trim[i] != '$')
+		if (trim[i] != '$' || (i && trim[i] == '$' && trim[i - 1] == '\\'))
 		{
 			join_string_value(&str, &tmp, &trim[i], &cmd->index);
 			i += ft_strlen(str);
@@ -105,7 +117,7 @@ char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 		free(tmp);
 		tmp = ft_strtrim(buf, "\'");
 		free(tmp_sub);
-		tmp_sub = replace_by_env_value(tmp, var_env, cmd);
+		tmp_sub = antislashes_dolls(replace_by_env_value(tmp, var_env, cmd));
 		boolean = 1;
 		tmp = ft_strdup(tmp_sub);
 	}
@@ -141,7 +153,7 @@ char		*handled_export(char *res, t_list *var_env, t_command *cmd)
 		str_first = NULL;
 	free_tabtab(p_bin);
 	printf("name %s\n", name);
-	if ((!(str_first)) || (!(is_valid_env_name(replace_by_env(name, var_env, cmd, 0)))) ||
+	if ((!(str_first)) || (!(is_valid_env_name(antislashes_dolls(replace_by_env(name, var_env, cmd, 0))))) ||
 	(!(ft_strcmp(str_first, ""))))
 	{
 		cmd->cmd_rv = 1;
