@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:21 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/01 15:41:04 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/02 08:48:29 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,6 @@ char		*antislashes_a_quotes(char *str)
 		i++;
 	}
 	ret[j] = '\0';
-	free(str);
-	str = NULL;
 	return (ret);
 }
 

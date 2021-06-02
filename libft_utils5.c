@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:48:39 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/29 06:26:58 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/02 08:06:44 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,5 +108,30 @@ char		*rv_itoa(int n)
 	str[len_int(k)] = '\0';
 	str[0] = (k < 0 && k != -2147483648) ? '-' : str[0];
 	return (str);
+}
+
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+{
+	size_t i;
+	size_t j;
+
+	i = 0;
+	j = 0;
+	if (*needle == '\0' || len < 0)
+		return ((char *)haystack);
+	while (haystack[i] != '\0' && len > 0)
+	{
+		while (haystack[i] && haystack[i + j] == needle[j]
+			&& len > j)
+		{
+			if (needle[j + 1] == '\0')
+				return ((char *)&haystack[i]);
+			j++;
+		}
+		len--;
+		j = 0;
+		i++;
+	}
+	return (NULL);
 }
 

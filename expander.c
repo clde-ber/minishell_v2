@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/01 15:52:42 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/02 09:00:42 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,6 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 			return (NULL);
 		}
 	}
-	printf("trim = %s\n", trim);
 	cmd->cmd_rv = 1;
 	if (!(is_valid_env_name(trim)))
 	{
@@ -113,32 +112,36 @@ void	remove_empty_string(char *str, int *j)
 	}
 }
 
+
 char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 {
 	int		i;
 	char	**parsed_res;
 	int		j;
+	char	**new_res;
 
 	i = -1;
 	j = 0;
-	parsed_res = create_parsed_res(res, cmd);
-	if (last_command_rv(res, parsed_res))
+	new_res = create_parsed_res(res, var_env, cmd, &parsed_res);
+	if (last_command_rv(new_res, parsed_res))
 		return (parsed_res);
-	while (res[++i])
+	while (new_res[++i])
 	{
-		if (ft_strcmp(res[j], "$?") == 0)
+		if (ft_strcmp(new_res[j], "$?") == 0)
 			parsed_res[j] = rv_itoa(cmd->cmd_rv);
-		else if ((strings_to_join(res, i)) > 0)
-			parsed_res[j] = expander(ft_strjoin(res[i],
-						res[++i]), var_env, res, cmd);
-		else if ((strings_to_join(res, i)) == -1)
+		else if ((strings_to_join(new_res, i)) > 0)
+			parsed_res[j] = expander(ft_strjoin(new_res[i],
+						new_res[++i]), var_env, new_res, cmd);
+		else if ((strings_to_join(new_res, i)) == -1)
 			parsed_res[j] = ft_strdup("");
 		else
-			parsed_res[j] = expander(res[i], var_env, res, cmd);
+			parsed_res[j] = expander(new_res[i], var_env, new_res, cmd);
+		
 		parsed_res[j] = parsed_res_error(parsed_res, j, cmd);
 //		remove_empty_string(parsed_res[j], &j);
 		j++;
 	}
+	free_tabtab(new_res);
 	parsed_res[j] = NULL;
 	return (parsed_res);
 }
