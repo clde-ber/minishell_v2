@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:38 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/02 09:01:44 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/02 09:29:34 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,56 +23,22 @@ int		strings_to_join(char **res, int i)
 	return (0);
 }
 
-void	escaped_spaces_in_env(char *str, int *j, char ***tmp)
-{
-	char	**split;
-	int		x;
-
-	x = 0;
-	if ((split = ft_split(str, " \t\n\r\v\f")))
-	{
-		while (split[x])
-		{
-			(*tmp)[*j] = ft_strdup(split[x]);
-			(*j)++;
-			x++;
-		}
-	}
-	free(str);
-	free_tabtab(split);
-}
-
-char	**create_parsed_res(char **res, t_list *var_env, t_command *cmd, char ***parsed_res)
+char	**create_parsed_res(char **res, t_command *cmd)
 {
 	int		i;
-	int		j;
 	char	**tmp;
-	char	*str;
+	char	**parsed_res;
 
+	parsed_res = NULL;
 	i = 0;
-	j = 0;
-	if (!(tmp = malloc(sizeof(char *) * 1000)))
-		return (0);
 	while (res[i])
 	{
-		if ((!(ft_strnstr(res[i], "\\$", ft_strlen(res[i])))) &&
-		ft_strnstr(res[i], "$", ft_strlen(res[i])))
-		{
-			str = replace_by_env_value(ft_strdup(res[i]), var_env, cmd);
-			escaped_spaces_in_env(str, &j, &tmp);
-		}
-		else
-		{
-			tmp[j] = antislashes_a_quotes(res[i]);
-			j++;
-		}
+		res[i] = antislashes_a_quotes(res[i]);
 		i++;
 	}
-	free_tabtab(res);
-	tmp[j] = NULL;
-	if (!(*parsed_res = malloc(sizeof(char *) * (j + 1))))
+	if (!(parsed_res = malloc(sizeof(char *) * (i + 1))))
 		return (0);
-	return (tmp);
+	return (parsed_res);
 }
 
 char		*parsed_res_error(char **parsed_res, int j, t_command *cmd)

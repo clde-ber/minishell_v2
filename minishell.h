@@ -128,7 +128,7 @@ char *find_op(char *str);
 **expander_utils4
 */
 int strings_to_join(char **res, int i);
-char **create_parsed_res(char **res, t_list *var_env, t_command *cmd, char ***parsed_res);
+char **create_parsed_res(char **res, t_command *cmd);
 char *parsed_res_error(char **parsed_res, int j, t_command *cmd);
 char **last_command_rv(char **res, char **parsed_res);
 
@@ -385,7 +385,6 @@ int	ft_putchar(int c);
 */
 int		ft_atoi(const char *str);
 char	*rv_itoa(int n);
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 
 /*
 **libft_list

@@ -40,7 +40,7 @@ int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 		f->res = parse_res(res, var_env, cmd);
 		num = redir_and_send(f, var_env, cmd, env);
 		restore_fds(f);
-	//	free_tabtab(res);
+		free_tabtab(res);
 		free_tabtab(f->res);
 	}
 }
