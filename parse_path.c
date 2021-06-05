@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:56:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/31 08:43:44 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/02 23:52:35 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ char			**parse_path(char *s, char c)
 		{
 			if (!(res[j] = malloc(sizeof(char) * (len_word(&s[i], c) + 1))))
 				return (free_path(res, j));
-			res[j] = ft_memmove(res[j], &s[i], len_word(&s[i], c) + 1);
+			res[j] = ft_memmove(res[j], &s[i], len_word(&s[i], c));
 			res[j][len_word(&s[i], c)] = '\0';
 			j++;
 			i += len_word(&s[i], c);

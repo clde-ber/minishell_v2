@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:26 by user42            #+#    #+#             */
-/*   Updated: 2021/05/29 14:19:11 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/04 06:52:59 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	unset(t_list *env, char **tabl)
 	}
 }
 
-void	print_env(t_list *environ)
+void	print_env(t_list *environ, t_command *cmd)
 {
 	char *name;
 	char *value;
@@ -129,7 +129,6 @@ void	print_env(t_list *environ)
 		{
 			name = ft_strjoin(environ->name, "=");
 			value = ft_strjoin(name, environ->value);
-			// printf("%s\n", value);
 			ft_putstr_fd(value, 1);
 			ft_putstr_fd("\n", 1);
 			free(value);
@@ -137,4 +136,5 @@ void	print_env(t_list *environ)
 		}
 		environ = environ->next;
 	}
+	cmd->cmd_rv = 0;
 }

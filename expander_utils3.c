@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 14:30:34 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/01 16:21:09 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/03 17:08:25 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ char		*get_string_value(char *str)
 	res = NULL;
 	if (!(res = malloc(sizeof(char) * (ft_strlen(str) + 1))))
 		return (0);
-	while (str[i] && ((i && str[i] == '$' && str[i - 1] == '\\')
-	|| str[i] != '$'))
+	while (str[i] && ((str[i] == '\\' && str[i + 1] == '$') ||
+	(i && str[i - 1] == '\\' && str[i] == '$') || str[i] != '$'))
 	{
 		res[i] = str[i];
 		i++;
@@ -61,7 +61,8 @@ char		*get_env_value(char *str, t_list *var_env, t_command *cmd)
 		return (0);
 	test[i] = '\0';
 	while (str[i] && ft_strcmp((ret = search_env_value(
-	test, var_env)), "") == 0 && (str[i] != '$' && is_valid_env_name_c(str[i])))
+	test, var_env)), "") == 0 && ((str[i] != '$') &&
+	(!(str[i] == '\\' && str[i + 1] == '$'))))// && is_valid_env_name_c(str[i])))
 	{
 		test[i] = str[i];
 		i++;
@@ -72,7 +73,7 @@ char		*get_env_value(char *str, t_list *var_env, t_command *cmd)
 	free(ret);
 	ret = 0;
 	ret = search_env_value(test, var_env);
-	cmd->index += ft_strlen(test);
+	cmd->index += ft_strlen(test) + 1;
 	free(test);
 	return (ret);
 }
@@ -94,15 +95,7 @@ char		*find_op(char *str)
 
 	i = 0;
 	ret = NULL;
-	if (ft_strchr(str, '+') && ft_strchr(str, '='))
-	{
-		ret = ft_strchr(str, '+');
-		if (ret[1] && ret[1] == '=')
-			return ("+=");
-		else
-			return ("=");
-	}
-	else if (ft_strchr(str, '='))
+	if (ft_strchr(str, '=') && ft_strlen(str) > 1)
 	{
 		ret = ft_strchr(str, '=');
 		return ("=");

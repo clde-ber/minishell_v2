@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:38 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/02 09:29:34 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/03 17:33:22 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	**create_parsed_res(char **res, t_command *cmd)
 	i = 0;
 	while (res[i])
 	{
-		res[i] = antislashes_a_quotes(res[i]);
+	//	res[i] = antislashes_a_quotes(res[i]);
 		i++;
 	}
 	if (!(parsed_res = malloc(sizeof(char *) * (i + 1))))
@@ -70,4 +70,12 @@ char	**last_command_rv(char **res, char **parsed_res)
 		return (parsed_res);
 	}
 	return (NULL);
+}
+
+void		init_var_h_export(int *quotes, char **str_first, char **str_secd, char **name)
+{
+	*quotes = 0;
+	*str_first = NULL;
+	*str_secd = NULL;
+	*name = NULL;
 }

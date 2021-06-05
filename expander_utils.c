@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/01 17:58:51 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/03 17:32:59 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,10 @@ char		*replace_by_env(char *trim, t_list *var_env, t_command *cmd,
 			i += cmd->index + 1;
 		}
 		else
+		{
+			free(trim);
 			return (tmp);
+		}
 		cmd->index = 0;
 	}
 	free(trim);
@@ -66,7 +69,9 @@ char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 	size_t	i;
 	char	*tmp;
 	char	*str;
+	int x;
 
+	x = 0;
 	i = 0;
 	if (ft_strlen(trim) == 1 && trim[0] == '$')
 	{
@@ -75,21 +80,22 @@ char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 	}
 	tmp = ft_strdup("");
 	str = NULL;
-	while (i < ft_strlen(trim))
+	while (i < ft_strlen(trim) && x < 20)
 	{
-		if (trim[i] != '$' || (i && trim[i] == '$' && trim[i - 1] == '\\'))
+		if (trim[i] != '$' || (trim[i] == '\\' && trim[i + 1] == '$'))
 		{
 			join_string_value(&str, &tmp, &trim[i], &cmd->index);
-			i += ft_strlen(str);
+			i += cmd->index;
 			free(str);
 		}
 		else
 		{
 			tmp = ft_strjoin_free(tmp, get_env_value(&trim[i + 1],
 						var_env, cmd));
-			i += cmd->index + 1;
+			i += cmd->index;
 		}
 		cmd->index = 0;
+		x++;
 	}
 	free(trim);
 	return (tmp);
@@ -146,26 +152,21 @@ char		*handled_export(char *res, t_list *var_env, t_command *cmd)
 	int		quotes;
 	char	*name;
 
-	quotes = 0;
-	str_first = NULL;
-	str_secd = NULL;
-	if (ft_strchr(res, '+'))
-		p_bin = parse_path(res, '+');
-	else
-		p_bin = parse_path(res, '=');
+	init_var_h_export(&quotes, &str_first, &str_secd, &name);
+	p_bin = parse_path(res, '=');
 	split_env_name_a_value(&str_first, &str_secd, p_bin, res);
 	env_quotes_a_values(&str_first, &str_secd, &quotes);
-	printf("str_first %s\n", str_first);
 	if (!(name = get_env_name(quotes, str_first)))
-		str_first = NULL;
+		str_first[0] = '\0';
 	free_tabtab(p_bin);
-	printf("name %s\n", name);
-	if ((!(str_first)) || (!(is_valid_env_name(antislashes_dolls(replace_by_env(name, var_env, cmd, 0))))) ||
-	(!(ft_strcmp(str_first, ""))))
+	if (!(is_valid_env_name((name = antislashes_dolls(replace_by_env_value\
+(name, var_env, cmd))))) || !(ft_strcmp(str_first, "")))
 	{
 		cmd->cmd_rv = 1;
+		free(name);
 		return (export_errors(str_first, str_secd, quotes, res));
 	}
+	free(name);
 	export_replace_by_env_value(&str_first, &str_secd, var_env, cmd);
 	if (cmd->cmd_rv != 1)
 		cmd->cmd_rv = 0;

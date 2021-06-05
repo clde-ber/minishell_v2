@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/01 15:52:17 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/03 17:26:42 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,12 +117,18 @@ char **p_bin, char *res)
 
 	str_f = NULL;
 	str_s = NULL;
-	if (ft_strchr(res, '='))
+	if (p_bin && p_bin[0] && p_bin[1])
 	{
 		*str_first = ft_strdup(p_bin[0]);
-		*str_secd = ft_strdup(p_bin[1]);
-		printf("p_bin0 %s\n", p_bin[0]);
-		printf("p_bin1 %s\n", p_bin[1]);
+		if (p_bin[1])
+			*str_secd = ft_strdup(p_bin[1]);
+		else
+			*str_secd = ft_strdup("");
+	}
+	else if (p_bin && p_bin[0])
+	{
+		*str_first = ft_strdup(p_bin[0]);
+		*str_secd = ft_strdup("");
 	}
 	else
 	{
@@ -136,7 +142,7 @@ t_list *var_env, t_command *cmd)
 {
 	cmd->index = 0;
 	if (even_or_odd(*str_first) % 2 == 0 || even_or_odd(*str_first) == 0)
-		*str_first = antislashes_dolls(replace_by_env(*str_first, var_env, cmd, 0));
+		*str_first = antislashes_dolls(replace_by_env_value(*str_first, var_env, cmd));
 	cmd->index = 0;
 	if (even_or_odd(*str_secd) % 2 == 0 || even_or_odd(*str_secd) == 0)
 		*str_secd = antislashes_dolls(replace_by_env_value(*str_secd, var_env, cmd));

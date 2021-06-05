@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/01 17:22:39 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/03 15:43:36 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,15 @@ int		go_e(char **tabl, t_list *var_env, t_command *cmd)
 	{
 		if (ft_strcmp(tabl[0], "echo") == 0)
 			ft_echo(tabl, var_env);
-		if ((ft_strcmp(tabl[0], "export") == 0 && tabl[1]) || (!tabl[1] && cmd->cmd_rv == 127))
+		if (ft_strcmp(tabl[0], "export") == 0 && tabl[1])
 		{
 			check_doublons_cl(tabl, NULL, NULL, 0);
 			set_env(tabl, var_env, cmd);
 		}
-		if (ft_strcmp(tabl[0], "export") == 0 && cmd->cmd_rv == 127)
+		else if (ft_strcmp(tabl[0], "export") == 0 && !tabl[1])
 			print_sorted_env(var_env, cmd);
 		if (ft_strcmp(tabl[0], "env") == 0)
-			print_env(var_env);
+			print_env(var_env, cmd);
 		if (ft_strcmp(tabl[0], "exit") == 0)
 			ft_exit(tabl, cmd);
 	}
@@ -73,10 +73,11 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 		if (tabl[0][0] == 'e')
 			go_e(tabl, var_env, cmd);
 		else if (ft_strcmp(tabl[0], "pwd") == 0)
-			ft_pwd(tabl);
-		else if (ft_strcmp(tabl[0], "cd") == 0 && tabl[1])
+			ft_pwd(tabl, cmd);
+		else if (ft_strcmp(tabl[0], "cd") == 0 && tabl[1] && ft_strcmp(tabl[1], ""))
 			ft_cd(tabl, var_env, cmd);
-		else if (ft_strcmp(tabl[0], "cd") == 0 && !tabl[1])
+		else if (ft_strcmp(tabl[0], "cd") == 0 && (!tabl[1] ||
+		ft_strcmp(tabl[1], "") == 0))
 			cd_no_arg(var_env, cmd);
 		else if (tabl[0][0] == '.' && tabl[0][1] == '/')
 			find_exe(tabl[0], env, cmd);
