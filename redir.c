@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/03 15:43:36 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/06 07:39:53 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 		else if (tabl[0][0] == '.' && tabl[0][1] == '/')
 			find_exe(tabl[0], env, cmd);
 		else if (ft_strcmp(tabl[0], "unset") == 0 && tabl[1])
-			unset(var_env, tabl);
+			unset(var_env, tabl, cmd);
 		else if (ft_strcmp(tabl[0], "unset") == 0)
 			errors(cmd);
 		else

@@ -162,8 +162,9 @@ char **env_tab(char *path);
 */
 void	set_env(char **tabl, t_list *var_env, t_command *cmd);
 t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd);
-void	unset(t_list *env, char **tabl);
+void	unset(t_list *env, char **tabl, t_command *cmd);
 void	print_env(t_list *environ, t_command *cmd);
+void	unset_cmd_path(int boolean, t_command *cmd);
 
 /*
 **env_utils
@@ -402,6 +403,7 @@ void	ft_lstadd_back(t_list **alst, t_list *new);
 void	ft_record(void *lst, void *cmd);
 void	ft_lstiter(t_list *lst, void (*f)(void *, void *), t_command *cmd);
 void	ft_lstdel(t_list *lst);
+int		record_cmd_path(void *lst, void *cmd);
 
 extern t_sig g_sig;
 

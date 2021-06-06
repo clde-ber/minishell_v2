@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:26 by user42            #+#    #+#             */
-/*   Updated: 2021/06/04 06:52:59 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/06 08:03:03 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,35 @@ t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd)
 	return (var_env);
 }
 
+int		reset_cmd_path(t_list *lst, t_command *cmd)
+{
+	int boolean;
+
+	boolean = 0;
+	while (lst)
+	{
+		if (strcmp(lst->name, "PATH") == 0)
+		{
+			if (cmd->path)
+			{
+				free(cmd->path);
+				cmd->path = NULL;
+			}
+			cmd->path = ft_strdup(lst->value);
+			boolean = 1;
+		}
+		lst = lst->next;
+	}
+	if (boolean == 0)
+	{
+		if (cmd->path)
+		{
+			free(cmd->path);
+			cmd->path = ft_strdup("");
+		}
+	}
+}
+
 void	set_env(char **tabl, t_list *var_env, t_command *cmd)
 {
 	int		i;
@@ -86,17 +115,32 @@ ft_strdup(&ft_strchr(tabl[i], '=')[1]));
 		tmp->prec = tmp;
 		tmp_new = tmp;
 	}
+	reset_cmd_path(var_env, cmd);
 }
 
-void	unset(t_list *env, char **tabl)
+void	unset_cmd_path(int boolean, t_command *cmd)
+{
+	if (boolean == 0)
+	{
+		if (cmd->path)
+		{
+			free(cmd->path);
+			cmd->path = ft_strdup("");
+		}
+	}
+}
+
+void	unset(t_list *env, char **tabl, t_command *cmd)
 {
 	int		i;
 	int		j;
 	char	*name;
+	int		boolean;
 
 	name = NULL;
 	i = 1;
 	j = 0;
+	boolean = 0;
 	while (tabl[j])
 		j++;
 	while (env)
@@ -111,9 +155,12 @@ void	unset(t_list *env, char **tabl)
 			i++;
 			free(name);
 		}
+		if (record_cmd_path(env, cmd) == 1)
+			boolean = 1;
 		env = env->next;
 		i = 1;
 	}
+	unset_cmd_path(boolean, cmd);
 }
 
 void	print_env(t_list *environ, t_command *cmd)
