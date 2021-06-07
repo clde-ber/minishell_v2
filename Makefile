@@ -13,6 +13,7 @@ SRCS =	./debug_to_delete.c\
 	./expander_utils5.c\
 	./expander.c\
 	./ft_split.c\
+	./gnl.c\
 	./gnl_utils.c\
 	./launch_exe_utils.c\
 	./launch_exe.c\

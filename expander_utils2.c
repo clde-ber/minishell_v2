@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:21 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/02 09:28:58 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/03 15:41:16 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,12 @@ char    *antislashes_dolls(char *str)
     {
         if (str[i] == '\\' && str[i + 1] == '$')
             i++;
-        tmp[j] = str[i];
-        i++;
-        j++;
+		else
+        {	
+			tmp[j] = str[i];
+        	i++;
+        	j++;
+		}
     }
     tmp[j] = '\0';
 	free(str);
@@ -89,18 +92,22 @@ char		*antislashes_a_quotes(char *str)
 	int		i;
 	int		j;
 
-	len = ft_strlen(str);
+	len = (int)ft_strlen(str);
+	if (len > 2 && str[len - 2] == '\\' && str[len - 3] == '\\')
+		len = len - 2;
 	i = 0;
 	j = 0;
 	if (!(ret = malloc(sizeof(char) * (len + 1))))
 		return (0);
 	while (i < len)
 	{
-		if (str[i] == '\\' && str[i + 1] != '$')
+		if (str[i] == '\\' && str[i + 1] != '$' && str[i + 1] && str[i + 1] != '\\')
 			i++;
-		ret[j] = str[i];
-		j++;
-		i++;
+		else
+		{	ret[j] = str[i];
+			j++;
+			i++;
+		}
 	}
 	ret[j] = '\0';
 	free(str);
@@ -122,12 +129,11 @@ char		*get_env_name(int quotes, char *str_first)
 	char *name;
 
 	name = NULL;
-	if (str_first)
-	{
-		if (quotes % 2 == 0)
-			name = ft_strtrim(str_first, "\'");
-		else
-			name = ft_strdup(str_first);
-	}
+	if (quotes % 2 == 0)
+		name = ft_strtrim(str_first, "\'");
+	else
+		name = ft_strdup(str_first);
+	if (ft_strlen(name) && name[ft_strlen(name) - 1] == '+')
+		name[ft_strlen(name) - 1] = '\0';
 	return (name);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   launch_exe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/29 13:23:25 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/04 07:13:18 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int		launch_exe(char *exe, char *path, char **env, t_command *cmd)
 	ret = 0;
 	status = 0;
 	argv = arg_tab(exe, path, env);
-	printf("argv[0] %s\n", argv[0]);
 	envp = env_tab(path);
 	if ((pid = fork()) == 0)
 	{

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/05/31 08:30:45 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/06 07:56:25 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ char **arguments(char **res, int j, char **args, char *path)
 	p_bin = parse_path(path, ':');
 	while (p_bin[k])
 		k++;
-	str = ft_strjoin(p_bin[0], "/");
+	if (k)
+		str = ft_strjoin(p_bin[0], "/");
+	else
+		str = ft_strdup("/");
 	argv = NULL;
 	if (!(argv = malloc(sizeof(char *) * (j + 2))))
 		return (0);
@@ -65,8 +68,10 @@ int    command_not_found(char **tabl, char **env, char **p_bin, char **res)
 	free(tabl[0]);
 	free_tabtab(env);
 	free_tabtab(p_bin);
-	printf("%s : Command not found\n", res[0]);
-	return (127);
+	ft_putstr_fd("bash: ", 1);
+	ft_putstr_fd(res[0], 1);
+	ft_putstr_fd(": No such file or directory\n", 1);
+	return (1);
 }
 
 int    command_found(char **tabl, char **env, char **p_bin)

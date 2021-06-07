@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:03 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/28 10:05:36 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/03 13:51:14 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,40 @@ void	path_copy(char **buf, int m, int k)
 	}
 }
 
-void	cd_go_back(int *i, int k, char **buf)
+int		count_slash(char *old_pwd)
+{
+	int i;
+	int count;
+
+	count = 0;
+	i = 0;
+	while (i < ft_strlen(old_pwd))
+	{
+		if (old_pwd[i] == '/')
+		{
+			count++;
+			i++;
+		}
+		while (old_pwd[i] == '/')
+			i++;
+		i++;
+	}
+	return (count);
+}
+
+void	cd_go_back(int *i, int k, char **buf, char *old_pwd)
 {
 	int m;
 
 	m = 0;
 	m = ft_strrchr(*buf, '/');
-	if (m)
+	if (k < count_slash(old_pwd))
 		path_copy(buf, m, k);
+	else
+	{
+		free(*buf);
+		*buf = ft_strdup("/");
+	}
 }
 
 int		cd_go_front(char *res, int *i, int k, char **buf)

@@ -127,20 +127,21 @@ char *find_op(char *str);
 /*
 **expander_utils4
 */
-int strings_to_join(char **res, int i);
-char **create_parsed_res(char **res, t_command *cmd);
-char *parsed_res_error(char **parsed_res, int j, t_command *cmd);
-char **last_command_rv(char **res, char **parsed_res);
-
-/*
-**expander_utils5
-*/
 char *export_errors(char *str_first, char *str_secd, int quotes, char *res);
 char *valid_export(char *str_first, char *str_secd, int quotes, char *res);
 void env_quotes_a_values(char **str_first, char **str_secd, int *quotes);
 void split_env_name_a_value(char **str_first, char **str_secd, char **p_bin, char *res);
 void export_replace_by_env_value(char **str_first, char **str_secd,
 t_list *var_env, t_command *cmd);
+
+/*
+**expander_utils5
+*/
+int strings_to_join(char **res, int i);
+char **create_parsed_res(char **res, t_command *cmd);
+char *parsed_res_error(char **parsed_res, int j, t_command *cmd);
+char **last_command_rv(char **res, char **parsed_res);
+void init_var_h_export(int *quotes, char **str_first, char **str_secd, char **name);
 
 /*
 **launch_exe
@@ -161,8 +162,9 @@ char **env_tab(char *path);
 */
 void	set_env(char **tabl, t_list *var_env, t_command *cmd);
 t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd);
-void	unset(t_list *env, char **tabl);
-void	print_env(t_list *environ);
+void	unset(t_list *env, char **tabl, t_command *cmd);
+void	print_env(t_list *environ, t_command *cmd);
+void	unset_cmd_path(int boolean, t_command *cmd);
 
 /*
 **env_utils
@@ -197,21 +199,21 @@ void    ft_cd(char **res, t_list *var_env, t_command *cmd);
 void	free_cd(char *path, char *buf, char *old_pwd, char *ret);
 int		if_too_many_args(char **res, t_command *cmd);
 void	init_cd_strings(char **path, char **old_pwd, char **buf, char **ret);
-void    ft_pwd(char **res);
+void    ft_pwd(char **res, t_command *cmd);
 
 /*
 **path_utils
 */
 int		count_back(char *str, int *j);
 void	path_copy(char **buf, int m, int k);
-void	cd_go_back(int *i, int k, char **buf);
+void	cd_go_back(int *i, int k, char **buf, char *old_pwd);
 int		cd_go_front(char *res, int *i, int k, char **buf);
 void 	set_pwd_env(char *path, char *buf, t_list *var_env);
 
 /*
 **path_utils2
 */
-char *cd_front_a_back(char **res, char *path, t_list *var_env, char *old_pwd);
+char *cd_front_a_back(char *res, char *path, t_list *var_env, char *old_pwd);
 char *get_cwd(void);
 void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd, char *old_pwd);
 void	set_root_path(char **buf, char **path, char **res, char **str);
@@ -401,6 +403,7 @@ void	ft_lstadd_back(t_list **alst, t_list *new);
 void	ft_record(void *lst, void *cmd);
 void	ft_lstiter(t_list *lst, void (*f)(void *, void *), t_command *cmd);
 void	ft_lstdel(t_list *lst);
+int		record_cmd_path(void *lst, void *cmd);
 
 extern t_sig g_sig;
 

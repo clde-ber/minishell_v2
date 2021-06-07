@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:56:45 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/04/28 13:56:47 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/06 07:48:02 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,21 @@ void	ft_record(void *lst, void *cmd)
 		}
 		((t_command *)cmd)->path = ft_strdup(((char *)((t_list *)lst)->value));
 	}
+}
+
+int		record_cmd_path(void *lst, void *cmd)
+{
+	if (strcmp(((char *)((t_list *)lst)->name), "PATH") == 0)
+	{
+		if (((t_command *)cmd)->path)
+		{
+			free(((t_command *)cmd)->path);
+			((t_command *)cmd)->path = NULL;
+		}
+		((t_command *)cmd)->path = ft_strdup(((char *)((t_list *)lst)->value));
+		return (1);
+	}
+	return (0);
 }
 
 void	ft_lstiter(t_list *lst, void (*f)(void *, void *), t_command *cmd)
@@ -48,4 +63,5 @@ void	ft_lstdel(t_list *lst)
 		free(buf);
 		buf = 0;
 	}
+	free(lst);
 }

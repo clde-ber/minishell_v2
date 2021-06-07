@@ -6,31 +6,29 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/28 15:00:41 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/02 09:48:55 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/03 14:23:28 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*cd_front_a_back(char **res, char *path, t_list *var_env, char *old_pwd)
+char	*cd_front_a_back(char *res, char *path, t_list *var_env, char *old_pwd)
 {
 	int		k;
 	int		i;
 	int		count;
 	char	*buf;
-	int		j;
 
-	j = 1;
 	i = 0;
 	k = 0;
 	count = 0;
 	buf = ft_strjoin(path, "/");
-	while (i < ft_strlen(res[j]))
+	while (i < ft_strlen(res))
 	{
-		if ((k = count_back(res[j], &i)))
-			cd_go_back(&i, k, &buf);
+		if ((k = count_back(res, &i)))
+			cd_go_back(&i, k, &buf, old_pwd);
 		else
-			cd_go_front(res[j], &i, k, &buf);
+			cd_go_front(res, &i, k, &buf);
 	}
 	if (buf[ft_strlen(buf) - 1] == '/')
 		buf[ft_strlen(buf) - 1] = '\0';
@@ -90,7 +88,6 @@ void	set_root_path(char **buf, char **path, char **res, char **str)
 			i++;
 		}
 		chdir(*buf);
-		printf("BUF %s\n", *buf);
 		free(*path);
 		if (res[1][0] == '/')
 			*path = ft_strdup(ft_strchr(&res[1][1], '/'));
@@ -103,7 +100,6 @@ void	set_root_path(char **buf, char **path, char **res, char **str)
 void	cd_failure(char **res, t_command *cmd, char *old_pwd, char *buf)
 {
 	cmd->cmd_rv = 0;
-	printf("buf %s\n", buf);
 //	if (ft_strcmp(, "") == 0)
 //		cmd->cmd_rv = 1;
 	if (chdir(buf) == -1)

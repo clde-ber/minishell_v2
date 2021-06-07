@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/02 09:28:22 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/03 17:26:48 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,15 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 		else
 			trim2 = ft_strdup(trim);
 		free(trim);
-		if (ft_strcmp(trim = antislashes_dolls(replace_by_env(trim2, var_env, cmd, 0)), "") == 0)
+		if (ft_strcmp(trim = antislashes_dolls(replace_by_env_value(trim2, var_env, cmd)), "") == 0)
 		{
 			free(trim);
 			return (NULL);
 		}
 	}
-	printf("trim = %s\n", trim);
-	cmd->cmd_rv = 1;
 	if (!(is_valid_env_name(trim)))
 	{
+		cmd->cmd_rv = 1;
 		write_error(trim, quotes, cmd);
 		return (NULL);
 	}
@@ -131,12 +130,15 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 		else if ((strings_to_join(res, i)) > 0)
 			parsed_res[j] = expander(ft_strjoin(res[i],
 						res[++i]), var_env, res, cmd);
-		else if ((strings_to_join(res, i)) == -1)
-			parsed_res[j] = ft_strdup("");
+//		else if ((strings_to_join(res, i)) == -1)
+//			parsed_res[j] = ft_strdup("");
 		else
 			parsed_res[j] = expander(res[i], var_env, res, cmd);
 		parsed_res[j] = parsed_res_error(parsed_res, j, cmd);
 //		remove_empty_string(parsed_res[j], &j);
+	//	remove_quotes(parsed_res[j]);
+		parsed_res[j] = antislashes_a_quotes(parsed_res[j]);
+		printf("parsed_res[j] %s\n", parsed_res[j]);
 		j++;
 	}
 	parsed_res[j] = NULL;

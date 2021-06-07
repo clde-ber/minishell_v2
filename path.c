@@ -6,13 +6,13 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/30 16:22:05 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/03 17:42:58 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_pwd(char **res)
+void	ft_pwd(char **res, t_command *cmd)
 {
 	char	*path;
 	char	*buf;
@@ -26,6 +26,7 @@ void	ft_pwd(char **res)
 	free(path);
 	ft_putstr_fd(buf, 1);
 	free(buf);
+	cmd->cmd_rv = 0;
 }
 
 void	free_cd(char *path, char *buf, char *old_pwd, char *ret)
@@ -49,7 +50,6 @@ int		if_too_many_args(char **res, t_command *cmd)
 
 void	init_cd_strings(char **path, char **old_pwd, char **buf, char **ret)
 {
-	*path = get_cwd();
 	*old_pwd = ft_strdup(*path);
 	*buf = ft_strdup(*path);
 	*ret = NULL;
@@ -70,23 +70,20 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 		ft_cd_minus(res, var_env, cmd, get_cwd());
 		return ;
 	}
+	if (chdir((path = get_cwd())) == -1)
+	{
+		free(path);
+		path = replace_by_env_value(ft_strdup("$OLDPWD"), var_env, cmd);
+	}
 	init_cd_strings(&path, &old_pwd, &buf, &ret);
 	set_root_path(&buf, &path, res, &str);
-	printf("buf %s\n", buf);
-	printf("str %s\n", str);
-	printf("path %s\n", path);
-	ret = ft_strjoin(ft_strjoin(old_pwd, "/"), res[1]);
-	printf("ret %s\n", ret);
-	if (chdir(buf = cd_front_a_back(res, str, var_env, old_pwd)) == -1)
+	if (chdir(ret = cd_front_a_back(res[1], old_pwd, var_env, old_pwd)) == -1)
 	{
 		chdir(res[1]);
 		cd_failure(res, cmd, old_pwd, res[1]);
 	}
 	else
-	{
-		printf("buf!!! %s\n", buf);
-		free(str);
-		cd_failure(res, cmd, old_pwd, buf);
-	}
+		cd_failure(res, cmd, old_pwd, ret);
+	free(str);
 	free_cd(path, buf, old_pwd, ret);
 }

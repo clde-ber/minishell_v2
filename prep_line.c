@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/07 15:46:58 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/07 15:49:45 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ char *go_line(t_term *term)
 			if (current != NULL)
 				free(current);
 			write(1, "\n", 1);
-			exit(126);
+			exit(0);
 		}
 		else if((int)buf[0] == 127)
 		{

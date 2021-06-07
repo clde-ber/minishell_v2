@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:39 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/20 12:57:08 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/04 07:24:45 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,10 +129,16 @@ void	replace_env(char *tabl, t_list *var_env)
 	if (ft_strcmp(name, var_env->name) == 0)
 	{
 		if (ft_strchr(tabl, '+') && ft_strchr(tabl, '='))
+		{
+			free(var_env->value);
 			var_env->value = ft_strjoin(var_env->value,
 					&ft_strchr(tabl, '=')[1]);
+		}
 		else if (ft_strchr(tabl, '='))
+		{
+			free(var_env->value);
 			var_env->value = ft_strdup(&ft_strchr(tabl, '=')[1]);
+		}
 		else
 			((char *)var_env->value)[0] = '\0';
 		tabl[0] = '\0';
