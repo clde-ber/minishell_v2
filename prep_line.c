@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/31 16:28:06 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/07 15:46:58 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ char *go_line(t_term *term)
 	return (NULL);
 }
 
+// si antislash avant ; lui dire de niquer sa mere et de pas decouper.
+
 int check_ok_quote(char *str, int i)
 {
 	int j;
@@ -143,7 +145,7 @@ char *getcommand(char *str)
 	i = check_ok_quote(str, i);
 	if (i == 0)
 		return (NULL);
-	if (i == ft_strlen(str))
+	if (i == ft_strlen(str) || str[i - 1] == '\\')
 		return (str);
 	if (!(ret = malloc(sizeof(char) * (i + 1))))
 		return (NULL);
