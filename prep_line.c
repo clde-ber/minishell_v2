@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/08 10:28:15 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/08 10:56:58 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,8 @@ char *go_line(t_term *term)
 	}
 	return (NULL);
 }
+
+// si antislash avant ; lui dire de niquer sa mere et de pas decouper.
 
 int check_ok_quote(char *str, int i)
 {
