@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/03 17:32:59 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/08 08:01:59 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,40 @@ void		join_string_value(char **str, char **tmp, char *trim, int *index)
 	*index += ft_strlen(*str);
 }
 
-char		*replace_by_env(char *trim, t_list *var_env, t_command *cmd,
-		int boolean)
+char		*replace_by_env(char *trim, t_list *var_env, t_command *cmd)
+{
+		size_t	i;
+	char	*tmp;
+	char	*str;
+
+	i = 0;
+	if (ft_strlen(trim) == 1 && trim[0] == '$')
+	{
+		free(trim);
+		return (ft_strdup("$"));
+	}
+	tmp = ft_strdup("");
+	str = NULL;
+	while (i < ft_strlen(trim))
+	{
+		if (!(((i && trim[i] == '$' && trim[i - 1] != '\\') || (i == 0 && trim[i] == '$'))))
+		{
+			free(trim);
+			return (antislashes_dolls(tmp));
+		}
+		else
+		{
+			tmp = ft_strjoin_free(tmp, get_env_value(&trim[i + 1],
+						var_env, cmd));
+			i += cmd->index;
+		}
+		cmd->index = 0;
+	}
+	free(trim);
+	return (antislashes_dolls(tmp));
+}
+
+char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 {
 	size_t	i;
 	char	*tmp;
@@ -41,48 +73,7 @@ char		*replace_by_env(char *trim, t_list *var_env, t_command *cmd,
 	str = NULL;
 	while (i < ft_strlen(trim))
 	{
-		if ((is_valid_env_c(trim[i]) || (trim[i] == '\\')) && (boolean = 1))
-		{
-			join_string_value(&str, &tmp, &trim[i], &cmd->index);
-			i += ft_strlen(str);
-			free(str);
-		}
-		else if (trim[i] == '$')
-		{
-			tmp = ft_strjoin_free(tmp, get_env_value(&trim[i + 1],
-			var_env, cmd));
-			i += cmd->index + 1;
-		}
-		else
-		{
-			free(trim);
-			return (tmp);
-		}
-		cmd->index = 0;
-	}
-	free(trim);
-	return (tmp);
-}
-
-char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
-{
-	size_t	i;
-	char	*tmp;
-	char	*str;
-	int x;
-
-	x = 0;
-	i = 0;
-	if (ft_strlen(trim) == 1 && trim[0] == '$')
-	{
-		free(trim);
-		return (ft_strdup("$"));
-	}
-	tmp = ft_strdup("");
-	str = NULL;
-	while (i < ft_strlen(trim) && x < 20)
-	{
-		if (trim[i] != '$' || (trim[i] == '\\' && trim[i + 1] == '$'))
+		if (!(((i && trim[i] == '$' && trim[i - 1] != '\\') || (i == 0 && trim[i] == '$'))))
 		{
 			join_string_value(&str, &tmp, &trim[i], &cmd->index);
 			i += cmd->index;
@@ -95,10 +86,9 @@ char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 			i += cmd->index;
 		}
 		cmd->index = 0;
-		x++;
 	}
 	free(trim);
-	return (tmp);
+	return (antislashes_dolls(tmp));
 }
 
 char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
@@ -128,7 +118,7 @@ char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 		free(tmp);
 		tmp = ft_strtrim(buf, "\'");
 		free(tmp_sub);
-		tmp_sub = antislashes_dolls(replace_by_env_value(buf, var_env, cmd));
+		tmp_sub = replace_by_env_value(buf, var_env, cmd);
 		buf = ft_strdup(tmp_sub);
 	}
 	if (buf[0] == '\'' && bool2 == 0)
@@ -159,8 +149,8 @@ char		*handled_export(char *res, t_list *var_env, t_command *cmd)
 	if (!(name = get_env_name(quotes, str_first)))
 		str_first[0] = '\0';
 	free_tabtab(p_bin);
-	if (!(is_valid_env_name((name = antislashes_dolls(replace_by_env_value\
-(name, var_env, cmd))))) || !(ft_strcmp(str_first, "")))
+	if (!(is_valid_env_name((name = replace_by_env_value\
+(name, var_env, cmd)))) || !(ft_strcmp(str_first, "")))
 	{
 		cmd->cmd_rv = 1;
 		free(name);

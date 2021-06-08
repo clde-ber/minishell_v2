@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:21 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/03 15:41:16 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/08 08:53:38 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,7 @@ char    *antislashes_dolls(char *str)
     }
     tmp[j] = '\0';
 	free(str);
-	str = tmp;
-    return (str);
+    return (tmp);
 }
 
 char		*antislashes_a_quotes(char *str)
@@ -101,10 +100,42 @@ char		*antislashes_a_quotes(char *str)
 		return (0);
 	while (i < len)
 	{
-		if (str[i] == '\\' && str[i + 1] != '$' && str[i + 1] && str[i + 1] != '\\')
+		if (i < len && (((i == 0 && str[i] == '\"') || ((i && str[i - 1] != '\\' && str[i] == '\"')))) && (str[i + 1] != '\"'))
+		{
+			ret[j] = str[i];
 			i++;
-		else
-		{	ret[j] = str[i];
+			j++;
+			while (i < len && (str[i] != '\"' || (str[i] == '\"' && str[i - 1] == '\\')))
+			{
+				if (!(str[i - 1] == '\\' && str[i] == '\\'))
+				{
+					ret[j] = str[i];
+					j++;
+				}
+				i++;
+			}
+		}
+		else if (i < len && (((i == 0 && str[i] == '\'') || ((i && str[i - 1] != '\\' && str[i] == '\'')))) && (str[i + 1] != '\''))
+		{
+			ret[j] = str[i];
+			i++;
+			j++;
+			while (i < len && (str[i] != '\'' || (str[i] == '\'' && str[i - 1] == '\\')))
+			{
+				if (!(str[i - 1] == '\\' && str[i] == '\\'))
+				{
+					ret[j] = str[i];
+					j++;
+				}
+				i++;
+			}
+		}
+	/*	else if (i < len && str[i] == '\\' && str[i + 1] && str[i + 1] != '$' && str[i + 1]
+		!= '\\')
+			i++;*/
+		else if (i < len)
+		{
+			ret[j] = str[i];
 			j++;
 			i++;
 		}

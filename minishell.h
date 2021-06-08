@@ -95,12 +95,13 @@ char **parse_first_arg(char **res, char **parsed_res);
 char *expander(char *res, t_list *var_env, char **args, t_command *cmd);
 char **parse_res(char **res, t_list *var_env, t_command *cmd);
 char *handled_unset(char *res, t_list *var_env, t_command *cmd);
+char *remove_antislashes(char *dest, char *str, t_list *var_env, t_command *cmd);
 
 /*
 **expander_utils
 */
 void join_string_value(char **str, char **tmp, char *trim, int *index);
-char *replace_by_env(char *trim, t_list *var_env, t_command *cmd, int boolean);
+char *replace_by_env(char *trim, t_list *var_env, t_command *cmd);
 char *non_handled_commands(char *res, t_list *var_env, t_command *cmd);
 char *handled_export(char *res, t_list *var_env, t_command *cmd);
 char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd);
@@ -268,6 +269,12 @@ char	**environment(char *path);
 int		exit_status(int status);
 
 /*
+**exec
+*/
+char	*get_location(char *arg);
+char	*set_first_arg(char *p_bin, char *res);
+
+/*
 **exit
 */
 int     ft_isdigit(int c);
@@ -324,7 +331,7 @@ int		is_handled_cmd(char *str);
 */
 char	**copy_tabtab(char **res);
 void	init_structs(t_command *cmd);
-char	*cut_after_punct(char *dest, char *line);
+char	*cut_after_punct(char *dest, char *line, char *command);
 int		count_tabs(char **res);
 void	free_tabtab(char **res);
 

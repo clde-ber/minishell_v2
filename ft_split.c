@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:31 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/05 15:54:40 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/06 12:26:13 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
 
 size_t	parse_command(size_t i, char *str, int *res, char *charset)
 {
-	if (is_symbol(str[i], str[i + 1]) && (*res = 1))
+	if (is_symbol(str[i], str[i + 1]) && (i == 0 || i && str[i - 1] != '\\')
+	 && (*res = 1))
 	{
 		while (str[i] && is_symbol(str[i], str[i + 1]))
 			i += is_symbol(str[i], str[i + 1]);
@@ -46,7 +47,7 @@ size_t	parse_command(size_t i, char *str, int *res, char *charset)
 	ft_ischarset(charset, str[i]) && str[i - 1] != '\\')) && (*res = 1))
 		i--;
 	else if (str[i + 1] && (is_symbol(str[i + 1], str[i + 2]) == 1 ||
-	is_symbol(str[i + 1], str[i + 2]) == 2))
+	is_symbol(str[i + 1], str[i + 2]) == 2) && (str[i] != '\\'))
 		*res = 1;
 	return (i);
 }

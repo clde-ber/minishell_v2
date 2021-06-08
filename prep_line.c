@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/04 07:11:43 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/08 10:28:15 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,13 +138,14 @@ char *getcommand(char *str)
 	j = 0;
 	if (str == NULL)
 		return (NULL);
-	while (str[i] && str[i] != ';')
+	while (str[i] && ((str[i] != ';' || (str[i] == ';' && (i && str[i - 1] == '\\')))
+	|| is_in_string(str, i)))
 		i++;
-	i = check_ok_quote(str, i);
-	if (i == 0)
-		return (NULL);
-	if (i == ft_strlen(str))
-		return (str);
+//	i = check_ok_quote(str, i);
+//	if (i == 0)
+//		return (NULL);
+//	if (i == ft_strlen(str))
+//		return (str);
 	if (!(ret = malloc(sizeof(char) * (i + 1))))
 		return (NULL);
 	while (j < i)

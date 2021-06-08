@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/06/06 07:56:25 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/07 15:23:30 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,6 @@ int    command_not_found(char **tabl, char **env, char **p_bin, char **res)
 	free(tabl[0]);
 	free_tabtab(env);
 	free_tabtab(p_bin);
-	ft_putstr_fd("bash: ", 1);
-	ft_putstr_fd(res[0], 1);
-	ft_putstr_fd(": No such file or directory\n", 1);
 	return (1);
 }
 
@@ -105,20 +102,19 @@ int    test_shell_bin(char **tabl, char **p_bin, char **res, char **env)
 
 	ret = 0;
 	i = -1;
-	x = -1;
+	x = 0;
 	count = 0;
 	str = NULL;
 	while (p_bin[++i])
 	{
-		x = -1;
+		x = 0;
 		free(tabl[0]);
-		str = ft_strjoin(p_bin[i], "/");
-		tabl[0] = ft_strjoin(str, res[0]);
-		while (tabl[++x])
-			test_write(tabl, x);
+		tabl[0] = set_first_arg(p_bin[i], res[0]);
+		while (tabl[x])
+			x++;
+		//	test_write(tabl, x);
 		if ((ret = execve(tabl[0], tabl, env)) == -1)
 			count++;
-		free(str);
 	}
 	if (i == count)
 		return (command_not_found(tabl, env, p_bin, res));
@@ -152,6 +148,22 @@ int exec_command(char **args, char **res, char *path, int j)
 	waitpid(-1, &status, 0);
 	return (exit_status(status));
 // waitpid waits for the program to be finished. 
+}
+
+void	write_error_shell(t_command *cmd, char **res)
+{
+	if (ft_strcmp(cmd->path, "") == 0)
+	{
+		ft_putstr_fd("bash: ", 1);
+		ft_putstr_fd(res[0], 1);
+		ft_putstr_fd(": No such file or directory\n", 1);
+	}
+	else
+	{
+		ft_putstr_fd("bash: ", 1);
+		ft_putstr_fd(res[0], 1);
+		ft_putstr_fd(": Command not found\n", 1);
+	}
 }
 
 int set_args(char **res, char *path, t_command *cmd)
@@ -207,12 +219,16 @@ int set_args(char **res, char *path, t_command *cmd)
 		}
 		args[index] = NULL;
 		ret = exec_command(args, res, path, i);
+		if (ret == 127)
+			write_error_shell(cmd, res);
 		cmd->cmd_rv = ret;
 		ft_free(args, index + 1);
 	}
 	else
 	{
 		ret = exec_command((clc = ft_calloc(2, sizeof(char *))), res, path, 1);
+		if (ret == 127)
+			write_error_shell(cmd, res);
 		cmd->cmd_rv = ret;
 		while (clc[k])
 			k++;

@@ -5,6 +5,7 @@ SRCS =	./debug_to_delete.c\
 	./env_utils3.c\
 	./env.c\
 	./exec.c\
+	./exec_utils.c\
 	./exit.c\
 	./expander_utils.c\
 	./expander_utils2.c\
@@ -24,6 +25,7 @@ SRCS =	./debug_to_delete.c\
 	./libft_utils3.c\
 	./libft_utils4.c\
 	./libft_utils5.c\
+	./libft_utils6.c\
 	./minishell_utils.c\
 	./minishell_utils2.c\
 	./multipipe.c\

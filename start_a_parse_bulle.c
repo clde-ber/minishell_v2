@@ -75,10 +75,10 @@ void main_loop(char *buf, char **env, t_list *var_env, t_command *cmd)
 		free(buf);
 		return ;
 	}
-	while ((command = getcommand(buf)) != NULL)
+	while (ft_strcmp((command = getcommand(buf)), ""))
 	{
 		dispatch(command, env, var_env, cmd);
-		buf2 = cut_after_punct(buf2, buf);
+		buf2 = cut_after_punct(buf2, buf, command);
 		if (buf2 == NULL)
 			buf = NULL;
 		else
@@ -87,6 +87,7 @@ void main_loop(char *buf, char **env, t_list *var_env, t_command *cmd)
 		free(command);
 		command = NULL;
 	}
+	free(command);
 	free(buf);
 }
 
