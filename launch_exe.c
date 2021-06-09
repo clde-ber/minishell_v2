@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/07 07:04:17 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/08 17:24:52 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,21 @@
 ** it prints an error.
 */
 
+void	write_error_launch_exe(char *path)
+{
+	write(1, "bash: ", 6);
+	write(1, path, ft_strlen(path));
+	write(1, ": ", 2);
+	printf("%s\n", strerror(errno));
+}
+
+void	init_vars_launch_exe(pid_t *pid, int *ret, int *status)
+{
+	*pid = 0;
+	*ret = 0;
+	*status = 0;
+}
+
 int		launch_exe(char *exe, char *path, char **env, t_command *cmd)
 {
 	pid_t	pid;
@@ -30,32 +45,52 @@ int		launch_exe(char *exe, char *path, char **env, t_command *cmd)
 	char	**argv;
 	char	**envp;
 
-	pid = 0;
-	ret = 0;
-	status = 0;
+	init_vars_launch_exe(&pid, &ret, &status);
 	argv = arg_tab(exe, path, env);
 	envp = env_tab(path);
 	if ((pid = fork()) == 0)
 	{
 		if ((ret = execve(argv[0], argv, envp)) == -1)
 		{
-			write(1, "bash: ", 6);
-			write(1, path, ft_strlen(path));
-			write(1, ": ", 2);
-			printf("%s\n", strerror(errno));
+			write_error_launch_exe(path);
 			if (errno == 2)
 				exit(127);
 			if (errno == 13)
 				exit(126);
 		}
-		else
-			exit(status);
+		exit(status);
 	}
 	free_tabtab(envp);
 	free_tabtab(argv);
-	waitpid(ret, &status, 0);
-	cmd->cmd_rv = status % 255;
-	return (exit_status(status));
+	waitpid(-1, &status, 0);
+	return ((cmd->cmd_rv = exit_status(status)));
+}
+
+void	opendir_error(char *path, t_command *cmd, char *str, char *path_mod)
+{
+	write(1, "bash: ", 6);
+	write(1, path, ft_strlen(path));
+	write(1, ": ", 2);
+	printf("%s\n", strerror(errno));
+	cmd->cmd_rv = 127;
+	free_string(str);
+	free_string(path_mod);
+}
+
+void	init_vars_find_exe(struct dirent *st_dir, char **str, char **path_mod, char *path)
+{
+	st_dir = NULL;
+	*str = ft_get_filename(path, '/');
+	*path_mod = get_path(path, '/');
+	errno = 0;
+}
+
+void	launch_exe_error(char *str, char *path, char **env, t_command *cmd)
+{
+	if (errno)
+		printf("%s\n", strerror(errno));
+	else
+		launch_exe(str, path, env, cmd);
 }
 
 void	find_exe(char *path, char **env, t_command *cmd)
@@ -65,19 +100,10 @@ void	find_exe(char *path, char **env, t_command *cmd)
 	struct dirent	*st_dir;
 	char			*path_mod;
 
-	st_dir = NULL;
-	str = ft_get_filename(path, '/');
-	path_mod = get_path(path, '/');
-	errno = 0;
+	init_vars_find_exe(st_dir, &str, &path_mod, path);
 	if (!(dir = opendir(path_mod)))
 	{
-		write(1, "bash: ", 6);
-		write(1, path, ft_strlen(path));
-		write(1, ": ", 2);
-		printf("%s\n", strerror(errno));
-		cmd->cmd_rv = 127;
-		free(str);
-		free(path_mod);
+		opendir_error(path, cmd, str, path_mod);
 		return ;
 	}
 	while ((st_dir = readdir(dir)))
@@ -86,16 +112,11 @@ void	find_exe(char *path, char **env, t_command *cmd)
 		{
 			launch_exe(st_dir->d_name, path, env, cmd);
 			closedir(dir);
-			free(str);
-			free(path_mod);
+			ft_free_2_strings(str, path_mod);
 			return ;
 		}
 	}
-	if (errno)
-		printf("%s\n", strerror(errno));
-	else
-		launch_exe(str, path, env, cmd);
+	launch_exe_error(str, path, env, cmd);
 	closedir(dir);
-	free(path_mod);
-	free(str);
+	ft_free_2_strings(path_mod, str);
 }

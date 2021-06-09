@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/28 15:00:41 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/07 07:04:44 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/09 09:10:10 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,11 @@ char	*cd_front_a_back(char *res, char *path, t_list *var_env, char *old_pwd)
 		else
 			cd_go_front(res, &i, k, &buf);
 	}
-	if (buf[ft_strlen(buf) - 1] == '/')
-		buf[ft_strlen(buf) - 1] = '\0';
-	set_pwd_env(old_pwd, buf, var_env);
+	if (ft_strlen(buf))
+	{
+		if (buf[ft_strlen(buf) - 1] == '/')
+			buf[ft_strlen(buf) - 1] = '\0';
+	}
 	return (buf);
 }
 
@@ -51,27 +53,28 @@ void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd, char *old_pwd)
 	char *str;
 
 	str = NULL;
-	cmd->cmd_rv = 0;
-	if (ft_strlen(res[1]) == 2 && res[1][0] == '-' && res[1][1] == '-')
-		chdir((str = replace_by_env_value(ft_strdup("$HOME"), var_env, cmd)));
-	else if (res[1][0] == '-' && res[1][1] == '\0')
+	if (res[1] && res[1][0] == '-' && !(res[2]))
 	{
-		chdir((str = replace_by_env_value(ft_strdup("$OLDPWD"), var_env, cmd)));
-		ft_putstr_fd(str, 1);
-		ft_putstr_fd("\n", 1);
+		if (ft_strlen(res[1]) == 2 && res[1][0] == '-' && res[1][1] == '-')
+			chdir((str = replace_by_env_value(ft_strdup("$HOME"), var_env, cmd)));
+		else if (res[1][0] == '-' && res[1][1] == '\0')
+		{
+			chdir((str = replace_by_env_value(ft_strdup("$OLDPWD"), var_env, cmd)));
+			ft_putstr_fd(str, 1);
+			ft_putstr_fd("\n", 1);
+		}
+		else
+		{
+			str = ft_strdup("");
+			ft_putstr_fd("bash : cd : ", 1);
+			ft_putstr_fd(res[1], 1);
+			ft_putstr_fd(": invalid option\ncd: usage: cd [-L] [-P] [-e] [-@] [dir]\n", 1);
+			cmd->cmd_rv = 2;
+		}
+		set_pwd_env(old_pwd, str, var_env);
+		free_string(str);
 	}
-	else
-	{
-		str = ft_strdup("");
-		ft_putstr_fd("bash : cd : ", 1);
-		ft_putstr_fd(res[1], 1);
-		ft_putstr_fd(": invalid option\ncd: usage: cd\
-[-L] [-P] [-e] [-@] [dir]\n", 1);
-		cmd->cmd_rv = 2;
-	}
-	set_pwd_env(old_pwd, str, var_env);
-	free(str);
-	free(old_pwd);
+	free_string(old_pwd);
 }
 
 void	set_root_path(char **buf, char **path, char **res, char **str)
@@ -79,6 +82,7 @@ void	set_root_path(char **buf, char **path, char **res, char **str)
 	int i;
 
 	i = 1;
+	free_string(*str);
 	if (ft_strchr(&res[1][1], '/'))
 	{
 		while ((*buf)[i])
@@ -99,7 +103,6 @@ void	set_root_path(char **buf, char **path, char **res, char **str)
 
 void	cd_failure(char **res, t_command *cmd, char *old_pwd, char *buf)
 {
-	cmd->cmd_rv = 0;
 //	if (ft_strcmp(, "") == 0)
 //		cmd->cmd_rv = 1;
 	if (chdir(buf) == -1)

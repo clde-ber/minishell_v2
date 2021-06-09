@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/06/07 15:23:30 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/08 15:11:08 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,21 @@ char **arguments(char **res, int j, char **args, char *path)
 	int i;
 	int k;
 
-	i = 1;
+	i = 0;
 	k = 0;
 	p_bin = parse_path(path, ':');
+	argv = NULL;
 	while (p_bin[k])
 		k++;
 	if (k)
 		str = ft_strjoin(p_bin[0], "/");
 	else
 		str = ft_strdup("/");
-	argv = NULL;
 	if (!(argv = malloc(sizeof(char *) * (j + 2))))
 		return (0);
 	argv[0] = ft_strjoin(str, res[0]);
-	while (i < j)
-	{
+	while (++i < j)
 		argv[i] = ft_strdup(args[i - 1]);
-		i++;
-	}
 	argv[i] = NULL;
 	free(str);
 	ft_free(p_bin, k + 1);
@@ -84,14 +81,6 @@ int exit_status(int status)
 	return (status % 255);
 }
 
-void    test_write(char **tabl, int x)
-{
-	ft_putstr_nbr(x, 1);
-	ft_putstr_fd(" ", 1);
-	ft_putstr_fd(tabl[x], 1);
-	ft_putstr_fd("\n", 1);
-}
-
 int    test_shell_bin(char **tabl, char **p_bin, char **res, char **env)
 {
 	char *str;
@@ -112,7 +101,6 @@ int    test_shell_bin(char **tabl, char **p_bin, char **res, char **env)
 		tabl[0] = set_first_arg(p_bin[i], res[0]);
 		while (tabl[x])
 			x++;
-		//	test_write(tabl, x);
 		if ((ret = execve(tabl[0], tabl, env)) == -1)
 			count++;
 	}
@@ -135,7 +123,6 @@ int exec_command(char **args, char **res, char *path, int j)
     tabl = arguments(res, j, args, path);
     p_bin = parse_path(path, ':');
     env = environment(path);
-// Fork duplicates the process so the parent process doesn't return when the child process does.
 	if ((pid = fork()) == 0)
 	{
 		if (test_shell_bin(tabl, p_bin, res, env))
@@ -146,8 +133,7 @@ int exec_command(char **args, char **res, char *path, int j)
 	free_tabtab(p_bin);
 	free_tabtab(env);
 	waitpid(-1, &status, 0);
-	return (exit_status(status));
-// waitpid waits for the program to be finished. 
+	return (exit_status(status)); 
 }
 
 void	write_error_shell(t_command *cmd, char **res)
@@ -166,74 +152,48 @@ void	write_error_shell(t_command *cmd, char **res)
 	}
 }
 
+void	ft_free_set_args(char **args)
+{
+	int k;
+
+	k = 0;
+	while (args[k])
+		k++;
+	ft_free(args, k + 1);
+}
+
+void	init_vars_set_args(int *i, int *index, int *k)
+{
+	*i = 0;
+	*index = -1;
+	*k = 0;
+}
+
 int set_args(char **res, char *path, t_command *cmd)
 {
 	int i;
 	int index;
 	char **args;
-	int ret;
-	char **clc;
 	int k;
 
-	i = 0;
-	index = 0;
-	ret = 0;
-	clc = NULL;
-	k = 0;
-	// char **text = check_redir_exec(res);
-	// while (text[i])
-	//     i++;
-	// if (i > 1)
-	// {
-	//     if (!(args = malloc(sizeof(char *) * i)))
-	//         return (0);
-	//     while (index + 1 < i)
-	//     {
-	//         args[index] = ft_strdup(text[index + 1]);
-	//         index++;
-	//     }
-	//     args[index] = NULL;
-	//     ret = exec_command(args, text, path, i);
-	//     cmd->cmd_rv = ret;
-	//     ft_free(args, index + 1);
-	// }
-	// else
-	// {
-	//     ret = exec_command((clc = ft_calloc(2, sizeof(char *))), text, path, 1);
-	//     cmd->cmd_rv = ret;
-	//     while (clc[k])
-	//         k++;
-	//     ft_free(clc, k + 1);
-	// }
-	// return (0);
+	init_vars_set_args(&i, &index, &k);
 	while (res[i])
 		i++;
 	if (i > 1)
 	{
 		if (!(args = malloc(sizeof(char *) * i)))
 			return (0);
-		while (index + 1 < i)
-		{
+		while (++index + 1 < i)
 			args[index] = ft_strdup(res[index + 1]);
-			index++;
-		}
 		args[index] = NULL;
-		ret = exec_command(args, res, path, i);
-		if (ret == 127)
+		if ((cmd->cmd_rv = exec_command(args, res, path, i)) == 127)
 			write_error_shell(cmd, res);
-		cmd->cmd_rv = ret;
 		ft_free(args, index + 1);
+		return (0);
 	}
-	else
-	{
-		ret = exec_command((clc = ft_calloc(2, sizeof(char *))), res, path, 1);
-		if (ret == 127)
-			write_error_shell(cmd, res);
-		cmd->cmd_rv = ret;
-		while (clc[k])
-			k++;
-		ft_free(clc, k + 1);
-	}
-	// free_tabtab(ret);
+	if ((cmd->cmd_rv = exec_command((args = ft_calloc(2, sizeof(char *))),
+	res, path, 1)) == 127)
+		write_error_shell(cmd, res);
+	ft_free_set_args(args);
 	return (0);
 }

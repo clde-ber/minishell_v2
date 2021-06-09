@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/08 10:56:58 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/08 14:11:18 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,40 +96,6 @@ char *go_line(t_term *term)
 	return (NULL);
 }
 
-// si antislash avant ; lui dire de niquer sa mere et de pas decouper.
-
-int check_ok_quote(char *str, int i)
-{
-	int j;
-	int k;
-	int l;
-
-	j = 0;
-	k = 0;
-	l = 0;
-	if (ft_strchr_bis(str, ';') == -1)
-		return (i);
-	while (j <= i)
-	{
-		if (str[j] == '\"')
-			k++;
-		if (str[j] == '\'')
-			l++;
-		j++;
-	}
-	if ((l % 2 == 0 && k % 2 == 0) || (k == 0 && l == 0))
-		return (i);
-	else
-	{
-		if (ft_strchr_bis(&str[i + 1], ';') != -1)
-		{
-			return (check_ok_quote(str, ft_strchr_bis(&str[i + 1], ';')));
-		}
-		else
-			return (i = ft_strlen(str));
-	}
-}
-
 char *getcommand(char *str)
 {
 	int i;
@@ -143,11 +109,6 @@ char *getcommand(char *str)
 	while (str[i] && ((str[i] != ';' || (str[i] == ';' && (i && str[i - 1] == '\\')))
 	|| is_in_string(str, i)))
 		i++;
-//	i = check_ok_quote(str, i);
-//	if (i == 0)
-//		return (NULL);
-//	if (i == ft_strlen(str))
-//		return (str);
 	if (!(ret = malloc(sizeof(char) * (i + 1))))
 		return (NULL);
 	while (j < i)

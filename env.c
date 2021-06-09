@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:26 by user42            #+#    #+#             */
-/*   Updated: 2021/06/06 08:03:03 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/08 14:22:18 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,21 +83,22 @@ int		reset_cmd_path(t_list *lst, t_command *cmd)
 	}
 }
 
-void	set_env(char **tabl, t_list *var_env, t_command *cmd)
+init_strings_set_env(char **tmp_new, char **tmp, char **name)
+{
+	*tmp_new = NULL;
+	*tmp = NULL;
+	*name = NULL;
+}
+
+void	set_env(char **tabl, t_list *var_env, t_command *cmd, int j)
 {
 	int		i;
-	int		j;
 	t_list	*tmp_new;
 	t_list	*tmp;
 	char 	*name;
 
-	j = 0;
 	i = 0;
-	tmp_new = NULL;
-	tmp = NULL;
-	name = NULL;
-	while (tabl[j])
-		j++;
+	init_strings_set_env(&tmp_new, &tmp, &name);
 	tmp = check_doublons(0, j, tabl, var_env);
 	while (++i <= j - 1)
 	{
@@ -107,7 +108,7 @@ void	set_env(char **tabl, t_list *var_env, t_command *cmd)
 			{
 				tmp_new = ft_lstnew(ft_get_name(tabl[i]),
 ft_strdup(&ft_strchr(tabl[i], '=')[1]));
-			ft_lstadd_back(&var_env, tmp_new);
+				ft_lstadd_back(&var_env, tmp_new);
 			}
 			free(name);
 		}
@@ -130,19 +131,15 @@ void	unset_cmd_path(int boolean, t_command *cmd)
 	}
 }
 
-void	unset(t_list *env, char **tabl, t_command *cmd)
+void	unset(t_list *env, char **tabl, t_command *cmd, int j)
 {
 	int		i;
-	int		j;
 	char	*name;
 	int		boolean;
 
 	name = NULL;
 	i = 1;
-	j = 0;
 	boolean = 0;
-	while (tabl[j])
-		j++;
 	while (env)
 	{
 		while (i < j)

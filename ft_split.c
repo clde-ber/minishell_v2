@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:31 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/06 12:26:13 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/08 17:10:03 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ size_t	parse_command(size_t i, char *str, int *res, char *charset)
 	}
 	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\'') && ++i)
 	{
-		while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i]
-		== '\''))
+		while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i] == '\''))
 			i++;
 	}
 	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\"') && ++i)

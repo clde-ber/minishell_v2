@@ -6,11 +6,31 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/07 07:03:54 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/08 17:19:22 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	free_export_errors(char *s1, char *s2, char *s3, char *s4)
+{
+	free_string(s1);
+	free_string(s2);
+	free_string(s3);
+	free_string(s4);
+}
+
+void		if_s_quotes(char *str_first, char *str_secd, char **str_f, char **str_s)
+{
+	if (str_first[0] == '\'')
+		*str_f = ft_strtrim(str_first, "\'");
+	else
+		*str_f = ft_strdup(str_first);
+	if (str_secd[0] == '\'')
+		*str_s = ft_strtrim(str_secd, "\'");
+	else
+		*str_s = ft_strdup(str_secd);
+}
 
 char		*export_errors(char *str_first, char *str_secd, int quotes,
 char *res)
@@ -19,14 +39,7 @@ char *res)
 	char *str_f;
 	char *str_s;
 
-	if (str_first[0] == '\'')
-		str_f = ft_strtrim(str_first, "\'");
-	else
-		str_f = ft_strdup(str_first);
-	if (str_secd[0] == '\'')
-		str_s = ft_strtrim(str_secd, "\'");
-	else
-		str_s = ft_strdup(str_secd);
+	if_s_quotes(str_first, str_secd, &str_f, &str_s);
 	operator = find_op(res);
 	write(1, "bash: export: '", 16);
 	if (quotes % 2 == 0)
@@ -39,11 +52,14 @@ char *res)
 	else
 		write(1, str_secd, ft_strlen(str_secd));
 	write(1, "': not a valid identifier\n", 26);
-	free(str_first);
-	free(str_secd);
-	free(str_f);
-	free(str_s);
+	free_export_errors(str_first, str_secd, str_f, str_s);
 	return (NULL);
+}
+
+void		ft_free_2_strings(char *s1, char *s2)
+{
+	free_string(s1);
+	free_string(s2);
 }
 
 char		*valid_export(char *str_first, char *str_secd, int quotes,
@@ -72,9 +88,20 @@ char *res)
 			str_s = ft_strtrim(str_secd, "\'");
 		}
 	}
-	free(str_first);
-	free(str_secd);
+	ft_free_2_strings(str_first, str_secd);
 	return (ft_strjoin_free(join_a_free(str_f, operator), str_s));
+}
+
+void		if_d_quotes(char *str_first, char *str_secd, char **str_f, char **str_s)
+{
+	if (str_first[0] == '\"')
+		*str_f = ft_strtrim(str_first, "\"");
+	else
+		*str_f = ft_strdup(str_first);
+	if (str_secd[0] == '\"')
+		*str_s = ft_strtrim(str_secd, "\"");
+	else
+		*str_s = ft_strdup(str_secd);
 }
 
 void		env_quotes_a_values(char **str_first, char **str_secd,
@@ -83,14 +110,7 @@ int *quotes)
 	char *str_f;
 	char *str_s;
 
-	if ((*str_first)[0] == '\"')
-		str_f = ft_strtrim(*str_first, "\"");
-	else
-		str_f = ft_strdup(*str_first);
-	if ((*str_secd)[0] == '\"')
-		str_s = ft_strtrim(*str_secd, "\"");
-	else
-		str_s = ft_strdup(*str_secd);
+	if_d_quotes(*str_first, *str_secd, &str_f, &str_s);
 	if (ft_strlen(*str_first) != ft_strlen(str_f) &&
 	ft_strlen(*str_secd) == ft_strlen(str_s))
 		*quotes = 1;
@@ -103,8 +123,7 @@ int *quotes)
 	if (ft_strlen(*str_first) == ft_strlen(str_f) &&
 	ft_strlen(*str_secd) == ft_strlen(str_s))
 		*quotes = 4;
-	free(*str_first);
-	free(*str_secd);
+	ft_free_2_strings(*str_first, *str_secd);
 	*str_first = str_f;
 	*str_secd = str_s;
 }

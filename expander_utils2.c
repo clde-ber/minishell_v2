@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:21 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/08 08:53:38 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/08 15:42:33 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,61 @@ char    *antislashes_dolls(char *str)
     return (tmp);
 }
 
+void	fill_string_dq(int *i, int *j, char *str, char **ret)
+{
+	int len;
+	
+	len = (int)ft_strlen(str);
+	if (len > 2 && str[len - 2] == '\\' && str[len - 3] == '\\')
+		len = len - 2;
+	(*ret)[*j] = str[*i];
+	(*i)++;
+	(*j)++;
+	while (*i < len && (str[*i] != '\"' || (str[*i] == '\"' && str[*i - 1] == '\\')))
+	{
+		if (!(str[*i - 1] == '\\' && str[*i] == '\\'))
+		{
+			(*ret)[*j] = str[*i];
+			(*j)++;
+		}
+		(*i)++;
+	}
+}
+
+void	fill_string_sq(int *i, int *j, char *str, char **ret)
+{
+	int len;
+	
+	len = (int)ft_strlen(str);
+	if (len > 2 && str[len - 2] == '\\' && str[len - 3] == '\\')
+		len = len - 2;
+	(*ret)[*j] = str[*i];
+	(*i)++;
+	(*j)++;
+	while (*i < len && (str[*i] != '\'' || (str[*i] == '\'' && str[*i - 1] == '\\')))
+	{
+		if (!(str[*i - 1] == '\\' && str[*i] == '\\'))
+		{
+			(*ret)[*j] = str[*i];
+			(*j)++;
+		}
+		(*i)++;
+	}
+}
+
+void		fill_string(int *i, int *j, char *str, char **ret)
+{
+	(*ret)[*j] = str[*i];
+	(*j)++;
+	(*i)++;
+}
+
+init_vars_a_a_q(int *i, int *j)
+{
+	*i = 0;
+	*j = 0;
+}
+
 char		*antislashes_a_quotes(char *str)
 {
 	char	*ret;
@@ -91,58 +146,25 @@ char		*antislashes_a_quotes(char *str)
 	int		i;
 	int		j;
 
+	init_vars_a_a_q(&i, &j);
 	len = (int)ft_strlen(str);
 	if (len > 2 && str[len - 2] == '\\' && str[len - 3] == '\\')
 		len = len - 2;
-	i = 0;
-	j = 0;
 	if (!(ret = malloc(sizeof(char) * (len + 1))))
 		return (0);
 	while (i < len)
 	{
-		if (i < len && (((i == 0 && str[i] == '\"') || ((i && str[i - 1] != '\\' && str[i] == '\"')))) && (str[i + 1] != '\"'))
-		{
-			ret[j] = str[i];
-			i++;
-			j++;
-			while (i < len && (str[i] != '\"' || (str[i] == '\"' && str[i - 1] == '\\')))
-			{
-				if (!(str[i - 1] == '\\' && str[i] == '\\'))
-				{
-					ret[j] = str[i];
-					j++;
-				}
-				i++;
-			}
-		}
-		else if (i < len && (((i == 0 && str[i] == '\'') || ((i && str[i - 1] != '\\' && str[i] == '\'')))) && (str[i + 1] != '\''))
-		{
-			ret[j] = str[i];
-			i++;
-			j++;
-			while (i < len && (str[i] != '\'' || (str[i] == '\'' && str[i - 1] == '\\')))
-			{
-				if (!(str[i - 1] == '\\' && str[i] == '\\'))
-				{
-					ret[j] = str[i];
-					j++;
-				}
-				i++;
-			}
-		}
-	/*	else if (i < len && str[i] == '\\' && str[i + 1] && str[i + 1] != '$' && str[i + 1]
-		!= '\\')
-			i++;*/
+		if (i < len && (((i == 0 && str[i] == '\"') || ((i && str[i - 1] != '\\'
+		&& str[i] == '\"')))) && (str[i + 1] != '\"'))
+			fill_string_dq(&i, &j, str, &ret);
+		else if (i < len && (((i == 0 && str[i] == '\'') || ((i && str[i - 1] != '\\'
+		&& str[i] == '\'')))) && (str[i + 1] != '\''))
+			fill_string_sq(&i, &j, str, &ret);
 		else if (i < len)
-		{
-			ret[j] = str[i];
-			j++;
-			i++;
-		}
+			fill_string(&i, &j, str, &ret);
 	}
 	ret[j] = '\0';
-	free(str);
-	str = NULL;
+	free_string(str);
 	return (ret);
 }
 

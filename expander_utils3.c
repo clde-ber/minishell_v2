@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 14:30:34 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/07 22:17:12 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/08 15:53:40 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,8 @@ char		*get_env_value(char *str, t_list *var_env, t_command *cmd)
 		return (0);
 	test[i] = '\0';
 	while (str[i] && ft_strcmp((ret = search_env_value(
-	test, var_env)), "") == 0 && ((str[i] != '$') &&
-	(!(str[i] == '\\' && str[i + 1] == '$'))) &&
-	str[i] != '\"' && str[i] != '\'')// && is_valid_env_name_c(str[i])))
+test, var_env)), "") == 0 && ((str[i] != '$') && (!(str[i] == '\\' &&
+str[i + 1] == '$'))) && str[i] != '\"' && str[i] != '\'')
 	{
 		test[i] = str[i];
 		i++;

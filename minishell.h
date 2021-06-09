@@ -115,6 +115,7 @@ char *search_env_value(char *str, t_list *var_env);
 char *antislashes_a_quotes(char *str);
 char *antislashes_dolls(char *str);
 int is_valid_env_c(char c);
+void fill_string(int *i, int *j, char *str, char **ret);
 
 /*
 **expander_utils3
@@ -134,6 +135,7 @@ void env_quotes_a_values(char **str_first, char **str_secd, int *quotes);
 void split_env_name_a_value(char **str_first, char **str_secd, char **p_bin, char *res);
 void export_replace_by_env_value(char **str_first, char **str_secd,
 t_list *var_env, t_command *cmd);
+void ft_free_2_strings(char *s1, char *s2);
 
 /*
 **expander_utils5
@@ -161,9 +163,9 @@ char **env_tab(char *path);
 /*
 **env
 */
-void	set_env(char **tabl, t_list *var_env, t_command *cmd);
+void	set_env(char **tabl, t_list *var_env, t_command *cmd, int j);
 t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd);
-void	unset(t_list *env, char **tabl, t_command *cmd);
+void	unset(t_list *env, char **tabl, t_command *cmd, int j);
 void	print_env(t_list *environ, t_command *cmd);
 void	unset_cmd_path(int boolean, t_command *cmd);
 
@@ -199,7 +201,7 @@ char *create_j_value(char *tab_l, char *j_value);
 void    ft_cd(char **res, t_list *var_env, t_command *cmd);
 void	free_cd(char *path, char *buf, char *old_pwd, char *ret);
 int		if_too_many_args(char **res, t_command *cmd);
-void	init_cd_strings(char **path, char **old_pwd, char **buf, char **ret);
+void	init_cd_strings(char **old_pwd, char **buf, char **ret, char *path);
 void    ft_pwd(char **res, t_command *cmd);
 
 /*
@@ -238,7 +240,7 @@ char *getcommand(char *str);
 */
 int		chrtabtab(char **res, char *str);
 char	**divide_pipe(t_fd *f);
-int		go_e(char **tabl, t_list *var_env, t_command *cmd);
+int		go_e(char **tabl, t_list *var_env, t_command *cmd, int j);
 int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env);
 int		go_pipe(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env);
 int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env);
@@ -343,6 +345,11 @@ int		count_pipes(char **res);
 int		chrtabtab(char **res, char *str);
 char	**replace_tabtab(char **tabl, int i, char *str);
 void	erase_line(int i, int j, t_term *term);
+
+/*
+**minishell_utils4
+*/
+void    free_string(char *str);
 
 /*
 **gnl

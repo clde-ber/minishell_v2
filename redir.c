@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/07 17:00:59 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/09 08:46:37 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	**divide_pipe(t_fd *f)
 	return (tabl);
 }
 
-int		go_e(char **tabl, t_list *var_env, t_command *cmd)
+int		go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 {
 	if (ft_strcmp(tabl[0], "echo") == 0 || ft_strcmp(tabl[0], "export") == 0
 	|| ft_strcmp(tabl[0], "env") == 0 || ft_strcmp(tabl[0], "exit") == 0)
@@ -50,7 +50,7 @@ int		go_e(char **tabl, t_list *var_env, t_command *cmd)
 		if (ft_strcmp(tabl[0], "export") == 0 && tabl[1])
 		{
 			check_doublons_cl(tabl, NULL, NULL, 0);
-			set_env(tabl, var_env, cmd);
+			set_env(tabl, var_env, cmd, j);
 		}
 		else if (ft_strcmp(tabl[0], "export") == 0 && !tabl[1])
 			print_sorted_env(var_env, cmd);
@@ -65,24 +65,32 @@ int		go_e(char **tabl, t_list *var_env, t_command *cmd)
 
 int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 {
+	int j;
+
+	j = 0;
+	while (tabl[j])
+		j++;
 	if (tabl == NULL)
 		;
 		//error
 	if (ft_strcmp(tabl[0], "$?"))
 	{
 		if (tabl[0][0] == 'e')
-			go_e(tabl, var_env, cmd);
+			go_e(tabl, var_env, cmd, j);
 		else if (ft_strcmp(tabl[0], "pwd") == 0)
 			ft_pwd(tabl, cmd);
 		else if (ft_strcmp(tabl[0], "cd") == 0 && tabl[1] && ft_strcmp(tabl[1], ""))
+		{
+			cmd->cmd_rv = 0;
 			ft_cd(tabl, var_env, cmd);
+		}
 		else if (ft_strcmp(tabl[0], "cd") == 0 && (!tabl[1] ||
 		ft_strcmp(tabl[1], "") == 0))
 			cd_no_arg(var_env, cmd);
 		else if (tabl[0][0] == '.' && tabl[0][1] == '/')
 			find_exe(tabl[0], env, cmd);
 		else if (ft_strcmp(tabl[0], "unset") == 0 && tabl[1])
-			unset(var_env, tabl, cmd);
+			unset(var_env, tabl, cmd, j);
 		else if (ft_strcmp(tabl[0], "unset") == 0)
 			errors(cmd);
 		else

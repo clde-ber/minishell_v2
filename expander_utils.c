@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/08 08:01:59 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/09 07:24:19 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,47 @@ char		*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 	return (antislashes_dolls(tmp));
 }
 
+char	*trim_dq(int *bool2, char *tmp)
+{
+	char	*tmp_sub;
+
+	tmp_sub = NULL;
+	if (tmp[0] == '\"')
+	{
+		*bool2 = 1;
+		tmp_sub = ft_strtrim(tmp, "\"");
+	}
+	else
+		tmp_sub = ft_strdup(tmp);
+	return (tmp_sub);
+}
+
+char	*trim_sq(int *boolean, char *tmp_sub)
+{
+	char	*buf;
+
+	buf = NULL;
+	if ((even_or_odd(tmp_sub)) && even_or_odd(tmp_sub) % 2)
+		*boolean = 1;
+	buf = ft_strdup(tmp_sub);
+	return (buf);
+}
+
+void	init_var_nh_cmd(int *boolean, int *index, int *bool2)
+{
+	*boolean = 0;
+	*index = 0;
+	*bool2 = 0;
+}
+
+void	ft_free_nh_cmd(char *tmp, char *tmp_sub)
+{
+	if (tmp != NULL)
+		free_string(tmp);
+	if (tmp_sub != NULL)
+		free_string(tmp_sub);
+}
+
 char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 {
 	char	*tmp;
@@ -99,38 +140,22 @@ char		*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 	int		bool2;
 	char	*buf;
 
-	boolean = 0;
-	cmd->index = 0;
-	bool2 = 0;
+	init_var_nh_cmd(&boolean, &cmd->index, &bool2);
 	tmp = ft_strdup(res);
-	if (tmp[0] == '\"')
-	{
-		bool2 = 1;
-		tmp_sub = ft_strtrim(tmp, "\"");
-	}
-	else
-		tmp_sub = ft_strdup(tmp);
-	if ((even_or_odd(tmp_sub)) && even_or_odd(tmp_sub) % 2)
-		boolean = 1;
-	buf = ft_strdup(tmp_sub);
+	tmp_sub = trim_dq(&bool2, tmp);
+	buf = trim_sq(&boolean, tmp_sub);
 	if ((boolean == 0 || bool2 == 1) && ft_strchr(buf, '$'))
 	{
-		free(tmp);
-		tmp = ft_strtrim(buf, "\'");
-		free(tmp_sub);
-		tmp_sub = replace_by_env_value(buf, var_env, cmd);
-		buf = ft_strdup(tmp_sub);
+		free_string(tmp);
+		tmp = ft_strtrim(buf, "\'");	
+		buf = replace_by_env_value(buf, var_env, cmd);
 	}
 	if (buf[0] == '\'' && bool2 == 0)
 	{
-		free(tmp);
-		tmp = NULL;
-		free(buf);
+		free_string(buf);
 		buf = ft_strtrim(tmp_sub, "\'");
 	}
-	if (tmp != NULL)
-		free(tmp);
-	free(tmp_sub);
+	ft_free_nh_cmd(tmp, tmp_sub);
 	return (buf);
 }
 
