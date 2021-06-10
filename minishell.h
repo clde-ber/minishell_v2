@@ -87,6 +87,7 @@ size_t	count_malloc(char *s, char *str);
 void		*ft_free(char **res, int j);
 char			**ft_split(char *s, char *str);
 size_t parse_command(size_t i, char *str, int *res, char *charset);
+void	init_vars_ft_split(size_t *i, size_t *j);
 
 /*
 **expander
@@ -131,7 +132,7 @@ char *find_op(char *str);
 */
 char *export_errors(char *str_first, char *str_secd, int quotes, char *res);
 char *valid_export(char *str_first, char *str_secd, int quotes, char *res);
-void env_quotes_a_values(char **str_first, char **str_secd, int *quotes);
+void env_quotes_a_values(char **str_first, char **str_secd, int *quotes, char **name);
 void split_env_name_a_value(char **str_first, char **str_secd, char **p_bin, char *res);
 void export_replace_by_env_value(char **str_first, char **str_secd,
 t_list *var_env, t_command *cmd);
@@ -203,6 +204,7 @@ void	free_cd(char *path, char *buf, char *old_pwd, char *ret);
 int		if_too_many_args(char **res, t_command *cmd);
 void	init_cd_strings(char **old_pwd, char **buf, char **ret, char *path);
 void    ft_pwd(char **res, t_command *cmd);
+void	init_2_strings(char *path, char *str);
 
 /*
 **path_utils
@@ -264,11 +266,12 @@ void	ft_echo(char **res, t_list *var_env);
 /*
 **exec
 */
-int		set_args(char **res, char *path, t_command *cmd);
+int		set_args(char **res, char *path, t_command *cmd, int j);
 int		exec_command(char **args, char **res, char *path, int j);
 char	**arguments(char **res, int i, char **args, char *path);
 char	**environment(char *path);
 int		exit_status(int status);
+void	init_2_vars(int *i, int *k);
 
 /*
 **exec

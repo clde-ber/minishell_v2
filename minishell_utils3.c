@@ -6,13 +6,13 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 15:55:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/06 12:27:37 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/09 16:20:37 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		is_symbol(char c, char comp)
+int	is_symbol(char c, char comp)
 {
 	if (c == '<' || c == '>' || c == '|' || c == ';')
 		return (1);
@@ -21,7 +21,7 @@ int		is_symbol(char c, char comp)
 	return (0);
 }
 
-int		count_pipes(char **res)
+int	count_pipes(char **res)
 {
 	int		i;
 	int		j;
@@ -37,7 +37,7 @@ int		count_pipes(char **res)
 	return (j);
 }
 
-int		chrtabtab(char **res, char *str)
+int	chrtabtab(char **res, char *str)
 {
 	int		i;
 

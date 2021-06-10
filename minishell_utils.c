@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 18:57:35 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/20 18:57:37 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/09 16:16:46 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 #include "minishell.h"
 
-int		is_handled_cmd(char *str)
+int	is_handled_cmd(char *str)
 {
 	if (ft_strcmp(str, "echo") == 0)
 		return (1);
@@ -37,7 +37,7 @@ int		is_handled_cmd(char *str)
 	return (0);
 }
 
-int		ft_strchr_bis(const char *s, int c)
+int	ft_strchr_bis(const char *s, int c)
 {
 	char	to_find;
 	int		i;
@@ -55,15 +55,15 @@ int		ft_strchr_bis(const char *s, int c)
 	return (-1);
 }
 
-int		ft_isspace(char c)
+int	ft_isspace(char c)
 {
-	if (c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f' ||
-c == ' ')
+	if (c == '\t' || c == '\n' || c == '\r' || c == '\v' || c == '\f' \
+	|| c == ' ')
 		return (1);
 	return (0);
 }
 
-int		check_word(char *str, char *to_find, int i)
+int	check_word(char *str, char *to_find, int i)
 {
 	int		j;
 
@@ -78,7 +78,7 @@ int		check_word(char *str, char *to_find, int i)
 	return (1);
 }
 
-int		search_word(char *str, char *to_find)
+int	search_word(char *str, char *to_find)
 {
 	int		i;
 

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/08 17:19:22 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/10 12:27:54 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	free_export_errors(char *s1, char *s2, char *s3, char *s4)
 	free_string(s4);
 }
 
-void		if_s_quotes(char *str_first, char *str_secd, char **str_f, char **str_s)
+void	if_s_quotes(char *str_first, char *str_secd, char **str_f,
+char **str_s)
 {
 	if (str_first[0] == '\'')
 		*str_f = ft_strtrim(str_first, "\'");
@@ -32,12 +33,12 @@ void		if_s_quotes(char *str_first, char *str_secd, char **str_f, char **str_s)
 		*str_s = ft_strdup(str_secd);
 }
 
-char		*export_errors(char *str_first, char *str_secd, int quotes,
+char	*export_errors(char *str_first, char *str_secd, int quotes,
 char *res)
 {
-	char *operator;
-	char *str_f;
-	char *str_s;
+	char	*operator;
+	char	*str_f;
+	char	*str_s;
 
 	if_s_quotes(str_first, str_secd, &str_f, &str_s);
 	operator = find_op(res);
@@ -56,18 +57,18 @@ char *res)
 	return (NULL);
 }
 
-void		ft_free_2_strings(char *s1, char *s2)
+void	ft_free_2_strings(char *s1, char *s2)
 {
 	free_string(s1);
 	free_string(s2);
 }
 
-char		*valid_export(char *str_first, char *str_secd, int quotes,
+char	*valid_export(char *str_first, char *str_secd, int quotes,
 char *res)
 {
-	char *operator;
-	char *str_f;
-	char *str_s;
+	char	*operator;
+	char	*str_f;
+	char	*str_s;
 
 	str_f = ft_strdup(str_first);
 	str_s = ft_strdup(str_secd);
@@ -92,7 +93,7 @@ char *res)
 	return (ft_strjoin_free(join_a_free(str_f, operator), str_s));
 }
 
-void		if_d_quotes(char *str_first, char *str_secd, char **str_f, char **str_s)
+void	if_d_quotes(char *str_first, char *str_secd, char **str_f, char **str_s)
 {
 	if (str_first[0] == '\"')
 		*str_f = ft_strtrim(str_first, "\"");
@@ -104,35 +105,38 @@ void		if_d_quotes(char *str_first, char *str_secd, char **str_f, char **str_s)
 		*str_s = ft_strdup(str_secd);
 }
 
-void		env_quotes_a_values(char **str_first, char **str_secd,
-int *quotes)
+void	env_quotes_a_values(char **str_first, char **str_secd,
+int *quotes, char **name)
 {
-	char *str_f;
-	char *str_s;
+	char	*str_f;
+	char	*str_s;
 
 	if_d_quotes(*str_first, *str_secd, &str_f, &str_s);
-	if (ft_strlen(*str_first) != ft_strlen(str_f) &&
-	ft_strlen(*str_secd) == ft_strlen(str_s))
+	if (ft_strlen(*str_first) != ft_strlen(str_f)
+		&& ft_strlen(*str_secd) == ft_strlen(str_s))
 		*quotes = 1;
-	if (ft_strlen(*str_secd) != ft_strlen(str_s) &&
-	ft_strlen(*str_first) == ft_strlen(str_f))
+	if (ft_strlen(*str_secd) != ft_strlen(str_s)
+		&& ft_strlen(*str_first) == ft_strlen(str_f))
 		*quotes = 2;
-	if (ft_strlen(*str_first) != ft_strlen(str_f) &&
-	ft_strlen(*str_secd) != ft_strlen(str_s))
+	if (ft_strlen(*str_first) != ft_strlen(str_f)
+		&& ft_strlen(*str_secd) != ft_strlen(str_s))
 		*quotes = 3;
-	if (ft_strlen(*str_first) == ft_strlen(str_f) &&
-	ft_strlen(*str_secd) == ft_strlen(str_s))
+	if (ft_strlen(*str_first) == ft_strlen(str_f)
+		&& ft_strlen(*str_secd) == ft_strlen(str_s))
 		*quotes = 4;
 	ft_free_2_strings(*str_first, *str_secd);
 	*str_first = str_f;
 	*str_secd = str_s;
+	*name = get_env_name(*quotes, *str_first);
+	if (!(*name))
+		(*str_first)[0] = '\0';
 }
 
-void		split_env_name_a_value(char **str_first, char **str_secd,
+void	split_env_name_a_value(char **str_first, char **str_secd,
 char **p_bin, char *res)
 {
-	char *str_f;
-	char *str_s;
+	char	*str_f;
+	char	*str_s;
 
 	str_f = NULL;
 	str_s = NULL;
@@ -156,7 +160,7 @@ char **p_bin, char *res)
 	}
 }
 
-void		export_replace_by_env_value(char **str_first, char **str_secd,
+void	export_replace_by_env_value(char **str_first, char **str_secd,
 t_list *var_env, t_command *cmd)
 {
 	cmd->index = 0;

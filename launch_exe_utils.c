@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:50 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/05/27 18:07:59 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/09 15:56:42 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ char	**arg_tab(char *exe, char *path, char **env)
 {
 	char	**ret;
 
-	if (!(ret = malloc(sizeof(char *) * 3)))
+	ret = malloc(sizeof(char *) * 3);
+	if (!(ret))
 		return (0);
 	ret[0] = ft_strdup(path);
 	ret[1] = ft_strdup((char *)env);
@@ -75,7 +76,8 @@ char	**env_tab(char *path)
 {
 	char	**ret;
 
-	if (!(ret = malloc(sizeof(char *) * 3)))
+	ret = malloc(sizeof(char *) * 3);
+	if (!(ret))
 		return (0);
 	ret[0] = ft_strjoin("HOME=", ".");
 	ret[1] = ft_strjoin("PATH=", path);

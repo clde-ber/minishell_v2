@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/08 17:24:52 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/10 12:28:04 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,13 @@ void	init_vars_launch_exe(pid_t *pid, int *ret, int *status)
 	*status = 0;
 }
 
-int		launch_exe(char *exe, char *path, char **env, t_command *cmd)
+void	free_2_tabs(char **argv, char **envp)
+{
+	free_tabtab(envp);
+	free_tabtab(argv);
+}
+
+int	launch_exe(char *exe, char *path, char **env, t_command *cmd)
 {
 	pid_t	pid;
 	int		ret;
@@ -48,20 +54,19 @@ int		launch_exe(char *exe, char *path, char **env, t_command *cmd)
 	init_vars_launch_exe(&pid, &ret, &status);
 	argv = arg_tab(exe, path, env);
 	envp = env_tab(path);
-	if ((pid = fork()) == 0)
+	pid = fork();
+	if (pid == 0)
 	{
-		if ((ret = execve(argv[0], argv, envp)) == -1)
-		{
+		ret = execve(argv[0], argv, envp);
+		if (ret == -1)
 			write_error_launch_exe(path);
-			if (errno == 2)
-				exit(127);
-			if (errno == 13)
-				exit(126);
-		}
+		if (errno == 2)
+			exit(127);
+		if (errno == 13)
+			exit(126);
 		exit(status);
 	}
-	free_tabtab(envp);
-	free_tabtab(argv);
+	free_2_tabs(argv, envp);
 	waitpid(-1, &status, 0);
 	return ((cmd->cmd_rv = exit_status(status)));
 }
@@ -77,7 +82,8 @@ void	opendir_error(char *path, t_command *cmd, char *str, char *path_mod)
 	free_string(path_mod);
 }
 
-void	init_vars_find_exe(struct dirent *st_dir, char **str, char **path_mod, char *path)
+void	init_vars_find_exe(struct dirent *st_dir, char **str, char **path_mod,
+char *path)
 {
 	st_dir = NULL;
 	*str = ft_get_filename(path, '/');
@@ -101,20 +107,21 @@ void	find_exe(char *path, char **env, t_command *cmd)
 	char			*path_mod;
 
 	init_vars_find_exe(st_dir, &str, &path_mod, path);
-	if (!(dir = opendir(path_mod)))
+	dir = opendir(path_mod);
+	if (!(dir))
 	{
 		opendir_error(path, cmd, str, path_mod);
 		return ;
 	}
-	while ((st_dir = readdir(dir)))
+	st_dir = readdir(dir);
+	while (st_dir)
 	{
 		if (ft_strcmp(st_dir->d_name, str) == 0)
 		{
 			launch_exe(st_dir->d_name, path, env, cmd);
-			closedir(dir);
-			ft_free_2_strings(str, path_mod);
-			return ;
+			break ;
 		}
+		st_dir = readdir(dir);
 	}
 	launch_exe_error(str, path, env, cmd);
 	closedir(dir);

@@ -6,13 +6,13 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 06:40:46 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/08 14:42:09 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/09 12:21:43 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int     ft_isdigit(int c)
+int	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
 		return (1);
@@ -48,7 +48,7 @@ void	exit_no_code(char **res, int i, t_command *cmd)
 
 void	ft_exit(char **res, t_command *cmd)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (res[1] && !res[2])

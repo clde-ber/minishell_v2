@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:21 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/08 15:42:33 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/10 12:27:36 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 ** of an environment variable is correct and output strings without antislashes.
 */
 
-char		*search_env_name(char *str, t_list *var_env)
+char	*search_env_name(char *str, t_list *var_env)
 {
 	int		chg;
 	char	*ret;
@@ -36,7 +36,7 @@ char		*search_env_name(char *str, t_list *var_env)
 	return (NULL);
 }
 
-char		*search_env_value(char *str, t_list *var_env)
+char	*search_env_value(char *str, t_list *var_env)
 {
 	char	*ret;
 
@@ -58,43 +58,45 @@ char		*search_env_value(char *str, t_list *var_env)
 	return (ft_strdup(""));
 }
 
-char    *antislashes_dolls(char *str)
+char	*antislashes_dolls(char *str)
 {
-    int i;
-    int j;
-    char *tmp;
+	int		i;
+	int		j;
+	char	*tmp;
 
-    i = 0;
-    j = 0;
-    if (!(tmp = malloc(sizeof(char) * (ft_strlen(str) + 1))))
-        return (0);
-    while (str[i])
-    {
-        if (str[i] == '\\' && str[i + 1] == '$')
-            i++;
+	i = 0;
+	j = 0;
+	tmp = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!(tmp))
+		return (0);
+	while (str[i])
+	{
+		if (str[i] == '\\' && str[i + 1] == '$')
+			i++;
 		else
-        {	
+		{	
 			tmp[j] = str[i];
-        	i++;
-        	j++;
+			i++;
+			j++;
 		}
-    }
-    tmp[j] = '\0';
+	}
+	tmp[j] = '\0';
 	free(str);
-    return (tmp);
+	return (tmp);
 }
 
 void	fill_string_dq(int *i, int *j, char *str, char **ret)
 {
-	int len;
-	
+	int	len;
+
 	len = (int)ft_strlen(str);
 	if (len > 2 && str[len - 2] == '\\' && str[len - 3] == '\\')
 		len = len - 2;
 	(*ret)[*j] = str[*i];
 	(*i)++;
 	(*j)++;
-	while (*i < len && (str[*i] != '\"' || (str[*i] == '\"' && str[*i - 1] == '\\')))
+	while (*i < len && (str[*i] != '\"' || (str[*i] == '\"'
+				&& str[*i - 1] == '\\')))
 	{
 		if (!(str[*i - 1] == '\\' && str[*i] == '\\'))
 		{
@@ -107,15 +109,16 @@ void	fill_string_dq(int *i, int *j, char *str, char **ret)
 
 void	fill_string_sq(int *i, int *j, char *str, char **ret)
 {
-	int len;
-	
+	int	len;
+
 	len = (int)ft_strlen(str);
 	if (len > 2 && str[len - 2] == '\\' && str[len - 3] == '\\')
 		len = len - 2;
 	(*ret)[*j] = str[*i];
 	(*i)++;
 	(*j)++;
-	while (*i < len && (str[*i] != '\'' || (str[*i] == '\'' && str[*i - 1] == '\\')))
+	while (*i < len && (str[*i] != '\'' || (str[*i] == '\''
+				&& str[*i - 1] == '\\')))
 	{
 		if (!(str[*i - 1] == '\\' && str[*i] == '\\'))
 		{
@@ -126,20 +129,36 @@ void	fill_string_sq(int *i, int *j, char *str, char **ret)
 	}
 }
 
-void		fill_string(int *i, int *j, char *str, char **ret)
+void	fill_string(int *i, int *j, char *str, char **ret)
 {
 	(*ret)[*j] = str[*i];
 	(*j)++;
 	(*i)++;
 }
 
-init_vars_a_a_q(int *i, int *j)
+void	init_vars_a_a_q(int *i, int *j)
 {
 	*i = 0;
 	*j = 0;
 }
 
-char		*antislashes_a_quotes(char *str)
+int	condition_dq(int i, int len, char *str)
+{
+	if (i < len && (((i == 0 && str[i] == '\"') || ((i && str[i - 1] \
+		!= '\\' && str[i] == '\"')))) && (str[i + 1] != '\"'))
+		return (1);
+	return (0);
+}
+
+int	condition_sq(int i, int len, char *str)
+{
+	if (i < len && (((i == 0 && str[i] == '\'') || ((i && str[i - 1] \
+		!= '\\' && str[i] == '\'')))) && (str[i + 1] != '\''))
+		return (1);
+	return (0);
+}
+
+char	*antislashes_a_quotes(char *str)
 {
 	char	*ret;
 	int		len;
@@ -150,15 +169,14 @@ char		*antislashes_a_quotes(char *str)
 	len = (int)ft_strlen(str);
 	if (len > 2 && str[len - 2] == '\\' && str[len - 3] == '\\')
 		len = len - 2;
-	if (!(ret = malloc(sizeof(char) * (len + 1))))
+	ret = malloc(sizeof(char) * (len + 1));
+	if (!(ret))
 		return (0);
 	while (i < len)
 	{
-		if (i < len && (((i == 0 && str[i] == '\"') || ((i && str[i - 1] != '\\'
-		&& str[i] == '\"')))) && (str[i + 1] != '\"'))
+		if (condition_dq(i, len, str))
 			fill_string_dq(&i, &j, str, &ret);
-		else if (i < len && (((i == 0 && str[i] == '\'') || ((i && str[i - 1] != '\\'
-		&& str[i] == '\'')))) && (str[i + 1] != '\''))
+		else if (condition_sq(i, len, str))
 			fill_string_sq(&i, &j, str, &ret);
 		else if (i < len)
 			fill_string(&i, &j, str, &ret);
@@ -168,18 +186,18 @@ char		*antislashes_a_quotes(char *str)
 	return (ret);
 }
 
-int			is_valid_env_c(char c)
+int	is_valid_env_c(char c)
 {
-	if (ft_isalnum(c) || c == '_' || c == '\t' || c == '\n'
-	|| c == '\r' || c == '\v' || c == '\f' || c == ' ' ||
-	c == '+' || c == '\'')
+	if (ft_isalnum(c) || c == '_' || c == '\t' || c == '\n' \
+		|| c == '\r' || c == '\v' || c == '\f' || c == ' ' \
+		|| c == '+' || c == '\'')
 		return (1);
 	return (0);
 }
 
-char		*get_env_name(int quotes, char *str_first)
+char	*get_env_name(int quotes, char *str_first)
 {
-	char *name;
+	char	*name;
 
 	name = NULL;
 	if (quotes % 2 == 0)

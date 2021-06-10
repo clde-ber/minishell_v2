@@ -6,17 +6,17 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:38 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/06 17:34:57 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/09 15:22:48 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		strings_to_join(char **res, int i)
+int	strings_to_join(char **res, int i)
 {
 	if (((res[i][0] == '\'' && res[i][ft_strlen(res[i]) - 1] == '\'')
-				|| (res[i][0] == '\"' && res[i][ft_strlen(res[i]) - 1] == '\"'))
-			&& ft_strlen(res) > 2 && res[i + 1] && ft_strchr(res[i + 1], '='))
+		|| (res[i][0] == '\"' && res[i][ft_strlen(res[i]) - 1] == '\"')) \
+		&& ft_strlen(res) > 2 && res[i + 1] && ft_strchr(res[i + 1], '='))
 		return (1);
 	else if (ft_strchr(res[i], '=') == 0 && res[i + 1] && res[i + 1][0] == '=')
 		return (-1);
@@ -36,14 +36,15 @@ char	**create_parsed_res(char **res, t_command *cmd)
 		res[i] = antislashes_a_quotes(res[i]);
 		i++;
 	}
-	if (!(parsed_res = malloc(sizeof(char *) * (i + 1))))
+	parsed_res = malloc(sizeof(char *) * (i + 1));
+	if (!(parsed_res))
 		return (0);
 	return (parsed_res);
 }
 
-char		*parsed_res_error(char **parsed_res, int j, t_command *cmd)
+char	*parsed_res_error(char **parsed_res, int j, t_command *cmd)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = NULL;
 	if (parsed_res[j])
@@ -58,8 +59,8 @@ char		*parsed_res_error(char **parsed_res, int j, t_command *cmd)
 
 char	**last_command_rv(char **res, char **parsed_res)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -72,7 +73,8 @@ char	**last_command_rv(char **res, char **parsed_res)
 	return (NULL);
 }
 
-void		init_var_h_export(int *quotes, char **str_first, char **str_secd, char **name)
+void	init_var_h_export(int *quotes, char **str_first, char **str_secd,
+char **name)
 {
 	*quotes = 0;
 	*str_first = NULL;

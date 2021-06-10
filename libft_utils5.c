@@ -6,20 +6,20 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:48:39 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/02 09:49:51 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/09 16:15:34 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int		conv_char_int(char str, int k)
+static int	conv_char_int(char str, int k)
 {
 	k *= 10;
 	k += str - 48;
 	return (k);
 }
 
-int				ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	int			i;
 	int			j;
@@ -28,7 +28,7 @@ int				ft_atoi(const char *str)
 	i = 0;
 	j = 0;
 	k = 0;
-	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\r' ||
+	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\r' || \
 		str[i] == '\v' || str[i] == '\f' || str[i] == ' ')
 		i++;
 	if (str[i] == '-' || str[i] == '+')
@@ -87,7 +87,7 @@ static int	ft_pow(int nb, int pow)
 	return (res);
 }
 
-char		*rv_itoa(int n)
+char	*rv_itoa(int n)
 {
 	int		i;
 	int		j;
@@ -99,13 +99,16 @@ char		*rv_itoa(int n)
 	i = -1;
 	k = n;
 	j = len_int(k);
-	if (!(str = malloc(sizeof(char) * (len_int(n) + 1))))
+	str = malloc(sizeof(char) * (len_int(n) + 1));
+	if (!(str))
 		return (0);
-	n = ((int)n < 0 && k != -2147483648) ? -n : n;
+	if ((int)n < 0 && k != -2147483648)
+		n = -n;
 	while (j-- > 0 && k != -2147483648)
 		if (i++ <= len_int(k))
 			str[j] = ((n / ft_pow(10, i)) % 10) + '0';
 	str[len_int(k)] = '\0';
-	str[0] = (k < 0 && k != -2147483648) ? '-' : str[0];
+	if (k < 0 && k != -2147483648)
+		str[0] = '-';
 	return (str);
 }
