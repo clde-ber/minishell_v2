@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/10 14:49:17 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/11 07:56:21 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,11 @@ t_command *cmd)
 {
 	*str = get_cwd();
 	if (chdir(*str) == -1)
-		*path = search_env_value("HOME", var_env);
+	{
+		*path = search_env_value("PWD", var_env);
+		free_string(*str);
+		*str = ft_strdup(*path);
+	}
 	else
 		*path = ft_strdup(*str);
 }
@@ -90,12 +94,11 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 	if (chdir(ret) == -1)
 	{
 		if (chdir(res[1]) == -1)
-			cd_failure(res, cmd, old_pwd, res[1]);
+			cd_failure(res, cmd, old_pwd, var_env);
 		else
 			set_pwd_env(old_pwd, res[1], var_env);
 	}
 	else
 		set_pwd_env(old_pwd, ret, var_env);
-//	free_string(str);
 	free_cd(path, buf, old_pwd, ret);
 }

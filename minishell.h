@@ -222,7 +222,7 @@ char *cd_front_a_back(char *res, char *path, t_list *var_env, char *old_pwd);
 char *get_cwd(void);
 void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd, char *old_pwd);
 void	set_root_path(char **buf, char **path, char **res, char **str);
-void	cd_failure(char **res, t_command *cmd, char *old_pwd, char *buf);
+void	cd_failure(char **res, t_command *cmd, char *old_pwd, t_list *var_env);
 
 /*
 **path_utils3
