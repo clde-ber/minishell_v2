@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/11 07:05:50 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/14 17:00:13 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*write_error(char *trim, char *trim2, int quotes, t_command *cmd)
 	free_string(trim);
 	free_string(trim2);
 	free_string(str);
-	return (NULL);
+	return (ft_strdup(""));
 }
 
 void	if_d_quotes_unset(char **trim, char *res, int *quotes)
@@ -130,7 +130,8 @@ int	condition_two(int i, char *dest)
 {
 	if (i < ft_strlen(dest) && dest[i] == '\\' && (dest[i + 1] == '\\' \
 		|| dest[i + 1] == '|' || dest[i + 1] == ';' || dest[i + 1] == '>' \
-		|| dest[i + 1] == '<' || dest[i + 1] == '\'' || dest[i + 1] == '\"'))
+		|| dest[i + 1] == '<' || dest[i + 1] == '\'' || dest[i + 1] == '\"' \
+		|| ft_isspace(dest[i + 1])))
 		return (1);
 	return (0);
 }
@@ -144,7 +145,7 @@ t_command *cmd)
 	char	*env;
 
 	init_2_vars(&i, &j);
-	env = replace_by_env(ft_strdup(str), var_env, cmd);
+	env = replace_by_env(str, ft_strdup(str), var_env, cmd);
 	res = malloc(sizeof(char) * (ft_strlen(dest) + 1));
 	if (!(res))
 		return (0);
@@ -181,13 +182,12 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 		if (ft_strcmp(res[i], "$?") == 0)
 			parsed_res[j] = rv_itoa(cmd->cmd_rv);
 		else if ((strings_to_join(res, i)) > 0)
-			parsed_res[j] = expander(ft_strjoin(res[i],
-						res[++i]), var_env, res, cmd);
+			parsed_res[j] = expander(ft_strjoin(res[i], res[++i]), var_env, res, cmd);
 		else
 			parsed_res[j] = expander(res[i], var_env, res, cmd);
-		parsed_res[j] = parsed_res_error(parsed_res, j, cmd);
-		parsed_res[j] = remove_antislashes(parsed_res[j], res[i], var_env, cmd);
-		j++;
+		parsed_res[j] = parsed_res_error(res[i], parsed_res[j], var_env, cmd);
+		if (parsed_res[j])
+			j++;
 	}
 	parsed_res[j] = NULL;
 	return (parsed_res);

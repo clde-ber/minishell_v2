@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/10 12:27:54 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/14 16:12:38 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char *res)
 		write(1, str_secd, ft_strlen(str_secd));
 	write(1, "': not a valid identifier\n", 26);
 	free_export_errors(str_first, str_secd, str_f, str_s);
-	return (NULL);
+	return (ft_strdup(""));
 }
 
 void	ft_free_2_strings(char *s1, char *s2)
@@ -132,6 +132,20 @@ int *quotes, char **name)
 		(*str_first)[0] = '\0';
 }
 
+void	which_is_name_a_value(char **str_first, char **str_secd, char **p_bin, char *res)
+{
+	if (res[0] == '=')
+		{
+			*str_first = ft_strdup("");
+			*str_secd = ft_strdup(p_bin[0]);
+		}
+		else
+		{
+			*str_first = ft_strdup(p_bin[0]);
+			*str_secd = ft_strdup("");
+		}
+}
+
 void	split_env_name_a_value(char **str_first, char **str_secd,
 char **p_bin, char *res)
 {
@@ -149,10 +163,7 @@ char **p_bin, char *res)
 			*str_secd = ft_strdup("");
 	}
 	else if (p_bin && p_bin[0])
-	{
-		*str_first = ft_strdup(p_bin[0]);
-		*str_secd = ft_strdup("");
-	}
+		which_is_name_a_value(str_first, str_secd, p_bin, res);
 	else
 	{
 		*str_first = ft_strdup(res);

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:38 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/09 15:22:48 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/14 17:12:30 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,16 @@ char	**create_parsed_res(char **res, t_command *cmd)
 	return (parsed_res);
 }
 
-char	*parsed_res_error(char **parsed_res, int j, t_command *cmd)
+char	*parsed_res_error(char *res, char *parsed_res, t_list *var_env, t_command *cmd)
 {
-	char	*tmp;
-
-	tmp = NULL;
-	if (parsed_res[j])
+	if (is_unknown_env_variable(res, var_env, cmd) && cmd->bol == 0)
 	{
-		tmp = ft_strdup(parsed_res[j]);
-		free(parsed_res[j]);
+		free_string(parsed_res);
+		return (NULL);
 	}
 	else
-		tmp = ft_strdup("");
-	return (tmp);
+		parsed_res = remove_antislashes(parsed_res, res, var_env, cmd);
+	return (parsed_res);
 }
 
 char	**last_command_rv(char **res, char **parsed_res)

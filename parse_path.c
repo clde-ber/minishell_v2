@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:56:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/10 15:43:01 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/14 08:50:51 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,14 @@ static size_t	count_tab(char *s, char c)
 	count = 0;
 	if (s[i] == '\0' || c == '\0')
 		return (1);
-	while (s[i])
+	while (i < ft_strlen(s))
 	{
-		if (s[i] == '\'' && s[i + 1])
+		if (i < ft_strlen(s) && s[i] == '\'' && s[i + 1])
 			is_part_of_string(s[i], s, &i);
-		if (s[i] == '\"' && s[i + 1])
+		if (i < ft_strlen(s) && s[i] == '\"' && s[i + 1])
 			is_part_of_string(s[i], s, &i);
-		if (s[i] && s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
+		if (i < ft_strlen(s) && s[i] && s[i] != c && (s[i + 1] == c \
+		|| s[i + 1] == '\0'))
 			count++;
 		i++;
 	}

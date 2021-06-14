@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/10 12:28:04 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/14 09:20:42 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,8 @@ void	find_exe(char *path, char **env, t_command *cmd)
 		}
 		st_dir = readdir(dir);
 	}
-	launch_exe_error(str, path, env, cmd);
+	if (!(st_dir))
+		launch_exe_error(str, path, env, cmd);
 	closedir(dir);
 	ft_free_2_strings(path_mod, str);
 }

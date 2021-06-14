@@ -62,6 +62,7 @@ typedef struct s_command
 	int			cmd_rv;
 	int			start;
 	int			ret;
+	int			bol;
 }				t_command;
 
 
@@ -102,10 +103,11 @@ char *remove_antislashes(char *dest, char *str, t_list *var_env, t_command *cmd)
 **expander_utils
 */
 void join_string_value(char **str, char **tmp, char *trim, int *index);
-char *replace_by_env(char *trim, t_list *var_env, t_command *cmd);
+char *replace_by_env(char *res, char *trim, t_list *var_env, t_command *cmd);
 char *non_handled_commands(char *res, t_list *var_env, t_command *cmd);
 char *handled_export(char *res, t_list *var_env, t_command *cmd);
 char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd);
+char *replace_by_env_value_no_space(char *trim, t_list *var_env, t_command *cmd);
 
 /*
 **expander_utils2
@@ -143,7 +145,7 @@ void ft_free_2_strings(char *s1, char *s2);
 */
 int strings_to_join(char **res, int i);
 char **create_parsed_res(char **res, t_command *cmd);
-char *parsed_res_error(char **parsed_res, int j, t_command *cmd);
+char *parsed_res_error(char *res, char *parsed_res, t_list *var_env, t_command *cmd);
 char **last_command_rv(char **res, char **parsed_res);
 void init_var_h_export(int *quotes, char **str_first, char **str_secd, char **name);
 
@@ -352,7 +354,8 @@ void	erase_line(int i, int j, t_term *term);
 /*
 **minishell_utils4
 */
-void    free_string(char *str);
+void free_string(char *str);
+int is_unknown_env_variable(char *str, t_list *var_env, t_command *cmd);
 
 /*
 **gnl

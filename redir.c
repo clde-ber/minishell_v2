@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/09 17:22:55 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/14 16:25:47 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int		go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 			check_doublons_cl(tabl, NULL, NULL, 0);
 			set_env(tabl, var_env, cmd, j);
 		}
-		else if (ft_strcmp(tabl[0], "export") == 0 && !tabl[1])
+		else if (ft_strcmp(tabl[0], "export") == 0 && cmd->cmd_rv != 1)
 			print_sorted_env(var_env, cmd);
 		if (ft_strcmp(tabl[0], "env") == 0)
 			print_env(var_env, cmd);
@@ -68,10 +68,13 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	int j;
 
 	j = 0;
+	if (tabl[0] == NULL)
+	{
+		cmd->cmd_rv = 0;
+		return (0);
+	}
 	while (tabl[j])
 		j++;
-	if (tabl == NULL)
-		;
 		//error
 	if (ft_strcmp(tabl[0], "$?"))
 	{

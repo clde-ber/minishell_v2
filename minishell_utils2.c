@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 18:59:08 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/10 12:02:23 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/14 17:11:54 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,4 +115,5 @@ void	init_structs(t_command *cmd)
 	cmd->cmd_rv = 0;
 	cmd->start = 0;
 	cmd->ret = 0;
+	cmd->bol = 0;
 }

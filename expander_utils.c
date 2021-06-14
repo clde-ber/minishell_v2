@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/10 15:18:11 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/14 17:12:10 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,69 @@ int	is_not_env_value(size_t i, char *trim)
 	return (0);
 }
 
-char	*replace_by_env(char *trim, t_list *var_env, t_command *cmd)
+char	*remove_starting_spaces(char *str)
+{
+	char	*ret;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	ret = malloc(sizeof(char) * (ft_strlen(str) + 1));
+	if (!(ret))
+		return (0);
+	while (str[i] && ft_isspace(str[i]))
+		i++;
+	while (str[i])
+	{
+		ret[j] = str[i];
+		i++;
+		j++;
+	}
+	ret[j] = '\0';
+	free_string(str);
+	return (ret);
+}
+
+char	*is_it_unknown_var(char *tmp)
+{
+	char	*str;
+
+	str = antislashes_dolls(tmp);
+	if (str)
+		return (remove_starting_spaces(str));
+	return (str);
+}
+
+char	*replace_by_env(char *res, char *trim, t_list *var_env, t_command *cmd)
+{
+	size_t	i;
+	char	*tmp;
+	char	*str;
+
+	init_vars_replace_by_env(&i, &tmp, &str);
+	if (ft_strlen(trim) == 1 && trim[0] == '$')
+	{
+		ft_free_2_strings(trim, tmp);
+		return (ft_strdup("$"));
+	}
+	while (i < ft_strlen(trim))
+	{
+		if ((is_not_env_value(i, trim)) && ft_strchr(res, '=') == 0)
+			break ;
+		else
+		{
+			tmp = ft_strjoin_free(tmp, get_env_value(&trim[i + 1],
+						var_env, cmd));
+			i += cmd->index;
+		}
+		cmd->index = 0;
+	}
+	free_string(trim);
+	return (antislashes_dolls(tmp));
+}
+
+char	*replace_by_env_value_no_space(char *trim, t_list *var_env, t_command *cmd)
 {
 	size_t	i;
 	char	*tmp;
@@ -54,17 +116,18 @@ char	*replace_by_env(char *trim, t_list *var_env, t_command *cmd)
 	while (i < ft_strlen(trim))
 	{
 		if ((is_not_env_value(i, trim)))
-			break ;
-		else
 		{
-			tmp = ft_strjoin_free(tmp, get_env_value(&trim[i + 1],
-						var_env, cmd));
-			i += cmd->index;
+			join_string_value(&str, &tmp, &trim[i], &cmd->index);
+			free(str);
 		}
+		else
+			tmp = ft_strjoin_free(tmp, get_env_value(&trim[i + 1], \
+			var_env, cmd));
+		i += cmd->index;
 		cmd->index = 0;
 	}
 	free_string(trim);
-	return (antislashes_dolls(tmp));
+	return (is_it_unknown_var(tmp));
 }
 
 char	*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
@@ -129,8 +192,13 @@ void	init_var_nh_cmd(int *boolean, int *index, int *bool2)
 	*bool2 = 0;
 }
 
-void	ft_free_nh_cmd(char *tmp, char *tmp_sub)
+void	trim_s_quotes(char **buf, char *tmp_sub, int bool2, char *tmp)
 {
+	if (*buf && (*buf)[0] == '\'' && bool2 == 0)
+	{
+		free_string(*buf);
+		*buf = ft_strtrim(tmp_sub, "\'");
+	}
 	free_string(tmp);
 	free_string(tmp_sub);
 }
@@ -143,6 +211,7 @@ char	*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 	int		bool2;
 	char	*buf;
 
+	cmd->bol = 0;
 	init_var_nh_cmd(&boolean, &cmd->index, &bool2);
 	tmp = ft_strdup(res);
 	tmp_sub = trim_dq(&bool2, tmp);
@@ -150,16 +219,20 @@ char	*non_handled_commands(char *res, t_list *var_env, t_command *cmd)
 	if ((boolean == 0 || bool2 == 1) && ft_strchr(buf, '$'))
 	{
 		free_string(tmp);
-		tmp = ft_strtrim(buf, "\'");
+		if (bool2 == 0)
+			tmp = ft_strtrim(buf, "\'");
+		else
+			tmp = ft_strdup(buf);
 		free_string(buf);
-		buf = replace_by_env_value(ft_strdup(tmp), var_env, cmd);
+		if (bool2 == 1)
+		{
+			buf = replace_by_env_value(ft_strdup(tmp), var_env, cmd);
+			cmd->bol = 1;
+		}
+		else
+			buf = replace_by_env_value_no_space(ft_strdup(tmp), var_env, cmd);
 	}
-	if (buf[0] == '\'' && bool2 == 0)
-	{
-		free_string(buf);
-		buf = ft_strtrim(tmp_sub, "\'");
-	}
-	ft_free_nh_cmd(tmp, tmp_sub);
+	trim_s_quotes(&buf, tmp_sub, bool2, tmp);
 	return (buf);
 }
 
@@ -177,15 +250,17 @@ char	*handled_export(char *res, t_list *var_env, t_command *cmd)
 	env_quotes_a_values(&str_first, &str_secd, &quotes, &name);
 	free_tabtab(p_bin);
 	name = replace_by_env_value(name, var_env, cmd);
-	if (!(is_valid_env_name(name)) || !(ft_strcmp(str_first, "")))
+	if ((name && !(is_valid_env_name(name)) && ft_strchr(res, '=')) || (!(name)) \
+	|| (ft_strcmp(name, "") == 0 && is_unknown_env_variable(res, var_env, cmd) == 0))
 	{
 		cmd->cmd_rv = 1;
-		free(name);
+		if (name)
+			free(name);
 		return (export_errors(str_first, str_secd, quotes, res));
 	}
 	free(name);
 	export_replace_by_env_value(&str_first, &str_secd, var_env, cmd);
 	if (cmd->cmd_rv != 1)
-		cmd->cmd_rv = 0;
+			cmd->cmd_rv = 0;
 	return (valid_export(str_first, str_secd, quotes, res));
 }
