@@ -66,13 +66,13 @@ void main_loop(char *buf, char **env, t_list *var_env, t_command *cmd)
 
 	if (buf == NULL)
 	{
-		free(buf);
+		free_string(buf);
 		return ;
 	}
 	if (ft_is_fail_char(buf))
 	{
 		ft_putstr_fd("failed char\n", 2);
-		free(buf);
+		free_string(buf);
 		return ;
 	}
 	while (ft_strcmp((command = getcommand(buf)), ""))
@@ -80,15 +80,18 @@ void main_loop(char *buf, char **env, t_list *var_env, t_command *cmd)
 		dispatch(command, env, var_env, cmd);
 		buf2 = cut_after_punct(buf2, buf, command);
 		if (buf2 == NULL)
-			buf = NULL;
+			free_string(buf);
 		else
+		{
+			free_string(buf);
 			buf = ft_strdup(buf2);
-		free(buf2);
-		free(command);
-		command = NULL;
+		}
+		free_string(buf2);
+		free_string(command);
 	}
-	free(command);
-	free(buf);
+	if (buf)
+		free_string(buf);
+	free_string(command);
 }
 
 void finish_line(t_command *cmd, t_term *term,t_list *var_env)
@@ -122,12 +125,11 @@ int main(int ac, char **av, char **env)
 		line = go_line(term);
 		if (line != NULL && ft_strcmp(line, "exit") == 0) //builtin à coder
 		{
-			free(line);
+			free_string(line);
 			exit(0);
 		}
 		if (line != NULL)
 			main_loop(line, env, var_env, cmd);
-		// free(line);
 		g_sig.boolean = 0;
 	}
 	finish_line(cmd, term, var_env);
