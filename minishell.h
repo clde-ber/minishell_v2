@@ -37,6 +37,7 @@ typedef struct	s_fd
 	int			save_out;
 	char		**save_pipe;
 	char		**res;
+	char		**first_res;
 }				t_fd;
 
 typedef struct	s_term

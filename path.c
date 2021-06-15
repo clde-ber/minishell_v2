@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/11 07:56:21 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/15 15:08:15 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	if_too_many_args(char **res, t_command *cmd)
 {
 	if (res[1] && res[2])
 	{
-		ft_putstr_fd("Too many arguments\n", 2);
+		ft_putstr_fd("bash: cd: too many arguments\n", 2);
 		cmd->cmd_rv = 1;
 		return (1);
 	}

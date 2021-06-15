@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/15 09:00:45 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/15 12:44:39 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,17 +190,19 @@ int check_valid_res(char **str)
 int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
 	g_sig.boolean = 1;
-	if (chrtabtab(f->res, "|") == -1 && chrtabtab(f->res, ">") == -1 && chrtabtab(f->res,
-	"<") == -1 && chrtabtab(f->res, ">>") == -1)
+	if ((chrtabtab(f->res, "|") == -1 || chrtabtab(f->first_res, "\\|") != -1) && \
+	(chrtabtab(f->res, ">") == -1 || chrtabtab(f->first_res, "\\>") != -1) && \
+	(chrtabtab(f->res, "<") == -1 || chrtabtab(f->first_res, "\\<") != -1) && \
+	(chrtabtab(f->res, ">>") == -1 || chrtabtab(f->first_res, "\\>>") != -1))
 		return (go_instruction(copy_tabtab(f->res), var_env, cmd, env));
 	else if (check_valid_res(f->res))
 	{
 		// free_tabtab(f->res);
 		//maybe return null in go instruction pour signal d'erreur
-		ft_putstr_fd("Error synthax\n", 2);
+		ft_putstr_fd("bash: synthax error near unexpected token 'newline'\n", 2);
 		return (2);
 	}
-	else if (chrtabtab(f->res, "|") == -1)
+	else if (chrtabtab(f->res, "|") == -1 || chrtabtab(f->first_res, "\\|") != -1)
 		return (go_instruction(end_redir(f->res, f), var_env, cmd, env));
 	else
 	{

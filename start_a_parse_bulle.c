@@ -37,6 +37,7 @@ int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 		// 	printf("%s\n", res[i]);
 		// 	i++;
 		// }
+		f->first_res = res;
 		f->res = parse_res(res, var_env, cmd);
 		num = redir_and_send(f, var_env, cmd, env);
 		restore_fds(f);
@@ -122,13 +123,12 @@ int main(int ac, char **av, char **env)
 	{
 		write(1, "***minishell*** > ", 18);
 		line = go_line(term);
-		if (line != NULL && ft_strcmp(line, "exit") == 0) //builtin à coder
+		if (ft_strcmp(line, "exit") == 0) //builtin à coder
 		{
 			free_string(line);
 			exit(0);
 		}
-		if (line != NULL)
-			main_loop(line, env, var_env, cmd);
+		main_loop(line, env, var_env, cmd);
 		g_sig.boolean = 0;
 	}
 	finish_line(cmd, term, var_env);

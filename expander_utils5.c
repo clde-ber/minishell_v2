@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:38 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/14 17:12:30 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/15 15:05:46 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	strings_to_join(char **res, int i)
 {
 	if (((res[i][0] == '\'' && res[i][ft_strlen(res[i]) - 1] == '\'')
 		|| (res[i][0] == '\"' && res[i][ft_strlen(res[i]) - 1] == '\"')) \
-		&& ft_strlen(res) > 2 && res[i + 1] && ft_strchr(res[i + 1], '='))
+		&& ft_strlen(res[i]) > 2 && res[i + 1] && ft_strchr(res[i + 1], '='))
 		return (1);
 	else if (ft_strchr(res[i], '=') == 0 && res[i + 1] && res[i + 1][0] == '=')
 		return (-1);

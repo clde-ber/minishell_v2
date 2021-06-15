@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/14 17:00:13 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/15 15:06:28 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,29 +166,43 @@ t_command *cmd)
 	return (res);
 }
 
+void	init_vars_parse_res(int *i, int *j, char **str)
+{
+	*i = -1;
+	*j = 0;
+	*str = NULL;
+}
+
+void	inc_j(char **parsed_res, int *j)
+{
+	if (parsed_res[*j])
+		(*j)++;
+}
+
 char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 {
 	int		i;
 	char	**parsed_res;
 	int		j;
+	char	*str;
 
-	i = -1;
-	j = 0;
+	init_vars_parse_res(&i, &j, &str);
 	parsed_res = create_parsed_res(res, cmd);
-	if (last_command_rv(res, parsed_res))
-		return (parsed_res);
-	while (res[++i])
+	while (res[++i] && !last_command_rv(res, parsed_res))
 	{
 		if (ft_strcmp(res[i], "$?") == 0)
 			parsed_res[j] = rv_itoa(cmd->cmd_rv);
-		else if ((strings_to_join(res, i)) > 0)
-			parsed_res[j] = expander(ft_strjoin(res[i], res[++i]), var_env, res, cmd);
+		else if ((strings_to_join(res, i)) > 0 && ft_strcmp(res[i], "$?"))
+		{
+			str = ft_strjoin(res[i], res[++i]);
+			parsed_res[j] = expander(str, var_env, res, cmd);
+			free_string(str);
+		}
 		else
 			parsed_res[j] = expander(res[i], var_env, res, cmd);
 		parsed_res[j] = parsed_res_error(res[i], parsed_res[j], var_env, cmd);
-		if (parsed_res[j])
-			j++;
+		inc_j(parsed_res, &j);
+		parsed_res[j] = NULL;
 	}
-	parsed_res[j] = NULL;
 	return (parsed_res);
 }
