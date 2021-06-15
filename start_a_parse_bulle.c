@@ -89,8 +89,7 @@ void main_loop(char *buf, char **env, t_list *var_env, t_command *cmd)
 		free_string(buf2);
 		free_string(command);
 	}
-	if (buf)
-		free_string(buf);
+	free_string(buf);
 	free_string(command);
 }
 

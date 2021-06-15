@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:26 by user42            #+#    #+#             */
-/*   Updated: 2021/06/08 14:22:18 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/15 08:49:44 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	set_env(char **tabl, t_list *var_env, t_command *cmd, int j)
 	i = 0;
 	init_strings_set_env(&tmp_new, &tmp, &name);
 	tmp = check_doublons(0, j, tabl, var_env);
-	while (++i <= j - 1)
+	while (++i < j)
 	{
 		if (ft_strchr(tabl[i], '='))
 		{

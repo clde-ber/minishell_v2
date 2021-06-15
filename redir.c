@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/15 07:57:45 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/15 09:00:45 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ char **env)
 		close(pipe_fd[1]);
 		exit(status);
 	}
-	// waitpid(-1, &status, 0);
+	waitpid(-1, &status, 0);
 	close(pipe_fd[1]);
 	dup2(pipe_fd[0], 0);
 	go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);

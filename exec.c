@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/06/10 12:53:37 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/15 09:06:36 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ int	exec_command(char **args, char **res, char *path, int j)
 	pid = fork();
 	if (pid == 0)
 	{
-		if (test_shell_bin(tabl, p_bin, res, env))
+		test_shell_bin(tabl, p_bin, res, env);
 			exit(33151);
 		exit(status);
 	}
