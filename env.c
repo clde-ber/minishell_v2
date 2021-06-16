@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:26 by user42            #+#    #+#             */
-/*   Updated: 2021/06/15 08:49:44 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 11:09:41 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,6 @@
 */
 
 #include "minishell.h"
-
-void	name_a_value_var(char **name, char **value, char **env, int k)
-{
-	*name = ft_get_name(env[k]);
-	*value = ft_strdup(&ft_strchr(env[k], '=')[1]);
-}
 
 t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd)
 {
@@ -54,9 +48,9 @@ t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd)
 	return (var_env);
 }
 
-int		reset_cmd_path(t_list *lst, t_command *cmd)
+int	reset_cmd_path(t_list *lst, t_command *cmd)
 {
-	int boolean;
+	int	boolean;
 
 	boolean = 0;
 	while (lst)
@@ -83,19 +77,12 @@ int		reset_cmd_path(t_list *lst, t_command *cmd)
 	}
 }
 
-init_strings_set_env(char **tmp_new, char **tmp, char **name)
-{
-	*tmp_new = NULL;
-	*tmp = NULL;
-	*name = NULL;
-}
-
 void	set_env(char **tabl, t_list *var_env, t_command *cmd, int j)
 {
 	int		i;
 	t_list	*tmp_new;
 	t_list	*tmp;
-	char 	*name;
+	char	*name;
 
 	i = 0;
 	init_strings_set_env(&tmp_new, &tmp, &name);
@@ -104,10 +91,11 @@ void	set_env(char **tabl, t_list *var_env, t_command *cmd, int j)
 	{
 		if (ft_strchr(tabl[i], '='))
 		{
-			if (is_valid_env_name((name = ft_get_name(tabl[i]))))
+			name = ft_get_name(tabl[i]);
+			if (is_valid_env_name(name))
 			{
-				tmp_new = ft_lstnew(ft_get_name(tabl[i]),
-ft_strdup(&ft_strchr(tabl[i], '=')[1]));
+				tmp_new = ft_lstnew(ft_get_name(tabl[i]), \
+				ft_strdup(&ft_strchr(tabl[i], '=')[1]));
 				ft_lstadd_back(&var_env, tmp_new);
 			}
 			free(name);
@@ -115,19 +103,6 @@ ft_strdup(&ft_strchr(tabl[i], '=')[1]));
 		ft_lstiter(var_env, &ft_record, cmd);
 		tmp->prec = tmp;
 		tmp_new = tmp;
-	}
-	reset_cmd_path(var_env, cmd);
-}
-
-void	unset_cmd_path(int boolean, t_command *cmd)
-{
-	if (boolean == 0)
-	{
-		if (cmd->path)
-		{
-			free(cmd->path);
-			cmd->path = ft_strdup("");
-		}
 	}
 }
 
@@ -137,14 +112,13 @@ void	unset(t_list *env, char **tabl, t_command *cmd, int j)
 	char	*name;
 	int		boolean;
 
-	name = NULL;
-	i = 1;
-	boolean = 0;
+	init_vars_unset(&name, &i, &boolean);
 	while (env)
 	{
 		while (i < j)
 		{
-			if (strcmp((name = ft_get_name(tabl[i])), env->name) == 0)
+			name = ft_get_name(tabl[i]);
+			if (ft_strcmp(name, env->name) == 0)
 			{
 				((char *)env->name)[0] = '\0';
 				((char *)env->value)[0] = '\0';
@@ -162,8 +136,8 @@ void	unset(t_list *env, char **tabl, t_command *cmd, int j)
 
 void	print_env(t_list *environ, t_command *cmd)
 {
-	char *name;
-	char *value;
+	char	*name;
+	char	*value;
 
 	name = NULL;
 	value = NULL;

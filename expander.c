@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/15 15:06:28 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 11:40:04 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,68 +19,6 @@
 ** array is returned to be used either in the fonctions that are shell commands
 ** recreated builtins or in the execve function.
 */
-
-char	*write_error(char *trim, char *trim2, int quotes, t_command *cmd)
-{
-	char	*str;
-
-	if (trim[0] == '\'')
-		str = ft_strtrim(trim, "\'");
-	else
-		str = ft_strdup(trim);
-	write(1, "bash: unset: '", 15);
-	if (quotes == 0)
-		write(1, str, ft_strlen(str));
-	else
-		write(1, trim, ft_strlen(trim));
-	write(1, "': not a valid identifier\n", 26);
-	cmd->cmd_rv = 1;
-	free_string(trim);
-	free_string(trim2);
-	free_string(str);
-	return (ft_strdup(""));
-}
-
-void	if_d_quotes_unset(char **trim, char *res, int *quotes)
-{
-	if (res[0] == '\"')
-		*trim = ft_strtrim(res, "\"");
-	else
-		*trim = ft_strdup(res);
-	if (ft_strlen(*trim) != ft_strlen(res))
-		*quotes = 1;
-}
-
-void	if_s_quotes_unset(char *trim, char **trim2)
-{
-	if (trim[0] == '\'')
-		*trim2 = ft_strtrim(trim, "\'");
-	else
-		*trim2 = ft_strdup(trim);
-}
-
-char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
-{
-	char	*trim;
-	char	*trim2;
-	int		quotes;
-
-	init_2_strings(trim, trim2);
-	init_2_vars(&quotes, &cmd->index);
-	if_d_quotes_unset(&trim, res, &quotes);
-	if (((quotes == 0 && ft_strchr(trim, '\"') == 0) || (quotes == 1
-				&& ft_strchr(trim, '\'') == 0)) && ft_strcmp(trim, ""))
-	{
-		if_s_quotes_unset(trim, &trim2);
-		free_string(trim);
-		trim = replace_by_env_value(trim2, var_env, cmd);
-	}
-	trim2 = ft_strdup(trim);
-	if (!(is_valid_env_name(trim)))
-		return (write_error(trim, trim2, quotes, cmd));
-	free_string(trim2);
-	return (trim);
-}
 
 char	*expander(char *res, t_list *var_env, char **args, t_command *cmd)
 {
@@ -104,36 +42,6 @@ char	*expander(char *res, t_list *var_env, char **args, t_command *cmd)
 			return (handled_unset(res, var_env, cmd));
 	}
 	return (ft_strdup(res));
-}
-
-void	remove_empty_string(char *str, int *j)
-{
-	if (ft_strcmp(str, "") == 0)
-	{
-		free(str);
-		(*j)--;
-	}
-}
-
-int	condition_one(int i, char *dest, char *str, char *env)
-{
-	if (i < ft_strlen(dest) && (((i && dest[i - 1] != '\\') || i == 0) && \
-		((((str[0] == '$' && (!(ft_strchr(env, '\"')))) || str[0] != '$') && \
-		(dest[i] == '\"' && dest[ft_strlen(dest) - 1 - i] != '\"')) || \
-		(((str[0] == '$' && (!(ft_strchr(env, '\'')))) || str[0] != '$') && \
-		(dest[i] == '\'' && dest[ft_strlen(dest) - 1 - i] != '\'')))))
-		return (1);
-	return (0);
-}
-
-int	condition_two(int i, char *dest)
-{
-	if (i < ft_strlen(dest) && dest[i] == '\\' && (dest[i + 1] == '\\' \
-		|| dest[i + 1] == '|' || dest[i + 1] == ';' || dest[i + 1] == '>' \
-		|| dest[i + 1] == '<' || dest[i + 1] == '\'' || dest[i + 1] == '\"' \
-		|| ft_isspace(dest[i + 1])))
-		return (1);
-	return (0);
 }
 
 char	*remove_antislashes(char *dest, char *str, t_list *var_env,

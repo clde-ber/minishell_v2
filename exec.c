@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/06/15 15:26:13 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 11:24:46 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,70 +21,6 @@
 ** it returns correctly, that is until it finds where the command binaries are
 ** stored. Then it executes the command or prints an error.
 */
-
-void	init_2_vars(int *i, int *k)
-{
-	*i = 0;
-	*k = 0;
-}
-
-char	**arguments(char **res, int j, char **args, char *path)
-{
-	char	**argv;
-	char	**p_bin;
-	char	*str;
-	int		i;
-	int		k;
-
-	init_2_vars(&i, &k);
-	p_bin = parse_path(path, ':');
-	argv = NULL;
-	while (p_bin[k])
-		k++;
-	if (k)
-		str = ft_strjoin(p_bin[0], "/");
-	else
-		str = ft_strdup("/");
-	argv = malloc(sizeof(char *) * (j + 2));
-	if (!(argv))
-		return (0);
-	argv[0] = ft_strjoin(str, res[0]);
-	while (++i < j)
-		argv[i] = ft_strdup(args[i - 1]);
-	argv[i] = NULL;
-	free(str);
-	ft_free(p_bin, k + 1);
-	return (argv);
-}
-
-char	**environment(char *path)
-{
-	char	**envp;
-
-	envp = NULL;
-	envp = malloc(sizeof(char *) * 2);
-	if (!(envp))
-		return (0);
-	envp[0] = ft_strjoin("PATH=", path);
-	envp[1] = NULL;
-	return (envp);
-}
-
-int	command_not_found(char **tabl, char **env, char **p_bin, char **res)
-{
-	free(tabl[0]);
-	free_tabtab(env);
-	free_tabtab(p_bin);
-	return (1);
-}
-
-int	command_found(char **tabl, char **env, char **p_bin)
-{
-	free(tabl[0]);
-	free_tabtab(env);
-	free_tabtab(p_bin);
-	return (0);
-}
 
 int	exit_status(int status)
 {
@@ -137,7 +73,7 @@ int	exec_command(char **args, char **res, char *path, int j)
 	pid = fork();
 	if (pid == 0)
 	{
-		test_shell_bin(tabl, p_bin, res, env);
+		if (test_shell_bin(tabl, p_bin, res, env))
 			exit(33151);
 		exit(status);
 	}
@@ -146,38 +82,6 @@ int	exec_command(char **args, char **res, char *path, int j)
 	free_tabtab(env);
 	waitpid(-1, &status, 0);
 	return (exit_status(status));
-}
-
-void	write_error_shell(t_command *cmd, char **res)
-{
-	if (ft_strcmp(cmd->path, "") == 0)
-	{
-		ft_putstr_fd("bash: ", 1);
-		ft_putstr_fd(res[0], 1);
-		ft_putstr_fd(": No such file or directory\n", 1);
-	}
-	else
-	{
-		ft_putstr_fd("bash: ", 1);
-		ft_putstr_fd(res[0], 1);
-		ft_putstr_fd(": Command not found\n", 1);
-	}
-}
-
-void	ft_free_set_args(char **args)
-{
-	int	k;
-
-	k = 0;
-	while (args[k])
-		k++;
-	ft_free(args, k + 1);
-}
-
-void	init_vars_set_args(int *index, int *k)
-{
-	*index = -1;
-	*k = 0;
 }
 
 int	set_args(char **res, char *path, t_command *cmd, int i)

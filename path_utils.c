@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:03 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/11 07:49:12 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 15:30:48 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,22 +107,4 @@ int	cd_go_front(char *res, int *i, int k, char **buf)
 	}
 	while (res[*i] && res[*i] != '.')
 		(*i)++;
-}
-
-void	set_pwd_env(char *path, char *buf, t_list *var_env)
-{
-	while (var_env->next)
-	{
-		if (ft_strcmp(var_env->name, "OLDPWD") == 0)
-		{
-			free(var_env->value);
-			var_env->value = ft_strdup(path);
-		}
-		if (ft_strcmp(var_env->name, "PWD") == 0)
-		{
-			free(var_env->value);
-			var_env->value = ft_strdup(buf);
-		}
-		var_env = var_env->next;
-	}
 }

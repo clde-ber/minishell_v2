@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 18:59:08 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/14 17:11:54 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 15:25:59 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,39 +81,4 @@ char	**copy_tabtab(char **res)
 	}
 	dest[j] = NULL;
 	return (dest);
-}
-
-int	count_tabs(char **res)
-{
-	int		j;
-
-	j = 0;
-	if (!res[j] || !res)
-		return (j);
-	while (res[j] != NULL)
-		j++;
-	return (j);
-}
-
-void	free_tabtab(char **res)
-{
-	int		i;
-
-	i = 0;
-	if (!res)
-		return ;
-	while (res[i] != NULL)
-		free(res[i++]);
-	free(res);
-	res = NULL;
-}
-
-void	init_structs(t_command *cmd)
-{
-	cmd->path = NULL;
-	cmd->index = 0;
-	cmd->cmd_rv = 0;
-	cmd->start = 0;
-	cmd->ret = 0;
-	cmd->bol = 0;
 }

@@ -6,7 +6,11 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:39 by clde-ber          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2021/06/16 06:59:26 by clde-ber         ###   ########.fr       */
+=======
 /*   Updated: 2021/06/16 09:46:31 by budal-bi         ###   ########.fr       */
+>>>>>>> d03fd898b2ecb6bc6783b5c730bddc93dbc20405
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +35,8 @@ char	*ft_get_name(char *str)
 	copy = ft_strdup(str);
 	while (copy[i] && boolean == 0)
 	{
-		if (copy[i] == '=' || (copy[i] == '+' && copy[i + 1] == '=') ||
-				(copy[i] == '+' && copy[i + 1] == '\0'))
+		if (copy[i] == '=' || (copy[i] == '+' && copy[i + 1] == '=') || \
+		(copy[i] == '+' && copy[i + 1] == '\0'))
 		{
 			copy[i] = '\0';
 			boolean = 1;
@@ -75,8 +79,13 @@ void	add_to_env(char **tabl, int k, int l)
 
 void	check_doublons_cl(char **tabl, char *i_name, char *j_name, int j)
 {
+<<<<<<< HEAD
+	int	k;
+	int	l;
+=======
 	int		k;
 	int		l;
+>>>>>>> d03fd898b2ecb6bc6783b5c730bddc93dbc20405
 
 	while (tabl[j])
 		j++;

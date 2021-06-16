@@ -6,15 +6,43 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/16 16:07:28 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/16 16:54:37 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
+char	**divide_pipe(t_fd *f)
 {
-	if (ft_strcmp(tabl[0], "echo") == 0 || ft_strcmp(tabl[0], "export") == 0
+	int		m;
+	int		i;
+	char	**tabl;
+
+	i = 0;
+	m = count_tabs(f->res) - chrtabtab(f->res, "|");
+	f->save_pipe = malloc(sizeof(char *) * (m + 2));
+	tabl = malloc(sizeof(char *) * (chrtabtab(f->res, "|") + 2));
+	if (!(tabl) || !(f->save_pipe))
+		return (NULL);
+	while (i < chrtabtab(f->res, "|"))
+	{
+		tabl[i] = ft_strdup(f->res[i]);
+		i++;
+	}
+	tabl[i] = NULL;
+	i = 0;
+	while (f->res[chrtabtab(f->res, "|") + i + 1])
+	{
+		f->save_pipe[i] = ft_strdup(f->res[chrtabtab(f->res, "|") + i + 1]);
+		i++;
+	}
+	f->save_pipe[i] = NULL;
+	return (tabl);
+}
+
+int	go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
+{
+	if (ft_strcmp(tabl[0], "echo") == 0 || ft_strcmp(tabl[0], "export") == 0 \
 	|| ft_strcmp(tabl[0], "env") == 0 || ft_strcmp(tabl[0], "exit") == 0)
 	{
 		if (ft_strcmp(tabl[0], "echo") == 0)
@@ -23,6 +51,7 @@ int		go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 		{
 			check_doublons_cl(tabl, NULL, NULL, 0);
 			set_env(tabl, var_env, cmd, j);
+			reset_cmd_path(var_env, cmd);
 		}
 		else if (ft_strcmp(tabl[0], "export") == 0 && cmd->cmd_rv != 1)
 			print_sorted_env(var_env, cmd);
@@ -35,42 +64,21 @@ int		go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 		set_args(tabl, cmd->path, cmd, j);
 }
 
-int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
+int	tabl_is_null(int *j, char **tabl, t_command *cmd)
 {
-	int j;
-
-	j = 0;
-	if (tabl == NULL || tabl[0] == NULL)
+	*j = 0;
+	if (tabl[0] == NULL)
 	{
 		cmd->cmd_rv = 0;
-		return (0);
+		return (1);
 	}
-	while (tabl[j])
-		j++;
-		//error
-	if (ft_strcmp(tabl[0], "$?"))
-	{
-		if (tabl[0][0] == 'e')
-			go_e(tabl, var_env, cmd, j);
-		else if (ft_strcmp(tabl[0], "pwd") == 0)
-			ft_pwd(tabl, cmd);
-		else if (ft_strcmp(tabl[0], "cd") == 0 && tabl[1] && ft_strcmp(tabl[1], ""))
-		{
-			cmd->cmd_rv = 0;
-			ft_cd(tabl, var_env, cmd);
-		}
-		else if (ft_strcmp(tabl[0], "cd") == 0 && (!tabl[1] ||
-		ft_strcmp(tabl[1], "") == 0))
-			cd_no_arg(var_env, cmd);
-		else if (tabl[0][0] == '.' && tabl[0][1] == '/')
-			find_exe(tabl[0], env, cmd);
-		else if (ft_strcmp(tabl[0], "unset") == 0 && tabl[1])
-			unset(var_env, tabl, cmd, j);
-		else if (ft_strcmp(tabl[0], "unset") == 0)
-			errors(cmd);
-		else
-			set_args(tabl, cmd->path, cmd, j);
-	}
+	while (tabl[*j])
+		(*j)++;
+	return (0);
+}
+
+void	handle_cmd_rv(char **tabl, t_command *cmd)
+{
 	if (g_sig.sig == 1)
 		cmd->cmd_rv = 130;
 	if (g_sig.sig == 2)
@@ -84,6 +92,34 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	if (g_sig.sig == 1 || g_sig.sig == 2)
 		g_sig.sig = 0;
 	free_tabtab(tabl);
+}
+
+int	go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
+{
+	int	j;
+
+	if (tabl_is_null(&j, tabl, cmd))
+		return (0);
+	if (tabl[0][0] == 'e' && ft_strcmp(tabl[0], "$?"))
+		go_e(tabl, var_env, cmd, j);
+	else if (ft_strcmp(tabl[0], "pwd") == 0 && ft_strcmp(tabl[0], "$?"))
+		ft_pwd(tabl, cmd);
+	else if (ft_strcmp(tabl[0], "cd") == 0 && tabl[1] && ft_strcmp(tabl[1], "") \
+	&& ft_strcmp(tabl[0], "$?"))
+		ft_cd(tabl, var_env, cmd);
+	else if (ft_strcmp(tabl[0], "cd") == 0 && (!tabl[1] || \
+	ft_strcmp(tabl[1], "") == 0) && ft_strcmp(tabl[0], "$?"))
+		cd_no_arg(var_env, cmd);
+	else if (tabl[0][0] == '.' && tabl[0][1] == '/' && ft_strcmp(tabl[0], "$?"))
+		find_exe(tabl[0], env, cmd);
+	else if (ft_strcmp(tabl[0], "unset") == 0 && tabl[1] && ft_strcmp(tabl[0], \
+	"$?"))
+		unset(var_env, tabl, cmd, j);
+	else if (ft_strcmp(tabl[0], "unset") == 0 && ft_strcmp(tabl[0], "$?"))
+		errors(cmd);
+	else if (ft_strcmp(tabl[0], "$?"))
+		set_args(tabl, cmd->path, cmd, j);
+	handle_cmd_rv(tabl, cmd);
 	return (0);
 }
 

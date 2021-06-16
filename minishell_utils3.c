@@ -6,7 +6,11 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 15:55:17 by clde-ber          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2021/06/16 07:47:14 by clde-ber         ###   ########.fr       */
+=======
 /*   Updated: 2021/06/16 15:02:19 by budal-bi         ###   ########.fr       */
+>>>>>>> d03fd898b2ecb6bc6783b5c730bddc93dbc20405
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +63,8 @@ char	**replace_tabtab(char **tabl, int i, char *str)
 	int		j;
 
 	j = 0;
-	if (!(buf = malloc(sizeof(char *) * (count_tabs(tabl) + 1))))
+	buf = malloc(sizeof(char *) * (count_tabs(tabl) + 1));
+	if (!(buf))
 		return (NULL);
 	while (tabl[j] && j < i)
 	{
@@ -88,6 +93,11 @@ void	erase_line(int i, int j, t_term *term)
 		write(1, " ", 1);
 		k++;
 	}
+<<<<<<< HEAD
+	tputs(tgoto(tgetstr("cm", NULL), (term->x - 1) + i, term->y - 1), \
+	1, ft_putchar);
+=======
 	tputs(tgoto(tgetstr("cm", NULL), (term->x - 1) + i, term->y - 1), 1,
 	ft_putchar);
+>>>>>>> d03fd898b2ecb6bc6783b5c730bddc93dbc20405
 }
