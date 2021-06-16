@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 15:55:17 by clde-ber          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/06/16 07:47:14 by clde-ber         ###   ########.fr       */
+=======
+/*   Updated: 2021/06/16 15:02:19 by budal-bi         ###   ########.fr       */
+>>>>>>> d03fd898b2ecb6bc6783b5c730bddc93dbc20405
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +46,8 @@ int	chrtabtab(char **res, char *str)
 	int		i;
 
 	i = 0;
+	if (!res)
+		return (-1);
 	while (res[i])
 	{
 		if (ft_strcmp(res[i], str) == 0)
@@ -87,6 +93,11 @@ void	erase_line(int i, int j, t_term *term)
 		write(1, " ", 1);
 		k++;
 	}
+<<<<<<< HEAD
 	tputs(tgoto(tgetstr("cm", NULL), (term->x - 1) + i, term->y - 1), \
 	1, ft_putchar);
+=======
+	tputs(tgoto(tgetstr("cm", NULL), (term->x - 1) + i, term->y - 1), 1,
+	ft_putchar);
+>>>>>>> d03fd898b2ecb6bc6783b5c730bddc93dbc20405
 }

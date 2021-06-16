@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multipipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/15 09:00:38 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 15:07:05 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,34 +67,29 @@ void	print_tabtab(char **res)
 int		handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd,
 char **env)
 {
-	int i;
-	int j;
-	int fd[2];
-	pid_t pid;
-	int fdd;
-	int status;
+	t_mp mp[1];
 
-	j = 0;
-	fdd = 0;
-	pid = 0;
-	while (j < count_pipes(f->res) + 1)
+	mp->count = 0;
+	mp->fdd = 0;
+	mp->pid = 0;
+	while (mp->count < count_pipes(f->res) + 1)
 	{
-		pipe(fd);
-		if ((pid = fork()) == -1)
+		pipe(mp->fd);
+		if ((mp->pid = fork()) == -1)
 			exit(1);
-		else if (pid == 0)
+		else if (mp->pid == 0)
 		{
-			dup2(fdd, 0);
-			if (j < count_pipes(f->res))
-				dup2(fd[1], 1);
-			close(fd[0]);
-			go_instruction(end_redir(middle_pipe(f->res, j), f), var_env, cmd,
-			env);
-			exit(status);
+			dup2(mp->fdd, 0);
+			if (mp->count < count_pipes(f->res))
+				dup2(mp->fd[1], 1);
+			close(mp->fd[0]);
+			go_instruction(end_redir(middle_pipe(f->res, mp->count), f),
+			var_env, cmd, env);
+			exit(mp->status);
 		}
-		waitpid(-1, &status, 0);
-		close(fd[1]);
-		fdd = fd[0];
-		j++;
+		waitpid(-1, &mp->status, 0);
+		close(mp->fd[1]);
+		mp->fdd = mp->fd[0];
+		mp->count++;
 	}
 }

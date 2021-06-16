@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 22:13:10 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/31 17:00:52 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/16 09:45:55 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ char	*echo_option(char *output, int option)
 
 char	*get_echo_output(char *output, char **res, int i)
 {
-	int j;
-	int k;
+	int		j;
+	int		k;
 
 	j = 2;
 	k = 0;

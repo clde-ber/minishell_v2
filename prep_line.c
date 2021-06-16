@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prep_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/15 08:05:46 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 15:04:39 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,12 @@ char *end_line(char *current, t_term *term)
 	restore_term(term);
 	if (current == NULL)
 	{
-		// current = ft_strdup("\0");
 		write(1, "\n", 1);
 		return (current);
 	}
 	if ((term->len > 0 && ft_strcmp(current, term->done[0]) != 0) || term->len == 0)
 		term->done = save_input(current, term->done);
 	write(1, "\n", 1);
-	// if (term->last != NULL)
-	// 	free(term->last);
 	return (current);
 }
 
@@ -49,6 +46,30 @@ char *get_char(char *current, t_term *term, char *buf)
 	return (current);
 }
 
+char	*handle_delete(char *current, t_term *term)
+{
+	if (current == NULL || ft_strlen(current) == 0)
+		;
+	else
+	{
+		tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2),
+		term->y - 1), 1, ft_putchar);
+		write(1, " ", 1);
+		tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2),
+		term->y - 1), 1, ft_putchar);
+		current[ft_strlen(current) - 1] = '\0';
+	}
+	return (current);
+}
+
+void	handle_ctrl_d(char *current, t_term *term)
+{
+	restore_term(term);
+	if (current != NULL)
+		free(current);
+	write(1, "\n", 1);
+}
+
 char *go_line(t_term *term)
 {
 	char buf[2];
@@ -57,9 +78,6 @@ char *go_line(t_term *term)
 	init_term(term);
 	current = NULL;
 	get_cursor_space(term);
-	// ft_putstr_nbr(term->lin, 1);
-	// ft_putstr_fd(" ", 1);
-	// ft_putstr_nbr(term->col, 1);
 	while (read(0, buf, 1) != -1)
 	{
 		buf[1] = '\0';
@@ -69,26 +87,11 @@ char *go_line(t_term *term)
 			current = handle_arrow(term, current);
 		else if ((int)buf[0] == 4)
 		{
-			restore_term(term);
-			if (current != NULL)
-				free(current);
-			write(1, "\n", 1);
+			handle_ctrl_d(current, term);
 			exit(0);
 		}
 		else if((int)buf[0] == 127)
-		{
-			if (current == NULL || ft_strlen(current) == 0)
-				;
-			else
-			{
-				tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2), term->y - 1), 1,
-	ft_putchar);
-				write(1, " ", 1);
-				tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2), term->y - 1), 1,
-	ft_putchar);
-				current[ft_strlen(current) - 1] = '\0';
-			}
-		}
+			current = handle_delete(current, term);
 		else
 			current = get_char(current, term, buf);
 		buf[0] = '\0';

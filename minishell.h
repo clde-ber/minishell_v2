@@ -40,6 +40,15 @@ typedef struct	s_fd
 	char		**first_res;
 }				t_fd;
 
+typedef struct	s_mp
+{
+	int			fd[2];
+	int			count;
+	pid_t		pid;
+	int			fdd;
+	int			status;
+}				t_mp;
+
 typedef struct	s_term
 {
 	struct		termios s_termios;

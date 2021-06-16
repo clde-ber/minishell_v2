@@ -53,7 +53,8 @@ int ft_is_fail_char(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] != '>' && str[i] != '<' && str[i] != '|' && str[i] != ' ' && str[i] != ';')
+		if (str[i] != '>' && str[i] != '<' && str[i] != '|' && str[i] != ' ' &&
+		str[i] != ';')
 			return (0);
 		i++;
 	}
@@ -73,6 +74,7 @@ void main_loop(char *buf, char **env, t_list *var_env, t_command *cmd)
 	if (ft_is_fail_char(buf))
 	{
 		ft_putstr_fd("failed char\n", 2);
+		// g_sig.sig = 2;
 		free_string(buf);
 		return ;
 	}
