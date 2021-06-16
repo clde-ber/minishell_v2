@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/28 15:00:41 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/11 08:09:16 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 15:32:18 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,24 +48,6 @@ char	*get_cwd(void)
 		return (NULL);
 	getcwd(path, 1000);
 	return (path);
-}
-
-void	write_cd_option_error(char *res, t_command *cmd, char **str, t_list *var_env)
-{
-	*str = search_env_value("OLDPWD", var_env);
-	ft_putstr_fd("bash : cd : ", 1);
-	ft_putstr_fd(res, 1);
-	ft_putstr_fd(": invalid option\ncd: usage: cd [-L] [-P] [-e] [-@] \
-[dir]\n", 1);
-	cmd->cmd_rv = 2;
-}
-
-void	write_cd_minus_option(char **str, t_list *var_env)
-{
-	*str = search_env_value("OLDPWD", var_env);
-	chdir(*str);
-	ft_putstr_fd(*str, 1);
-	ft_putstr_fd("\n", 1);
 }
 
 void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd, char *old_pwd)
@@ -110,12 +92,6 @@ void	set_root_path(char **buf, char **path, char **res, char **str)
 			i++;
 		}
 		chdir(*buf);
-	/*	*path = ft_strdup(*str);
-		free(*path);
-		if (res[1][0] == '/')
-			*path = ft_strdup(ft_strchr(&res[1][1], '/'));
-		else
-			*path = ft_strdup(ft_strchr(res[1], '/'));*/
 	}
 }
 

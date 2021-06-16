@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:39 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/04 07:24:45 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 06:59:26 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ char	*ft_get_name(char *str)
 	copy = ft_strdup(str);
 	while (copy[i] && boolean == 0)
 	{
-		if (copy[i] == '=' || (copy[i] == '+' && copy[i + 1] == '=') ||
-				(copy[i] == '+' && copy[i + 1] == '\0'))
+		if (copy[i] == '=' || (copy[i] == '+' && copy[i + 1] == '=') || \
+		(copy[i] == '+' && copy[i + 1] == '\0'))
 		{
 			copy[i] = '\0';
 			boolean = 1;
@@ -49,8 +49,8 @@ char	*ft_get_name(char *str)
 
 void	add_to_env(char **tabl, int k, int l)
 {
-	char *i_name;
-	char *j_name;
+	char	*i_name;
+	char	*j_name;
 
 	i_name = ft_get_name(tabl[k]);
 	j_name = ft_get_name(tabl[l]);
@@ -75,8 +75,8 @@ void	add_to_env(char **tabl, int k, int l)
 
 void	check_doublons_cl(char **tabl, char *i_name, char *j_name, int j)
 {
-	int k;
-	int l;
+	int	k;
+	int	l;
 
 	while (tabl[j])
 		j++;
@@ -123,7 +123,7 @@ t_list	*check_doublons(int k, int j, char **tabl, t_list *var_env)
 
 void	replace_env(char *tabl, t_list *var_env)
 {
-	char *name;
+	char	*name;
 
 	name = ft_get_name(tabl);
 	if (ft_strcmp(name, var_env->name) == 0)

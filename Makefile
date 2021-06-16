@@ -3,21 +3,30 @@ SRCS =	./debug_to_delete.c\
 	./env_utils.c\
 	./env_utils2.c\
 	./env_utils3.c\
+	./env_utils4.c\
+	./env_values.c\
+	./env_values_utils.c\
+	./env_values_utils2.c\
+	./env_values_utils3.c\
 	./env.c\
 	./exec.c\
 	./exec_utils.c\
+	./exec_utils2.c\
 	./exit.c\
+	./expander_a_env.c\
 	./expander_utils.c\
 	./expander_utils2.c\
 	./expander_utils3.c\
-	./expander_utils4.c\
-	./expander_utils5.c\
 	./expander.c\
-	./ft_split.c\
+	./export_utils.c\
+	./export.c\
 	./gnl.c\
 	./gnl_utils.c\
 	./launch_exe_utils.c\
+	./launch_exe_utils2.c\
 	./launch_exe.c\
+	./lexer_utils.c\
+	./lexer.c\
 	./libft_list.c\
 	./libft_list2.c\
 	./libft_utils.c\
@@ -31,6 +40,7 @@ SRCS =	./debug_to_delete.c\
 	./multipipe.c\
 	./minishell_utils3.c\
 	./minishell_utils4.c\
+	./minishell_utils5.c\
 	./parse_path.c\
 	./path.c\
 	./path_utils.c\
@@ -43,6 +53,7 @@ SRCS =	./debug_to_delete.c\
 	./start_a_parse_bulle.c\
 	./termcap.c\
 	./termcap_arrow.c\
+	./unset.c\
 
 RENAME		= mv a.out minishell
 OBJ			= $(SRCS:.c=.o)

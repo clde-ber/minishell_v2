@@ -82,147 +82,232 @@ int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd);
 char	*go_line(t_term *term);
 
 /*
-**ft_split
+**lexer
 */
+size_t	parse_command(size_t i, char *str, int *res, char *charset);
 size_t	len_wd(char *str, char *charset);
 size_t	count_malloc(char *s, char *str);
-void		*ft_free(char **res, int j);
-char			**ft_split(char *s, char *str);
-size_t parse_command(size_t i, char *str, int *res, char *charset);
 void	init_vars_ft_split(size_t *i, size_t *j);
+char	**ft_split(char *s, char *str);
+
+/*
+**lexer_utils
+*/
+int	is_not_charset(char *s, int j, char *str, int i);
+void	*ft_free(char **res, int j);
 
 /*
 **expander
 */
-char **parse_first_arg(char **res, char **parsed_res);
-char *expander(char *res, t_list *var_env, char **args, t_command *cmd);
-char **parse_res(char **res, t_list *var_env, t_command *cmd);
-char *handled_unset(char *res, t_list *var_env, t_command *cmd);
-char *remove_antislashes(char *dest, char *str, t_list *var_env, t_command *cmd);
+char	*expander(char *res, t_list *var_env, char **args, t_command *cmd);
+char	*remove_antislashes(char *dest, char *str, t_list *var_env,
+t_command *cmd);
+void	init_vars_parse_res(int *i, int *j, char **str);
+void	inc_j(char **parsed_res, int *j);
+char	**parse_res(char **res, t_list *var_env, t_command *cmd);
 
 /*
 **expander_utils
 */
-void join_string_value(char **str, char **tmp, char *trim, int *index);
-char *replace_by_env(char *res, char *trim, t_list *var_env, t_command *cmd);
-char *non_handled_commands(char *res, t_list *var_env, t_command *cmd);
-char *handled_export(char *res, t_list *var_env, t_command *cmd);
-char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd);
-char *replace_by_env_value_no_space(char *trim, t_list *var_env, t_command *cmd);
+int	strings_to_join(char **res, int i);
+char	**create_parsed_res(char **res, t_command *cmd);
+char	*parsed_res_error(char *res, char *parsed_res, t_list *var_env,
+t_command *cmd);
+char	**last_command_rv(char **res, char **parsed_res);
+void	init_var_h_export(int *quotes, char **str_first, char **str_secd,
+char **name);
 
 /*
 **expander_utils2
 */
-char *get_env_name(int quotes, char *str_first);
-char *search_env_name(char *str, t_list *var_env);
-char *search_env_value(char *str, t_list *var_env);
-char *antislashes_a_quotes(char *str);
-char *antislashes_dolls(char *str);
-int is_valid_env_c(char c);
-void fill_string(int *i, int *j, char *str, char **ret);
+int	condition_dq(int i, int len, char *str);
+int	condition_sq(int i, int len, char *str);
+void	init_vars_get_env_v(int *i, char **ret);
+int	condition_one(int i, char *dest, char *str, char *env);
+int	condition_two(int i, char *dest);
 
 /*
 **expander_utils3
 */
-char *get_string(char *str);
-char *get_string_value(char *str);
-char *get_env_value(char *str, t_list *var_env, t_command *cmd);
-int even_or_odd(char *str);
-char *find_op(char *str);
+char	*trim_dq(int *bool2, char *tmp);
+char	*trim_sq(int *boolean, char *tmp_sub);
+void	init_var_nh_cmd(int *boolean, int *index, int *bool2, int *cmd_bol);
+void	trim_s_quotes(char **buf, char *tmp_sub, int bool2, char *tmp);
+char	*no_trim_starting_space(char *tmp, t_list *var_env, t_command *cmd);
 
 /*
-**expander_utils4
+**expander_a_env
 */
-char *export_errors(char *str_first, char *str_secd, int quotes, char *res);
-char *valid_export(char *str_first, char *str_secd, int quotes, char *res);
-void env_quotes_a_values(char **str_first, char **str_secd, int *quotes, char **name);
-void split_env_name_a_value(char **str_first, char **str_secd, char **p_bin, char *res);
-void export_replace_by_env_value(char **str_first, char **str_secd,
+char	*replace_by_env(char *res, char *trim, t_list *var_env, t_command *cmd);
+char	*replace_by_env_value_no_space(char *trim, t_list *var_env,
+t_command *cmd);
+char	*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd);
+char	*non_handled_commands(char *res, t_list *var_env, t_command *cmd);
+char	*handled_export(char *res, t_list *var_env, t_command *cmd);
+
+/*
+**unset
+*/
+
+void	remove_empty_string(char *str, int *j);
+char	*write_error(char *trim, char *trim2, int quotes, t_command *cmd);
+void	if_d_quotes_unset(char **trim, char *res, int *quotes);
+void	if_s_quotes_unset(char *trim, char **trim2);
+char	*handled_unset(char *res, t_list *var_env, t_command *cmd);
+
+/*
+**export
+*/
+void	free_export_errors(char *s1, char *s2, char *s3, char *s4);
+void	if_s_quotes(char *str_first, char *str_secd, char **str_f,
+char **str_s);
+char	*export_errors(char *str_first, char *str_secd, int quotes,
+char *res);
+void	ft_free_2_strings(char *s1, char *s2);
+char	*valid_export(char *str_first, char *str_secd, int quotes,
+char *res);
+
+/*
+**export_utils
+*/
+void	if_d_quotes(char *str_first, char *str_secd, char **str_f, char **str_s);
+void	env_quotes_a_values(char **str_first, char **str_secd,
+int *quotes, char **name);
+void	which_is_name_a_value(char **str_first, char **str_secd, char **p_bin,
+char *res);
+void	split_env_name_a_value(char **str_first, char **str_secd,
+char **p_bin, char *res);
+void	export_replace_by_env_value(char **str_first, char **str_secd,
 t_list *var_env, t_command *cmd);
-void ft_free_2_strings(char *s1, char *s2);
 
 /*
-**expander_utils5
+**env_values
 */
-int strings_to_join(char **res, int i);
-char **create_parsed_res(char **res, t_command *cmd);
-char *parsed_res_error(char *res, char *parsed_res, t_list *var_env, t_command *cmd);
-char **last_command_rv(char **res, char **parsed_res);
-void init_var_h_export(int *quotes, char **str_first, char **str_secd, char **name);
+void	join_string_value(char **str, char **tmp, char *trim, int *index);
+void	init_vars_replace_by_env(size_t *i, char **tmp, char **str);
+int	is_not_env_value(size_t i, char *trim);
+char	*remove_starting_spaces(char *str);
+char	*is_it_unknown_var(char *tmp);
+
+/*
+**env_values_utils
+*/
+int	is_valid_env_c(char c);
+void	fill_string_dq(int *i, int *j, char *str, char **ret);
+void	fill_string_sq(int *i, int *j, char *str, char **ret);
+void	fill_string(int *i, int *j, char *str, char **ret);
+void	init_vars_a_a_q(int *i, int *j);
+
+/*
+**env_values_utils2
+*/
+char	*get_string(char *str);
+char	*get_string_value(char *str);
+char	*get_env_value(char *str, t_list *var_env, t_command *cmd);
+int	even_or_odd(char *str);
+char	*find_op(char *str);
+
+/*
+**env_values_utils3
+*/
+char	*search_env_name(char *str, t_list *var_env);
+char	*search_env_value(char *str, t_list *var_env);
+char	*antislashes_dolls(char *str);
+char	*antislashes_a_quotes(char *str);
+char	*get_env_name(int quotes, char *str_first);
 
 /*
 **launch_exe
 */
-int		launch_exe(char *exe, char *path, char **env, t_command *cmd);
+void	init_vars_launch_exe(pid_t *pid, int *ret, int *status);
+void	free_2_tabs(char **argv, char **envp);
+int	launch_exe(char *exe, char *path, char **env, t_command *cmd);
 void	find_exe(char *path, char **env, t_command *cmd);
 
 /*
 **launch_exe_utils
 */
-char *ft_get_filename(const char *s, int c);
-char *get_path(char *path, char c);
-char **arg_tab(char *exe, char *path, char **env);
-char **env_tab(char *path);
+char	*ft_get_filename(const char *s, int c);
+char	*get_path(char *path, char c);
+char	**arg_tab(char *exe, char *path, char **env);
+char	**env_tab(char *path);
+void	write_error_launch_exe(char *path);
+
+/*
+**launch_exe_utils2
+*/
+void	opendir_error(char *path, t_command *cmd, char *str, char *path_mod);
+void	init_vars_find_exe(char **str, char **path_mod, char *path,
+DIR **dir);
+void	launch_exe_error(char *str, char *path, char **env, t_command *cmd);
 
 /*
 **env
 */
-void	set_env(char **tabl, t_list *var_env, t_command *cmd, int j);
 t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd);
+int	reset_cmd_path(t_list *lst, t_command *cmd);
+void	set_env(char **tabl, t_list *var_env, t_command *cmd, int j);
 void	unset(t_list *env, char **tabl, t_command *cmd, int j);
 void	print_env(t_list *environ, t_command *cmd);
-void	unset_cmd_path(int boolean, t_command *cmd);
 
 /*
 **env_utils
 */
 char	*ft_get_name(char *str);
+void	add_to_env(char **tabl, int k, int l);
 void	check_doublons_cl(char **tabl, char *i_name, char *j_name, int j);
 t_list	*check_doublons(int k, int j, char **tabl, t_list *var_env);
 void	replace_env(char *tabl, t_list *var_env);
-void	add_to_env(char **tabl, int k, int l);
 
 /*
 **env_utils2
 */
+void	init_vars_fill_list(int *i, t_list **environ, t_list **tmp);
 char	**fill_list(t_list *environ, char **list, int i);
 char	**sort_list(char **list, int i, int j);
 void	print_sorted_env(t_list *environ, t_command *cmd);
-int		is_valid_env_name(char *str);
-int		is_valid_env_name_c(char c);
+int	is_valid_env_name(char *str);
 
 /*
 **env_utils3
 */
-void add_to_env_k(char **tabl, char *i_name, int k, int l);
-void add_to_env_l(char **tabl, char *j_name, int k, int l);
-char *create_i_value(char *tab_k, char *i_value);
-char *create_j_value(char *tab_l, char *j_value);
+char	*create_i_value(char *tab_k, char *i_value);
+char	*create_j_value(char *tab_l, char *j_value);
+void	add_to_env_l(char **tabl, char *j_name, int k, int l);
+void	add_to_env_k(char **tabl, char *i_name, int k, int l);
+
+/*
+**env_utils4
+*/
+void	unset_cmd_path(int boolean, t_command *cmd);
+void	name_a_value_var(char **name, char **value, char **env, int k);
+void	init_strings_set_env(char **tmp_new, char **tmp, char **name);
+void	init_vars_unset(char **name, int *i, int *boolean);
 
 /*
 **path
 */
-void    ft_cd(char **res, t_list *var_env, t_command *cmd);
-void	free_cd(char *path, char *buf, char *old_pwd, char *ret);
-int		if_too_many_args(char **res, t_command *cmd);
-void	init_cd_strings(char **old_pwd, char **buf, char **ret, char *path);
-void    ft_pwd(char **res, t_command *cmd);
+int	if_too_many_args(char **res, t_command *cmd);
+void	init_cd_strings(char **str, char **buf, char **ret, char *path);
 void	init_2_strings(char *path, char *str);
+void	set_current_path_cd(char **str, char **path, t_list *var_env,
+t_command *cmd);
+void	ft_cd(char **res, t_list *var_env, t_command *cmd);
 
 /*
 **path_utils
 */
-int		count_back(char *str, int *j);
+int	count_back(char *str, int *j);
 void	path_copy(char **buf, int m, int k);
+int	count_slash(char *old_pwd);
 void	cd_go_back(int *i, int k, char **buf, char *old_pwd);
-int		cd_go_front(char *res, int *i, int k, char **buf);
-void 	set_pwd_env(char *path, char *buf, t_list *var_env);
+int	cd_go_front(char *res, int *i, int k, char **buf);
 
 /*
 **path_utils2
 */
-char *cd_front_a_back(char *res, char *path, t_list *var_env, char *old_pwd);
-char *get_cwd(void);
+char	*cd_front_a_back(char *res, char *path, t_list *var_env, char *old_pwd);
+char	*get_cwd(void);
 void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd, char *old_pwd);
 void	set_root_path(char **buf, char **path, char **res, char **str);
 void	cd_failure(char **res, t_command *cmd, char *old_pwd, t_list *var_env);
@@ -230,7 +315,12 @@ void	cd_failure(char **res, t_command *cmd, char *old_pwd, t_list *var_env);
 /*
 **path_utils3
 */
-void    cd_no_arg(t_list *var_env, t_command *cmd);
+void	cd_no_arg(t_list *var_env, t_command *cmd);
+void	set_pwd_env(char *path, char *buf, t_list *var_env);
+void	write_cd_option_error(char *res, t_command *cmd, char **str,
+t_list *var_env);
+void	write_cd_minus_option(char **str, t_list *var_env);
+void	ft_pwd(char **res, t_command *cmd);
 
 /*
 **prep_line
@@ -269,18 +359,28 @@ void	ft_echo(char **res, t_list *var_env);
 /*
 **exec
 */
-int		set_args(char **res, char *path, t_command *cmd, int j);
-int		exec_command(char **args, char **res, char *path, int j);
-char	**arguments(char **res, int i, char **args, char *path);
-char	**environment(char *path);
-int		exit_status(int status);
-void	init_2_vars(int *i, int *k);
+int	exit_status(int status);
+int	test_shell_bin(char **tabl, char **p_bin, char **res, char **env);
+int	exec_command(char **args, char **res, char *path, int j);
+int	set_args(char **res, char *path, t_command *cmd, int i);
 
 /*
-**exec
+**exec_utils
 */
 char	*get_location(char *arg);
 char	*set_first_arg(char *p_bin, char *res);
+char	**arguments(char **res, int j, char **args, char *path);
+char	**environment(char *path);
+void	write_error_shell(t_command *cmd, char **res);
+
+/*
+**exec_utils2
+*/
+void	ft_free_set_args(char **args);
+void	init_vars_set_args(int *index, int *k);
+void	init_2_vars(int *i, int *k);
+int	command_not_found(char **tabl, char **env, char **p_bin, char **res);
+int	command_found(char **tabl, char **env, char **p_bin);
 
 /*
 **exit
@@ -328,35 +428,44 @@ void	handle_signal(int code);
 /*
 **minishell_utils
 */
-int		ft_strchr_bis(const char *s, int c);
-int		check_word(char *str, char *to_find, int i);
-int		search_word(char *str, char *to_find);
-int		ft_isspace(char c);
-int		is_handled_cmd(char *str);
+int	is_handled_cmd(char *str);
+int	ft_strchr_bis(const char *s, int c);
+int	ft_isspace(char c);
+int	check_word(char *str, char *to_find, int i);
+int	search_word(char *str, char *to_find);
 
 /*
 **minishell_utils2
 */
-char	**copy_tabtab(char **res);
-void	init_structs(t_command *cmd);
+void	init_4_values(int *s_q, int *d_q, int *s_q2, int *d_q2);
+int	is_in_string(char *line, int index);
 char	*cut_after_punct(char *dest, char *line, char *command);
-int		count_tabs(char **res);
-void	free_tabtab(char **res);
+char	**copy_tabtab(char **res);
 
 /*
 **minishell_utils3
 */
-int		is_symbol(char c, char comp);
-int		count_pipes(char **res);
-int		chrtabtab(char **res, char *str);
+int	is_symbol(char c, char comp);
+int	count_pipes(char **res);
+int	chrtabtab(char **res, char *str);
 char	**replace_tabtab(char **tabl, int i, char *str);
 void	erase_line(int i, int j, t_term *term);
 
 /*
 **minishell_utils4
 */
-void free_string(char *str);
-int is_unknown_env_variable(char *str, t_list *var_env, t_command *cmd);
+void	free_string(char *str);
+void	if_string_literal(char **tmp, char **tmp2);
+void	if_dq_unkwn_var(char **tmp, char *str, int *boolean);
+int	is_unknown_env_variable(char *str, t_list *var_env, t_command *cmd);
+
+/*
+**minishell_utils5
+*/
+int	count_tabs(char **res);
+void	free_tabtab(char **res);
+void	init_structs(t_command *cmd);
+void	free_cd(char *path, char *buf, char *old_pwd, char *ret);
 
 /*
 **gnl

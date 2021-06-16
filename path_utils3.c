@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/29 06:56:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/15 08:35:15 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 15:35:27 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,59 @@ void	cd_no_arg(t_list *var_env, t_command *cmd)
 	}
 	else
 		cmd->cmd_rv = 1;
+}
+
+void	set_pwd_env(char *path, char *buf, t_list *var_env)
+{
+	while (var_env->next)
+	{
+		if (ft_strcmp(var_env->name, "OLDPWD") == 0)
+		{
+			free(var_env->value);
+			var_env->value = ft_strdup(path);
+		}
+		if (ft_strcmp(var_env->name, "PWD") == 0)
+		{
+			free(var_env->value);
+			var_env->value = ft_strdup(buf);
+		}
+		var_env = var_env->next;
+	}
+}
+
+void	write_cd_option_error(char *res, t_command *cmd, char **str,
+t_list *var_env)
+{
+	*str = search_env_value("OLDPWD", var_env);
+	ft_putstr_fd("bash : cd : ", 1);
+	ft_putstr_fd(res, 1);
+	ft_putstr_fd(": invalid option\ncd: usage: cd [-L] [-P] [-e] [-@] \
+[dir]\n", 1);
+	cmd->cmd_rv = 2;
+}
+
+void	write_cd_minus_option(char **str, t_list *var_env)
+{
+	*str = search_env_value("OLDPWD", var_env);
+	chdir(*str);
+	ft_putstr_fd(*str, 1);
+	ft_putstr_fd("\n", 1);
+}
+
+void	ft_pwd(char **res, t_command *cmd)
+{
+	char	*path;
+	char	*buf;
+	int		i;
+
+	i = 0;
+	path = malloc(sizeof(char) * 1000);
+	if (!(path))
+		return ;
+	getcwd(path, 1000);
+	buf = ft_strjoin(path, "\n");
+	free(path);
+	ft_putstr_fd(buf, 1);
+	free(buf);
+	cmd->cmd_rv = 0;
 }

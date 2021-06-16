@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:31 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/10 06:34:47 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 15:04:11 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,32 +87,10 @@ size_t	count_malloc(char *s, char *str)
 	return (count);
 }
 
-void	*ft_free(char **res, int j)
-{
-	int	i;
-
-	i = 0;
-	while (i < j)
-	{
-		free(res[i]);
-		i++;
-	}
-	free(res);
-	return (NULL);
-}
-
 void	init_vars_ft_split(size_t *i, size_t *j)
 {
 	*i = -1;
 	*j = 0;
-}
-
-int	is_not_charset(char *s, int j, char *str, int i)
-{
-	if (i < ft_strlen((char *)s) && j < count_malloc(s, str) && \
-		ft_ischarset(str, s[i]) == 0)
-		return (1);
-	return (0);
 }
 
 char	**ft_split(char *s, char *str)

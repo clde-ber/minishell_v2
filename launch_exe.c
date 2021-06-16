@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/14 09:20:42 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 15:21:05 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,6 @@
 ** error, it prints error accordingly. If command is interrupted by a signal,
 ** it prints an error.
 */
-
-void	write_error_launch_exe(char *path)
-{
-	write(1, "bash: ", 6);
-	write(1, path, ft_strlen(path));
-	write(1, ": ", 2);
-	printf("%s\n", strerror(errno));
-}
 
 void	init_vars_launch_exe(pid_t *pid, int *ret, int *status)
 {
@@ -71,34 +63,6 @@ int	launch_exe(char *exe, char *path, char **env, t_command *cmd)
 	return ((cmd->cmd_rv = exit_status(status)));
 }
 
-void	opendir_error(char *path, t_command *cmd, char *str, char *path_mod)
-{
-	write(1, "bash: ", 6);
-	write(1, path, ft_strlen(path));
-	write(1, ": ", 2);
-	printf("%s\n", strerror(errno));
-	cmd->cmd_rv = 127;
-	free_string(str);
-	free_string(path_mod);
-}
-
-void	init_vars_find_exe(struct dirent *st_dir, char **str, char **path_mod,
-char *path)
-{
-	st_dir = NULL;
-	*str = ft_get_filename(path, '/');
-	*path_mod = get_path(path, '/');
-	errno = 0;
-}
-
-void	launch_exe_error(char *str, char *path, char **env, t_command *cmd)
-{
-	if (errno)
-		printf("%s\n", strerror(errno));
-	else
-		launch_exe(str, path, env, cmd);
-}
-
 void	find_exe(char *path, char **env, t_command *cmd)
 {
 	DIR				*dir;
@@ -106,8 +70,7 @@ void	find_exe(char *path, char **env, t_command *cmd)
 	struct dirent	*st_dir;
 	char			*path_mod;
 
-	init_vars_find_exe(st_dir, &str, &path_mod, path);
-	dir = opendir(path_mod);
+	init_vars_find_exe(&str, &path_mod, path, &dir);
 	if (!(dir))
 	{
 		opendir_error(path, cmd, str, path_mod);

@@ -5,109 +5,63 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/28 14:30:34 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/10 12:57:26 by clde-ber         ###   ########.fr       */
+/*   Created: 2021/06/16 11:26:40 by clde-ber          #+#    #+#             */
+/*   Updated: 2021/06/16 16:01:50 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_string(char *str)
+char	*trim_dq(int *bool2, char *tmp)
 {
-	int		i;
-	char	*res;
+	char	*tmp_sub;
 
-	i = 0;
-	res = NULL;
-	res = malloc(sizeof(char) * (ft_strlen(str) + 1));
-	if (!(res))
-		return (0);
-	while (str[i] && is_valid_env_c(str[i]))
+	tmp_sub = NULL;
+	if (tmp[0] == '\"')
 	{
-		res[i] = str[i];
-		i++;
-	}
-	res[i] = '\0';
-	return (res);
-}
-
-char	*get_string_value(char *str)
-{
-	int		i;
-	char	*res;
-
-	i = 0;
-	res = NULL;
-	res = malloc(sizeof(char) * (ft_strlen(str) + 1));
-	if (!(res))
-		return (0);
-	while (str[i] && ((str[i] == '\\' && str[i + 1] == '$') || (i && str[i - 1] \
-		== '\\' && str[i] == '$') || str[i] != '$'))
-	{
-		res[i] = str[i];
-		i++;
-	}
-	res[i] = '\0';
-	return (res);
-}
-
-void	init_vars_get_env_v(int *i, char **ret)
-{
-	*i = 0;
-	*ret = NULL;
-}
-
-char	*get_env_value(char *str, t_list *var_env, t_command *cmd)
-{
-	int		i;
-	char	*test;
-	char	*ret;
-
-	init_vars_get_env_v(&i, &ret);
-	test = malloc(sizeof(char) * (ft_strlen(str) + 1));
-	if (!(test))
-		return (0);
-	test[i] = '\0';
-	ret = search_env_value(test, var_env);
-	while (str[i] && ft_strcmp(ret, "") == 0 && ((str[i] != '$') \
-		&& (!(str[i] == '\\' && str[i + 1] == '$'))) && str[i] != '\"' \
-		&& str[i] != '\'')
-	{
-		test[i] = str[i];
-		i++;
-		test[i] = '\0';
-		free_string(ret);
-		ret = search_env_value(test, var_env);
-	}
-	free_string(ret);
-	ret = search_env_value(test, var_env);
-	cmd->index += ft_strlen(test) + 1;
-	free(test);
-	return (ret);
-}
-
-int	even_or_odd(char *str)
-{
-	int		i;
-
-	i = 0;
-	while (str[i] && str[i] == '\'')
-		i++;
-	return (i);
-}
-
-char	*find_op(char *str)
-{
-	int		i;
-	char	*ret;
-
-	i = 0;
-	ret = NULL;
-	if (ft_strchr(str, '=') && ft_strlen(str) > 1)
-	{
-		ret = ft_strchr(str, '=');
-		return ("=");
+		*bool2 = 1;
+		tmp_sub = ft_strtrim(tmp, "\"");
 	}
 	else
-		return ("");
+		tmp_sub = ft_strdup(tmp);
+	return (tmp_sub);
+}
+
+char	*trim_sq(int *boolean, char *tmp_sub)
+{
+	char	*buf;
+
+	buf = NULL;
+	if ((even_or_odd(tmp_sub)) && even_or_odd(tmp_sub) % 2)
+		*boolean = 1;
+	buf = ft_strdup(tmp_sub);
+	return (buf);
+}
+
+void	init_var_nh_cmd(int *boolean, int *index, int *bool2, int *cmd_bol)
+{
+	*boolean = 0;
+	*index = 0;
+	*bool2 = 0;
+	*cmd_bol = 0;
+}
+
+void	trim_s_quotes(char **buf, char *tmp_sub, int bool2, char *tmp)
+{
+	if (*buf && (*buf)[0] == '\'' && bool2 == 0)
+	{
+		free_string(*buf);
+		*buf = ft_strtrim(tmp_sub, "\'");
+	}
+	free_string(tmp);
+	free_string(tmp_sub);
+}
+
+char	*no_trim_starting_space(char *tmp, t_list *var_env, t_command *cmd)
+{
+	char	*buf;
+
+	buf = replace_by_env_value(ft_strdup(tmp), var_env, cmd);
+	cmd->bol = 1;
+	return (buf);
 }

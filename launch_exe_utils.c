@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:50 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/09 15:56:42 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 15:19:53 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,12 @@ char	**env_tab(char *path)
 	ret[1] = ft_strjoin("PATH=", path);
 	ret[2] = NULL;
 	return (ret);
+}
+
+void	write_error_launch_exe(char *path)
+{
+	write(1, "bash: ", 6);
+	write(1, path, ft_strlen(path));
+	write(1, ": ", 2);
+	printf("%s\n", strerror(errno));
 }

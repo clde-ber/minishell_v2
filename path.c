@@ -6,37 +6,11 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/15 15:08:15 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 15:36:46 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	ft_pwd(char **res, t_command *cmd)
-{
-	char	*path;
-	char	*buf;
-	int		i;
-
-	i = 0;
-	path = malloc(sizeof(char) * 1000);
-	if (!(path))
-		return ;
-	getcwd(path, 1000);
-	buf = ft_strjoin(path, "\n");
-	free(path);
-	ft_putstr_fd(buf, 1);
-	free(buf);
-	cmd->cmd_rv = 0;
-}
-
-void	free_cd(char *path, char *buf, char *old_pwd, char *ret)
-{
-	free_string(path);
-	free_string(buf);
-	free_string(old_pwd);
-	free_string(ret);
-}
 
 int	if_too_many_args(char **res, t_command *cmd)
 {
@@ -83,6 +57,7 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd)
 	char	*old_pwd;
 	char	*ret;
 
+	cmd->cmd_rv = 0;
 	init_2_strings(path, str);
 	ft_cd_minus(res, var_env, cmd, get_cwd());
 	if ((if_too_many_args(res, cmd)) || (res[1] && res[1][0] == '-'))

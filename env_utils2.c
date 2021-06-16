@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:50 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/14 15:47:18 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 16:04:21 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,33 @@
 
 #include "minishell.h"
 
+void	init_vars_fill_list(int *i, t_list **environ, t_list **tmp)
+{
+	*tmp = *environ;
+	*i = 0;
+}
+
 char	**fill_list(t_list *environ, char **list, int i)
 {
 	t_list	*tmp;
 
-	tmp = environ;
-	i = 0;
+	init_vars_fill_list(&i, &environ, &tmp);
 	while (environ->next)
 	{
 		environ = environ->next;
 		i++;
 	}
-	if (!(list = malloc(sizeof(char *) * (i + 3))))
+	list = malloc(sizeof(char *) * (i + 3));
+	if (!(list))
 		return (0);
 	i = 0;
 	while (tmp)
 	{
 		if (ft_strlen(tmp->name))
 		{
-			list[i] = join_a_free(join_a_free(join_a_free(join_a_free(
-ft_strjoin("declare -x ", tmp->name), "="), "\""), tmp->value), "\"");
+			list[i] = join_a_free(join_a_free(join_a_free(join_a_free(\
+			ft_strjoin("declare -x ", tmp->name), "="), "\""), tmp->value), \
+			"\"");
 			i++;
 		}
 		tmp = tmp->next;
@@ -47,9 +54,9 @@ ft_strjoin("declare -x ", tmp->name), "="), "\""), tmp->value), "\"");
 
 char	**sort_list(char **list, int i, int j)
 {
-	char *tmp;
-	char *i_name;
-	char *j_name;
+	char	*tmp;
+	char	*i_name;
+	char	*j_name;
 
 	tmp = NULL;
 	i_name = NULL;
@@ -91,9 +98,9 @@ void	print_sorted_env(t_list *environ, t_command *cmd)
 	cmd->cmd_rv = 0;
 }
 
-int		is_valid_env_name(char *str)
+int	is_valid_env_name(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (str[i] == '\0')
@@ -102,11 +109,11 @@ int		is_valid_env_name(char *str)
 	{
 		if (i < ft_strlen(str) && str[i] == '\\')
 			i += 2;
-		if (i < ft_strlen(str) && !(str[i] == '_' || ft_isalnum(str[i]) || str[i] == '$' ||
-		str[i] == '\\' || (str[i] == '=' && ft_strlen(str) > 1)))
+		if (i < ft_strlen(str) && !(str[i] == '_' || ft_isalnum(str[i]) \
+		|| str[i] == '$' || str[i] == '\\' || (str[i] == '=' && \
+		ft_strlen(str) > 1)))
 			return (0);
 		i++;
 	}
 	return (1);
 }
-
