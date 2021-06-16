@@ -37,7 +37,17 @@ typedef struct	s_fd
 	int			save_out;
 	char		**save_pipe;
 	char		**res;
+	char		**first_res;
 }				t_fd;
+
+typedef struct	s_mp
+{
+	int			fd[2];
+	int			count;
+	pid_t		pid;
+	int			fdd;
+	int			status;
+}				t_mp;
 
 typedef struct	s_term
 {
@@ -62,6 +72,7 @@ typedef struct s_command
 	int			cmd_rv;
 	int			start;
 	int			ret;
+	int			bol;
 }				t_command;
 
 
@@ -87,6 +98,7 @@ size_t	count_malloc(char *s, char *str);
 void		*ft_free(char **res, int j);
 char			**ft_split(char *s, char *str);
 size_t parse_command(size_t i, char *str, int *res, char *charset);
+void	init_vars_ft_split(size_t *i, size_t *j);
 
 /*
 **expander
@@ -101,10 +113,11 @@ char *remove_antislashes(char *dest, char *str, t_list *var_env, t_command *cmd)
 **expander_utils
 */
 void join_string_value(char **str, char **tmp, char *trim, int *index);
-char *replace_by_env(char *trim, t_list *var_env, t_command *cmd);
+char *replace_by_env(char *res, char *trim, t_list *var_env, t_command *cmd);
 char *non_handled_commands(char *res, t_list *var_env, t_command *cmd);
 char *handled_export(char *res, t_list *var_env, t_command *cmd);
 char *replace_by_env_value(char *trim, t_list *var_env, t_command *cmd);
+char *replace_by_env_value_no_space(char *trim, t_list *var_env, t_command *cmd);
 
 /*
 **expander_utils2
@@ -115,6 +128,7 @@ char *search_env_value(char *str, t_list *var_env);
 char *antislashes_a_quotes(char *str);
 char *antislashes_dolls(char *str);
 int is_valid_env_c(char c);
+void fill_string(int *i, int *j, char *str, char **ret);
 
 /*
 **expander_utils3
@@ -130,17 +144,18 @@ char *find_op(char *str);
 */
 char *export_errors(char *str_first, char *str_secd, int quotes, char *res);
 char *valid_export(char *str_first, char *str_secd, int quotes, char *res);
-void env_quotes_a_values(char **str_first, char **str_secd, int *quotes);
+void env_quotes_a_values(char **str_first, char **str_secd, int *quotes, char **name);
 void split_env_name_a_value(char **str_first, char **str_secd, char **p_bin, char *res);
 void export_replace_by_env_value(char **str_first, char **str_secd,
 t_list *var_env, t_command *cmd);
+void ft_free_2_strings(char *s1, char *s2);
 
 /*
 **expander_utils5
 */
 int strings_to_join(char **res, int i);
 char **create_parsed_res(char **res, t_command *cmd);
-char *parsed_res_error(char **parsed_res, int j, t_command *cmd);
+char *parsed_res_error(char *res, char *parsed_res, t_list *var_env, t_command *cmd);
 char **last_command_rv(char **res, char **parsed_res);
 void init_var_h_export(int *quotes, char **str_first, char **str_secd, char **name);
 
@@ -161,9 +176,9 @@ char **env_tab(char *path);
 /*
 **env
 */
-void	set_env(char **tabl, t_list *var_env, t_command *cmd);
+void	set_env(char **tabl, t_list *var_env, t_command *cmd, int j);
 t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd);
-void	unset(t_list *env, char **tabl, t_command *cmd);
+void	unset(t_list *env, char **tabl, t_command *cmd, int j);
 void	print_env(t_list *environ, t_command *cmd);
 void	unset_cmd_path(int boolean, t_command *cmd);
 
@@ -199,8 +214,9 @@ char *create_j_value(char *tab_l, char *j_value);
 void    ft_cd(char **res, t_list *var_env, t_command *cmd);
 void	free_cd(char *path, char *buf, char *old_pwd, char *ret);
 int		if_too_many_args(char **res, t_command *cmd);
-void	init_cd_strings(char **path, char **old_pwd, char **buf, char **ret);
+void	init_cd_strings(char **old_pwd, char **buf, char **ret, char *path);
 void    ft_pwd(char **res, t_command *cmd);
+void	init_2_strings(char *path, char *str);
 
 /*
 **path_utils
@@ -218,7 +234,7 @@ char *cd_front_a_back(char *res, char *path, t_list *var_env, char *old_pwd);
 char *get_cwd(void);
 void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd, char *old_pwd);
 void	set_root_path(char **buf, char **path, char **res, char **str);
-void	cd_failure(char **res, t_command *cmd, char *old_pwd, char *buf);
+void	cd_failure(char **res, t_command *cmd, char *old_pwd, t_list *var_env);
 
 /*
 **path_utils3
@@ -238,7 +254,7 @@ char *getcommand(char *str);
 */
 int		chrtabtab(char **res, char *str);
 char	**divide_pipe(t_fd *f);
-int		go_e(char **tabl, t_list *var_env, t_command *cmd);
+int		go_e(char **tabl, t_list *var_env, t_command *cmd, int j);
 int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env);
 int		go_pipe(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env);
 int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env);
@@ -262,11 +278,12 @@ void	ft_echo(char **res, t_list *var_env);
 /*
 **exec
 */
-int		set_args(char **res, char *path, t_command *cmd);
+int		set_args(char **res, char *path, t_command *cmd, int j);
 int		exec_command(char **args, char **res, char *path, int j);
 char	**arguments(char **res, int i, char **args, char *path);
 char	**environment(char *path);
 int		exit_status(int status);
+void	init_2_vars(int *i, int *k);
 
 /*
 **exec
@@ -343,6 +360,12 @@ int		count_pipes(char **res);
 int		chrtabtab(char **res, char *str);
 char	**replace_tabtab(char **tabl, int i, char *str);
 void	erase_line(int i, int j, t_term *term);
+
+/*
+**minishell_utils4
+*/
+void free_string(char *str);
+int is_unknown_env_variable(char *str, t_list *var_env, t_command *cmd);
 
 /*
 **gnl

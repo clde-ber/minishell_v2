@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:50 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/08 08:29:33 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 09:46:54 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ ft_strjoin("declare -x ", tmp->name), "="), "\""), tmp->value), "\"");
 
 char	**sort_list(char **list, int i, int j)
 {
-	char *tmp;
-	char *i_name;
-	char *j_name;
+	char	*tmp;
+	char	*i_name;
+	char	*j_name;
 
 	tmp = NULL;
 	i_name = NULL;
@@ -93,7 +93,7 @@ void	print_sorted_env(t_list *environ, t_command *cmd)
 
 int		is_valid_env_name(char *str)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	if (str[i] == '\0')
@@ -110,9 +110,3 @@ int		is_valid_env_name(char *str)
 	return (1);
 }
 
-/*int		is_valid_env_name_c(char c)
-{
-	if (!(c == '_' || ft_isalnum(c)) || c == '\\' || c == '\'' || c == '\"')
-		return (0);
-	return (1);
-}*/

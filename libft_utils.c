@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 16:59:37 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/03 08:30:45 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/09 16:07:46 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	j = -1;
 	if (!s1 && !s2)
 		return (0);
-	if (!(ptr = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1))))
+	ptr = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!(ptr))
 		return (0);
 	while (s1[++i])
 		ptr[i] = s1[i];
@@ -42,9 +43,9 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (ptr);
 }
 
-int		ft_strcmp(const char *s1, const char *s2)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (s1[i] || s2[i])
@@ -63,7 +64,9 @@ char	*ft_strchr(const char *s, int c)
 	str = (char *)s;
 	while (*str && *str != (char)c)
 		str++;
-	return (*str == c ? str : NULL);
+	if (*str == c)
+		return (str);
+	return (NULL);
 }
 
 char	*ft_strdup(const char *s1)
@@ -72,7 +75,8 @@ char	*ft_strdup(const char *s1)
 	char	*ptr;
 
 	i = 0;
-	if (!(ptr = malloc(sizeof(char) * (ft_strlen((char *)s1) + 1))))
+	ptr = malloc(sizeof(char) * (ft_strlen((char *)s1) + 1));
+	if (!(ptr))
 		return (0);
 	while (s1[i])
 	{

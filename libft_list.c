@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:56:41 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/04/28 13:56:57 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/09 16:05:49 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@ void	ft_lstdelone(t_list *lst)
 
 t_list	*ft_lstnew(char *name, void *value)
 {
-	t_list *new;
+	t_list	*new;
 
-	if (!(new = malloc(sizeof(t_list))))
+	new = malloc(sizeof(t_list));
+	if (!(new))
 		return (NULL);
 	new->name = name;
 	new->value = value;

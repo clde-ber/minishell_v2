@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/07 17:00:59 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/16 14:06:36 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	**divide_pipe(t_fd *f)
 	return (tabl);
 }
 
-int		go_e(char **tabl, t_list *var_env, t_command *cmd)
+int		go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 {
 	if (ft_strcmp(tabl[0], "echo") == 0 || ft_strcmp(tabl[0], "export") == 0
 	|| ft_strcmp(tabl[0], "env") == 0 || ft_strcmp(tabl[0], "exit") == 0)
@@ -50,9 +50,9 @@ int		go_e(char **tabl, t_list *var_env, t_command *cmd)
 		if (ft_strcmp(tabl[0], "export") == 0 && tabl[1])
 		{
 			check_doublons_cl(tabl, NULL, NULL, 0);
-			set_env(tabl, var_env, cmd);
+			set_env(tabl, var_env, cmd, j);
 		}
-		else if (ft_strcmp(tabl[0], "export") == 0 && !tabl[1])
+		else if (ft_strcmp(tabl[0], "export") == 0 && cmd->cmd_rv != 1)
 			print_sorted_env(var_env, cmd);
 		if (ft_strcmp(tabl[0], "env") == 0)
 			print_env(var_env, cmd);
@@ -60,33 +60,44 @@ int		go_e(char **tabl, t_list *var_env, t_command *cmd)
 			ft_exit(tabl, cmd);
 	}
 	else
-		set_args(tabl, cmd->path, cmd);
+		set_args(tabl, cmd->path, cmd, j);
 }
 
 int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 {
-	if (tabl == NULL)
-		;
+	int j;
+
+	j = 0;
+	if (tabl == NULL || tabl[0] == NULL)
+	{
+		cmd->cmd_rv = 0;
+		return (0);
+	}
+	while (tabl[j])
+		j++;
 		//error
 	if (ft_strcmp(tabl[0], "$?"))
 	{
 		if (tabl[0][0] == 'e')
-			go_e(tabl, var_env, cmd);
+			go_e(tabl, var_env, cmd, j);
 		else if (ft_strcmp(tabl[0], "pwd") == 0)
 			ft_pwd(tabl, cmd);
 		else if (ft_strcmp(tabl[0], "cd") == 0 && tabl[1] && ft_strcmp(tabl[1], ""))
+		{
+			cmd->cmd_rv = 0;
 			ft_cd(tabl, var_env, cmd);
+		}
 		else if (ft_strcmp(tabl[0], "cd") == 0 && (!tabl[1] ||
 		ft_strcmp(tabl[1], "") == 0))
 			cd_no_arg(var_env, cmd);
 		else if (tabl[0][0] == '.' && tabl[0][1] == '/')
 			find_exe(tabl[0], env, cmd);
 		else if (ft_strcmp(tabl[0], "unset") == 0 && tabl[1])
-			unset(var_env, tabl, cmd);
+			unset(var_env, tabl, cmd, j);
 		else if (ft_strcmp(tabl[0], "unset") == 0)
 			errors(cmd);
 		else
-			set_args(tabl, cmd->path, cmd);
+			set_args(tabl, cmd->path, cmd, j);
 	}
 	if (g_sig.sig == 1)
 		cmd->cmd_rv = 130;
@@ -107,9 +118,7 @@ int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 int		go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd,
 char **env)
 {
-	pid_t	pid;
-	int		pipe_fd[2];
-	int		status;
+	t_mp mp[1];
 
 	if (f->save_pipe[0] == NULL)
 	{
@@ -117,22 +126,22 @@ char **env)
 		free_tabtab(f->save_pipe);
 		return ;
 	}
-	pipe(pipe_fd);
-	if ((pid = fork()) == -1)
+	pipe(mp->fd);
+	if ((mp->pid = fork()) == -1)
 		exit(1);
-	else if (pid == 0)
+	else if (mp->pid == 0)
 	{
-		close(pipe_fd[0]);
-		dup2(pipe_fd[1], 1);
+		close(mp->fd[0]);
+		dup2(mp->fd[1], 1);
 		go_instruction(end_redir(one, f), var_env, cmd, env);
-		close(pipe_fd[1]);
-		exit(status);
+		close(mp->fd[1]);
+		exit(mp->status);
 	}
-	// waitpid(-1, &status, 0);
-	close(pipe_fd[1]);
-	dup2(pipe_fd[0], 0);
+	waitpid(-1, &mp->status, 0);
+	close(mp->fd[1]);
+	dup2(mp->fd[0], 0);
 	go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);
-	close(pipe_fd[0]);
+	close(mp->fd[0]);
 	free_tabtab(one);
 }
 
@@ -143,11 +152,14 @@ int check_valid_res_bis(char **str)
 	i = 0;
 	while (str[i])
 	{
-		if (ft_strcmp(str[i], "|") == 0 || ft_strcmp(str[i], "<") == 0 || ft_strcmp(str[i], ">") == 0 || ft_strcmp(str[i], ">>") == 0)
+		if (ft_strcmp(str[i], "|") == 0 || ft_strcmp(str[i], "<") == 0 ||
+		ft_strcmp(str[i], ">") == 0 || ft_strcmp(str[i], ">>") == 0)
 		{
 			if (!str[i + 1])
 				return (1);
-			else if (ft_strcmp(str[i + 1], "|") == 0 || ft_strcmp(str[i + 1], "<") == 0 || ft_strcmp(str[i + 1], ">") == 0 || ft_strcmp(str[i + 1], ">>") == 0)
+			else if (ft_strcmp(str[i + 1], "|") == 0 || ft_strcmp(str[i + 1],
+			"<") == 0 || ft_strcmp(str[i + 1], ">") == 0 || ft_strcmp(str[i + 1]
+			, ">>") == 0)
 				return (1);
 		}
 		i++;
@@ -179,17 +191,18 @@ int check_valid_res(char **str)
 int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
 	g_sig.boolean = 1;
-	if (chrtabtab(f->res, "|") == -1 && chrtabtab(f->res, ">") == -1 && chrtabtab(f->res,
-	"<") == -1 && chrtabtab(f->res, ">>") == -1)
+	if ((chrtabtab(f->res, "|") == -1 || chrtabtab(f->first_res, "\\|") != -1) && \
+	(chrtabtab(f->res, ">") == -1 || chrtabtab(f->first_res, "\\>") != -1) && \
+	(chrtabtab(f->res, "<") == -1 || chrtabtab(f->first_res, "\\<") != -1) && \
+	(chrtabtab(f->res, ">>") == -1 || chrtabtab(f->first_res, "\\>>") != -1))
 		return (go_instruction(copy_tabtab(f->res), var_env, cmd, env));
 	else if (check_valid_res(f->res))
 	{
-		// free_tabtab(f->res);
 		//maybe return null in go instruction pour signal d'erreur
-		ft_putstr_fd("Error synthax\n", 2);
+		ft_putstr_fd("bash: synthax error near unexpected token 'newline'\n", 2);
 		return (2);
 	}
-	else if (chrtabtab(f->res, "|") == -1)
+	else if (chrtabtab(f->res, "|") == -1 || chrtabtab(f->first_res, "\\|") != -1)
 		return (go_instruction(end_redir(f->res, f), var_env, cmd, env));
 	else
 	{

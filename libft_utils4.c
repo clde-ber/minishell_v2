@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils4.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:48:34 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/24 16:58:11 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/09 16:13:27 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		ft_isalnum(int c)
+int	ft_isalnum(int c)
 {
 	if (c >= 'a' && c <= 'z')
 		return (1);
@@ -23,7 +23,7 @@ int		ft_isalnum(int c)
 	return (0);
 }
 
-int		ft_strlcpy(char *dst, const char *src, int dstsize)
+int	ft_strlcpy(char *dst, const char *src, int dstsize)
 {
 	int		i;
 	int		j;
@@ -52,7 +52,8 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	j = -1;
 	if (!s1 && !s2)
 		return (0);
-	if (!(ptr = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1))))
+	ptr = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!(ptr))
 		return (0);
 	while (s1[++i])
 		ptr[i] = s1[i];
@@ -64,7 +65,7 @@ char	*ft_strjoin_free(char *s1, char *s2)
 	return (ptr);
 }
 
-int		ft_is_empty_string(char *str)
+int	ft_is_empty_string(char *str)
 {
 	int		i;
 
@@ -78,7 +79,7 @@ int		ft_is_empty_string(char *str)
 	return (1);
 }
 
-int		ft_putchar(int c)
+int	ft_putchar(int c)
 {
 	write(1, &c, 1);
 }

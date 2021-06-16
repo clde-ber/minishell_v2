@@ -6,18 +6,18 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:03 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/03 13:51:14 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/11 07:49:12 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		count_back(char *str, int *j)
+int	count_back(char *str, int *j)
 {
-	int k;
+	int	k;
 
 	k = 0;
-	while (*j < ft_strlen(str) && (str[*j] == '/'
+	while (*j < ft_strlen(str) && (str[*j] == '/' \
 	|| str[*j] == '.'))
 	{
 		while (str[*j] == '/')
@@ -37,7 +37,7 @@ int		count_back(char *str, int *j)
 
 void	path_copy(char **buf, int m, int k)
 {
-	int i;
+	int	i;
 
 	i = ft_strlen(*buf) - 1;
 	while (i > 0 && k >= 0)
@@ -51,10 +51,10 @@ void	path_copy(char **buf, int m, int k)
 	}
 }
 
-int		count_slash(char *old_pwd)
+int	count_slash(char *old_pwd)
 {
-	int i;
-	int count;
+	int	i;
+	int	count;
 
 	count = 0;
 	i = 0;
@@ -74,7 +74,7 @@ int		count_slash(char *old_pwd)
 
 void	cd_go_back(int *i, int k, char **buf, char *old_pwd)
 {
-	int m;
+	int	m;
 
 	m = 0;
 	m = ft_strrchr(*buf, '/');
@@ -87,10 +87,10 @@ void	cd_go_back(int *i, int k, char **buf, char *old_pwd)
 	}
 }
 
-int		cd_go_front(char *res, int *i, int k, char **buf)
+int	cd_go_front(char *res, int *i, int k, char **buf)
 {
-	int index;
-	int count;
+	int	index;
+	int	count;
 
 	count = 0;
 	index = *i;

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:48:22 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/23 12:48:23 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/09 16:08:36 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		ft_strrchr(const char *s, int c)
+int	ft_strrchr(const char *s, int c)
 {
 	char			to_find;
 	int				i;
@@ -36,7 +36,8 @@ void	*ft_calloc(size_t count, size_t size)
 	void			*ptr;
 
 	i = 0;
-	if (!(ptr = (void *)malloc(count * size)))
+	ptr = (void *)malloc(count * size);
+	if (!(ptr))
 		return (0);
 	while (i < count * size)
 	{
@@ -80,7 +81,7 @@ void	*ft_memmove(void *dst, const void *src, size_t len)
 	return (dst);
 }
 
-int		ft_ischarset(char *str, char c)
+int	ft_ischarset(char *str, char c)
 {
 	int				i;
 

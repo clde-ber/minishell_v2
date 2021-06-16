@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:31 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/06 12:26:13 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/10 06:34:47 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,30 +24,27 @@
 
 size_t	parse_command(size_t i, char *str, int *res, char *charset)
 {
-	if (is_symbol(str[i], str[i + 1]) && (i == 0 || i && str[i - 1] != '\\')
-	 && (*res = 1))
+	if (is_symbol(str[i], str[i + 1]) && (i == 0 || i && str[i - 1] != '\\'))
 	{
+		*res = 1;
 		while (str[i] && is_symbol(str[i], str[i + 1]))
 			i += is_symbol(str[i], str[i + 1]);
 		i--;
 	}
 	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\'') && ++i)
-	{
-		while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i]
-		== '\''))
+		while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i] == '\''))
 			i++;
-	}
 	else if ((((i && str[i - 1] != '\\') || !i) && str[i] == '\"') && ++i)
-	{
-		while (i < ft_strlen(str) && !(str[i - 1] != '\\' &&
-		str[i] == '\"'))
+		while (i < ft_strlen(str) && !(str[i - 1] != '\\' && str[i] == '\"'))
 			i++;
-	}
-	else if (((!i && ft_ischarset(charset, str[i])) || (i &&
-	ft_ischarset(charset, str[i]) && str[i - 1] != '\\')) && (*res = 1))
+	else if (((!i && ft_ischarset(charset, str[i])) || (i && \
+	ft_ischarset(charset, str[i]) && str[i - 1] != '\\')))
+	{
+		*res = 1;
 		i--;
-	else if (str[i + 1] && (is_symbol(str[i + 1], str[i + 2]) == 1 ||
-	is_symbol(str[i + 1], str[i + 2]) == 2) && (str[i] != '\\'))
+	}
+	else if (str[i + 1] && (is_symbol(str[i + 1], str[i + 2]) == 1 \
+	|| is_symbol(str[i + 1], str[i + 2]) == 2) && (str[i] != '\\'))
 		*res = 1;
 	return (i);
 }
@@ -104,24 +101,38 @@ void	*ft_free(char **res, int j)
 	return (NULL);
 }
 
+void	init_vars_ft_split(size_t *i, size_t *j)
+{
+	*i = -1;
+	*j = 0;
+}
+
+int	is_not_charset(char *s, int j, char *str, int i)
+{
+	if (i < ft_strlen((char *)s) && j < count_malloc(s, str) && \
+		ft_ischarset(str, s[i]) == 0)
+		return (1);
+	return (0);
+}
+
 char	**ft_split(char *s, char *str)
 {
 	size_t	i;
 	size_t	j;
 	char	**res;
 
-	i = -1;
-	j = 0;
+	init_vars_ft_split(&i, &j);
 	if (!s || !*s)
 		return ((char **)ft_calloc(2, sizeof(char *)));
-	if (!(res = malloc(sizeof(char *) * (count_malloc(s, str) + 1))))
+	res = malloc(sizeof(char *) * (count_malloc(s, str) + 1));
+	if (!(res))
 		return (0);
 	while (++i < ft_strlen((char *)s))
 	{
-		while (i < ft_strlen((char *)s) && j < count_malloc(s, str) &&
-		ft_ischarset(str, s[i]) == 0)
+		while (is_not_charset(s, j, str, i))
 		{
-			if (!(res[j] = malloc(sizeof(char) * (len_wd(&s[i], str) + 1))))
+			res[j] = malloc(sizeof(char) * (len_wd(&s[i], str) + 1));
+			if (!(res[j]))
 				return (ft_free(res, j));
 			res[j] = ft_memmove(res[j], &s[i], len_wd(&s[i], str));
 			res[j][len_wd(&s[i], str)] = '\0';

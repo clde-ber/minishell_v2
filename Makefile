@@ -30,6 +30,7 @@ SRCS =	./debug_to_delete.c\
 	./minishell_utils2.c\
 	./multipipe.c\
 	./minishell_utils3.c\
+	./minishell_utils4.c\
 	./parse_path.c\
 	./path.c\
 	./path_utils.c\

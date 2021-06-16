@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 19:01:15 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/05/25 17:53:06 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/16 11:18:38 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ char	**get_redir_ready(char **res)
 	char	**tabl;
 
 	j = 0;
+	if (count_tabs(res) == 2)
+		return (NULL);
 	if (!(tabl = malloc(sizeof(char *) * (count_tabs(res) - 1))))
 		return (NULL);
 	while (res[j] && ft_strcmp(res[j], "<") != 0 && ft_strcmp(res[j], ">") != 0
@@ -110,6 +112,8 @@ char	**end_redir(char **res, t_fd *f)
 		free_tabtab(tabl);
 		tabl = end_redir(buf, f);
 		free_tabtab(buf);
+		if (tabl == NULL)
+			return (NULL);
 	}
 	return (tabl);
 }

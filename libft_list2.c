@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:56:45 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/06 07:48:02 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/09 16:06:11 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_record(void *lst, void *cmd)
 	}
 }
 
-int		record_cmd_path(void *lst, void *cmd)
+int	record_cmd_path(void *lst, void *cmd)
 {
 	if (strcmp(((char *)((t_list *)lst)->name), "PATH") == 0)
 	{

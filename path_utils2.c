@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/28 15:00:41 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/07 07:04:44 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/11 08:09:16 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,18 @@ char	*cd_front_a_back(char *res, char *path, t_list *var_env, char *old_pwd)
 	count = 0;
 	buf = ft_strjoin(path, "/");
 	while (i < ft_strlen(res))
-	{
-		if ((k = count_back(res, &i)))
+	{	
+		k = count_back(res, &i);
+		if (k)
 			cd_go_back(&i, k, &buf, old_pwd);
 		else
 			cd_go_front(res, &i, k, &buf);
 	}
-	if (buf[ft_strlen(buf) - 1] == '/')
-		buf[ft_strlen(buf) - 1] = '\0';
-	set_pwd_env(old_pwd, buf, var_env);
+	if (ft_strlen(buf) > 1)
+	{
+		if (buf[ft_strlen(buf) - 1] == '/')
+			buf[ft_strlen(buf) - 1] = '\0';
+	}
 	return (buf);
 }
 
@@ -40,43 +43,62 @@ char	*get_cwd(void)
 {
 	char	*path;
 
-	if (!(path = malloc(sizeof(char) * 1000)))
+	path = malloc(sizeof(char) * 1000);
+	if (!(path))
 		return (NULL);
 	getcwd(path, 1000);
 	return (path);
 }
 
+void	write_cd_option_error(char *res, t_command *cmd, char **str, t_list *var_env)
+{
+	*str = search_env_value("OLDPWD", var_env);
+	ft_putstr_fd("bash : cd : ", 1);
+	ft_putstr_fd(res, 1);
+	ft_putstr_fd(": invalid option\ncd: usage: cd [-L] [-P] [-e] [-@] \
+[dir]\n", 1);
+	cmd->cmd_rv = 2;
+}
+
+void	write_cd_minus_option(char **str, t_list *var_env)
+{
+	*str = search_env_value("OLDPWD", var_env);
+	chdir(*str);
+	ft_putstr_fd(*str, 1);
+	ft_putstr_fd("\n", 1);
+}
+
 void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd, char *old_pwd)
 {
-	char *str;
+	char	*str;
 
 	str = NULL;
-	cmd->cmd_rv = 0;
-	if (ft_strlen(res[1]) == 2 && res[1][0] == '-' && res[1][1] == '-')
-		chdir((str = replace_by_env_value(ft_strdup("$HOME"), var_env, cmd)));
-	else if (res[1][0] == '-' && res[1][1] == '\0')
+	if (chdir(old_pwd) == -1)
 	{
-		chdir((str = replace_by_env_value(ft_strdup("$OLDPWD"), var_env, cmd)));
-		ft_putstr_fd(str, 1);
-		ft_putstr_fd("\n", 1);
+		free_string(old_pwd);
+		old_pwd = search_env_value("OLDPWD", var_env);
+	}
+	if (res[1] && res[1][0] == '-' && !(res[2]))
+	{
+		if (ft_strlen(res[1]) == 2 && res[1][0] == '-' && res[1][1] == '-')
+		{
+			str = search_env_value("HOME", var_env);
+			chdir(str);
+		}
+		else if (res[1][0] == '-' && res[1][1] == '\0')
+			write_cd_minus_option(&str, var_env);
+		else
+			write_cd_option_error(res[1], cmd, &str, var_env);
 	}
 	else
-	{
-		str = ft_strdup("");
-		ft_putstr_fd("bash : cd : ", 1);
-		ft_putstr_fd(res[1], 1);
-		ft_putstr_fd(": invalid option\ncd: usage: cd\
-[-L] [-P] [-e] [-@] [dir]\n", 1);
-		cmd->cmd_rv = 2;
-	}
+		str = search_env_value("OLDPWD", var_env);
 	set_pwd_env(old_pwd, str, var_env);
-	free(str);
-	free(old_pwd);
+	ft_free_2_strings(old_pwd, str);
 }
 
 void	set_root_path(char **buf, char **path, char **res, char **str)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (ft_strchr(&res[1][1], '/'))
@@ -88,26 +110,19 @@ void	set_root_path(char **buf, char **path, char **res, char **str)
 			i++;
 		}
 		chdir(*buf);
+	/*	*path = ft_strdup(*str);
 		free(*path);
 		if (res[1][0] == '/')
 			*path = ft_strdup(ft_strchr(&res[1][1], '/'));
 		else
-			*path = ft_strdup(ft_strchr(res[1], '/'));
+			*path = ft_strdup(ft_strchr(res[1], '/'));*/
 	}
-	*str = ft_strdup(*path);
 }
 
-void	cd_failure(char **res, t_command *cmd, char *old_pwd, char *buf)
+void	cd_failure(char **res, t_command *cmd, char *old_pwd, t_list *var_env)
 {
-	cmd->cmd_rv = 0;
-//	if (ft_strcmp(, "") == 0)
-//		cmd->cmd_rv = 1;
-	if (chdir(buf) == -1)
-	{
-		chdir(old_pwd);
-		ft_putstr_fd("bash : cd : ", 1);
-		ft_putstr_fd(res[1], 1);
-		ft_putstr_fd(": No such file or directory\n", 1);
-		cmd->cmd_rv = 1;
-	}
+	ft_putstr_fd("bash : cd : ", 1);
+	ft_putstr_fd(res[1], 1);
+	ft_putstr_fd(": No such file or directory\n", 1);
+	cmd->cmd_rv = 1;
 }
