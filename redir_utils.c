@@ -6,13 +6,13 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 19:01:15 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/16 11:18:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/16 15:16:34 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		open_fds_out(char **res, int i, int m)
+int	open_fds_out(char **res, int i, int m)
 {
 	int		fd;
 
@@ -31,7 +31,7 @@ int		open_fds_out(char **res, int i, int m)
 	return (fd);
 }
 
-int		open_fds_in(char **res, int i)
+int	open_fds_in(char **res, int i)
 {
 	int		fd;
 
@@ -43,7 +43,7 @@ int		open_fds_in(char **res, int i)
 	return (fd);
 }
 
-int		handle_fds(char **res, t_fd *f)
+int	handle_fds(char **res, t_fd *f)
 {
 	int		i;
 
@@ -72,7 +72,7 @@ char	**get_redir_ready(char **res)
 	if (!(tabl = malloc(sizeof(char *) * (count_tabs(res) - 1))))
 		return (NULL);
 	while (res[j] && ft_strcmp(res[j], "<") != 0 && ft_strcmp(res[j], ">") != 0
-	&& ft_strcmp(res[j], ">>") != 0)
+		&& ft_strcmp(res[j], ">>") != 0)
 	{
 		tabl[j] = ft_strdup(res[j]);
 		j++;
@@ -92,21 +92,14 @@ char	**end_redir(char **res, t_fd *f)
 	char	**tabl;
 	char	**buf;
 
-	if (chrtabtab(res, ">") == -1 && chrtabtab(res, ">>") == -1 &&
-	chrtabtab(res, "<") == -1)
+	if (chrtabtab(res, ">") == -1 && chrtabtab(res, ">>") == -1 && \
+		chrtabtab(res, "<") == -1)
 		return (res);
 	if (handle_fds(res, f) < 0)
-	{
-		restore_fds(f);
-		if (handle_fds(res, f) == -1)
-			ft_putstr_fd("Error: file cannot be opened\n", 2);
-		else
-			ft_putstr_fd("Error: no specified file\n", 2);
-		return (NULL);
-	}
+		return (failed_fd(f, res));
 	tabl = get_redir_ready(res);
-	while (chrtabtab(tabl, ">") != -1 || chrtabtab(tabl, ">>") != -1 ||
-	chrtabtab(tabl, "<") != -1)
+	while (chrtabtab(tabl, ">") != -1 || chrtabtab(tabl, ">>") != -1 || \
+		chrtabtab(tabl, "<") != -1)
 	{
 		buf = copy_tabtab(tabl);
 		free_tabtab(tabl);

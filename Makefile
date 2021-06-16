@@ -39,9 +39,11 @@ SRCS =	./debug_to_delete.c\
 	./prep_line.c\
 	./redir.c\
 	./redir_utils.c\
+	./redir_utils2.c\
 	./sig_a_errors.c\
 	./start_a_parse_bulle.c\
 	./termcap.c\
+	./termcap_utils.c\
 	./termcap_arrow.c\
 
 RENAME		= mv a.out minishell
