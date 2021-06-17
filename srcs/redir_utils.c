@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 19:01:15 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 16:11:43 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	open_fds_in(char **res, int i)
 	return (fd);
 }
 
-int	handle_fds(char **res, t_fd *f)
+int	handle_fds(char **res)
 {
 	int		i;
 
@@ -95,7 +95,7 @@ char	**end_redir(char **res, t_fd *f)
 	if (chrtabtab(res, ">") == -1 && chrtabtab(res, ">>") == -1 && \
 		chrtabtab(res, "<") == -1)
 		return (res);
-	if (handle_fds(res, f) < 0)
+	if (handle_fds(res) < 0)
 		return (failed_fd(f, res));
 	tabl = get_redir_ready(res);
 	while (chrtabtab(tabl, ">") != -1 || chrtabtab(tabl, ">>") != -1 || \

@@ -20,10 +20,10 @@ void	init_fds(t_fd *f)
 int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 {
 	char **res;
-	char **parsed_res;
 	int num;
 	t_fd f[1];
 
+	(void)num;
 	init_fds(f);
 	if (ft_is_empty_string(str))
 		return (0);
@@ -44,6 +44,7 @@ int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 		free_tabtab(res);
 		free_tabtab(f->res);
 	}
+	return (0);
 }
 
 int ft_is_fail_char(char *str)
@@ -106,15 +107,16 @@ void finish_line(t_command *cmd, t_term *term,t_list *var_env)
 
 int main(int ac, char **av, char **env)
 {
+	(void)ac;
+	(void)av;
 	char *line;
 	t_list *var_env;
 	t_command cmd[1];
 	t_term term[1];
-	int ret;
 
 	line = NULL;
-	ret = 0;
 	init_structs(cmd);
+	var_env = NULL;
 	var_env = set_new_env(env, var_env, cmd);
 	term->done = NULL;
 	g_sig.sig = 0;

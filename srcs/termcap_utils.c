@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:28:09 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 16:17:56 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,6 @@
 
 char	*handle_delete(char *current, t_term *term)
 {
-	char	*buf;
-
 	if (current == NULL || ft_strlen(current) == 0)
 		;
 	else

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:17:22 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 16:11:47 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 char	**failed_fd(t_fd *f, char **res)
 {
 	restore_fds(f);
-	if (handle_fds(res, f) == -1)
+	if (handle_fds(res) == -1)
 		ft_putstr_fd("Error: file cannot be opened\n", 2);
 	else
 		ft_putstr_fd("Error: no specified file\n", 2);

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:32:07 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 15:44:19 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	init_vars_get_env_v(int *i, char **ret)
 
 int	condition_one(int i, char *dest, char *str, char *env)
 {
-	if (i < ft_strlen(dest) && (((i && dest[i - 1] != '\\') || i == 0) && \
+	if (i < (int)ft_strlen(dest) && (((i && dest[i - 1] != '\\') || i == 0) && \
 		((((str[0] == '$' && (!(ft_strchr(env, '\"')))) || str[0] != '$') && \
 		(dest[i] == '\"' && dest[ft_strlen(dest) - 1 - i] != '\"')) || \
 		(((str[0] == '$' && (!(ft_strchr(env, '\'')))) || str[0] != '$') && \
@@ -47,7 +47,7 @@ int	condition_one(int i, char *dest, char *str, char *env)
 
 int	condition_two(int i, char *dest)
 {
-	if (i < ft_strlen(dest) && dest[i] == '\\' && (dest[i + 1] == '\\' \
+	if (i < (int)ft_strlen(dest) && dest[i] == '\\' && (dest[i + 1] == '\\' \
 		|| dest[i + 1] == '|' || dest[i + 1] == ';' || dest[i + 1] == '>' \
 		|| dest[i + 1] == '<' || dest[i + 1] == '\'' || dest[i + 1] == '\"' \
 		|| ft_isspace(dest[i + 1])))

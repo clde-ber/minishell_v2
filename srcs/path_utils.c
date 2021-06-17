@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/07 07:43:03 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 16:03:35 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	count_back(char *str, int *j)
 	int	k;
 
 	k = 0;
-	while (*j < ft_strlen(str) && (str[*j] == '/' \
+	while (*j < (int)ft_strlen(str) && (str[*j] == '/' \
 	|| str[*j] == '.'))
 	{
 		while (str[*j] == '/')
@@ -35,7 +35,7 @@ int	count_back(char *str, int *j)
 	return (k);
 }
 
-void	path_copy(char **buf, int m, int k)
+void	path_copy(char **buf, int k)
 {
 	int	i;
 
@@ -58,7 +58,7 @@ int	count_slash(char *old_pwd)
 
 	count = 0;
 	i = 0;
-	while (i < ft_strlen(old_pwd))
+	while (i < (int)ft_strlen(old_pwd))
 	{
 		if (old_pwd[i] == '/')
 		{
@@ -72,14 +72,10 @@ int	count_slash(char *old_pwd)
 	return (count);
 }
 
-void	cd_go_back(int *i, int k, char **buf, char *old_pwd)
+void	cd_go_back(int k, char **buf, char *old_pwd)
 {
-	int	m;
-
-	m = 0;
-	m = ft_strrchr(*buf, '/');
 	if (k < count_slash(old_pwd))
-		path_copy(buf, m, k);
+		path_copy(buf, k);
 	else
 	{
 		free(*buf);
@@ -87,7 +83,7 @@ void	cd_go_back(int *i, int k, char **buf, char *old_pwd)
 	}
 }
 
-int	cd_go_front(char *res, int *i, int k, char **buf)
+void	cd_go_front(char *res, int *i, char **buf)
 {
 	int	index;
 	int	count;

@@ -6,33 +6,96 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 12:28:36 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 16:20:55 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+void	ft_putstr_nbr(int i, int fd)
 {
-	size_t	i;
-	size_t	j;
+	int j;;
+	char *buf;
 
-	i = 0;
 	j = 0;
-	if (*needle == '\0' || len < 0)
-		return ((char *)haystack);
-	while (haystack[i] != '\0' && len > 0)
+	buf = ft_itoa(i);
+	while (buf[j])
 	{
-		while (haystack[i] && haystack[i + j] == needle[j]
-			&& len > j)
-		{
-			if (needle[j + 1] == '\0')
-				return ((char *)&haystack[i]);
-			j++;
-		}
-		len--;
-		j = 0;
+		write(fd, &buf[j], 1);
+		j++;
+	}
+	free(buf);
+}
+
+static char	*ft_attrib(int n, char *res, int i)
+{
+	int j;
+
+	j = 0;
+	if (n == -2147483648)
+		n++;
+	if (n < 0)
+	{
+		n *= -1;
+		j = 1;
+	}
+	while (i >= j)
+	{
+		res[i] = n % 10 + 48;
+		n /= 10;
+		i--;
+	}
+	return (res);
+}
+
+static int	ft_mallocsize(int n)
+{
+	int i;
+
+	i = 1;
+	if (n <= 0)
+		i++;
+	while (n % 10 != 0 || n != 0)
+	{
+		n /= 10;
 		i++;
 	}
-	return (NULL);
+	return (i);
+}
+
+static char	*ft_int_min(void)
+{
+	char	*res;
+	int		i;
+
+	i = 12;
+	if (!(res = malloc(sizeof(char) * i)))
+		return (NULL);
+	res[0] = '-';
+	ft_attrib(-2147483648, res, i - 2);
+	res[10] += 1;
+	res[11] = '\0';
+	return (res);
+}
+
+char		*ft_itoa(int n)
+{
+	char	*res;
+	int		i;
+
+	if (n == -0)
+		n = 0;
+	if (n == -2147483648)
+	{
+		res = (char *)ft_int_min();
+		return (res);
+	}
+	i = ft_mallocsize(n);
+	if (!(res = malloc(sizeof(char) * i)))
+		return (NULL);
+	if (n < 0)
+		res[0] = '-';
+	ft_attrib(n, res, i - 2);
+	res[i - 1] = '\0';
+	return (res);
 }

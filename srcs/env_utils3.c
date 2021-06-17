@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:10 by user42            #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 15:38:31 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void	add_to_env_l(char **tabl, char *j_name, int k, int l)
 	char	*j_value;
 	char	*tmp;
 
+	i_value = NULL;
+	j_value = NULL;
 	i_value = create_i_value(tabl[k], i_value);
 	j_value = create_i_value(tabl[l], j_value);
 	tmp = ft_strdup(tabl[l]);
@@ -59,6 +61,8 @@ void	add_to_env_k(char **tabl, char *i_name, int k, int l)
 	char	*j_value;
 	char	*tmp;
 
+	i_value = NULL;
+	j_value = NULL;
 	i_value = create_i_value(tabl[k], i_value);
 	j_value = create_i_value(tabl[l], j_value);
 	tmp = ft_strdup(tabl[k]);

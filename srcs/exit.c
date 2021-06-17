@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 06:40:46 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 15:41:24 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	exit_too_many_args(t_command *cmd)
 	cmd->cmd_rv = 1;
 }
 
-void	exit_no_code(char **res, int i, t_command *cmd)
+void	exit_no_code(char **res, t_command *cmd)
 {
 	if (g_sig.sig == 0)
 		cmd->cmd_rv = ft_atoi(res[1]);
@@ -55,9 +55,9 @@ void	ft_exit(char **res, t_command *cmd)
 	{
 		while (res[1][i] && ft_isdigit(res[1][i]))
 			i++;
-		if (i == ft_strlen(res[1]))
+		if (i == (int)ft_strlen(res[1]))
 		{
-			exit_no_code(res, i, cmd);
+			exit_no_code(res, cmd);
 			exit(cmd->cmd_rv);
 		}
 		else

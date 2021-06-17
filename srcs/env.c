@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:26 by user42            #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 15:39:10 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd)
 	return (var_env);
 }
 
-int	reset_cmd_path(t_list *lst, t_command *cmd)
+void	reset_cmd_path(t_list *lst, t_command *cmd)
 {
 	int	boolean;
 

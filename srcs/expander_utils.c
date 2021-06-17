@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:38 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 15:43:57 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,9 @@ int	strings_to_join(char **res, int i)
 	return (0);
 }
 
-char	**create_parsed_res(char **res, t_command *cmd)
+char	**create_parsed_res(char **res)
 {
 	int		i;
-	char	**tmp;
 	char	**parsed_res;
 
 	parsed_res = NULL;
@@ -57,11 +56,6 @@ t_command *cmd)
 
 char	**last_command_rv(char **res, char **parsed_res)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
 	if (res[0][0] == '$' && res[0][1] == '?' && res[0][2] == '\0')
 	{
 		parsed_res[0] = ft_strdup("$?");

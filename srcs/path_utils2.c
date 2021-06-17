@@ -6,30 +6,28 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/28 15:00:41 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 16:07:42 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*cd_front_a_back(char *res, char *path, t_list *var_env, char *old_pwd)
+char	*cd_front_a_back(char *res, char *path, char *old_pwd)
 {
 	int		k;
 	int		i;
-	int		count;
 	char	*buf;
 
 	i = 0;
 	k = 0;
-	count = 0;
 	buf = ft_strjoin(path, "/");
-	while (i < ft_strlen(res))
+	while (i < (int)ft_strlen(res))
 	{	
 		k = count_back(res, &i);
 		if (k)
-			cd_go_back(&i, k, &buf, old_pwd);
+			cd_go_back(k, &buf, old_pwd);
 		else
-			cd_go_front(res, &i, k, &buf);
+			cd_go_front(res, &i, &buf);
 	}
 	if (ft_strlen(buf) > 1)
 	{
@@ -78,7 +76,7 @@ void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd, char *old_pwd)
 	ft_free_2_strings(old_pwd, str);
 }
 
-void	set_root_path(char **buf, char **path, char **res, char **str)
+void	set_root_path(char **buf, char **res)
 {
 	int	i;
 
@@ -95,8 +93,9 @@ void	set_root_path(char **buf, char **path, char **res, char **str)
 	}
 }
 
-void	cd_failure(char **res, t_command *cmd, char *old_pwd, t_list *var_env)
+void	cd_failure(char **res, t_command *cmd, char *old_pwd)
 {
+	chdir(old_pwd);
 	ft_putstr_fd("bash : cd : ", 2);
 	ft_putstr_fd(res[1], 2);
 	ft_putstr_fd(": No such file or directory\n", 2);

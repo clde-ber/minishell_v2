@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 16:10:59 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 	|| ft_strcmp(tabl[0], "env") == 0 || ft_strcmp(tabl[0], "exit") == 0)
 	{
 		if (ft_strcmp(tabl[0], "echo") == 0)
-			ft_echo(tabl, var_env);
+			ft_echo(tabl);
 		if (ft_strcmp(tabl[0], "export") == 0 && tabl[1])
 		{
 			check_doublons_cl(tabl, NULL, NULL, 0);
@@ -34,6 +34,7 @@ int	go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 	}
 	else
 		set_args(tabl, cmd->path, cmd, j);
+	return (0);
 }
 
 int	tabl_is_null(int *j, char **tabl, t_command *cmd)
@@ -77,7 +78,7 @@ int	go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	if (tabl[0][0] == 'e' && ft_strcmp(tabl[0], "$?"))
 		go_e(tabl, var_env, cmd, j);
 	else if (ft_strcmp(tabl[0], "pwd") == 0 && ft_strcmp(tabl[0], "$?"))
-		ft_pwd(tabl, cmd);
+		ft_pwd(cmd);
 	else if (ft_strcmp(tabl[0], "cd") == 0 && tabl[1] && ft_strcmp(tabl[1], "") \
 	&& ft_strcmp(tabl[0], "$?"))
 		ft_cd(tabl, var_env, cmd);
@@ -125,6 +126,7 @@ char **env)
 	go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);
 	close(mp->fd[0]);
 	free_tabtab(one);
+	return (0);
 }
 
 int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)

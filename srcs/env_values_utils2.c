@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 14:30:34 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 15:38:52 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,16 +92,8 @@ int	even_or_odd(char *str)
 
 char	*find_op(char *str)
 {
-	int		i;
-	char	*ret;
-
-	i = 0;
-	ret = NULL;
 	if (ft_strchr(str, '=') && ft_strlen(str) > 1)
-	{
-		ret = ft_strchr(str, '=');
 		return ("=");
-	}
 	else
 		return ("");
 }

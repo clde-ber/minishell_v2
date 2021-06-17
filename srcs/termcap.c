@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 15:13:21 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 16:17:28 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,7 @@ void	restore_term(t_term *term)
 void	get_cursor_pos(t_term *term, char **res)
 {
 	char	*temp;
-	int		i;
 
-	i = 0;
 	if ((int)res[0][0] != 27 || res[0][1] != '[')
 	{
 		free_tabtab(res);
@@ -67,12 +65,10 @@ void	get_cursor_pos(t_term *term, char **res)
 
 void	get_cursor_space(t_term *term)
 {
-	int		i;
 	char	buf[2];
 	char	*check;
 	char	*buf1;
 
-	i = 0;
 	check = NULL;
 	write(1, "\033[6n", 4);
 	while (buf[0] != 'R')

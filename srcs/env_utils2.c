@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:50 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 15:37:56 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void	print_sorted_env(t_list *environ, t_command *cmd)
 
 	i = -1;
 	j = -1;
+	list = NULL;
 	list = fill_list(environ, list, i);
 	list = sort_list(list, i, j);
 	while (list[++i])
@@ -108,11 +109,11 @@ int	is_valid_env_name(char *str)
 	i = 0;
 	if (str[i] == '\0')
 		return (0);
-	while (i < ft_strlen(str))
+	while (i < (int)ft_strlen(str))
 	{
-		if (i < ft_strlen(str) && str[i] == '\\')
+		if (i < (int)ft_strlen(str) && str[i] == '\\')
 			i += 2;
-		if (i < ft_strlen(str) && !(str[i] == '_' || ft_isalnum(str[i]) \
+		if (i < (int)ft_strlen(str) && !(str[i] == '_' || ft_isalnum(str[i]) \
 		|| str[i] == '$' || str[i] == '\\' || (str[i] == '=' && \
 		ft_strlen(str) > 1)))
 			return (0);

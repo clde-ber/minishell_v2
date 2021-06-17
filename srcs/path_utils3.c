@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/29 06:56:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 16:08:49 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,11 @@ void	write_cd_minus_option(char **str, t_list *var_env)
 	ft_putstr_fd("\n", 2);
 }
 
-void	ft_pwd(char **res, t_command *cmd)
+void	ft_pwd(t_command *cmd)
 {
 	char	*path;
 	char	*buf;
-	int		i;
 
-	i = 0;
 	path = malloc(sizeof(char) * 1000);
 	if (!(path))
 		return ;

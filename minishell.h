@@ -79,7 +79,6 @@ typedef struct s_command
 int ft_is_fail_char(char *str);
 //A DELETE
 // dans debug_to_delete
-void	ft_putstr_nbr(int i, int fd);
 
 /*
 **start_a_parse
@@ -119,7 +118,7 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd);
 **expander_utils
 */
 int	strings_to_join(char **res, int i);
-char	**create_parsed_res(char **res, t_command *cmd);
+char	**create_parsed_res(char **res);
 char	*parsed_res_error(char *res, char *parsed_res, t_list *var_env,
 t_command *cmd);
 char	**last_command_rv(char **res, char **parsed_res);
@@ -230,7 +229,7 @@ char	*get_env_name(int quotes, char *str_first);
 */
 void	init_vars_launch_exe(pid_t *pid, int *ret, int *status);
 void	free_2_tabs(char **argv, char **envp);
-int	launch_exe(char *exe, char *path, char **env, t_command *cmd);
+int	launch_exe(char *path, char **env, t_command *cmd);
 void	find_exe(char *path, char **env, t_command *cmd);
 
 /*
@@ -238,7 +237,7 @@ void	find_exe(char *path, char **env, t_command *cmd);
 */
 char	*ft_get_filename(const char *s, int c);
 char	*get_path(char *path, char c);
-char	**arg_tab(char *exe, char *path, char **env);
+char	**arg_tab(char *path, char **env);
 char	**env_tab(char *path);
 void	write_error_launch_exe(char *path);
 
@@ -248,13 +247,13 @@ void	write_error_launch_exe(char *path);
 void	opendir_error(char *path, t_command *cmd, char *str, char *path_mod);
 void	init_vars_find_exe(char **str, char **path_mod, char *path,
 DIR **dir);
-void	launch_exe_error(char *str, char *path, char **env, t_command *cmd);
+void	launch_exe_error(char *path, char **env, t_command *cmd);
 
 /*
 **env
 */
 t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd);
-int	reset_cmd_path(t_list *lst, t_command *cmd);
+void	reset_cmd_path(t_list *lst, t_command *cmd);
 void	set_env(char **tabl, t_list *var_env, t_command *cmd, int j);
 void	unset(t_list *env, char **tabl, t_command *cmd, int j);
 void	print_env(t_list *environ, t_command *cmd);
@@ -297,29 +296,28 @@ void	init_vars_unset(char **name, int *i, int *boolean);
 **path
 */
 int	if_too_many_args(char **res, t_command *cmd);
-void	init_cd_strings(char **str, char **buf, char **ret, char *path);
-void	init_2_strings(char *path, char *str);
-void	set_current_path_cd(char **str, char **path, t_list *var_env,
-t_command *cmd);
+void	init_cd_strings(char **buf, char **ret, char *path);
+void	init_2_strings(char **path, char **str);
+void	set_current_path_cd(char **str, char **path, t_list *var_env);
 void	ft_cd(char **res, t_list *var_env, t_command *cmd);
 
 /*
 **path_utils
 */
 int	count_back(char *str, int *j);
-void	path_copy(char **buf, int m, int k);
+void	path_copy(char **buf, int k);
 int	count_slash(char *old_pwd);
-void	cd_go_back(int *i, int k, char **buf, char *old_pwd);
-int	cd_go_front(char *res, int *i, int k, char **buf);
+void	cd_go_back(int k, char **buf, char *old_pwd);
+void	cd_go_front(char *res, int *i, char **buf);
 
 /*
 **path_utils2
 */
-char	*cd_front_a_back(char *res, char *path, t_list *var_env, char *old_pwd);
+char	*cd_front_a_back(char *res, char *path, char *old_pwd);
 char	*get_cwd(void);
 void	ft_cd_minus(char **res, t_list *var_env, t_command *cmd, char *old_pwd);
-void	set_root_path(char **buf, char **path, char **res, char **str);
-void	cd_failure(char **res, t_command *cmd, char *old_pwd, t_list *var_env);
+void	set_root_path(char **buf, char **res);
+void	cd_failure(char **res, t_command *cmd, char *old_pwd);
 
 /*
 **path_utils3
@@ -329,7 +327,7 @@ void	set_pwd_env(char *path, char *buf, t_list *var_env);
 void	write_cd_option_error(char *res, t_command *cmd, char **str,
 t_list *var_env);
 void	write_cd_minus_option(char **str, t_list *var_env);
-void	ft_pwd(char **res, t_command *cmd);
+void	ft_pwd(t_command *cmd);
 
 /*
 **prep_line
@@ -354,7 +352,7 @@ int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env);
 */
 int		open_fds_out(char **res, int i, int m);
 int		open_fds_in(char **res, int i);
-int		handle_fds(char **res, t_fd *f);
+int		handle_fds(char **res);
 int		count_pipes(char **res);
 char	**end_redir(char **res, t_fd *f);
 
@@ -371,7 +369,7 @@ char	**divide_pipe(t_fd *f);
 */
 char	*echo_option(char *output, int option);
 char	*get_echo_output(char *output, char **res, int i);
-void	ft_echo(char **res, t_list *var_env);
+void	ft_echo(char **res);
 
 /*
 **exec
@@ -396,7 +394,7 @@ void	write_error_shell(t_command *cmd, char **res);
 void	ft_free_set_args(char **args);
 void	init_vars_set_args(int *index, int *k);
 void	init_2_vars(int *i, int *k);
-int	command_not_found(char **tabl, char **env, char **p_bin, char **res);
+int	command_not_found(char **tabl, char **env, char **p_bin);
 int	command_found(char **tabl, char **env, char **p_bin);
 
 /*
@@ -524,8 +522,6 @@ int	ft_ischarset(char *str, char c);
 */
 void	ft_putstr_fd(char *s, int fd);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-static int	trim_first(char const *s1, char const *set);
-static int	trim_last(char const *s1, char const *set, int k);
 char	*ft_strtrim(char const *s1, char const *set);
 
 /*
@@ -540,14 +536,17 @@ int	ft_putchar(int c);
 /*
 **libft_utils5
 */
-static int	conv_char_int(char str, int k);
 int	ft_atoi(const char *str);
-static int	len_int(int n);
-static int	ft_pow(int nb, int pow);
 char	*rv_itoa(int n);
 
 /*
 **libft_utils6
+*/
+void	ft_putstr_nbr(int i, int fd);
+char		*ft_itoa(int n);
+
+/*
+**libft_utils7
 */
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 

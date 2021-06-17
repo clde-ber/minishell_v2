@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:14:05 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 15:40:22 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	init_2_vars(int *i, int *k)
 	*k = 0;
 }
 
-int	command_not_found(char **tabl, char **env, char **p_bin, char **res)
+int	command_not_found(char **tabl, char **env, char **p_bin)
 {
 	free(tabl[0]);
 	free_tabtab(env);
