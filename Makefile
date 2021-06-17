@@ -51,7 +51,7 @@ SRCS =	./debug_to_delete.c\
 	./redir_utils.c\
 	./redir_utils2.c\
 	./sig_a_errors.c\
-	./start_a_parse_bulle.c\
+	./start_a_parse.c\
 	./termcap.c\
 	./termcap_utils.c\
 	./termcap_arrow.c\

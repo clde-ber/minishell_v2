@@ -125,11 +125,6 @@ int main(int ac, char **av, char **env)
 	{
 		ft_putstr_fd("***minishell*** > ", 1);
 		line = go_line(term);
-		if (ft_strcmp(line, "exit") == 0) //builtin à coder
-		{
-			free_string(line);
-			exit(0);
-		}
 		main_loop(line, env, var_env, cmd);
 		g_sig.boolean = 0;
 	}

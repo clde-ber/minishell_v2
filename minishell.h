@@ -82,7 +82,7 @@ int ft_is_fail_char(char *str);
 void	ft_putstr_nbr(int i, int fd);
 
 /*
-**start_a_parse_bulle
+**start_a_parse
 */
 char	*getcommand(char *str);
 void	restore_fds(t_fd *f);
