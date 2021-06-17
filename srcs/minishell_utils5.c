@@ -1,45 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_utils4.c                                       :+:      :+:    :+:   */
+/*   minishell_utils5.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/16 11:08:41 by clde-ber          #+#    #+#             */
+/*   Created: 2021/06/16 15:26:09 by clde-ber          #+#    #+#             */
 /*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	unset_cmd_path(int boolean, t_command *cmd)
+int	count_tabs(char **res)
 {
-	if (boolean == 0)
-	{
-		if (cmd->path)
-		{
-			free(cmd->path);
-			cmd->path = ft_strdup("");
-		}
-	}
+	int		j;
+
+	j = 0;
+	if (!res[j] || !res)
+		return (j);
+	while (res[j] != NULL)
+		j++;
+	return (j);
 }
 
-void	name_a_value_var(char **name, char **value, char **env, int k)
+void	free_tabtab(char **res)
 {
-	*name = ft_get_name(env[k]);
-	*value = ft_strdup(&ft_strchr(env[k], '=')[1]);
+	int		i;
+
+	i = 0;
+	if (!res)
+		return ;
+	while (res[i] != NULL)
+		free(res[i++]);
+	free(res);
+	res = NULL;
 }
 
-void	init_strings_set_env(t_list **tmp_new, t_list **tmp, char **name)
+void	init_structs(t_command *cmd)
 {
-	*tmp_new = NULL;
-	*tmp = NULL;
-	*name = NULL;
+	cmd->path = NULL;
+	cmd->index = 0;
+	cmd->cmd_rv = 0;
+	cmd->start = 0;
+	cmd->ret = 0;
+	cmd->bol = 0;
 }
 
-void	init_vars_unset(char **name, int *i, int *boolean)
+void	free_cd(char *path, char *buf, char *old_pwd, char *ret)
 {
-	*name = NULL;
-	*i = 1;
-	*boolean = 0;
+	free_string(path);
+	free_string(buf);
+	free_string(old_pwd);
+	free_string(ret);
 }

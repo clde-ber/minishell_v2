@@ -1,45 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_utils4.c                                       :+:      :+:    :+:   */
+/*   libft_utils6.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/16 11:08:41 by clde-ber          #+#    #+#             */
+/*   Created: 2021/06/06 12:28:36 by clde-ber          #+#    #+#             */
 /*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	unset_cmd_path(int boolean, t_command *cmd)
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
-	if (boolean == 0)
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	if (*needle == '\0' || len < 0)
+		return ((char *)haystack);
+	while (haystack[i] != '\0' && len > 0)
 	{
-		if (cmd->path)
+		while (haystack[i] && haystack[i + j] == needle[j]
+			&& len > j)
 		{
-			free(cmd->path);
-			cmd->path = ft_strdup("");
+			if (needle[j + 1] == '\0')
+				return ((char *)&haystack[i]);
+			j++;
 		}
+		len--;
+		j = 0;
+		i++;
 	}
-}
-
-void	name_a_value_var(char **name, char **value, char **env, int k)
-{
-	*name = ft_get_name(env[k]);
-	*value = ft_strdup(&ft_strchr(env[k], '=')[1]);
-}
-
-void	init_strings_set_env(t_list **tmp_new, t_list **tmp, char **name)
-{
-	*tmp_new = NULL;
-	*tmp = NULL;
-	*name = NULL;
-}
-
-void	init_vars_unset(char **name, int *i, int *boolean)
-{
-	*name = NULL;
-	*i = 1;
-	*boolean = 0;
+	return (NULL);
 }

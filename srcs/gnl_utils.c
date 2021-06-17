@@ -1,45 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_utils4.c                                       :+:      :+:    :+:   */
+/*   gnl_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/16 11:08:41 by clde-ber          #+#    #+#             */
+/*   Created: 2021/04/28 13:55:38 by clde-ber          #+#    #+#             */
 /*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	unset_cmd_path(int boolean, t_command *cmd)
+int		find_n(char *buf, size_t size)
 {
-	if (boolean == 0)
+	size_t i;
+
+	i = 0;
+	while (i < size && buf[i])
 	{
-		if (cmd->path)
-		{
-			free(cmd->path);
-			cmd->path = ft_strdup("");
-		}
+		if (buf[i] == '\n')
+			return (i);
+		i++;
 	}
+	return (-1);
 }
 
-void	name_a_value_var(char **name, char **value, char **env, int k)
+char	*join_a_free(char *s1, char *s2)
 {
-	*name = ft_get_name(env[k]);
-	*value = ft_strdup(&ft_strchr(env[k], '=')[1]);
-}
+	size_t	i;
+	size_t	j;
+	char	*ptr;
 
-void	init_strings_set_env(t_list **tmp_new, t_list **tmp, char **name)
-{
-	*tmp_new = NULL;
-	*tmp = NULL;
-	*name = NULL;
-}
-
-void	init_vars_unset(char **name, int *i, int *boolean)
-{
-	*name = NULL;
-	*i = 1;
-	*boolean = 0;
+	i = -1;
+	j = -1;
+	if (!s1 && !s2)
+		return (0);
+	if (!(ptr = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1))))
+		return (0);
+	while (s1[++i])
+		ptr[i] = s1[i];
+	while (s2[++j])
+		ptr[i + j] = s2[j];
+	ptr[i + j] = '\0';
+	free(s1);
+	return (ptr);
 }
