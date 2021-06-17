@@ -1,45 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_utils4.c                                       :+:      :+:    :+:   */
+/*   sig_a_errors.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/16 11:08:41 by clde-ber          #+#    #+#             */
+/*   Created: 2021/04/28 13:56:27 by clde-ber          #+#    #+#             */
 /*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	unset_cmd_path(int boolean, t_command *cmd)
+void	errors(t_command *cmd)
 {
-	if (boolean == 0)
+	cmd->cmd_rv = 1;
+}
+
+void	handle_signal(int code)
+{
+	if (code == 2)
 	{
-		if (cmd->path)
+		g_sig.sig = 1;
+		if (g_sig.boolean == 1)
+			ft_putstr_fd("\n", 1);
+		else
+			ft_putstr_fd("\n***minishell*** > ", 1);
+	}
+	else if (code == 3)
+	{
+		if (g_sig.boolean == 1)
 		{
-			free(cmd->path);
-			cmd->path = ft_strdup("");
+			g_sig.sig = 2;
+			ft_putstr_fd("Quit (core dumped)\n", 1);
 		}
 	}
-}
-
-void	name_a_value_var(char **name, char **value, char **env, int k)
-{
-	*name = ft_get_name(env[k]);
-	*value = ft_strdup(&ft_strchr(env[k], '=')[1]);
-}
-
-void	init_strings_set_env(t_list **tmp_new, t_list **tmp, char **name)
-{
-	*tmp_new = NULL;
-	*tmp = NULL;
-	*name = NULL;
-}
-
-void	init_vars_unset(char **name, int *i, int *boolean)
-{
-	*name = NULL;
-	*i = 1;
-	*boolean = 0;
 }

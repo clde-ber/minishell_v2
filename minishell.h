@@ -290,7 +290,7 @@ void	add_to_env_k(char **tabl, char *i_name, int k, int l);
 */
 void	unset_cmd_path(int boolean, t_command *cmd);
 void	name_a_value_var(char **name, char **value, char **env, int k);
-void	init_strings_set_env(char **tmp_new, char **tmp, char **name);
+void	init_strings_set_env(t_list **tmp_new, t_list **tmp, char **name);
 void	init_vars_unset(char **name, int *i, int *boolean);
 
 /*
@@ -361,7 +361,7 @@ char	**end_redir(char **res, t_fd *f);
 /*
 **redir_utils2
 */
-char	*failed_fd(t_fd *f, char **res);
+char	**failed_fd(t_fd *f, char **res);
 int		check_valid_res_bis(char **str);
 int		check_valid_res(char **str);
 char	**divide_pipe(t_fd *f);
@@ -506,40 +506,50 @@ char	*join_a_free(char *s1, char *s2);
 */
 size_t	ft_strlen(char *str);
 char	*ft_strjoin(char *s1, char *s2);
-int		ft_strcmp(const char *s1, const char *s2);
+int	ft_strcmp(const char *s1, const char *s2);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(const char *s1);
 
 /*
 **libft_utils2
 */
-int		ft_strrchr(const char *s, int c);
+int	ft_strrchr(const char *s, int c);
 void	*ft_calloc(size_t count, size_t size);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 void	*ft_memmove(void *dst, const void *src, size_t len);
-int		ft_ischarset(char *str, char c);
+int	ft_ischarset(char *str, char c);
 
 /*
 **libft_utils3
 */
 void	ft_putstr_fd(char *s, int fd);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+static int	trim_first(char const *s1, char const *set);
+static int	trim_last(char const *s1, char const *set, int k);
 char	*ft_strtrim(char const *s1, char const *set);
 
 /*
 **libft_utils4
 */
-int		ft_strlcpy(char *dst, const char *src, int dstsize);
-int		ft_isalnum(int c);
+int	ft_isalnum(int c);
+int	ft_strlcpy(char *dst, const char *src, int dstsize);
 char	*ft_strjoin_free(char *s1, char *s2);
-int		ft_is_empty_string(char *str);
+int	ft_is_empty_string(char *str);
 int	ft_putchar(int c);
 
 /*
 **libft_utils5
 */
-int		ft_atoi(const char *str);
+static int	conv_char_int(char str, int k);
+int	ft_atoi(const char *str);
+static int	len_int(int n);
+static int	ft_pow(int nb, int pow);
 char	*rv_itoa(int n);
+
+/*
+**libft_utils6
+*/
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 
 /*
 **libft_list
@@ -554,9 +564,9 @@ void	ft_lstadd_back(t_list **alst, t_list *new);
 **libft_list2
 */
 void	ft_record(void *lst, void *cmd);
+int	record_cmd_path(void *lst, void *cmd);
 void	ft_lstiter(t_list *lst, void (*f)(void *, void *), t_command *cmd);
 void	ft_lstdel(t_list *lst);
-int		record_cmd_path(void *lst, void *cmd);
 
 extern t_sig g_sig;
 
