@@ -359,6 +359,14 @@ int		count_pipes(char **res);
 char	**end_redir(char **res, t_fd *f);
 
 /*
+**redir_utils2
+*/
+char	*failed_fd(t_fd *f, char **res);
+int		check_valid_res_bis(char **str);
+int		check_valid_res(char **str);
+char	**divide_pipe(t_fd *f);
+
+/*
 **echo
 */
 char	*echo_option(char *output, int option);
@@ -405,6 +413,12 @@ void	restore_term(t_term *term);
 void	get_cursor_pos(t_term *term, char **res);
 void	get_cursor_space(t_term *term);
 void	init_term(t_term *term);
+
+/*
+**termcap_utils
+*/
+char	*handle_delete(char *current, t_term *term);
+void	handle_ctrl_d(char *current, t_term *term);
 
 /*
 **termcap_arrow

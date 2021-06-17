@@ -6,14 +6,13 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/16 15:04:39 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/16 16:39:42 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-
-char *end_line(char *current, t_term *term)
+char	*end_line(char *current, t_term *term)
 {
 	restore_term(term);
 	if (current == NULL)
@@ -21,15 +20,16 @@ char *end_line(char *current, t_term *term)
 		write(1, "\n", 1);
 		return (current);
 	}
-	if ((term->len > 0 && ft_strcmp(current, term->done[0]) != 0) || term->len == 0)
+	if ((term->len > 0 && ft_strcmp(current, term->done[0]) != 0) || \
+		term->len == 0)
 		term->done = save_input(current, term->done);
 	write(1, "\n", 1);
 	return (current);
 }
 
-char *get_char(char *current, t_term *term, char *buf)
+char	*get_char(char *current, t_term *term, char *buf)
 {
-	char *buf1;
+	char	*buf1;
 
 	if (term->where == -1)
 		term->mtline = 1;
@@ -46,34 +46,10 @@ char *get_char(char *current, t_term *term, char *buf)
 	return (current);
 }
 
-char	*handle_delete(char *current, t_term *term)
+char	*go_line(t_term *term)
 {
-	if (current == NULL || ft_strlen(current) == 0)
-		;
-	else
-	{
-		tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2),
-		term->y - 1), 1, ft_putchar);
-		write(1, " ", 1);
-		tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2),
-		term->y - 1), 1, ft_putchar);
-		current[ft_strlen(current) - 1] = '\0';
-	}
-	return (current);
-}
-
-void	handle_ctrl_d(char *current, t_term *term)
-{
-	restore_term(term);
-	if (current != NULL)
-		free(current);
-	write(1, "\n", 1);
-}
-
-char *go_line(t_term *term)
-{
-	char buf[2];
-	char *current;
+	char	buf[2];
+	char	*current;
 
 	init_term(term);
 	current = NULL;
@@ -90,8 +66,9 @@ char *go_line(t_term *term)
 			handle_ctrl_d(current, term);
 			exit(0);
 		}
-		else if((int)buf[0] == 127)
+		else if ((int)buf[0] == 127)
 			current = handle_delete(current, term);
+			// handle_delete(current, term);
 		else
 			current = get_char(current, term, buf);
 		buf[0] = '\0';
