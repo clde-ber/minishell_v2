@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/29 06:56:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/16 15:35:27 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 08:59:53 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ void	write_cd_option_error(char *res, t_command *cmd, char **str,
 t_list *var_env)
 {
 	*str = search_env_value("OLDPWD", var_env);
-	ft_putstr_fd("bash : cd : ", 1);
-	ft_putstr_fd(res, 1);
+	ft_putstr_fd("bash : cd : ", 2);
+	ft_putstr_fd(res, 2);
 	ft_putstr_fd(": invalid option\ncd: usage: cd [-L] [-P] [-e] [-@] \
-[dir]\n", 1);
+[dir]\n", 2);
 	cmd->cmd_rv = 2;
 }
 
@@ -63,8 +63,8 @@ void	write_cd_minus_option(char **str, t_list *var_env)
 {
 	*str = search_env_value("OLDPWD", var_env);
 	chdir(*str);
-	ft_putstr_fd(*str, 1);
-	ft_putstr_fd("\n", 1);
+	ft_putstr_fd(*str, 2);
+	ft_putstr_fd("\n", 2);
 }
 
 void	ft_pwd(char **res, t_command *cmd)

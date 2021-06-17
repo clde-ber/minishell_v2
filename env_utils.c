@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:39 by clde-ber          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/06/16 06:59:26 by clde-ber         ###   ########.fr       */
-=======
-/*   Updated: 2021/06/16 09:46:31 by budal-bi         ###   ########.fr       */
->>>>>>> d03fd898b2ecb6bc6783b5c730bddc93dbc20405
+/*   Updated: 2021/06/17 08:47:57 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +75,8 @@ void	add_to_env(char **tabl, int k, int l)
 
 void	check_doublons_cl(char **tabl, char *i_name, char *j_name, int j)
 {
-<<<<<<< HEAD
 	int	k;
 	int	l;
-=======
-	int		k;
-	int		l;
->>>>>>> d03fd898b2ecb6bc6783b5c730bddc93dbc20405
 
 	while (tabl[j])
 		j++;

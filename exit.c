@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 06:40:46 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/09 12:21:43 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 08:42:56 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,15 @@ int	ft_isdigit(int c)
 
 void	exit_error_no_nb(char **res, t_command *cmd)
 {
-	write(1, "exit: ", 6);
-	write(1, res[1], ft_strlen(res[1]));
-	write(1, ": numeric argument required\n", 28);
+	ft_putstr_fd("exit: ", 2);
+	ft_putstr_fd(res[1], 2);
+	ft_putstr_fd(": numeric argument required\n", 2);
 	cmd->cmd_rv = 2;
 }
 
 void	exit_too_many_args(t_command *cmd)
 {
-	write(1, "bash: exit: too many arguments\n", 30);
+	ft_putstr_fd("bash: exit: too many arguments\n", 2);
 	cmd->cmd_rv = 1;
 }
 

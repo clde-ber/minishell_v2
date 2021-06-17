@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:50 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/16 16:11:46 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 08:56:32 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,10 @@ void	print_sorted_env(t_list *environ, t_command *cmd)
 	list = fill_list(environ, list, i);
 	list = sort_list(list, i, j);
 	while (list[++i])
-		printf("%s\n", list[i]);
+	{
+		ft_putstr_fd(list[i], 1);
+		ft_putstr_fd("\n", 1);
+	}
 	ft_free(list, i + 1);
 	list = NULL;
 	cmd->cmd_rv = 0;

@@ -123,7 +123,7 @@ int main(int ac, char **av, char **env)
 	signal(SIGQUIT, handle_signal);
 	while (1)
 	{
-		write(1, "***minishell*** > ", 18);
+		ft_putstr_fd("***minishell*** > ", 1);
 		line = go_line(term);
 		if (ft_strcmp(line, "exit") == 0) //builtin à coder
 		{

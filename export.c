@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander_utils10.c                                 :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:35:29 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/16 11:35:44 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 08:44:05 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,17 @@ char *res)
 
 	if_s_quotes(str_first, str_secd, &str_f, &str_s);
 	operator = find_op(res);
-	write(1, "bash: export: '", 16);
+	ft_putstr_fd("bash: export: '", 2);
 	if (quotes % 2 == 0)
-		write(1, str_f, ft_strlen(str_f));
+		ft_putstr_fd(str_f, 2);
 	else
-		write(1, str_first, ft_strlen(str_first));
-	write(1, operator, ft_strlen(operator));
+		ft_putstr_fd(str_first, 2);
+	ft_putstr_fd(operator, 2);
 	if (quotes == 1 || quotes == 4)
-		write(1, str_s, ft_strlen(str_s));
+		ft_putstr_fd(str_s, 2);
 	else
-		write(1, str_secd, ft_strlen(str_secd));
-	write(1, "': not a valid identifier\n", 26);
+		ft_putstr_fd(str_secd, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
 	free_export_errors(str_first, str_secd, str_f, str_s);
 	return (ft_strdup(""));
 }

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:20:43 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/16 15:48:56 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 08:58:25 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 void	opendir_error(char *path, t_command *cmd, char *str, char *path_mod)
 {
-	write(1, "bash: ", 6);
-	write(1, path, ft_strlen(path));
-	write(1, ": ", 2);
-	printf("%s\n", strerror(errno));
+	ft_putstr_fd("bash: ", 2);
+	ft_putstr_fd(path, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(strerror(errno), 2);
+	ft_putstr_fd("\n", 2);
 	cmd->cmd_rv = 127;
 	free_string(str);
 	free_string(path_mod);
@@ -35,7 +36,10 @@ DIR **dir)
 void	launch_exe_error(char *str, char *path, char **env, t_command *cmd)
 {
 	if (errno)
-		printf("%s\n", strerror(errno));
+	{
+		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd("\n", 2);
+	}
 	else
 		launch_exe(str, path, env, cmd);
 }

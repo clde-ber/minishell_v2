@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander_utils11.c                                 :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:36:52 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/16 11:39:32 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 08:46:14 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ char	*write_error(char *trim, char *trim2, int quotes, t_command *cmd)
 		str = ft_strtrim(trim, "\'");
 	else
 		str = ft_strdup(trim);
-	write(1, "bash: unset: '", 15);
+	ft_putstr_fd("bash: unset: '", 2);
 	if (quotes == 0)
-		write(1, str, ft_strlen(str));
+		ft_putstr_fd(str, 2);
 	else
-		write(1, trim, ft_strlen(trim));
-	write(1, "': not a valid identifier\n", 26);
+		ft_putstr_fd(trim, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
 	cmd->cmd_rv = 1;
 	free_string(trim);
 	free_string(trim2);

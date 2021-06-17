@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 13:31:38 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/16 11:13:43 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 08:59:18 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,15 +97,15 @@ void	write_error_shell(t_command *cmd, char **res)
 {
 	if (ft_strcmp(cmd->path, "") == 0)
 	{
-		ft_putstr_fd("bash: ", 1);
-		ft_putstr_fd(res[0], 1);
-		ft_putstr_fd(": No such file or directory\n", 1);
+		ft_putstr_fd("bash: ", 2);
+		ft_putstr_fd(res[0], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
 	}
 	else
 	{
-		ft_putstr_fd("bash: ", 1);
-		ft_putstr_fd(res[0], 1);
-		ft_putstr_fd(": Command not found\n", 1);
+		ft_putstr_fd("bash: ", 2);
+		ft_putstr_fd(res[0], 2);
+		ft_putstr_fd(": Command not found\n", 2);
 	}
 }
 
