@@ -6,39 +6,11 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 09:15:27 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 11:40:51 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	**divide_pipe(t_fd *f)
-{
-	int		m;
-	int		i;
-	char	**tabl;
-
-	i = 0;
-	m = count_tabs(f->res) - chrtabtab(f->res, "|");
-	f->save_pipe = malloc(sizeof(char *) * (m + 2));
-	tabl = malloc(sizeof(char *) * (chrtabtab(f->res, "|") + 2));
-	if (!(tabl) || !(f->save_pipe))
-		return (NULL);
-	while (i < chrtabtab(f->res, "|"))
-	{
-		tabl[i] = ft_strdup(f->res[i]);
-		i++;
-	}
-	tabl[i] = NULL;
-	i = 0;
-	while (f->res[chrtabtab(f->res, "|") + i + 1])
-	{
-		f->save_pipe[i] = ft_strdup(f->res[chrtabtab(f->res, "|") + i + 1]);
-		i++;
-	}
-	f->save_pipe[i] = NULL;
-	return (tabl);
-}
 
 int	go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 {
@@ -70,6 +42,7 @@ int	tabl_is_null(int *j, char **tabl, t_command *cmd)
 	if (tabl[0] == NULL)
 	{
 		cmd->cmd_rv = 0;
+		free_string(tabl);
 		return (1);
 	}
 	while (tabl[*j])
