@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 16:10:59 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/18 08:39:47 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,14 @@ int	go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 	{
 		if (ft_strcmp(tabl[0], "echo") == 0)
 			ft_echo(tabl);
-		if (ft_strcmp(tabl[0], "export") == 0 && tabl[1])
+		if (ft_strcmp(tabl[0], "export") == 0 && ((tabl[1] && cmd->res[1]) \
+		|| (!tabl[1] && cmd->res[1] && ft_strchr(cmd->res[1], '='))))
 		{
 			check_doublons_cl(tabl, NULL, NULL, 0);
 			set_env(tabl, var_env, cmd, j);
 			reset_cmd_path(var_env, cmd);
 		}
-		else if (ft_strcmp(tabl[0], "export") == 0 && cmd->cmd_rv != 1)
+		else if (ft_strcmp(tabl[0], "export") == 0)
 			print_sorted_env(var_env, cmd);
 		if (ft_strcmp(tabl[0], "env") == 0)
 			print_env(var_env, cmd);
@@ -78,7 +79,7 @@ int	go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	if (tabl[0][0] == 'e' && ft_strcmp(tabl[0], "$?"))
 		go_e(tabl, var_env, cmd, j);
 	else if (ft_strcmp(tabl[0], "pwd") == 0 && ft_strcmp(tabl[0], "$?"))
-		ft_pwd(cmd);
+		ft_pwd(cmd, var_env);
 	else if (ft_strcmp(tabl[0], "cd") == 0 && tabl[1] && ft_strcmp(tabl[1], "") \
 	&& ft_strcmp(tabl[0], "$?"))
 		ft_cd(tabl, var_env, cmd);

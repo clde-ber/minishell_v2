@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:26:09 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/18 08:07:08 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	init_structs(t_command *cmd)
 	cmd->start = 0;
 	cmd->ret = 0;
 	cmd->bol = 0;
+	cmd->res = NULL;
 }
 
 void	free_cd(char *path, char *buf, char *old_pwd, char *ret)

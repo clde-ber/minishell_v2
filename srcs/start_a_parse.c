@@ -30,6 +30,7 @@ int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 	else
 	{	
 		res = ft_split(str, "\t\n\r\v\f ");
+		cmd->res = res;
 		// int i;
 		// i = 0;
 		// while (res[i])

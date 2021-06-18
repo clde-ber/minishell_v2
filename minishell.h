@@ -73,6 +73,7 @@ typedef struct s_command
 	int			start;
 	int			ret;
 	int			bol;
+	char		**res;
 }				t_command;
 
 
@@ -327,7 +328,7 @@ void	set_pwd_env(char *path, char *buf, t_list *var_env);
 void	write_cd_option_error(char *res, t_command *cmd, char **str,
 t_list *var_env);
 void	write_cd_minus_option(char **str, t_list *var_env);
-void	ft_pwd(t_command *cmd);
+void	ft_pwd(t_command *cmd, t_list *var_env);
 
 /*
 **prep_line
@@ -400,8 +401,11 @@ int	command_found(char **tabl, char **env, char **p_bin);
 /*
 **exit
 */
-int     ft_isdigit(int c);
-void    ft_exit(char **res, t_command *cmd);
+int	ft_isdigit(int c);
+void	exit_error_no_nb(char **res, t_command *cmd);
+void	exit_too_many_args(t_command *cmd);
+void	exit_code(char **res, t_command *cmd);
+void	ft_exit(char **res, t_command *cmd);
 
 /*
 **termcap
