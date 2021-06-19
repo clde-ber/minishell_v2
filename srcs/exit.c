@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 06:40:46 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/18 08:20:38 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/19 07:52:56 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	exit_code(char **res, t_command *cmd)
 	{
 		cmd->cmd_rv = ft_atoi(res[1]);
 		if (cmd->cmd_rv < 0)
-			cmd->cmd_rv = 256 - cmd->cmd_rv;
+			cmd->cmd_rv = 256 + cmd->cmd_rv;
 	}
 	else
 	{

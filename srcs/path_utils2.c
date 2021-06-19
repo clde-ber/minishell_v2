@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/28 15:00:41 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/18 08:29:37 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/19 06:59:58 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	set_root_path(char **buf, char **res)
 void	cd_failure(char **res, t_command *cmd, char *old_pwd)
 {
 	chdir(old_pwd);
-	ft_putstr_fd("bash : cd : ", 2);
+	ft_putstr_fd("bash: cd: ", 2);
 	ft_putstr_fd(res[1], 2);
 	ft_putstr_fd(": No such file or directory\n", 2);
 	cmd->cmd_rv = 1;
