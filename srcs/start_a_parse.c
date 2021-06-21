@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-t_sig g_sig;
+t_sig	g_sig;
 
 void	restore_fds(t_fd *f)
 {
@@ -17,12 +17,12 @@ void	init_fds(t_fd *f)
 	f->save_pipe = NULL;
 }
 
-int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
+int	dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 {
-	char **res;
-	char **parsed_res;
-	int num;
-	t_fd f[1];
+	char	**res;
+	char	**parsed_res;
+	int		num;
+	t_fd	f[1];
 
 	init_fds(f);
 	if (ft_is_empty_string(str))
@@ -30,13 +30,6 @@ int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 	else
 	{	
 		res = ft_split(str, "\t\n\r\v\f ");
-		// int i;
-		// i = 0;
-		// while (res[i])
-		// {
-		// 	printf("%s\n", res[i]);
-		// 	i++;
-		// }
 		f->first_res = res;
 		f->res = parse_res(res, var_env, cmd);
 		num = redir_and_send(f, var_env, cmd, env);
@@ -46,25 +39,25 @@ int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 	}
 }
 
-int ft_is_fail_char(char *str)
+int	ft_is_fail_char(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] != '>' && str[i] != '<' && str[i] != '|' && str[i] != ' ' &&
-		str[i] != ';')
+		if (str[i] != '>' && str[i] != '<' && str[i] != '|' && str[i] != ' ' \
+			&& str[i] != ';')
 			return (0);
 		i++;
 	}
 	return (i);
 }
 
-void main_loop(char *buf, char **env, t_list *var_env, t_command *cmd)
+void	main_loop(char *buf, char **env, t_list *var_env, t_command *cmd)
 {
-	char *command;
-	char *buf2;
+	char	*command;
+	char	*buf2;
 
 	if (buf == NULL)
 	{
@@ -96,7 +89,7 @@ void main_loop(char *buf, char **env, t_list *var_env, t_command *cmd)
 	free_string(command);
 }
 
-void finish_line(t_command *cmd, t_term *term,t_list *var_env)
+void	finish_line(t_command *cmd, t_term *term, t_list *var_env)
 {
 	free_tabtab(term->done);
 	ft_lstdel(var_env);
@@ -104,13 +97,13 @@ void finish_line(t_command *cmd, t_term *term,t_list *var_env)
 	free(cmd->path);
 }
 
-int main(int ac, char **av, char **env)
+int	main(int ac, char **av, char **env)
 {
-	char *line;
-	t_list *var_env;
-	t_command cmd[1];
-	t_term term[1];
-	int ret;
+	char		*line;
+	t_list		*var_env;
+	t_command	cmd[1];
+	t_term		term[1];
+	int			ret;
 
 	line = NULL;
 	ret = 0;

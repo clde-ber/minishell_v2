@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 19:01:15 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/20 16:23:09 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ char	**get_redir_ready(char **res)
 	j = 0;
 	if (count_tabs(res) == 2)
 		return (NULL);
-	if (!(tabl = malloc(sizeof(char *) * (count_tabs(res) - 1))))
+	tabl = malloc(sizeof(char *) * (count_tabs(res) - 1));
+	if (!tabl)
 		return (NULL);
 	while (res[j] && ft_strcmp(res[j], "<") != 0 && ft_strcmp(res[j], ">") != 0
 		&& ft_strcmp(res[j], ">>") != 0)

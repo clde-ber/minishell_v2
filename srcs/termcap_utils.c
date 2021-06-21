@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   termcap_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:28:09 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 17:04:36 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,16 @@
 
 char	*handle_delete(char *current, t_term *term)
 {
-	char	*buf;
-
 	if (current == NULL || ft_strlen(current) == 0)
 		;
 	else
 	{
 		tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2),
-			term->y - 1), 1, ft_putchar);
+				term->y - 1), 1, ft_putchar);
 		write(1, " ", 1);
 		tputs(tgoto(tgetstr("cm", NULL), (term->x + ft_strlen(current) - 2),
-			term->y - 1), 1, ft_putchar);
+				term->y - 1), 1, ft_putchar);
 		current[ft_strlen(current) - 1] = '\0';
-		// buf = ft_strdup(current);
-		// free(current);
-		// current = ft_strdup(buf);
-		// free(buf);
 	}
 	return (current);
 }

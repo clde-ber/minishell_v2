@@ -346,7 +346,6 @@ int		chrtabtab(char **res, char *str);
 char	**divide_pipe(t_fd *f);
 int		go_e(char **tabl, t_list *var_env, t_command *cmd, int j);
 int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env);
-int		go_pipe(char **res, t_fd *f, t_list *var_env, t_command *cmd, char **env);
 int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env);
 
 /*
@@ -365,6 +364,8 @@ char	**failed_fd(t_fd *f, char **res);
 int		check_valid_res_bis(char **str);
 int		check_valid_res(char **str);
 char	**divide_pipe(t_fd *f);
+int	go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd,
+char **env);
 
 /*
 **echo

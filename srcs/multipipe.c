@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   multipipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/20 16:40:15 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int		get_k(int k, char **res, int i, int j)
+int	get_k(int k, char **res, int i, int j)
 {
 	if (count_pipes(res) == i)
 		k = count_tabs(res);
@@ -40,7 +40,8 @@ char	**middle_pipe(char **res, int i)
 		j++;
 	}
 	k = get_k(k, res, i, j);
-	if (!(tabl = malloc(sizeof(char *) * ((k - j) + 1))))
+	tabl = malloc(sizeof(char *) * ((k - j) + 1));
+	if (!tabl)
 		return (NULL);
 	i = 0;
 	while (i < ((k - j)))
@@ -64,10 +65,10 @@ void	print_tabtab(char **res)
 	}
 }
 
-int		handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd,
+int	handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd,
 char **env)
 {
-	t_mp mp[1];
+	t_mp	mp[1];
 
 	mp->count = 0;
 	mp->fdd = 0;
@@ -75,7 +76,8 @@ char **env)
 	while (mp->count < count_pipes(f->res) + 1)
 	{
 		pipe(mp->fd);
-		if ((mp->pid = fork()) == -1)
+		mp->pid = fork();
+		if (mp->pid == -1)
 			exit(1);
 		else if (mp->pid == 0)
 		{
@@ -84,7 +86,7 @@ char **env)
 				dup2(mp->fd[1], 1);
 			close(mp->fd[0]);
 			go_instruction(end_redir(middle_pipe(f->res, mp->count), f),
-			var_env, cmd, env);
+				var_env, cmd, env);
 			exit(mp->status);
 		}
 		waitpid(-1, &mp->status, 0);

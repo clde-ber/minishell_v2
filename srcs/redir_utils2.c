@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:17:22 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/20 16:32:04 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ int	check_valid_res_bis(char **str)
 	i = 0;
 	while (str[i])
 	{
-		if (ft_strcmp(str[i], "|") == 0 || ft_strcmp(str[i], "<") == 0 ||
-		ft_strcmp(str[i], ">") == 0 || ft_strcmp(str[i], ">>") == 0)
+		if (ft_strcmp(str[i], "|") == 0 || ft_strcmp(str[i], "<") == 0 || \
+			ft_strcmp(str[i], ">") == 0 || ft_strcmp(str[i], ">>") == 0)
 		{
 			if (!str[i + 1])
 				return (1);
 			else if (ft_strcmp(str[i + 1], "|") == 0 || ft_strcmp(str[i + 1],
-			"<") == 0 || ft_strcmp(str[i + 1], ">") == 0 || ft_strcmp(str[i + 1]
-			, ">>") == 0)
+					"<") == 0 || ft_strcmp(str[i + 1], ">") == 0 || ft_strcmp(\
+					str[i + 1], ">>") == 0)
 				return (1);
 		}
 		i++;
@@ -73,9 +73,11 @@ char	**divide_pipe(t_fd *f)
 
 	i = 0;
 	m = count_tabs(f->res) - chrtabtab(f->res, "|");
-	if (!(f->save_pipe = malloc(sizeof(char *) * (m + 2))))
+	f->save_pipe = malloc(sizeof(char *) * (m + 2));
+	if (!f->save_pipe)
 		return (NULL);
-	if (!(tabl = malloc(sizeof(char *) * (chrtabtab(f->res, "|") + 2))))
+	tabl = malloc(sizeof(char *) * (chrtabtab(f->res, "|") + 2));
+	if (!tabl)
 		return (NULL);
 	while (i < chrtabtab(f->res, "|"))
 	{
@@ -91,4 +93,34 @@ char	**divide_pipe(t_fd *f)
 	}
 	f->save_pipe[i] = NULL;
 	return (tabl);
+}
+
+int	go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char **env)
+{
+	t_mp	mp[1];
+
+	if (f->save_pipe[0] == NULL)
+	{
+		go_instruction(end_redir(one, f), var_env, cmd, env);
+		free_tabtab(f->save_pipe);
+		return (2);
+	}
+	pipe(mp->fd);
+	mp->pid = fork();
+	if (mp->pid == -1)
+		exit(1);
+	else if (mp->pid == 0)
+	{
+		close(mp->fd[0]);
+		dup2(mp->fd[1], 1);
+		go_instruction(end_redir(one, f), var_env, cmd, env);
+		close(mp->fd[1]);
+		exit(mp->status);
+	}
+	waitpid(-1, &mp->status, 0);
+	close(mp->fd[1]);
+	dup2(mp->fd[0], 0);
+	go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);
+	close(mp->fd[0]);
+	free_tabtab(one);
 }

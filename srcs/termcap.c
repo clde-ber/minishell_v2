@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   termcap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 15:13:21 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 16:03:27 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,21 @@
 
 char	**save_input(char *str, char **save)
 {
-	int		i;
 	char	**buf;
 	int		j;
 
 	j = 0;
 	if (save == NULL)
 	{
-		if (!(save = malloc(sizeof(char *) * 2)))
+		save = malloc(sizeof(char *) * 2);
+		if (!save)
 			return (NULL);
 		save[0] = ft_strdup(str);
 		save[1] = NULL;
 		return (save);
 	}
-	i = count_tabs(save);
-	if (!(buf = malloc(sizeof(char *) * (i + 2))))
+	buf = malloc(sizeof(char *) * (count_tabs(save) + 2));
+	if (!buf)
 		return (NULL);
 	buf[j] = ft_strdup(str);
 	while (save[j])

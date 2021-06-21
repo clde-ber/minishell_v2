@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 16:46:37 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,43 +97,13 @@ int	go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	return (0);
 }
 
-int		go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd,
-char **env)
-{
-	t_mp mp[1];
-
-	if (f->save_pipe[0] == NULL)
-	{
-		go_instruction(end_redir(one, f), var_env, cmd, env);
-		free_tabtab(f->save_pipe);
-		return (2);
-	}
-	pipe(mp->fd);
-	if ((mp->pid = fork()) == -1)
-		exit(1);
-	else if (mp->pid == 0)
-	{
-		close(mp->fd[0]);
-		dup2(mp->fd[1], 1);
-		go_instruction(end_redir(one, f), var_env, cmd, env);
-		close(mp->fd[1]);
-		exit(mp->status);
-	}
-	waitpid(-1, &mp->status, 0);
-	close(mp->fd[1]);
-	dup2(mp->fd[0], 0);
-	go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);
-	close(mp->fd[0]);
-	free_tabtab(one);
-}
-
-int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)
+int	redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
 	g_sig.boolean = 1;
-	if ((chrtabtab(f->res, "|") == -1 || chrtabtab(f->first_res, "\\|") != -1) && \
-	(chrtabtab(f->res, ">") == -1 || chrtabtab(f->first_res, "\\>") != -1) && \
-	(chrtabtab(f->res, "<") == -1 || chrtabtab(f->first_res, "\\<") != -1) && \
-	(chrtabtab(f->res, ">>") == -1 || chrtabtab(f->first_res, "\\>>") != -1))
+	if ((chrtabtab(f->res, "|") == -1 || chrtabtab(f->first_res, "\\|") != -1) \
+	&& (chrtabtab(f->res, ">") == -1 || chrtabtab(f->first_res, "\\>") != -1) \
+	&& (chrtabtab(f->res, "<") == -1 || chrtabtab(f->first_res, "\\<") != -1) \
+	&& (chrtabtab(f->res, ">>") == -1 || chrtabtab(f->first_res, "\\>>") != -1))
 		return (go_instruction(copy_tabtab(f->res), var_env, cmd, env));
 	else if (check_valid_res(f->res))
 	{
@@ -141,7 +111,8 @@ int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 		ft_putstr_fd("bash: synthax error near unexpected token 'newline'\n", 2);
 		return (2);
 	}
-	else if (chrtabtab(f->res, "|") == -1 || chrtabtab(f->first_res, "\\|") != -1)
+	else if (chrtabtab(f->res, "|") == -1 || chrtabtab(f->first_res, "\\|") \
+	!= -1)
 		return (go_instruction(end_redir(f->res, f), var_env, cmd, env));
 	else
 	{

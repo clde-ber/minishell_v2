@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prep_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/19 11:42:24 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,11 @@ char	*go_line(t_term *term)
 	while (read(0, buf, 1) != -1)
 	{
 		buf[1] = '\0';
+		if ((int)buf[0] == 12)
+		{
+			tputs(tgoto(tgetstr("cl", NULL), 0, 0), 1, ft_putchar);
+			return (NULL);
+		}
 		if (buf[0] == '\n' || (int)buf[0] == 13)
 			return (end_line(current, term));
 		else if ((int)buf[0] == 27)
@@ -68,7 +73,6 @@ char	*go_line(t_term *term)
 		}
 		else if ((int)buf[0] == 127)
 			current = handle_delete(current, term);
-			// handle_delete(current, term);
 		else
 			current = get_char(current, term, buf);
 		buf[0] = '\0';

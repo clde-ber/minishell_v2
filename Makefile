@@ -20,7 +20,6 @@ SRCS =	./srcs/debug_to_delete.c\
 	./srcs/expander.c\
 	./srcs/export_utils.c\
 	./srcs/export.c\
-	./srcs/gnl.c\
 	./srcs/gnl_utils.c\
 	./srcs/launch_exe_utils.c\
 	./srcs/launch_exe_utils2.c\

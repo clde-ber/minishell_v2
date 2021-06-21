@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   gnl_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:38 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/20 16:45:54 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int		find_n(char *buf, size_t size)
+int	find_n(char *buf, size_t size)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (i < size && buf[i])
@@ -36,7 +36,8 @@ char	*join_a_free(char *s1, char *s2)
 	j = -1;
 	if (!s1 && !s2)
 		return (0);
-	if (!(ptr = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1))))
+	ptr = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!ptr)
 		return (0);
 	while (s1[++i])
 		ptr[i] = s1[i];

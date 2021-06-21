@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   termcap_arrow.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 19:16:23 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/18 20:51:33 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int		handle_j(t_term *term)
+int	handle_j(t_term *term)
 {
-	int j;
+	int	j;
 
 	if (term->where == 0)
 		j = ft_strlen(term->last);
@@ -22,10 +22,10 @@ int		handle_j(t_term *term)
 		j = ft_strlen(term->done[term->where - 1]);
 	if (j + 18 > term->col)
 		tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 2), 1,
-		ft_putchar);
+			ft_putchar);
 	else
 		tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 1), 1,
-		ft_putchar);
+			ft_putchar);
 	return (j);
 }
 
@@ -40,7 +40,7 @@ char	*handle_arrow_up(t_term *term, char *end)
 	if (term->where == term->len - 1)
 		return (end);
 	if (term->where != -1 && end != NULL && ft_strcmp(end,
-	term->done[term->where]) != 0)
+			term->done[term->where]) != 0)
 		term->done = replace_tabtab(term->done, term->where, end);
 	term->where++;
 	j = handle_j(term);
@@ -51,7 +51,7 @@ char	*handle_arrow_up(t_term *term, char *end)
 	}
 	get_cursor_space(term);
 	term->x = k + 1;
-		tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y), 1, ft_putchar);
+	tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 1), 1, ft_putchar);
 	ft_putstr_fd(term->done[term->where], 1);
 	if (end != NULL)
 		free(end);
@@ -63,7 +63,7 @@ char	*handle_end_up(t_term *term, char *end, int k)
 {
 	get_cursor_space(term);
 	term->x = k;
-	tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y), 1, ft_putchar);
+	tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 1), 1, ft_putchar);
 	if (term->where == -1 && term->mtline == 0)
 	{
 		free(end);
@@ -96,7 +96,7 @@ char	*handle_arrow_down(t_term *term, char *end)
 	if (term->where == -1)
 		return (end);
 	if (term->where != -1 && end != NULL && ft_strcmp(end,
-	term->done[term->where]) != 0)
+			term->done[term->where]) != 0)
 		term->done = replace_tabtab(term->done, term->where, end);
 	term->where--;
 	if (term->where == -1)
@@ -104,9 +104,11 @@ char	*handle_arrow_down(t_term *term, char *end)
 	else
 		j = ft_strlen(term->done[term->where + 1]);
 	if (j + 18 > term->col)
-		tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 2), 1, ft_putchar);
+		tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 2), 1,
+			ft_putchar);
 	else
-		tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 1), 1, ft_putchar);
+		tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 1), 1,
+			ft_putchar);
 	while (i <= j)
 	{
 		write(1, " ", 1);
@@ -124,6 +126,7 @@ char	*handle_arrow(t_term *term, char *current)
 	{
 		read(0, buf, 1);
 		if ((int)buf[0] != 66 && (int)buf[0] != 65)
+			;
 		if (term->len == 0)
 			return (current);
 		if (current != NULL && term->where == -1)
