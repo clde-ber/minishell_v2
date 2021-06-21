@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 15:40:41 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	exit_status(int status)
 
 int	test_shell_bin(char **tabl, char **p_bin, char **res, char **env)
 {
-	char	*str;
 	int		count;
 	int		x;
 	int		i;
@@ -39,7 +38,6 @@ int	test_shell_bin(char **tabl, char **p_bin, char **res, char **env)
 	i = -1;
 	x = 0;
 	count = 0;
-	str = NULL;
 	while (p_bin[++i])
 	{
 		x = 0;
@@ -52,7 +50,7 @@ int	test_shell_bin(char **tabl, char **p_bin, char **res, char **env)
 			count++;
 	}
 	if (i == count)
-		return (command_not_found(tabl, env, p_bin, res));
+		return (command_not_found(tabl, env, p_bin));
 	return (command_found(tabl, env, p_bin));
 }
 

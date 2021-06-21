@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/29 06:56:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 16:05:53 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/21 10:57:38 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	write_cd_option_error(char *res, t_command *cmd, char **str,
 t_list *var_env)
 {
 	*str = search_env_value("OLDPWD", var_env);
-	ft_putstr_fd("bash : cd : ", 2);
+	ft_putstr_fd("bash: cd: ", 2);
 	ft_putstr_fd(res, 2);
 	ft_putstr_fd(": invalid option\ncd: usage: cd [-L] [-P] [-e] [-@] \
 [dir]\n", 2);
@@ -67,17 +67,25 @@ void	write_cd_minus_option(char **str, t_list *var_env)
 	ft_putstr_fd("\n", 2);
 }
 
-void	ft_pwd(char **res, t_command *cmd)
+void	ft_pwd(t_command *cmd, t_list *var_env)
 {
 	char	*path;
 	char	*buf;
-	int		i;
+	char	*old_pwd;
 
-	i = 0;
 	path = malloc(sizeof(char) * 1000);
 	if (!(path))
 		return ;
-	getcwd(path, 1000);
+	if (getcwd(path, 1000) == NULL)
+	{
+		free_string(path);
+		path = search_env_value("OLDPWD", var_env);
+		old_pwd = replace_by_env_value(ft_strdup(path), var_env, cmd);
+		chdir(old_pwd);
+		set_pwd_env(old_pwd, old_pwd, var_env);
+		free_string(old_pwd);
+		
+	}
 	buf = ft_strjoin(path, "\n");
 	free(path);
 	ft_putstr_fd(buf, 1);

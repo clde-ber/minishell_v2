@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 18:59:08 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 15:53:12 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	init_4_values(int *s_q, int *d_q, int *s_q2, int *d_q2)
 {
-	s_q = 0;
-	d_q = 0;
-	s_q2 = 0;
-	d_q2 = 0;
+	*s_q = 0;
+	*d_q = 0;
+	*s_q2 = 0;
+	*d_q2 = 0;
 }
 
 int	is_in_string(char *line, int index)
@@ -37,7 +37,7 @@ int	is_in_string(char *line, int index)
 		if (line[i] == '\'' && (i == 0 || (i && line[i - 1] != '\\')))
 			sq++;
 	}
-	while (++i < ft_strlen(line))
+	while (++i < (int)ft_strlen(line))
 	{
 		if (line[i] == '\"' && (i == 0 || (i && line[i - 1] != '\\')))
 			dq2++;
@@ -52,9 +52,6 @@ int	is_in_string(char *line, int index)
 char	*cut_after_punct(char *dest, char *line, char *command)
 {
 	int		i;
-	char	*buf;
-	int		j;
-	char	*tmp;
 
 	i = ft_strlen(command);
 	dest = ft_substr(line, i + 1, ft_strlen(line) - i);

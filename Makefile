@@ -1,5 +1,4 @@
-SRCS =	./srcs/debug_to_delete.c\
-	./srcs/echo.c\
+SRCS =	./srcs/echo.c\
 	./srcs/env_utils.c\
 	./srcs/env_utils2.c\
 	./srcs/env_utils3.c\
@@ -34,6 +33,7 @@ SRCS =	./srcs/debug_to_delete.c\
 	./srcs/libft_utils4.c\
 	./srcs/libft_utils5.c\
 	./srcs/libft_utils6.c\
+	./srcs/libft_utils7.c\
 	./srcs/minishell_utils.c\
 	./srcs/minishell_utils2.c\
 	./srcs/multipipe.c\
@@ -63,7 +63,7 @@ FS			= a.out.dSYM minishell.dSYM valgrind_log
 CC			= gcc
 RM			= rm -f
 RM_DIR		= rm -rf
-CFLAGS		= -g3 -fsanitize=address #-Wall -Wextra -Werror
+CFLAGS		= -g3 -fsanitize=address -Wall -Wextra -Werror
 DEP			= -lncurses
 $(NAME):		$(OBJ)
 #add CFLAGS

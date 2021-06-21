@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 15:46:21 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,6 @@
 
 char	*expander(char *res, t_list *var_env, char **args, t_command *cmd)
 {
-	char	*trim;
-	char	*str;
-	int		quotes;
-
-	quotes = 0;
-	trim = NULL;
-	str = NULL;
 	cmd->index = 0;
 	if (is_handled_cmd(args[0]) == 0 || ft_strcmp(args[0], "echo") == 0
 		|| ft_strcmp(args[0], "pwd") == 0 || ft_strcmp(args[0], "cd") == 0)
@@ -57,7 +50,7 @@ t_command *cmd)
 	res = malloc(sizeof(char) * (ft_strlen(dest) + 1));
 	if (!(res))
 		return (0);
-	while (i < ft_strlen(dest))
+	while (i < (int)ft_strlen(dest))
 	{
 		if (condition_one(i, dest, str, env))
 		{
@@ -66,7 +59,7 @@ t_command *cmd)
 		}
 		else if (condition_two(i, dest))
 			i++;
-		else if (i < ft_strlen(dest))
+		else if (i < (int)ft_strlen(dest))
 			fill_string(&i, &j, dest, &res);
 	}
 	res[j] = '\0';
@@ -95,14 +88,15 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 	char	*str;
 
 	init_vars_parse_res(&i, &j, &str);
-	parsed_res = create_parsed_res(res, cmd);
+	parsed_res = create_parsed_res(res);
 	while (res[++i] && !last_command_rv(res, parsed_res))
 	{
 		if (ft_strcmp(res[i], "$?") == 0)
 			parsed_res[j] = rv_itoa(cmd->cmd_rv);
 		else if ((strings_to_join(res, i)) > 0 && ft_strcmp(res[i], "$?"))
 		{
-			str = ft_strjoin(res[i], res[++i]);
+			str = ft_strjoin(res[i], res[i + 1]);
+			i++;
 			parsed_res[j] = expander(str, var_env, res, cmd);
 			free_string(str);
 		}

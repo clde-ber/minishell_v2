@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:20:43 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 18:46:58 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/21 10:58:43 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ DIR **dir)
 	errno = 0;
 }
 
-void	launch_exe_error(char *str, char *path, char **env, t_command *cmd)
+void	launch_exe_error(char *path, char **env, t_command *cmd)
 {
 	if (errno)
 	{
@@ -41,5 +41,5 @@ void	launch_exe_error(char *str, char *path, char **env, t_command *cmd)
 		ft_putstr_fd("\n", 2);
 	}
 	else
-		launch_exe(str, path, env, cmd);
+		launch_exe(path, env, cmd);
 }

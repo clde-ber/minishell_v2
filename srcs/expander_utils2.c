@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:32:07 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 17:19:22 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/21 10:52:21 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,22 @@ void	init_vars_get_env_v(int *i, char **ret)
 
 int	condition_one(int i, char *dest, char *str, char *env)
 {
-	if (i < ft_strlen(dest) && (((i && dest[i - 1] != '\\') || i == 0) && \
+	if (i < (int)ft_strlen(dest) && (((i && dest[i - 1] != '\\') || i == 0) && \
 		((((str[0] == '$' && (!(ft_strchr(env, '\"')))) || str[0] != '$') && \
 		(dest[i] == '\"' && dest[ft_strlen(dest) - 1 - i] != '\"')) || \
 		(((str[0] == '$' && (!(ft_strchr(env, '\'')))) || str[0] != '$') && \
 		(dest[i] == '\'' && dest[ft_strlen(dest) - 1 - i] != '\'')))))
+		return (1);
+	if (i < (int)ft_strlen(dest) && (((i && dest[i - 1] != '\\' && i != \
+		(int)ft_strlen(dest) - 1)) && ((dest[i] == '\'' && dest[i - 1] != '\\') \
+		|| (dest[i] == '\"' && dest[i - 1] != '\\'))))
 		return (1);
 	return (0);
 }
 
 int	condition_two(int i, char *dest)
 {
-	if (i < ft_strlen(dest) && dest[i] == '\\' && (dest[i + 1] == '\\' \
+	if (i < (int)ft_strlen(dest) && dest[i] == '\\' && (dest[i + 1] == '\\' \
 		|| dest[i + 1] == '|' || dest[i + 1] == ';' || dest[i + 1] == '>' \
 		|| dest[i + 1] == '<' || dest[i + 1] == '\'' || dest[i + 1] == '\"' \
 		|| ft_isspace(dest[i + 1])))

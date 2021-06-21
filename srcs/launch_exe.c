@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/17 15:48:54 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	free_2_tabs(char **argv, char **envp)
 	free_tabtab(argv);
 }
 
-int	launch_exe(char *exe, char *path, char **env, t_command *cmd)
+int	launch_exe(char *path, char **env, t_command *cmd)
 {
 	pid_t	pid;
 	int		ret;
@@ -44,7 +44,7 @@ int	launch_exe(char *exe, char *path, char **env, t_command *cmd)
 	char	**envp;
 
 	init_vars_launch_exe(&pid, &ret, &status);
-	argv = arg_tab(exe, path, env);
+	argv = arg_tab(path, env);
 	envp = env_tab(path);
 	pid = fork();
 	if (pid == 0)
@@ -81,13 +81,13 @@ void	find_exe(char *path, char **env, t_command *cmd)
 	{
 		if (ft_strcmp(st_dir->d_name, str) == 0)
 		{
-			launch_exe(st_dir->d_name, path, env, cmd);
+			launch_exe(path, env, cmd);
 			break ;
 		}
 		st_dir = readdir(dir);
 	}
 	if (!(st_dir))
-		launch_exe_error(str, path, env, cmd);
+		launch_exe_error(path, env, cmd);
 	closedir(dir);
 	ft_free_2_strings(path_mod, str);
 }

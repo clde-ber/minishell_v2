@@ -19,17 +19,25 @@ void	init_fds(t_fd *f)
 
 int	dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 {
-	char	**res;
-	char	**parsed_res;
-	int		num;
-	t_fd	f[1];
+	char **res;
+	int num;
+	t_fd f[1];
 
+	(void)num;
 	init_fds(f);
 	if (ft_is_empty_string(str))
 		return (0);
 	else
 	{	
 		res = ft_split(str, "\t\n\r\v\f ");
+		cmd->res = res;
+		// int i;
+		// i = 0;
+		// while (res[i])
+		// {
+		// 	printf("%s\n", res[i]);
+		// 	i++;
+		// }
 		f->first_res = res;
 		f->res = parse_res(res, var_env, cmd);
 		num = redir_and_send(f, var_env, cmd, env);
@@ -37,6 +45,7 @@ int	dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 		free_tabtab(res);
 		free_tabtab(f->res);
 	}
+	return (0);
 }
 
 int	ft_is_fail_char(char *str)
@@ -99,15 +108,16 @@ void	finish_line(t_command *cmd, t_term *term, t_list *var_env)
 
 int	main(int ac, char **av, char **env)
 {
-	char		*line;
-	t_list		*var_env;
-	t_command	cmd[1];
-	t_term		term[1];
-	int			ret;
+	(void)ac;
+	(void)av;
+	char *line;
+	t_list *var_env;
+	t_command cmd[1];
+	t_term term[1];
 
 	line = NULL;
-	ret = 0;
 	init_structs(cmd);
+	var_env = NULL;
 	var_env = set_new_env(env, var_env, cmd);
 	term->done = NULL;
 	g_sig.sig = 0;

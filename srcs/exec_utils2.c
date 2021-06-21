@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:14:05 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/19 16:12:57 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/21 10:52:03 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	init_2_vars(int *i, int *k)
 	*k = 0;
 }
 
-int	command_not_found(char **tabl, char **env, char **p_bin, char **res)
+int	command_not_found(char **tabl, char **env, char **p_bin)
 {
 	free(tabl[0]);
 	free_tabtab(env);

@@ -1,35 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*   libft_utils7.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/16 15:03:54 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:49:34 by clde-ber         ###   ########.fr       */
+/*   Created: 2021/06/17 16:21:07 by clde-ber          #+#    #+#             */
+/*   Updated: 2021/06/17 16:21:22 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	is_not_charset(char *s, int j, char *str, int i)
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 {
-	if (i < (int)ft_strlen((char *)s) && j < (int)count_malloc(s, str) && \
-		ft_ischarset(str, s[i]) == 0)
-		return (1);
-	return (0);
-}
-
-void	*ft_free(char **res, int j)
-{
-	int	i;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
-	while (i < j)
+	j = 0;
+	if (*needle == '\0')
+		return ((char *)haystack);
+	while (haystack[i] != '\0' && len > 0)
 	{
-		free(res[i]);
+		while (haystack[i] && haystack[i + j] == needle[j]
+			&& len > j)
+		{
+			if (needle[j + 1] == '\0')
+				return ((char *)&haystack[i]);
+			j++;
+		}
+		len--;
+		j = 0;
 		i++;
 	}
-	free(res);
 	return (NULL);
 }
