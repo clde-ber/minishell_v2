@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 19:16:23 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/18 20:51:33 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/21 13:34:15 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ char	*handle_arrow(t_term *term, char *current)
 	{
 		read(0, buf, 1);
 		if ((int)buf[0] != 66 && (int)buf[0] != 65)
-			;
+			return (current);
 		if (term->len == 0)
 			return (current);
 		if (current != NULL && term->where == -1)
