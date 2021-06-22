@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/21 10:58:14 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/21 15:53:45 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,19 @@ void	print_tabtab(char **res)
 	}
 }
 
+void	init_mp(t_mp *mp)
+{
+	mp->count = 0;
+	mp->fdd = 0;
+	mp->pid = 0;
+}
+
 int	handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd,
 char **env)
 {
 	t_mp	mp[1];
 
-	mp->count = 0;
-	mp->fdd = 0;
-	mp->pid = 0;
+	init_mp(mp);
 	while (mp->count < count_pipes(f->res) + 1)
 	{
 		pipe(mp->fd);

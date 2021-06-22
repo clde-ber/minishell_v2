@@ -363,8 +363,7 @@ char	**failed_fd(t_fd *f, char **res);
 int		check_valid_res_bis(char **str);
 int		check_valid_res(char **str);
 char	**divide_pipe(t_fd *f);
-int	go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd,
-char **env);
+int	go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env);
 
 /*
 **echo

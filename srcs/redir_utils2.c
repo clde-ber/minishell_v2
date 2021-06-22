@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:17:22 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/21 13:33:10 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/21 15:34:30 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,12 @@ int	check_valid_res(char **str)
 
 char	**divide_pipe(t_fd *f)
 {
-	int		m;
 	int		i;
 	char	**tabl;
 
 	i = 0;
-	m = count_tabs(f->res) - chrtabtab(f->res, "|");
-	f->save_pipe = malloc(sizeof(char *) * (m + 2));
+	f->save_pipe = malloc(sizeof(char *) * ((count_tabs(f->res) - \
+		chrtabtab(f->res, "|")) + 2));
 	if (!f->save_pipe)
 		return (NULL);
 	tabl = malloc(sizeof(char *) * (chrtabtab(f->res, "|") + 2));
@@ -95,10 +94,12 @@ char	**divide_pipe(t_fd *f)
 	return (tabl);
 }
 
-int	go_pipe(char **one, t_fd *f, t_list *var_env, t_command *cmd, char **env)
+int	go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
 	t_mp	mp[1];
+	char	**one;
 
+	one = divide_pipe(f);
 	if (f->save_pipe[0] == NULL)
 	{
 		go_instruction(end_redir(one, f), var_env, cmd, env);

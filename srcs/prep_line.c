@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/19 11:42:24 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/21 16:06:58 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,22 @@ char	*get_char(char *current, t_term *term, char *buf)
 	return (current);
 }
 
+char	*special_line(char *current, char *buf, t_term *term)
+{
+	if ((int)buf[0] == 12)
+	{
+		tputs(tgoto(tgetstr("cl", NULL), 0, 0), 1, ft_putchar);
+		ft_putstr_fd("***minishell*** > ", 1);
+		if (current)
+			ft_putstr_fd(current, 1);
+	}
+	else if ((int)buf[0] == 127)
+		current = handle_delete(current, term);
+	else
+		current = get_char(current, term, buf);
+	return (current);
+}
+
 char	*go_line(t_term *term)
 {
 	char	buf[2];
@@ -57,11 +73,6 @@ char	*go_line(t_term *term)
 	while (read(0, buf, 1) != -1)
 	{
 		buf[1] = '\0';
-		if ((int)buf[0] == 12)
-		{
-			tputs(tgoto(tgetstr("cl", NULL), 0, 0), 1, ft_putchar);
-			return (NULL);
-		}
 		if (buf[0] == '\n' || (int)buf[0] == 13)
 			return (end_line(current, term));
 		else if ((int)buf[0] == 27)
@@ -71,10 +82,8 @@ char	*go_line(t_term *term)
 			handle_ctrl_d(current, term);
 			exit(0);
 		}
-		else if ((int)buf[0] == 127)
-			current = handle_delete(current, term);
 		else
-			current = get_char(current, term, buf);
+			current = special_line(current, buf, term);
 		buf[0] = '\0';
 	}
 	return (NULL);

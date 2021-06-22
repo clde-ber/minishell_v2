@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils6.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 12:28:36 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 16:20:55 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/21 13:50:47 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	ft_putstr_nbr(int i, int fd)
 {
-	int j;;
-	char *buf;
+	int		j;
+	char	*buf;
 
 	j = 0;
 	buf = ft_itoa(i);
@@ -29,7 +29,7 @@ void	ft_putstr_nbr(int i, int fd)
 
 static char	*ft_attrib(int n, char *res, int i)
 {
-	int j;
+	int	j;
 
 	j = 0;
 	if (n == -2147483648)
@@ -50,7 +50,7 @@ static char	*ft_attrib(int n, char *res, int i)
 
 static int	ft_mallocsize(int n)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (n <= 0)
@@ -69,7 +69,8 @@ static char	*ft_int_min(void)
 	int		i;
 
 	i = 12;
-	if (!(res = malloc(sizeof(char) * i)))
+	res = malloc(sizeof(char) * i);
+	if (!res)
 		return (NULL);
 	res[0] = '-';
 	ft_attrib(-2147483648, res, i - 2);
@@ -78,7 +79,7 @@ static char	*ft_int_min(void)
 	return (res);
 }
 
-char		*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char	*res;
 	int		i;
@@ -91,7 +92,8 @@ char		*ft_itoa(int n)
 		return (res);
 	}
 	i = ft_mallocsize(n);
-	if (!(res = malloc(sizeof(char) * i)))
+	res = malloc(sizeof(char) * i);
+	if (!res)
 		return (NULL);
 	if (n < 0)
 		res[0] = '-';

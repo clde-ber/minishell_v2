@@ -6,20 +6,32 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 19:16:23 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/21 13:34:15 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/21 14:03:50 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	handle_j(t_term *term)
+int	handle_j(t_term *term, int k, int j)
 {
-	int	j;
-
-	if (term->where == 0)
-		j = ft_strlen(term->last);
+	if (k == 0)
+	{
+		if (term->where == 0)
+			j = ft_strlen(term->last);
+		else
+			j = ft_strlen(term->done[term->where - 1]);
+		if (j + 18 > term->col)
+			tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 2), 1,
+				ft_putchar);
+		else
+			tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 1), 1,
+				ft_putchar);
+		return (j);
+	}
+	if (term->where == -1)
+		j = ft_strlen(term->done[0]);
 	else
-		j = ft_strlen(term->done[term->where - 1]);
+		j = ft_strlen(term->done[term->where + 1]);
 	if (j + 18 > term->col)
 		tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 2), 1,
 			ft_putchar);
@@ -43,7 +55,7 @@ char	*handle_arrow_up(t_term *term, char *end)
 			term->done[term->where]) != 0)
 		term->done = replace_tabtab(term->done, term->where, end);
 	term->where++;
-	j = handle_j(term);
+	j = handle_j(term, 0, 0);
 	while (i <= j)
 	{
 		write(1, " ", 1);
@@ -55,8 +67,7 @@ char	*handle_arrow_up(t_term *term, char *end)
 	ft_putstr_fd(term->done[term->where], 1);
 	if (end != NULL)
 		free(end);
-	end = ft_strdup(term->done[term->where]);
-	return (end);
+	return (ft_strdup(term->done[term->where]));
 }
 
 char	*handle_end_up(t_term *term, char *end, int k)
@@ -99,16 +110,7 @@ char	*handle_arrow_down(t_term *term, char *end)
 			term->done[term->where]) != 0)
 		term->done = replace_tabtab(term->done, term->where, end);
 	term->where--;
-	if (term->where == -1)
-		j = ft_strlen(term->done[0]);
-	else
-		j = ft_strlen(term->done[term->where + 1]);
-	if (j + 18 > term->col)
-		tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 2), 1,
-			ft_putchar);
-	else
-		tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 1), 1,
-			ft_putchar);
+	j = handle_j(term, 1, 0);
 	while (i <= j)
 	{
 		write(1, " ", 1);
