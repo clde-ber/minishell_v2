@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:26 by user42            #+#    #+#             */
-/*   Updated: 2021/06/17 15:39:10 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/21 15:33:52 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ void	set_env(char **tabl, t_list *var_env, t_command *cmd, int j)
 
 	i = 0;
 	init_strings_set_env(&tmp_new, &tmp, &name);
-	tmp = check_doublons(0, j, tabl, var_env);
 	while (++i < j)
 	{
+		tmp = check_doublons(0, j, tabl, var_env);
 		if (ft_strchr(tabl[i], '='))
 		{
 			name = ft_get_name(tabl[i]);
@@ -101,7 +101,7 @@ void	set_env(char **tabl, t_list *var_env, t_command *cmd, int j)
 			free(name);
 		}
 		ft_lstiter(var_env, &ft_record, cmd);
-		tmp->prec = tmp;
+		var_env->prec = tmp;
 		tmp_new = tmp;
 	}
 }

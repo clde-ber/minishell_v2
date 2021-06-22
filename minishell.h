@@ -74,6 +74,7 @@ typedef struct s_command
 	int			ret;
 	int			bol;
 	char		**res;
+	char		**env;
 }				t_command;
 
 
@@ -284,6 +285,7 @@ char	*create_i_value(char *tab_k, char *i_value);
 char	*create_j_value(char *tab_l, char *j_value);
 void	add_to_env_l(char **tabl, char *j_name, int k, int l);
 void	add_to_env_k(char **tabl, char *i_name, int k, int l);
+void	set_i_a_j_name(char **i_name, char **j_name, char **split, char **split2);
 
 /*
 **env_utils4
@@ -377,8 +379,8 @@ void	ft_echo(char **res);
 */
 int	exit_status(int status);
 int	test_shell_bin(char **tabl, char **p_bin, char **res, char **env);
-int	exec_command(char **args, char **res, char *path, int j);
-int	set_args(char **res, char *path, t_command *cmd, int i);
+int	exec_command(char **args, char **res, t_command *cmd, int j);
+int	set_args(char **res, t_command *cmd, int i);
 
 /*
 **exec_utils
@@ -491,6 +493,7 @@ int	count_tabs(char **res);
 void	free_tabtab(char **res);
 void	init_structs(t_command *cmd);
 void	free_cd(char *path, char *buf, char *old_pwd, char *ret);
+char	**put_list_in_tab(t_list *var_env);
 
 /*
 **gnl
