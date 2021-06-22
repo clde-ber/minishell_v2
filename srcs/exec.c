@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/06/17 15:40:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/21 14:06:56 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	test_shell_bin(char **tabl, char **p_bin, char **res, char **env)
 	return (command_found(tabl, env, p_bin));
 }
 
-int	exec_command(char **args, char **res, char *path, int j)
+int	exec_command(char **args, char **res, t_command *cmd, int j)
 {
 	pid_t	pid;
 	int		status;
@@ -65,9 +65,10 @@ int	exec_command(char **args, char **res, char *path, int j)
 	pid = 0;
 	errno = 0;
 	status = 0;
-	tabl = arguments(res, j, args, path);
-	p_bin = parse_path(path, ':');
-	env = environment(path);
+	tabl = arguments(res, j, args, cmd->path);
+	p_bin = parse_path(cmd->path, ':');
+//	env = environment(path);
+	env = cmd->env;
 	pid = fork();
 	if (pid == 0)
 	{
@@ -77,12 +78,12 @@ int	exec_command(char **args, char **res, char *path, int j)
 	}
 	free_tabtab(tabl);
 	free_tabtab(p_bin);
-	free_tabtab(env);
+//	free_tabtab(env);
 	waitpid(-1, &status, 0);
 	return (exit_status(status));
 }
 
-int	set_args(char **res, char *path, t_command *cmd, int i)
+int	set_args(char **res, t_command *cmd, int i)
 {
 	int		index;
 	char	**args;
@@ -97,14 +98,14 @@ int	set_args(char **res, char *path, t_command *cmd, int i)
 		while (++index + 1 < i)
 			args[index] = ft_strdup(res[index + 1]);
 		args[index] = NULL;
-		cmd->cmd_rv = exec_command(args, res, path, i);
+		cmd->cmd_rv = exec_command(args, res, cmd, i);
 		if (cmd->cmd_rv == 127)
 			write_error_shell(cmd, res);
 		ft_free(args, index + 1);
 		return (0);
 	}
 	args = ft_calloc(2, sizeof(char *));
-	cmd->cmd_rv = exec_command(args, res, path, 1);
+	cmd->cmd_rv = exec_command(args, res, cmd, 1);
 	if (cmd->cmd_rv == 127)
 		write_error_shell(cmd, res);
 	ft_free_set_args(args);

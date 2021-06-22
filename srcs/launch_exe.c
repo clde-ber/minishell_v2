@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:48:54 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/21 14:04:32 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int	launch_exe(char *path, char **env, t_command *cmd)
 
 	init_vars_launch_exe(&pid, &ret, &status);
 	argv = arg_tab(path, env);
-	envp = env_tab(path);
+//	envp = env_tab(path);
+	envp = cmd->env;
 	pid = fork();
 	if (pid == 0)
 	{
@@ -58,7 +59,7 @@ int	launch_exe(char *path, char **env, t_command *cmd)
 			exit(126);
 		exit(status);
 	}
-	free_2_tabs(argv, envp);
+	free_tabtab(argv);
 	waitpid(-1, &status, 0);
 	return ((cmd->cmd_rv = exit_status(status)));
 }

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:39 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/21 16:08:58 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,12 @@ void	add_to_env(char **tabl, int k, int l)
 {
 	char	*i_name;
 	char	*j_name;
+	char	**split;
+	char	**split2;
 
-	i_name = ft_get_name(tabl[k]);
-	j_name = ft_get_name(tabl[l]);
+	split = parse_path(tabl[k], '=');
+	split2 = parse_path(tabl[l], '=');
+	set_i_a_j_name(&i_name, &j_name, split, split2);
 	if (l > k)
 	{
 		add_to_env_l(tabl, j_name, k, l);
@@ -130,17 +133,16 @@ void	replace_env(char *tabl, t_list *var_env)
 	{
 		if (ft_strchr(tabl, '+') && ft_strchr(tabl, '='))
 		{
-			free(var_env->value);
-			var_env->value = ft_strjoin(var_env->value,
-					&ft_strchr(tabl, '=')[1]);
+			var_env->value = join_a_free(var_env->value, \
+			&ft_strchr(tabl, '=')[1]);
 		}
 		else if (ft_strchr(tabl, '='))
 		{
 			free(var_env->value);
 			var_env->value = ft_strdup(&ft_strchr(tabl, '=')[1]);
 		}
-		else
-			((char *)var_env->value)[0] = '\0';
+	//	else
+	//		((char *)var_env->value)[0] = '\0';
 		tabl[0] = '\0';
 	}
 	free(name);

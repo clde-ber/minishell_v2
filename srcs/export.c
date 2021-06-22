@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:35:29 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/22 08:45:34 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,11 @@ void	ft_free_2_strings(char *s1, char *s2)
 char	*valid_export(char *str_first, char *str_secd, int quotes,
 char *res)
 {
-	char	*operator;
 	char	*str_f;
 	char	*str_s;
 
 	str_f = ft_strdup(str_first);
 	str_s = ft_strdup(str_secd);
-	operator = find_op(res);
 	if (quotes % 2 == 0)
 	{
 		if (str_first[0] == '\'')
@@ -90,5 +88,7 @@ char *res)
 		}
 	}
 	ft_free_2_strings(str_first, str_secd);
-	return (ft_strjoin_free(join_a_free(str_f, operator), str_s));
+	if (ft_strchr(str_f, '=') == NULL || ft_strcmp(str_s, ""))
+		return (ft_strjoin_free(join_a_free(str_f, find_op(res)), str_s));
+	return (ft_strjoin_free(join_a_free(str_f, ""), str_s));
 }

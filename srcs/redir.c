@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/21 10:57:00 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/21 14:07:18 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 			ft_exit(tabl, cmd);
 	}
 	else
-		set_args(tabl, cmd->path, cmd, j);
+		set_args(tabl, cmd, j);
 	return (0);
 }
 
@@ -94,13 +94,16 @@ int	go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	else if (ft_strcmp(tabl[0], "unset") == 0 && ft_strcmp(tabl[0], "$?"))
 		errors(cmd);
 	else if (ft_strcmp(tabl[0], "$?"))
-		set_args(tabl, cmd->path, cmd, j);
+		set_args(tabl, cmd, j);
 	handle_cmd_rv(tabl, cmd);
 	return (0);
 }
 
 int	redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
+	if (cmd->env)
+		free_tabtab(cmd->env);
+	cmd->env = put_list_in_tab(var_env);
 	g_sig.boolean = 1;
 	if ((chrtabtab(f->res, "|") == -1 || chrtabtab(f->first_res, "\\|") != -1) \
 	&& (chrtabtab(f->res, ">") == -1 || chrtabtab(f->first_res, "\\>") != -1) \
