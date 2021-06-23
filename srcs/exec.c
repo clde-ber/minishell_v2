@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/06/23 15:59:13 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/23 16:50:22 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	exec_command(char **args, char **res, t_command *cmd, int j)
 	{
 		waitpid(pid, &status, 1);
 		free_2_tabs(tabl, p_bin);
-		while (wait(NULL) >= 0)
+		while (wait(&status) >= 0)
 			;
 	}
 	return (exit_status(status));
