@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/23 15:10:18 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/23 17:00:19 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,15 @@ int	launch_exe(char *path, char **env, t_command *cmd)
 		write_error_launch_exe(path);
 	else if (pid == 0)
 	{
-		ret = execve(argv[0], argv, envp);
-		if (ret == -1)
-			write_error_launch_exe(path);
+		child_process(argv, envp, path, &ret);
 		exit(exit_code_launch_exe(status));
 	}
 	else
 	{
 		waitpid(pid, &status, 1);
 		free_tabtab(argv);
+		while (wait(&status) >= 0)
+			;
 	}
 	return ((cmd->cmd_rv = exit_status(status)));
 }

@@ -255,6 +255,7 @@ char *path_mod);
 void	init_vars_find_exe(char **str, char **path_mod, char *path, \
 DIR **dir);
 void	launch_exe_error(char *path, char **env, t_command *cmd);
+void	child_process(char **argv, char **envp, char *path, int *ret);
 
 /*
 **env

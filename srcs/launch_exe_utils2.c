@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   launch_exe_utils2.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:20:43 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/21 10:58:43 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/23 17:01:09 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	child_process(char **argv, char **envp, char *path, int *ret)
+{
+	*ret = execve(argv[0], argv, envp);
+	if (*ret == -1)
+		write_error_launch_exe(path);
+}
 
 void	opendir_error(char *path, t_command *cmd, char *str, char *path_mod)
 {
