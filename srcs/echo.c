@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 22:13:10 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:36:16 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/22 15:47:40 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*get_echo_output(char *output, char **res, int i)
 	return (output);
 }
 
-void	ft_echo(char **res)
+void	ft_echo(char **res, t_command *cmd)
 {
 	int		option;
 	int		i;
@@ -84,4 +84,5 @@ void	ft_echo(char **res)
 	output = echo_option(output, option);
 	ft_putstr_fd(output, 1);
 	free(output);
+	cmd->cmd_rv = 0;
 }

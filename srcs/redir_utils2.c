@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:17:22 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/21 15:34:30 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/23 12:05:27 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ char	**divide_pipe(t_fd *f)
 	return (tabl);
 }
 
+//mettre waitpid dans pere
 int	go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
 	t_mp	mp[1];
@@ -118,11 +119,14 @@ int	go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 		close(mp->fd[1]);
 		exit(mp->status);
 	}
+	else
+	{
+		close(mp->fd[1]);
+		dup2(mp->fd[0], 0);
+		go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);
+		close(mp->fd[0]);
+	}
 	waitpid(-1, &mp->status, 0);
-	close(mp->fd[1]);
-	dup2(mp->fd[0], 0);
-	go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);
-	close(mp->fd[0]);
 	free_tabtab(one);
 	return (0);
 }

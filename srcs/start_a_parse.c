@@ -73,13 +73,6 @@ void	main_loop(char *buf, char **env, t_list *var_env, t_command *cmd)
 		free_string(buf);
 		return ;
 	}
-	if (ft_is_fail_char(buf))
-	{
-		ft_putstr_fd("failed char\n", 2);
-		// g_sig.sig = 2;
-		free_string(buf);
-		return ;
-	}
 	while (ft_strcmp((command = getcommand(buf)), ""))
 	{
 		dispatch(command, env, var_env, cmd);
