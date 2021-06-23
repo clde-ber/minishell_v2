@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:56:27 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/23 15:49:26 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	handle_signal(int code)
 		if (g_sig.boolean == 1)
 			ft_putstr_fd("\n", 1);
 		else
-			ft_putstr_fd("\n***minishell*** > ", 1);
+			ft_putstr_fd("^C\n***minishell*** > ", 1);
 	}
 	else if (code == 3)
 	{

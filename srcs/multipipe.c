@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multipipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/21 15:53:45 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/23 15:10:42 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char **env)
 		pipe(mp->fd);
 		mp->pid = fork();
 		if (mp->pid == -1)
-			exit(1);
+			return (0);
 		else if (mp->pid == 0)
 		{
 			dup2(mp->fdd, 0);
@@ -94,10 +94,13 @@ char **env)
 				var_env, cmd, env);
 			exit(mp->status);
 		}
-		waitpid(-1, &mp->status, 0);
-		close(mp->fd[1]);
-		mp->fdd = mp->fd[0];
-		mp->count++;
+		else
+		{
+			waitpid(mp->pid, &mp->status, 1);
+			close(mp->fd[1]);
+			mp->fdd = mp->fd[0];
+			mp->count++;
+		}
 	}
 	return (0);
 }

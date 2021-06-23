@@ -236,6 +236,7 @@ void	init_vars_launch_exe(pid_t *pid, int *ret, int *status);
 void	free_2_tabs(char **argv, char **envp);
 int		launch_exe(char *path, char **env, t_command *cmd);
 void	find_exe(char *path, char **env, t_command *cmd);
+int		exit_code_launch_exe(int status);
 
 /*
 **launch_exe_utils
@@ -388,6 +389,7 @@ int		exit_status(int status);
 int		test_shell_bin(char **tabl, char **p_bin, char **res, char **env);
 int		exec_command(char **args, char **res, t_command *cmd, int j);
 int		set_args(char **res, t_command *cmd, int i);
+void	init_vars_exec(int *status, char ***env, t_command *cmd, char ***p_bin);
 
 /*
 **exec_utils

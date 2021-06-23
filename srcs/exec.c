@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/06/22 15:43:58 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/23 15:59:13 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,14 @@
 ** it returns correctly, that is until it finds where the command binaries are
 ** stored. Then it executes the command or prints an error.
 */
+
+void	init_vars_exec(int *status, char ***env, t_command *cmd, char ***p_bin)
+{
+	errno = 0;
+	*status = 0;
+	*env = cmd->env;
+	*p_bin = parse_path(cmd->path, ':');
+}
 
 int	exit_status(int status)
 {
@@ -62,22 +70,24 @@ int	exec_command(char **args, char **res, t_command *cmd, int j)
 	char	**p_bin;
 	char	**env;
 
-	pid = 0;
-	errno = 0;
-	status = 0;
+	init_vars_exec(&status, &env, cmd, &p_bin);
 	tabl = arguments(res, j, args, cmd->path);
-	p_bin = parse_path(cmd->path, ':');
-	env = cmd->env;
 	pid = fork();
-	if (pid == 0)
+	if (pid == -1)
+		return (exit_status(1));
+	else if (pid == 0)
 	{
 		if (test_shell_bin(tabl, p_bin, res, env))
 			exit(33151);
 		exit(status);
 	}
-	free_tabtab(tabl);
-	free_tabtab(p_bin);
-	waitpid(-1, &status, 0);
+	else
+	{
+		waitpid(pid, &status, 1);
+		free_2_tabs(tabl, p_bin);
+		while (wait(NULL) >= 0)
+			;
+	}
 	return (exit_status(status));
 }
 

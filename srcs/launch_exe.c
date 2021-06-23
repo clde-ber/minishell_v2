@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/22 15:43:28 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/23 15:10:18 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,15 @@ void	free_2_tabs(char **argv, char **envp)
 	free_tabtab(argv);
 }
 
+int	exit_code_launch_exe(int status)
+{
+	if (errno == 2)
+		return (127);
+	if (errno == 13)
+		return (126);
+	return (status);
+}
+
 int	launch_exe(char *path, char **env, t_command *cmd)
 {
 	pid_t	pid;
@@ -47,19 +56,20 @@ int	launch_exe(char *path, char **env, t_command *cmd)
 	argv = arg_tab(path, env);
 	envp = cmd->env;
 	pid = fork();
-	if (pid == 0)
+	if (pid == -1)
+		write_error_launch_exe(path);
+	else if (pid == 0)
 	{
 		ret = execve(argv[0], argv, envp);
 		if (ret == -1)
 			write_error_launch_exe(path);
-		if (errno == 2)
-			exit(127);
-		if (errno == 13)
-			exit(126);
-		exit(status);
+		exit(exit_code_launch_exe(status));
 	}
-	free_tabtab(argv);
-	waitpid(-1, &status, 0);
+	else
+	{
+		waitpid(pid, &status, 1);
+		free_tabtab(argv);
+	}
 	return ((cmd->cmd_rv = exit_status(status)));
 }
 
