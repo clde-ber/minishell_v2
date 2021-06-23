@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:35:29 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/22 08:45:34 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/23 08:27:09 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ char *res)
 		ft_putstr_fd(str_f, 2);
 	else
 		ft_putstr_fd(str_first, 2);
-	ft_putstr_fd(operator, 2);
+	if (!ft_strchr(str_first, '='))
+		ft_putstr_fd(operator, 2);
 	if (quotes == 1 || quotes == 4)
 		ft_putstr_fd(str_s, 2);
 	else

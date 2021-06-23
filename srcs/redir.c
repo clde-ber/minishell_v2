@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/22 14:06:48 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/23 08:14:56 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int	go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 		if (ft_strcmp(tabl[0], "env") == 0)
 			print_env(var_env, cmd);
 		if (ft_strcmp(tabl[0], "exit") == 0)
+		{
+			cmd->cmd_rv = 0;
 			ft_exit(tabl, cmd);
+		}
 	}
 	else
 		set_args(tabl, cmd, j);
@@ -104,7 +107,6 @@ int	redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 	if (cmd->env)
 		free_tabtab(cmd->env);
 	cmd->env = put_list_in_tab(var_env);
-	g_sig.boolean = 1;
 	if ((chrtabtab(f->res, "|") == -1 || chrtabtab(f->first_res, "\\|") != -1) \
 	&& (chrtabtab(f->res, ">") == -1 || chrtabtab(f->first_res, "\\>") != -1) \
 	&& (chrtabtab(f->res, "<") == -1 || chrtabtab(f->first_res, "\\<") != -1) \
@@ -112,9 +114,8 @@ int	redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 		return (go_instruction(copy_tabtab(f->res), var_env, cmd, env));
 	else if (check_valid_res(f->res))
 	{
-		//maybe return null in go instruction pour signal d'erreur
 		ft_putstr_fd("bash: synthax error near unexpected token 'newline'\n", 2);
-		return (2);
+		cmd->cmd_rv = 2;
 	}
 	else if (chrtabtab(f->res, "|") == -1 || chrtabtab(f->first_res, "\\|") \
 	!= -1)
