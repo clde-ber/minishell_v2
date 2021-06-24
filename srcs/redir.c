@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/22 15:57:02 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/24 03:44:18 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,7 @@ int	redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 	&& (chrtabtab(f->res, ">>") == -1 || chrtabtab(f->first_res, "\\>>") != -1))
 		return (go_instruction(copy_tabtab(f->res), var_env, cmd, env));
 	else if (check_valid_res(f->res))
-	{
-		ft_putstr_fd("bash: synthax error near unexpected token 'newline'\n", 2);
-		cmd->cmd_rv = 2;
-		return (2);
-	}
+		return (faulty_redir(cmd));
 	else if (chrtabtab(f->res, "|") == -1 || chrtabtab(f->first_res, "\\|") \
 	!= -1)
 		return (go_instruction(end_redir(f->res, f), var_env, cmd, env));

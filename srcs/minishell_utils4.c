@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils4.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/08 15:20:47 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:06:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/24 02:56:08 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,16 @@ int	is_unknown_env_variable(char *str, t_list *var_env, t_command *cmd)
 	}
 	ft_free_2_strings(tmp, tmp2);
 	return (0);
+}
+
+void	print_tabtab(char **res)
+{
+	int		i;
+
+	i = 0;
+	while (res[i])
+	{
+		ft_putstr_fd(res[i], 2);
+		i++;
+	}
 }

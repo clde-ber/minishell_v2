@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:10 by user42            #+#    #+#             */
-/*   Updated: 2021/06/21 16:06:57 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/24 02:23:43 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,8 @@ void	add_to_env_k(char **tabl, char *i_name, int k, int l)
 	free(j_value);
 }
 
-void	set_i_a_j_name(char **i_name, char **j_name, char **split, char **split2)
+void	set_i_a_j_name(char **i_name, char **j_name, char **split, char \
+**split2)
 {
 	if (split[0])
 		*i_name = ft_strdup(split[0]);

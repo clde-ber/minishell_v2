@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:17:22 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/23 12:05:27 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/24 11:02:03 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,39 +94,31 @@ char	**divide_pipe(t_fd *f)
 	return (tabl);
 }
 
-//mettre waitpid dans pere
 int	go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
 	t_mp	mp[1];
-	char	**one;
 
-	one = divide_pipe(f);
+	init_mp(mp, 1, f);
 	if (f->save_pipe[0] == NULL)
 	{
-		go_instruction(end_redir(one, f), var_env, cmd, env);
+		go_instruction(end_redir(mp->first, f), var_env, cmd, env);
 		free_tabtab(f->save_pipe);
-		return (2);
+		return (1);
 	}
-	pipe(mp->fd);
-	mp->pid = fork();
 	if (mp->pid == -1)
-		exit(1);
+		return (1);
 	else if (mp->pid == 0)
 	{
-		close(mp->fd[0]);
-		dup2(mp->fd[1], 1);
-		go_instruction(end_redir(one, f), var_env, cmd, env);
-		close(mp->fd[1]);
+		control_fds(mp, 0);
+		go_instruction(end_redir(mp->first, f), var_env, cmd, env);
 		exit(mp->status);
 	}
 	else
 	{
-		close(mp->fd[1]);
-		dup2(mp->fd[0], 0);
+		control_fds(mp, 1);
 		go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);
-		close(mp->fd[0]);
 	}
 	waitpid(-1, &mp->status, 0);
-	free_tabtab(one);
+	free_tabtab(mp->first);
 	return (0);
 }
