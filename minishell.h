@@ -47,6 +47,7 @@ typedef struct	s_mp
 	pid_t		pid;
 	int			fdd;
 	int			status;
+	char		**first;
 }				t_mp;
 
 typedef struct	s_term
@@ -372,7 +373,7 @@ int	go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env);
 */
 char	*echo_option(char *output, int option);
 char	*get_echo_output(char *output, char **res, int i);
-void	ft_echo(char **res);
+void	ft_echo(char **res, t_command *cmd);
 
 /*
 **exec
@@ -439,6 +440,7 @@ char	*handle_arrow(t_term *term, char *end);
 int	get_k(int k, char **res, int i, int j);
 char **middle_pipe(char **res, int i);
 void print_tabtab(char **res);
+void	init_mp(t_mp *mp, int i, t_fd *f);
 int handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd, char **env);
 
 /*
@@ -556,6 +558,8 @@ char		*ft_itoa(int n);
 **libft_utils7
 */
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
+int	faulty_redir(t_command *cmd);
+void	control_fds(t_mp *mp, int i);
 
 /*
 **libft_list
