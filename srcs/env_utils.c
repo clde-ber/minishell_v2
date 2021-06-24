@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:39 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/21 16:08:58 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/23 09:33:10 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,18 @@
 char	*ft_get_name(char *str)
 {
 	int		i;
-	int		boolean;
 	char	*copy;
 
 	i = 0;
-	boolean = 0;
 	copy = ft_strdup(str);
-	while (copy[i] && boolean == 0)
+	while (copy[i])
 	{
 		if (copy[i] == '=' || (copy[i] == '+' && copy[i + 1] == '=') || \
 		(copy[i] == '+' && copy[i + 1] == '\0'))
 		{
 			copy[i] = '\0';
-			boolean = 1;
+			return (copy);
 		}
-		i++;
-	}
-	while (copy[i])
-	{
-		copy[i] = '\0';
 		i++;
 	}
 	return (copy);
@@ -83,11 +76,11 @@ void	check_doublons_cl(char **tabl, char *i_name, char *j_name, int j)
 
 	while (tabl[j])
 		j++;
-	k = j - 1;
-	l = j - 1;
-	while (k >= 1)
+	k = 0;
+	l = 0;
+	while (k < j)
 	{
-		while (l >= 1)
+		while (l < j)
 		{
 			i_name = ft_get_name(tabl[k]);
 			j_name = ft_get_name(tabl[l]);
@@ -95,43 +88,47 @@ void	check_doublons_cl(char **tabl, char *i_name, char *j_name, int j)
 				add_to_env(tabl, k, l);
 			free(i_name);
 			free(j_name);
-			l--;
+			l++;
 		}
-		l = j - 1;
-		k--;
+		l = 0;
+		k++;
 	}
 }
 
 t_list	*check_doublons(int k, int j, char **tabl, t_list *var_env)
 {
-	k = j - 1;
+	k = 1;
 	while (var_env->next)
 	{
-		while (k > 0)
+		while (k < j)
 		{
 			replace_env(tabl[k], var_env);
-			k--;
+			k++;
 		}
-		k = j - 1;
+		k = 1;
 		var_env = var_env->next;
 	}
-	k = j - 1;
-	while (k > 0)
+	k = 1;
+	while (k < j)
 	{
 		replace_env(tabl[k], var_env);
-		k--;
+		k++;
 	}
 	return (var_env);
 }
 
 void	replace_env(char *tabl, t_list *var_env)
 {
-	char	*name;
+	char	**name;
+	char	*name_var;
 
-	name = ft_get_name(tabl);
-	if (ft_strcmp(name, var_env->name) == 0)
+	name_var = NULL;
+	name = parse_path(tabl, '=');
+	if (name[0])
+		name_var = ft_get_name(name[0]);
+	if (name[0] && ft_strcmp(name_var, var_env->name) == 0)
 	{
-		if (ft_strchr(tabl, '+') && ft_strchr(tabl, '='))
+		if (ft_strchr(tabl, '+'))
 		{
 			var_env->value = join_a_free(var_env->value, \
 			&ft_strchr(tabl, '=')[1]);
@@ -141,9 +138,8 @@ void	replace_env(char *tabl, t_list *var_env)
 			free(var_env->value);
 			var_env->value = ft_strdup(&ft_strchr(tabl, '=')[1]);
 		}
-	//	else
-	//		((char *)var_env->value)[0] = '\0';
 		tabl[0] = '\0';
 	}
-	free(name);
+	free_tabtab(name);
+	free_string(name_var);
 }

@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:10 by user42            #+#    #+#             */
-/*   Updated: 2021/06/24 02:23:43 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/24 11:24:59 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,11 @@ void	set_i_a_j_name(char **i_name, char **j_name, char **split, char \
 **split2)
 {
 	if (split[0])
-		*i_name = ft_strdup(split[0]);
+		*i_name = ft_get_name(split[0]);
 	else
 		*i_name = ft_strdup("");
 	if (split2[0])
-		*j_name = ft_strdup(split2[0]);
+		*j_name = ft_get_name(split2[0]);
 	else
 		*j_name = ft_strdup("");
 	free_tabtab(split);

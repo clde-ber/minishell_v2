@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/24 03:44:18 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/24 11:28:37 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ int	go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 		if (ft_strcmp(tabl[0], "env") == 0)
 			print_env(var_env, cmd);
 		if (ft_strcmp(tabl[0], "exit") == 0)
+		{
+			cmd->cmd_rv = 0;
 			ft_exit(tabl, cmd);
+		}
 	}
 	else
 		set_args(tabl, cmd, j);
@@ -104,7 +107,6 @@ int	redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 	if (cmd->env)
 		free_tabtab(cmd->env);
 	cmd->env = put_list_in_tab(var_env);
-	g_sig.boolean = 1;
 	if ((chrtabtab(f->res, "|") == -1 || chrtabtab(f->first_res, "\\|") != -1) \
 	&& (chrtabtab(f->res, ">") == -1 || chrtabtab(f->first_res, "\\>") != -1) \
 	&& (chrtabtab(f->res, "<") == -1 || chrtabtab(f->first_res, "\\<") != -1) \

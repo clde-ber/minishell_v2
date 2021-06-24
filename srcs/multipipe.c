@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/24 03:37:37 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/24 11:26:45 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 		pipe(mp->fd);
 		mp->pid = fork();
 		if (mp->pid == -1)
-			return (1);
+			return (0);
 		else if (mp->pid == 0)
 		{
 			prep_fds(mp, f);

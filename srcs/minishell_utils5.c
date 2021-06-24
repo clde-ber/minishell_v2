@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:26:09 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/24 02:44:29 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/24 11:25:33 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,26 +61,26 @@ char	**put_list_in_tab(t_list *var_env)
 {
 	int		i;
 	char	**res;
+	t_list	*tmp;
 
 	i = 0;
+	tmp = var_env;
 	while (var_env->next)
 	{
 		i++;
 		var_env = var_env->next;
 	}
-	while (var_env->prec)
-		var_env = var_env->prec;
 	res = malloc(sizeof(char *) * (i + 2));
 	if (!(res))
 		return (0);
 	i = 0;
-	while (var_env->next)
+	while (tmp->next)
 	{
-		res[i] = join_a_free(ft_strjoin(var_env->name, "="), var_env->value);
-		var_env = var_env->next;
+		res[i] = join_a_free(ft_strjoin(tmp->name, "="), tmp->value);
+		tmp = tmp->next;
 		i++;
 	}
-	res[i] = join_a_free(ft_strjoin(var_env->name, "="), var_env->value);
+	res[i] = join_a_free(ft_strjoin(tmp->name, "="), tmp->value);
 	res[i + 1] = NULL;
 	return (res);
 }

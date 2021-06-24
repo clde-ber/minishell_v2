@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:17:22 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/24 11:02:03 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/24 11:28:23 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 		return (1);
 	}
 	if (mp->pid == -1)
-		return (1);
+		return (0);
 	else if (mp->pid == 0)
 	{
 		control_fds(mp, 0);

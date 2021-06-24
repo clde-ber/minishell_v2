@@ -34,6 +34,7 @@ SRCS =	./srcs/echo.c\
 	./srcs/libft_utils5.c\
 	./srcs/libft_utils6.c\
 	./srcs/libft_utils7.c\
+	./srcs/main_utils.c\
 	./srcs/minishell_utils.c\
 	./srcs/minishell_utils2.c\
 	./srcs/multipipe.c\

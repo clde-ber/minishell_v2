@@ -1,38 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sig_a_errors.c                                     :+:      :+:    :+:   */
+/*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/28 13:56:27 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/23 15:49:26 by clde-ber         ###   ########.fr       */
+/*   Created: 2021/06/22 15:17:08 by clde-ber          #+#    #+#             */
+/*   Updated: 2021/06/22 15:42:59 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	errors(t_command *cmd)
+void	init_vars_main(char **line, char ***term_done, int *g_sig_sig,
+int *g_sig_boolean)
 {
-	cmd->cmd_rv = 1;
+	*line = NULL;
+	*term_done = NULL;
+	*g_sig_sig = 0;
+	*g_sig_boolean = 0;
 }
 
-void	handle_signal(int code)
+void	restore_fds(t_fd *f)
 {
-	if (code == 2)
-	{
-		g_sig.sig = 1;
-		if (g_sig.boolean == 1)
-			ft_putstr_fd("\n", 1);
-		else
-			ft_putstr_fd("^C\n***minishell*** > ", 1);
-	}
-	else if (code == 3)
-	{
-		if (g_sig.boolean == 1)
-		{
-			g_sig.sig = 2;
-			ft_putstr_fd("Quit (core dumped)\n", 1);
-		}
-	}
+	close(0);
+	close(1);
+	dup2(f->save_in, 0);
+	dup2(f->save_out, 1);
+}
+
+void	init_fds(t_fd *f)
+{
+	f->save_in = dup(STDIN_FILENO);
+	f->save_out = dup(STDOUT_FILENO);
+	f->save_pipe = NULL;
 }

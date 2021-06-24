@@ -1,37 +1,37 @@
-#ifndef MINISHELL_H
-#define MINISHELL_H
+#	ifndef MINISHELL_H
+# define MINISHELL_H
 
-#include <stddef.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <dirent.h>
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include <stdlib.h>
-#include <sys/wait.h>
-#include <fcntl.h>
-#include <signal.h>
-#include <curses.h>
-#include <term.h>
+# include <stddef.h>
+# include <unistd.h>
+# include <sys/types.h>
+# include <dirent.h>
+# include <stdio.h>
+# include <errno.h>
+# include <string.h>
+# include <stdlib.h>
+# include <sys/wait.h>
+# include <fcntl.h>
+# include <signal.h>
+# include <curses.h>
+# include <term.h>
 
-#define BUFFER_SIZE 50
+# define BUFFER_SIZE 50
 
-typedef struct	s_sig
+typedef struct s_sig
 {
 	int			sig;
 	int			boolean;
 }				t_sig;
 
-typedef struct	s_list
+typedef struct s_list
 {
-	char		*name;
-	void		*value;
-	struct		s_list *prec;
-	struct		s_list *next;
+	char			*name;
+	void			*value;
+	struct s_list	*prec;
+	struct s_list	*next;
 }				t_list;
 
-typedef struct	s_fd
+typedef struct s_fd
 {
 	int			save_in;
 	int			save_out;
@@ -40,7 +40,7 @@ typedef struct	s_fd
 	char		**first_res;
 }				t_fd;
 
-typedef struct	s_mp
+typedef struct s_mp
 {
 	int			fd[2];
 	int			count;
@@ -50,20 +50,20 @@ typedef struct	s_mp
 	char		**first;
 }				t_mp;
 
-typedef struct	s_term
+typedef struct s_term
 {
-	struct		termios s_termios;
-	struct		termios s_termios_backup;
-	int			x;
-	int			y;
-	int			col;
-	int			lin;
-	int			size;
-	char		**done;
-	char		*last;
-	int			len;
-	int			where;
-	int			mtline;
+	struct termios	s_termios;
+	struct termios	s_termios_backup;
+	int				x;
+	int				y;
+	int				col;
+	int				lin;
+	int				size;
+	char			**done;
+	char			*last;
+	int				len;
+	int				where;
+	int				mtline;
 }				t_term;
 
 typedef struct s_command
@@ -78,19 +78,21 @@ typedef struct s_command
 	char		**env;
 }				t_command;
 
-
-int ft_is_fail_char(char *str);
-//A DELETE
-// dans debug_to_delete
+/*
+**main_utils
+*/
+void	init_vars_main(char **line, char ***term_done, int *g_sig_sig, \
+int *g_sig_boolean);
+void	restore_fds(t_fd *f);
+void	init_fds(t_fd *f);
 
 /*
 **start_a_parse
 */
-char	*getcommand(char *str);
-void	restore_fds(t_fd *f);
-void	init_fds(t_fd *f);
 int		dispatch(char *str, char **env, t_list *var_env, t_command *cmd);
-char	*go_line(t_term *term);
+int		ft_is_fail_char(char *str);
+void	main_loop(char *buf, char **env, t_list *var_env, t_command *cmd);
+void	finish_line(t_command *cmd, t_term *term, t_list *var_env);
 
 /*
 **lexer
@@ -104,14 +106,14 @@ char	**ft_split(char *s, char *str);
 /*
 **lexer_utils
 */
-int	is_not_charset(char *s, int j, char *str, int i);
+int		is_not_charset(char *s, int j, char *str, int i);
 void	*ft_free(char **res, int j);
 
 /*
 **expander
 */
 char	*expander(char *res, t_list *var_env, char **args, t_command *cmd);
-char	*remove_antislashes(char *dest, char *str, t_list *var_env,
+char	*remove_antislashes(char *dest, char *str, t_list *var_env, \
 t_command *cmd);
 void	init_vars_parse_res(int *i, int *j, char **str);
 void	inc_j(char **parsed_res, int *j);
@@ -120,22 +122,22 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd);
 /*
 **expander_utils
 */
-int	strings_to_join(char **res, int i);
+int		strings_to_join(char **res, int i);
 char	**create_parsed_res(char **res);
-char	*parsed_res_error(char *res, char *parsed_res, t_list *var_env,
+char	*parsed_res_error(char *res, char *parsed_res, t_list *var_env, \
 t_command *cmd);
 char	**last_command_rv(char **res, char **parsed_res);
-void	init_var_h_export(int *quotes, char **str_first, char **str_secd,
+void	init_var_h_export(int *quotes, char **str_first, char **str_secd, \
 char **name);
 
 /*
 **expander_utils2
 */
-int	condition_dq(int i, int len, char *str);
-int	condition_sq(int i, int len, char *str);
+int		condition_dq(int i, int len, char *str);
+int		condition_sq(int i, int len, char *str);
 void	init_vars_get_env_v(int *i, char **ret);
-int	condition_one(int i, char *dest, char *str, char *env);
-int	condition_two(int i, char *dest);
+int		condition_one(int i, char *dest, char *str, char *env);
+int		condition_two(int i, char *dest);
 
 /*
 **expander_utils3
@@ -150,7 +152,7 @@ char	*no_trim_starting_space(char *tmp, t_list *var_env, t_command *cmd);
 **expander_a_env
 */
 char	*replace_by_env(char *res, char *trim, t_list *var_env, t_command *cmd);
-char	*replace_by_env_value_no_space(char *trim, t_list *var_env,
+char	*replace_by_env_value_no_space(char *trim, t_list *var_env, \
 t_command *cmd);
 char	*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd);
 char	*non_handled_commands(char *res, t_list *var_env, t_command *cmd);
@@ -170,25 +172,26 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd);
 **export
 */
 void	free_export_errors(char *s1, char *s2, char *s3, char *s4);
-void	if_s_quotes(char *str_first, char *str_secd, char **str_f,
+void	if_s_quotes(char *str_first, char *str_secd, char **str_f, \
 char **str_s);
-char	*export_errors(char *str_first, char *str_secd, int quotes,
+char	*export_errors(char *str_first, char *str_secd, int quotes, \
 char *res);
 void	ft_free_2_strings(char *s1, char *s2);
-char	*valid_export(char *str_first, char *str_secd, int quotes,
+char	*valid_export(char *str_first, char *str_secd, int quotes, \
 char *res);
 
 /*
 **export_utils
 */
-void	if_d_quotes(char *str_first, char *str_secd, char **str_f, char **str_s);
-void	env_quotes_a_values(char **str_first, char **str_secd,
+void	if_d_quotes(char *str_first, char *str_secd, char **str_f, \
+char **str_s);
+void	env_quotes_a_values(char **str_first, char **str_secd, \
 int *quotes, char **name);
-void	which_is_name_a_value(char **str_first, char **str_secd, char **p_bin,
+void	which_is_name_a_value(char **str_first, char **str_secd, char **p_bin, \
 char *res);
-void	split_env_name_a_value(char **str_first, char **str_secd,
+void	split_env_name_a_value(char **str_first, char **str_secd, \
 char **p_bin, char *res);
-void	export_replace_by_env_value(char **str_first, char **str_secd,
+void	export_replace_by_env_value(char **str_first, char **str_secd, \
 t_list *var_env, t_command *cmd);
 
 /*
@@ -196,14 +199,14 @@ t_list *var_env, t_command *cmd);
 */
 void	join_string_value(char **str, char **tmp, char *trim, int *index);
 void	init_vars_replace_by_env(size_t *i, char **tmp, char **str);
-int	is_not_env_value(size_t i, char *trim);
+int		is_not_env_value(size_t i, char *trim);
 char	*remove_starting_spaces(char *str);
 char	*is_it_unknown_var(char *tmp);
 
 /*
 **env_values_utils
 */
-int	is_valid_env_c(char c);
+int		is_valid_env_c(char c);
 void	fill_string_dq(int *i, int *j, char *str, char **ret);
 void	fill_string_sq(int *i, int *j, char *str, char **ret);
 void	fill_string(int *i, int *j, char *str, char **ret);
@@ -215,7 +218,7 @@ void	init_vars_a_a_q(int *i, int *j);
 char	*get_string(char *str);
 char	*get_string_value(char *str);
 char	*get_env_value(char *str, t_list *var_env, t_command *cmd);
-int	even_or_odd(char *str);
+int		even_or_odd(char *str);
 char	*find_op(char *str);
 
 /*
@@ -232,8 +235,9 @@ char	*get_env_name(int quotes, char *str_first);
 */
 void	init_vars_launch_exe(pid_t *pid, int *ret, int *status);
 void	free_2_tabs(char **argv, char **envp);
-int	launch_exe(char *path, char **env, t_command *cmd);
+int		launch_exe(char *path, char **env, t_command *cmd);
 void	find_exe(char *path, char **env, t_command *cmd);
+int		exit_code_launch_exe(int status);
 
 /*
 **launch_exe_utils
@@ -247,10 +251,12 @@ void	write_error_launch_exe(char *path);
 /*
 **launch_exe_utils2
 */
-void	opendir_error(char *path, t_command *cmd, char *str, char *path_mod);
-void	init_vars_find_exe(char **str, char **path_mod, char *path,
+void	opendir_error(char *path, t_command *cmd, char *str, \
+char *path_mod);
+void	init_vars_find_exe(char **str, char **path_mod, char *path, \
 DIR **dir);
 void	launch_exe_error(char *path, char **env, t_command *cmd);
+void	child_process(char **argv, char **envp, char *path, int *ret);
 
 /*
 **env
@@ -277,7 +283,7 @@ void	init_vars_fill_list(int *i, t_list **environ, t_list **tmp);
 char	**fill_list(t_list *environ, char **list, int i);
 char	**sort_list(char **list, int i, int j);
 void	print_sorted_env(t_list *environ, t_command *cmd);
-int	is_valid_env_name(char *str);
+int		is_valid_env_name(char *str);
 
 /*
 **env_utils3
@@ -286,7 +292,8 @@ char	*create_i_value(char *tab_k, char *i_value);
 char	*create_j_value(char *tab_l, char *j_value);
 void	add_to_env_l(char **tabl, char *j_name, int k, int l);
 void	add_to_env_k(char **tabl, char *i_name, int k, int l);
-void	set_i_a_j_name(char **i_name, char **j_name, char **split, char **split2);
+void	set_i_a_j_name(char **i_name, char **j_name, char **split, \
+char **split2);
 
 /*
 **env_utils4
@@ -299,7 +306,7 @@ void	init_vars_unset(char **name, int *i, int *boolean);
 /*
 **path
 */
-int	if_too_many_args(char **res, t_command *cmd);
+int		if_too_many_args(char **res, t_command *cmd);
 void	init_cd_strings(char **buf, char **ret, char *path);
 void	init_2_strings(char **path, char **str);
 void	set_current_path_cd(char **str, char **path, t_list *var_env);
@@ -308,9 +315,9 @@ void	ft_cd(char **res, t_list *var_env, t_command *cmd);
 /*
 **path_utils
 */
-int	count_back(char *str, int *j);
+int		count_back(char *str, int *j);
 void	path_copy(char **buf, int k);
-int	count_slash(char *old_pwd);
+int		count_slash(char *old_pwd);
 void	cd_go_back(int k, char **buf, char *old_pwd);
 void	cd_go_front(char *res, int *i, char **buf);
 
@@ -328,7 +335,7 @@ void	cd_failure(char **res, t_command *cmd, char *old_pwd);
 */
 void	cd_no_arg(t_list *var_env, t_command *cmd);
 void	set_pwd_env(char *path, char *buf, t_list *var_env);
-void	write_cd_option_error(char *res, t_command *cmd, char **str,
+void	write_cd_option_error(char *res, t_command *cmd, char **str, \
 t_list *var_env);
 void	write_cd_minus_option(char **str, t_list *var_env);
 void	ft_pwd(t_command *cmd, t_list *var_env);
@@ -336,10 +343,10 @@ void	ft_pwd(t_command *cmd, t_list *var_env);
 /*
 **prep_line
 */
-char *end_line(char *current, t_term *term);
-char *get_char(char *current, t_term *term, char *buf);
-char *go_line(t_term *term);
-char *getcommand(char *str);
+char	*end_line(char *current, t_term *term);
+char	*get_char(char *current, t_term *term, char *buf);
+char	*go_line(t_term *term);
+char	*getcommand(char *str);
 
 /*
 **redir
@@ -347,8 +354,10 @@ char *getcommand(char *str);
 int		chrtabtab(char **res, char *str);
 char	**divide_pipe(t_fd *f);
 int		go_e(char **tabl, t_list *var_env, t_command *cmd, int j);
-int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env);
-int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, char **env);
+int		go_instruction(char **tabl, t_list *var_env, t_command *cmd, \
+char **env);
+int		redir_and_send(t_fd *f, t_list *var_env, t_command *cmd, \
+char **env);
 
 /*
 **redir_utils
@@ -366,7 +375,7 @@ char	**failed_fd(t_fd *f, char **res);
 int		check_valid_res_bis(char **str);
 int		check_valid_res(char **str);
 char	**divide_pipe(t_fd *f);
-int	go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env);
+int		go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env);
 
 /*
 **echo
@@ -378,10 +387,11 @@ void	ft_echo(char **res, t_command *cmd);
 /*
 **exec
 */
-int	exit_status(int status);
-int	test_shell_bin(char **tabl, char **p_bin, char **res, char **env);
-int	exec_command(char **args, char **res, t_command *cmd, int j);
-int	set_args(char **res, t_command *cmd, int i);
+int		exit_status(int status);
+int		test_shell_bin(char **tabl, char **p_bin, char **res, char **env);
+int		exec_command(char **args, char **res, t_command *cmd, int j);
+int		set_args(char **res, t_command *cmd, int i);
+void	init_vars_exec(int *status, char ***env, t_command *cmd, char ***p_bin);
 
 /*
 **exec_utils
@@ -398,13 +408,13 @@ void	write_error_shell(t_command *cmd, char **res);
 void	ft_free_set_args(char **args);
 void	init_vars_set_args(int *index, int *k);
 void	init_2_vars(int *i, int *k);
-int	command_not_found(char **tabl, char **env, char **p_bin);
-int	command_found(char **tabl, char **env, char **p_bin);
+int		command_not_found(char **tabl, char **env, char **p_bin);
+int		command_found(char **tabl, char **env, char **p_bin);
 
 /*
 **exit
 */
-int	ft_isdigit(int c);
+int		ft_isdigit(int c);
 void	exit_error_no_nb(char **res, t_command *cmd);
 void	exit_too_many_args(t_command *cmd);
 void	exit_code(char **res, t_command *cmd);
@@ -457,26 +467,26 @@ void	handle_signal(int code);
 /*
 **minishell_utils
 */
-int	is_handled_cmd(char *str);
-int	ft_strchr_bis(const char *s, int c);
-int	ft_isspace(char c);
-int	check_word(char *str, char *to_find, int i);
-int	search_word(char *str, char *to_find);
+int		is_handled_cmd(char *str);
+int		ft_strchr_bis(const char *s, int c);
+int		ft_isspace(char c);
+int		check_word(char *str, char *to_find, int i);
+int		search_word(char *str, char *to_find);
 
 /*
 **minishell_utils2
 */
 void	init_4_values(int *s_q, int *d_q, int *s_q2, int *d_q2);
-int	is_in_string(char *line, int index);
+int		is_in_string(char *line, int index);
 char	*cut_after_punct(char *dest, char *line, char *command);
 char	**copy_tabtab(char **res);
 
 /*
 **minishell_utils3
 */
-int	is_symbol(char c, char comp);
-int	count_pipes(char **res);
-int	chrtabtab(char **res, char *str);
+int		is_symbol(char c, char comp);
+int		count_pipes(char **res);
+int		chrtabtab(char **res, char *str);
 char	**replace_tabtab(char **tabl, int i, char *str);
 void	erase_line(int i, int j, t_term *term);
 
@@ -486,12 +496,12 @@ void	erase_line(int i, int j, t_term *term);
 void	free_string(char *str);
 void	if_string_literal(char **tmp, char **tmp2);
 void	if_dq_unkwn_var(char **tmp, char *str, int *boolean);
-int	is_unknown_env_variable(char *str, t_list *var_env, t_command *cmd);
+int		is_unknown_env_variable(char *str, t_list *var_env, t_command *cmd);
 
 /*
 **minishell_utils5
 */
-int	count_tabs(char **res);
+int		count_tabs(char **res);
 void	free_tabtab(char **res);
 void	init_structs(t_command *cmd);
 void	free_cd(char *path, char *buf, char *old_pwd, char *ret);
@@ -513,18 +523,18 @@ char	*join_a_free(char *s1, char *s2);
 */
 size_t	ft_strlen(char *str);
 char	*ft_strjoin(char *s1, char *s2);
-int	ft_strcmp(const char *s1, const char *s2);
+int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(const char *s1);
 
 /*
 **libft_utils2
 */
-int	ft_strrchr(const char *s, int c);
+int		ft_strrchr(const char *s, int c);
 void	*ft_calloc(size_t count, size_t size);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 void	*ft_memmove(void *dst, const void *src, size_t len);
-int	ft_ischarset(char *str, char c);
+int		ft_ischarset(char *str, char c);
 
 /*
 **libft_utils3
@@ -536,28 +546,29 @@ char	*ft_strtrim(char const *s1, char const *set);
 /*
 **libft_utils4
 */
-int	ft_isalnum(int c);
-int	ft_strlcpy(char *dst, const char *src, int dstsize);
+int		ft_isalnum(int c);
+int		ft_strlcpy(char *dst, const char *src, int dstsize);
 char	*ft_strjoin_free(char *s1, char *s2);
-int	ft_is_empty_string(char *str);
-int	ft_putchar(int c);
+int		ft_is_empty_string(char *str);
+int		ft_putchar(int c);
 
 /*
 **libft_utils5
 */
-int	ft_atoi(const char *str);
+int		ft_atoi(const char *str);
 char	*rv_itoa(int n);
 
 /*
 **libft_utils6
 */
 void	ft_putstr_nbr(int i, int fd);
-char		*ft_itoa(int n);
+char	*ft_itoa(int n);
 
 /*
 **libft_utils7
 */
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int	faulty_redir(t_command *cmd);
 void	control_fds(t_mp *mp, int i);
 
@@ -574,10 +585,11 @@ void	ft_lstadd_back(t_list **alst, t_list *new);
 **libft_list2
 */
 void	ft_record(void *lst, void *cmd);
-int	record_cmd_path(void *lst, void *cmd);
-void	ft_lstiter(t_list *lst, void (*f)(void *, void *), t_command *cmd);
+int		record_cmd_path(void *lst, void *cmd);
+void	ft_lstiter(t_list *lst, void (*f)(void *, void *), \
+t_command *cmd);
 void	ft_lstdel(t_list *lst);
 
-extern t_sig g_sig;
+extern t_sig	g_sig;
 
 #endif
