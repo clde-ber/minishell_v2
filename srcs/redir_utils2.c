@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:17:22 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/24 11:28:23 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/25 12:41:02 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,16 @@ char	**divide_pipe(t_fd *f)
 	return (tabl);
 }
 
+void	parent_process(t_mp *mp, char *str)
+{
+	control_fds(mp, 1);
+	if (ft_strcmp(str, "exit") == 0)
+	{
+		while (wait(NULL) >= 0)
+			;
+	}
+}
+
 int	go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
 	t_mp	mp[1];
@@ -105,20 +115,20 @@ int	go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 		free_tabtab(f->save_pipe);
 		return (1);
 	}
-	if (mp->pid == -1)
-		return (0);
-	else if (mp->pid == 0)
+	if (mp->pid == 0)
 	{
 		control_fds(mp, 0);
 		go_instruction(end_redir(mp->first, f), var_env, cmd, env);
 		exit(mp->status);
 	}
-	else
+	else if (mp->pid != -1)
 	{
-		control_fds(mp, 1);
+		if (WIFSIGNALED(mp->status) && g_sig.boolean != -1)
+			g_sig.boolean++;
+		waitpid(mp->pid, &mp->status, 1);
+		parent_process(mp, f->save_pipe[0]);
 		go_instruction(end_redir(f->save_pipe, f), var_env, cmd, env);
 	}
-	waitpid(-1, &mp->status, 0);
 	free_tabtab(mp->first);
 	return (0);
 }

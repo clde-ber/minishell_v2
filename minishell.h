@@ -418,7 +418,7 @@ int		ft_isdigit(int c);
 void	exit_error_no_nb(char **res, t_command *cmd);
 void	exit_too_many_args(t_command *cmd);
 void	exit_code(char **res, t_command *cmd);
-void	ft_exit(char **res, t_command *cmd);
+void	ft_exit(int i, char **res, t_command *cmd);
 
 /*
 **termcap

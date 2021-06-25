@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 06:40:46 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/23 09:52:13 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/25 07:37:00 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,10 @@ void	exit_code(char **res, t_command *cmd)
 	}
 }
 
-void	ft_exit(char **res, t_command *cmd)
+void	ft_exit(int i, char **res, t_command *cmd)
 {
-	int	i;
-
-	i = 0;
+	if (g_sig.boolean >= 2 || g_sig.sig == -1)
+		return ;
 	if (res[1] && !res[2])
 	{
 		while ((res[1][i] && ft_isdigit(res[1][i])) || \

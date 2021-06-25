@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/24 11:28:37 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/25 08:49:22 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 		if (ft_strcmp(tabl[0], "exit") == 0)
 		{
 			cmd->cmd_rv = 0;
-			ft_exit(tabl, cmd);
+			ft_exit(0, tabl, cmd);
 		}
 	}
 	else

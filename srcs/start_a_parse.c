@@ -98,7 +98,7 @@ int	main(int ac, char **av, char **env)
 		ft_putstr_fd("***minishell*** > ", 1);
 		line = go_line(term);
 		if (line && ft_strncmp(line, "exit", 4) == 0)
-			ft_exit(ft_split(line, " \t\n\r\v\f"), cmd);
+			ft_exit(0, ft_split(line, " \t\n\r\v\f"), cmd);
 		main_loop(line, env, var_env, cmd);
 		g_sig.boolean = 0;
 		line = NULL;
