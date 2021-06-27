@@ -21,6 +21,7 @@ typedef struct s_sig
 {
 	int			sig;
 	int			boolean;
+	int			stop;
 }				t_sig;
 
 typedef struct s_list
