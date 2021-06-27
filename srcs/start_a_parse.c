@@ -21,6 +21,7 @@ int	dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 		g_sig.boolean = 1;
 		num = redir_and_send(f, var_env, cmd, env);
 		restore_fds(f);
+		g_sig.stop = 0;
 		free_tabtab(res);
 		free_tabtab(f->res);
 	}
@@ -96,7 +97,8 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		ft_putstr_fd("***minishell*** > ", 1);
-		line = go_line(term);
+		// while (g_sig.stop == 0)
+			line = go_line(term);
 		if (line && ft_strncmp(line, "exit", 4) == 0)
 			ft_exit(ft_split(line, " \t\n\r\v\f"), cmd);
 		main_loop(line, env, var_env, cmd);

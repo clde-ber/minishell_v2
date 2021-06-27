@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/21 16:06:58 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/27 01:05:29 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,11 @@ char	*special_line(char *current, char *buf, t_term *term)
 		if (current)
 			ft_putstr_fd(current, 1);
 	}
+	if ((int)buf[0] == 4)
+	{
+		handle_ctrl_d(current, term);
+		exit(0);
+	}
 	else if ((int)buf[0] == 127)
 		current = handle_delete(current, term);
 	else
@@ -66,27 +71,35 @@ char	*go_line(t_term *term)
 {
 	char	buf[2];
 	char	*current;
+	int res;
 
 	init_term(term);
+	g_sig.stop = 0;
 	current = NULL;
 	get_cursor_space(term);
-	while (read(0, buf, 1) != -1)
+	res = read(0, buf, 1);
+	if (res == -1)
+			return NULL;
+	while (buf[0] != '\n')
 	{
-		buf[1] = '\0';
-		if (buf[0] == '\n' || (int)buf[0] == 13)
-			return (end_line(current, term));
-		else if ((int)buf[0] == 27)
-			current = handle_arrow(term, current);
-		else if ((int)buf[0] == 4)
+		if (g_sig.stop == 1 && current == NULL)
+			g_sig.stop = 0;
+		if (g_sig.stop == 1 && current != NULL)
 		{
-			handle_ctrl_d(current, term);
-			exit(0);
+			g_sig.stop = 0;
+			free(current);
+			current = NULL;
 		}
+		buf[1] = '\0';
+		if ((int)buf[0] == 27)
+			current = handle_arrow(term, current);
 		else
 			current = special_line(current, buf, term);
-		buf[0] = '\0';
+		res = read(0, buf, 1);
+		if (res == -1)
+			return NULL;
 	}
-	return (NULL);
+	return (end_line(current, term));
 }
 
 char	*getcommand(char *str)

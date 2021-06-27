@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/24 11:26:45 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/24 16:01:31 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	init_mp(t_mp *mp, int i, t_fd *f)
 		pipe(mp->fd);
 		mp->pid = fork();
 	}
+	g_sig.stop = 1;
 }
 
 void	prep_fds(t_mp *mp, t_fd *f)
