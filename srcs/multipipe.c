@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/24 16:01:31 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/27 12:32:34 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	init_mp(t_mp *mp, int i, t_fd *f)
 		pipe(mp->fd);
 		mp->pid = fork();
 	}
-	g_sig.stop = 1;
+	g_sig.boolean = 2;
 }
 
 void	prep_fds(t_mp *mp, t_fd *f)
@@ -76,6 +76,18 @@ void	prep_fds(t_mp *mp, t_fd *f)
 	if (mp->count < count_pipes(f->res))
 		dup2(mp->fd[1], 1);
 	close(mp->fd[0]);
+}
+
+void	parent_process_mult(t_mp *mp, int count)
+{
+	close(mp->fd[1]);
+	mp->fdd = mp->fd[0];
+	mp->count++;
+	if (mp->count == count)
+	{
+		while (wait(NULL) >= 0)
+			;
+	}
 }
 
 int	handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd, char **env)
@@ -96,12 +108,13 @@ int	handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 				var_env, cmd, env);
 			exit(mp->status);
 		}
-		waitpid(-1, &mp->status, 1);
-		close(mp->fd[1]);
-		mp->fdd = mp->fd[0];
-		mp->count++;
+		else
+		{
+			if (WIFSIGNALED(mp->status) && g_sig.boolean != -1)
+				g_sig.boolean++;
+			waitpid(mp->pid, &mp->status, 1);
+			parent_process_mult(mp, count_pipes(f->res) + 1);
+		}
 	}
-	while (wait(NULL) >= 0)
-		;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:53 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/23 17:00:19 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/25 07:18:27 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ int	launch_exe(char *path, char **env, t_command *cmd)
 	}
 	else
 	{
-		waitpid(pid, &status, 1);
+		waitpid(pid, &status, 0);
 		free_tabtab(argv);
-		while (wait(&status) >= 0)
+		while (wait(NULL) >= 0)
 			;
 	}
 	return ((cmd->cmd_rv = exit_status(status)));

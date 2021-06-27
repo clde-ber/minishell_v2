@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:56:27 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/26 23:43:44 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/27 12:32:06 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,12 @@ void	handle_signal(int code)
 	if (code == 2)
 	{
 		g_sig.sig = 1;
-		if (g_sig.boolean == 1)
+		if (g_sig.boolean == 1 || g_sig.boolean > 1)
+		{
+			if (g_sig.boolean > 1)
+				g_sig.boolean = -1;
 			ft_putstr_fd("\n", 1);
-		// else if (g_sig.boolean == -1)
-		// 	ft_putstr_fd("^C", 1);
+		}
 		else
 			ft_putstr_fd("^C\n***minishell*** > ", 1);
 	}
@@ -36,6 +38,8 @@ void	handle_signal(int code)
 			g_sig.sig = 2;
 			ft_putstr_fd("Quit (core dumped)\n", 1);
 		}
+		else if (g_sig.boolean > 1)
+			g_sig.boolean = -1;
 	}
 	g_sig.stop = 1;
 }

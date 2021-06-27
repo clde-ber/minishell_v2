@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:39 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/23 09:33:10 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/25 08:35:15 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void	check_doublons_cl(char **tabl, char *i_name, char *j_name, int j)
 
 	while (tabl[j])
 		j++;
-	k = 0;
-	l = 0;
+	k = 1;
+	l = 1;
 	while (k < j)
 	{
 		while (l < j)
@@ -90,7 +90,7 @@ void	check_doublons_cl(char **tabl, char *i_name, char *j_name, int j)
 			free(j_name);
 			l++;
 		}
-		l = 0;
+		l = 1;
 		k++;
 	}
 }
