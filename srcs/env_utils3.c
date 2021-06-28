@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:10 by user42            #+#    #+#             */
-/*   Updated: 2021/06/25 08:40:19 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/28 08:49:41 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,23 +30,46 @@ char	*create_j_value(char *tab_l, char *j_value)
 	return (j_value);
 }
 
+void	init_i_a_j_values(char **i_value, char **j_value, char *tabl_k, char *tabl_l)
+{
+	*i_value = NULL;
+	*j_value = NULL;
+	*i_value = create_i_value(tabl_k, *i_value);
+	*j_value = create_i_value(tabl_l, *j_value);
+}
+
+void	plus_equal(char **tabl, char *x_name, char *a_value, char *b_value)
+{
+	free(*tabl);
+	*tabl = join_a_free(join_a_free(join_a_free(x_name, \
+	"+="), &a_value[1]), &b_value[1]);
+}
+
+void	equal(char **tabl, char *x_name, char *a_value, char *b_value)
+{
+	free(*tabl);
+	*tabl = join_a_free(join_a_free(join_a_free(x_name, \
+	"="), &a_value[1]), &b_value[1]);
+}
+
 void	add_to_env_l(char **tabl, char *j_name, int k, int l)
 {
 	char	*i_value;
 	char	*j_value;
 	char	*tmp;
 
-	i_value = NULL;
-	j_value = NULL;
-	i_value = create_i_value(tabl[k], i_value);
-	j_value = create_i_value(tabl[l], j_value);
+	init_i_a_j_values(&i_value, &j_value, tabl[k], tabl[l]);
 	tmp = ft_strdup(tabl[l]);
-	if (ft_strchr(tmp, '+') && ft_strchr(tabl[k], '=') && \
+	if (ft_strchr(tmp, '+') && ft_strchr(tabl[k], '=') &&
+	ft_strchr(tabl[k], '+') && ft_strchr(tmp, '='))
+		plus_equal(&tabl[l], j_name, i_value, j_value);
+	else if (ft_strchr(tmp, '+') && ft_strchr(tabl[k], '=') && \
 	ft_strchr(tmp, '='))
+		equal(&tabl[l], j_name, i_value, j_value);
+	else if (ft_strchr(tmp, '='))
 	{
 		free(tabl[l]);
-		tabl[l] = join_a_free(join_a_free(join_a_free(j_name, \
-		"+="), &i_value[1]), &j_value[1]);
+		tabl[l] = join_a_free(join_a_free(j_name, "="), &j_value[1]);
 	}
 	else
 		free(j_name);
@@ -61,17 +84,18 @@ void	add_to_env_k(char **tabl, char *i_name, int k, int l)
 	char	*j_value;
 	char	*tmp;
 
-	i_value = NULL;
-	j_value = NULL;
-	i_value = create_i_value(tabl[k], i_value);
-	j_value = create_i_value(tabl[l], j_value);
+	init_i_a_j_values(&i_value, &j_value, tabl[k], tabl[l]);
 	tmp = ft_strdup(tabl[k]);
 	if (ft_strchr(tmp, '+') && ft_strchr(tabl[l], '=') && \
+	ft_strchr(tabl[l], '+') && ft_strchr(tmp, '='))
+		plus_equal(&tabl[k], i_name, j_value, i_value);
+	else if (ft_strchr(tmp, '+') && ft_strchr(tabl[l], '=') && \
 	ft_strchr(tmp, '='))
+		equal(&tabl[k], i_name, j_value, i_value);
+	else if (ft_strchr(tmp, '='))
 	{
 		free(tabl[k]);
-		tabl[k] = join_a_free(join_a_free(join_a_free(i_name, \
-		"+="), &j_value[1]), &i_value[1]);
+		tabl[k] = join_a_free(join_a_free(i_name, "="), &i_value[1]);
 	}
 	else
 		free(i_name);
