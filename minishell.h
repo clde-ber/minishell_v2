@@ -304,6 +304,15 @@ void	name_a_value_var(char **name, char **value, char **env, int k);
 void	init_strings_set_env(t_list **tmp_new, t_list **tmp, char **name);
 void	init_vars_unset(char **name, int *i, int *boolean);
 
+
+/*
+**env_utils5
+*/
+void	init_i_a_j_values(char **i_value, char **j_value, char *tabl_k,
+char *tabl_l);
+void	plus_equal(char **tabl, char *x_name, char *a_value, char *b_value);
+void	equal(char **tabl, char *x_name, char *a_value, char *b_value);
+
 /*
 **path
 */
