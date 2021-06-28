@@ -91,7 +91,8 @@ int	main(int ac, char **av, char **env)
 	init_vars_main(&line, &term->done, &g_sig.sig, &g_sig.boolean);
 	init_structs(cmd);
 	var_env = NULL;
-	var_env = set_new_env(env, var_env, cmd);
+	if ((env && env[0] != NULL) || !env)
+		var_env = set_new_env(env, var_env, cmd);
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, handle_signal);
 	while (1)
