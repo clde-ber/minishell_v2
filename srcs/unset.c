@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:36:52 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/25 09:00:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/28 08:59:11 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd)
 	char	*trim2;
 	int		quotes;
 
-	cmd->cmd_rv = 0;
+	if (cmd->cmd_rv != 1)
+		cmd->cmd_rv = 0;
 	init_2_strings(&trim, &trim2);
 	init_2_vars(&quotes, &cmd->index);
 	if_d_quotes_unset(&trim, res, &quotes);
