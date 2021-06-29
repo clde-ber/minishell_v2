@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:42:22 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/06/28 14:22:25 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*replace_by_env(char *res, char *trim, t_list *var_env, t_command *cmd)
 		{
 			tmp = ft_strjoin_free(tmp, get_env_value(&trim[i + 1],
 						var_env, cmd));
-			i += cmd->index;
+			i += (size_t)cmd->index;
 		}
 		cmd->index = 0;
 	}
@@ -68,7 +68,7 @@ t_command *cmd)
 		else
 			tmp = ft_strjoin_free(tmp, get_env_value(&trim[i + 1], \
 			var_env, cmd));
-		i += cmd->index;
+		i += (size_t)cmd->index;
 		cmd->index = 0;
 	}
 	free_string(trim);
@@ -97,7 +97,7 @@ char	*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 		else
 			tmp = ft_strjoin_free(tmp, get_env_value(&trim[i + 1], \
 			var_env, cmd));
-		i += cmd->index;
+		i += (size_t)cmd->index;
 		cmd->index = 0;
 	}
 	free_string(trim);

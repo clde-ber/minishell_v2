@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils5.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:26:09 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/24 11:25:33 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/28 14:50:58 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	free_tabtab(char **res)
 
 void	init_structs(t_command *cmd)
 {
-	cmd->path = NULL;
+	cmd->path = ft_strdup("");
 	cmd->index = 0;
 	cmd->cmd_rv = 0;
 	cmd->start = 0;
