@@ -6,21 +6,11 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:17:22 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/27 12:32:58 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/28 11:17:42 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-char	**failed_fd(t_fd *f, char **res)
-{
-	restore_fds(f);
-	if (handle_fds(res) == -1)
-		ft_putstr_fd("Error: file cannot be opened\n", 2);
-	else
-		ft_putstr_fd("Error: no specified file\n", 2);
-	return (ft_calloc(sizeof(char *), 2));
-}
 
 int	check_valid_res_bis(char **str)
 {

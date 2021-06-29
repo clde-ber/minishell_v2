@@ -6,15 +6,30 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/27 12:33:51 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/28 11:54:14 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+char	*handle_ctrlc(char *current)
+{
+	if (g_sig.stop == 1 && current == NULL)
+		g_sig.stop = 0;
+	if (g_sig.stop == 1 && current != NULL)
+	{
+		g_sig.stop = 0;
+		free(current);
+		current = NULL;
+	}
+	return (current);
+}
+
 char	*end_line(char *current, t_term *term)
 {
 	restore_term(term);
+	if (g_sig.stop == 1)
+		current = handle_ctrlc(current);
 	if (current == NULL)
 	{
 		write(1, "\n", 1);
@@ -71,7 +86,7 @@ char	*go_line(t_term *term)
 {
 	char	buf[2];
 	char	*current;
-	int res;
+	int		res;
 
 	init_term(term);
 	g_sig.stop = 0;
@@ -79,17 +94,11 @@ char	*go_line(t_term *term)
 	get_cursor_space(term);
 	res = read(0, buf, 1);
 	if (res == -1)
-			return NULL;
+		return (NULL);
 	while (buf[0] != '\n')
 	{
-		if (g_sig.stop == 1 && current == NULL)
-			g_sig.stop = 0;
-		if (g_sig.stop == 1 && current != NULL)
-		{
-			g_sig.stop = 0;
-			free(current);
-			current = NULL;
-		}
+		if (g_sig.stop == 1)
+			current = handle_ctrlc(current);
 		buf[1] = '\0';
 		if ((int)buf[0] == 27)
 			current = handle_arrow(term, current);
@@ -97,32 +106,7 @@ char	*go_line(t_term *term)
 			current = special_line(current, buf, term);
 		res = read(0, buf, 1);
 		if (res == -1)
-			return NULL;
+			return (NULL);
 	}
 	return (end_line(current, term));
-}
-
-char	*getcommand(char *str)
-{
-	int		i;
-	int		j;
-	char	*ret;
-
-	i = 0;
-	j = 0;
-	if (str == NULL)
-		return (NULL);
-	while (str[i] && ((str[i] != ';' || (str[i] == ';' && \
-	(i && str[i - 1] == '\\'))) || is_in_string(str, i)))
-		i++;
-	ret = malloc(sizeof(char) * (i + 1));
-	if (!(ret))
-		return (NULL);
-	while (j < i)
-	{
-		ret[j] = str[j];
-		j++;
-	}
-	ret[j] = '\0';
-	return (ret);
 }

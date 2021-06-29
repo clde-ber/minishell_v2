@@ -79,16 +79,14 @@ void	finish_line(t_command *cmd, t_term *term, t_list *var_env)
 	free(cmd->path);
 }
 
-int	main(int ac, char **av, char **env)
+int	main(int ac, char *av[], char **env)
 {
 	char		*line;
 	t_list		*var_env;
 	t_command	cmd[1];
 	t_term		term[1];
 
-	(void)ac;
-	(void)av;
-	init_vars_main(&line, &term->done, &g_sig.sig, &g_sig.boolean);
+	init_vars_main(&line, &term->done, ac, av);
 	init_structs(cmd);
 	var_env = NULL;
 	var_env = set_new_env(env, var_env, cmd);
@@ -97,8 +95,7 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		ft_putstr_fd("***minishell*** > ", 1);
-		// while (g_sig.stop == 0)
-			line = go_line(term);
+		line = go_line(term);
 		if (line && ft_strncmp(line, "exit", 4) == 0)
 			ft_exit(0, ft_split(line, " \t\n\r\v\f"), cmd);
 		main_loop(line, env, var_env, cmd);

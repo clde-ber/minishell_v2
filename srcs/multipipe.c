@@ -6,52 +6,11 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/27 12:32:34 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/28 11:18:00 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-int	get_k(int k, char **res, int i, int j)
-{
-	if (count_pipes(res) == i)
-		k = count_tabs(res);
-	else
-	{
-		k = j;
-		while (ft_strcmp(res[k], "|") != 0)
-			k++;
-	}
-	return (k);
-}
-
-char	**middle_pipe(char **res, int i)
-{
-	int		j;
-	int		k;
-	char	**tabl;
-
-	j = 0;
-	k = 0;
-	while (k != i)
-	{
-		if (ft_strcmp(res[j], "|") == 0)
-			k++;
-		j++;
-	}
-	k = get_k(k, res, i, j);
-	tabl = malloc(sizeof(char *) * ((k - j) + 1));
-	if (!tabl)
-		return (NULL);
-	i = 0;
-	while (i < ((k - j)))
-	{
-		tabl[i] = ft_strdup(res[j + i]);
-		i++;
-	}
-	tabl[i] = NULL;
-	return (tabl);
-}
 
 void	init_mp(t_mp *mp, int i, t_fd *f)
 {

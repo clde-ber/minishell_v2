@@ -82,8 +82,7 @@ typedef struct s_command
 /*
 **main_utils
 */
-void	init_vars_main(char **line, char ***term_done, int *g_sig_sig, \
-int *g_sig_boolean);
+void	init_vars_main(char **line, char ***term_done, int ac, char *argv[]);
 void	restore_fds(t_fd *f);
 void	init_fds(t_fd *f);
 
@@ -304,12 +303,11 @@ void	name_a_value_var(char **name, char **value, char **env, int k);
 void	init_strings_set_env(t_list **tmp_new, t_list **tmp, char **name);
 void	init_vars_unset(char **name, int *i, int *boolean);
 
-
 /*
 **env_utils5
 */
 void	init_i_a_j_values(char **i_value, char **j_value, char *tabl_k,
-char *tabl_l);
+			char *tabl_l);
 void	plus_equal(char **tabl, char *x_name, char *a_value, char *b_value);
 void	equal(char **tabl, char *x_name, char *a_value, char *b_value);
 
@@ -381,11 +379,17 @@ char	**end_redir(char **res, t_fd *f);
 /*
 **redir_utils2
 */
-char	**failed_fd(t_fd *f, char **res);
+
 int		check_valid_res_bis(char **str);
 int		check_valid_res(char **str);
 char	**divide_pipe(t_fd *f);
 int		go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env);
+
+/*
+**redir_utils3
+*/
+char	**failed_fd(t_fd *f, char **res);
+char	**middle_pipe(char **res, int i);
 
 /*
 **echo
@@ -457,11 +461,11 @@ char	*handle_arrow(t_term *term, char *end);
 /*
 **multipipe
 */
-int	get_k(int k, char **res, int i, int j);
-char **middle_pipe(char **res, int i);
-void print_tabtab(char **res);
+int		get_k(int k, char **res, int i, int j);
+char	**middle_pipe(char **res, int i);
+void	print_tabtab(char **res);
 void	init_mp(t_mp *mp, int i, t_fd *f);
-int handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd, char **env);
+int		handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd, char **env);
 
 /*
 **parse_path
@@ -579,7 +583,7 @@ char	*ft_itoa(int n);
 */
 char	*ft_strnstr(const char *haystack, const char *needle, size_t len);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
-int	faulty_redir(t_command *cmd);
+int		faulty_redir(t_command *cmd);
 void	control_fds(t_mp *mp, int i);
 
 /*

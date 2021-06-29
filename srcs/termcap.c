@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 15:13:21 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/24 16:52:39 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/28 11:15:43 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,5 +108,4 @@ void	init_term(t_term *term)
 	else
 		term->len = 0;
 	term->mtline = 0;
-	// term->last = NULL;
 }
