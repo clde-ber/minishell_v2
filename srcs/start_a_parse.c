@@ -89,8 +89,7 @@ int	main(int ac, char *av[], char **env)
 	init_vars_main(&line, &term->done, ac, av);
 	init_structs(cmd);
 	var_env = NULL;
-	if ((env && env[0] != NULL) || !env)
-		var_env = set_new_env(env, var_env, cmd);
+	set_env_list(&var_env, env, cmd);
 	signal(SIGINT, handle_signal);
 	signal(SIGQUIT, handle_signal);
 	while (1)

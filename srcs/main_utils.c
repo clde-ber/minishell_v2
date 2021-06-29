@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/22 15:17:08 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/28 11:54:53 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/06/29 15:08:38 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,12 @@ char	*getcommand(char *str)
 	}
 	ret[j] = '\0';
 	return (ret);
+}
+
+void	set_env_list(t_list **var_env, char **env, t_command *cmd)
+{
+	if (env && env[0] != NULL)
+		*var_env = set_new_env(env, *var_env, cmd);
+	else
+		*var_env = ft_lstnew(ft_strdup(""), ft_strdup(""));
 }

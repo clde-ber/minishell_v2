@@ -85,6 +85,7 @@ typedef struct s_command
 void	init_vars_main(char **line, char ***term_done, int ac, char *argv[]);
 void	restore_fds(t_fd *f);
 void	init_fds(t_fd *f);
+void	set_env_list(t_list **var_env, char **env, t_command *cmd);
 
 /*
 **start_a_parse
