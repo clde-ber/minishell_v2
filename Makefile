@@ -51,6 +51,7 @@ SRCS =	./srcs/echo.c\
 	./srcs/redir.c\
 	./srcs/redir_utils.c\
 	./srcs/redir_utils2.c\
+	./srcs/redir_utils3.c\
 	./srcs/sig_a_errors.c\
 	./srcs/start_a_parse.c\
 	./srcs/termcap.c\
