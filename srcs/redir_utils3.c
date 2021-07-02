@@ -6,11 +6,11 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/28 11:17:25 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/28 11:27:05 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 char	**failed_fd(t_fd *f, char **res)
 {

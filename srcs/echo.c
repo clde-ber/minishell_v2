@@ -6,11 +6,11 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/11 22:13:10 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/22 15:47:40 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 char	*echo_option(char *output, int option)
 {

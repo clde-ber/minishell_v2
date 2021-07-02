@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:26 by user42            #+#    #+#             */
-/*   Updated: 2021/06/25 08:37:50 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 ** invoked, updated when unset is called, and printed when env is.
 */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 t_list	*set_new_env(char **env, t_list *var_env, t_command *cmd)
 {

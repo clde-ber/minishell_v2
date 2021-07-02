@@ -6,11 +6,11 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/28 11:54:14 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/02 14:17:20 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 char	*handle_ctrlc(char *current)
 {
@@ -39,6 +39,8 @@ char	*end_line(char *current, t_term *term)
 		term->len == 0)
 		term->done = save_input(current, term->done);
 	write(1, "\n", 1);
+	if (term->last != NULL)
+		free(term->last);
 	return (current);
 }
 
@@ -72,8 +74,16 @@ char	*special_line(char *current, char *buf, t_term *term)
 	}
 	if ((int)buf[0] == 4)
 	{
-		handle_ctrl_d(current, term);
-		exit(0);
+		if (current == NULL)
+		{
+			handle_ctrl_d(current, term);
+			exit(0);
+		}
+		else
+		{
+			current = free_null(current);
+			ft_putstr_fd("\n***minishell*** > ", 1);
+		}
 	}
 	else if ((int)buf[0] == 127)
 		current = handle_delete(current, term);

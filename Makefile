@@ -42,6 +42,7 @@ SRCS =	./srcs/echo.c\
 	./srcs/minishell_utils3.c\
 	./srcs/minishell_utils4.c\
 	./srcs/minishell_utils5.c\
+	./srcs/minishell_utils6.c\
 	./srcs/parse_path.c\
 	./srcs/path.c\
 	./srcs/path_utils.c\

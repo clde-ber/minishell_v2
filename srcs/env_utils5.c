@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils5.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/28 09:28:32 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/28 09:30:46 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 void	init_i_a_j_values(char **i_value, char **j_value, char *tabl_k,
 char *tabl_l)

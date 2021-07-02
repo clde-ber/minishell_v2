@@ -6,38 +6,33 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 19:16:23 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/21 14:03:50 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/02 14:26:13 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
-int	handle_j(t_term *term, int k, int j)
+int	handle_j_up(t_term *term)
 {
-	if (k == 0)
+	int	j;
+
+	if (term->where == 0)
 	{
-		if (term->where == 0)
+		if (term->last != NULL)
 			j = ft_strlen(term->last);
 		else
-			j = ft_strlen(term->done[term->where - 1]);
+			j = 0;
+	}
+	else
+	{
+		j = ft_strlen(term->done[term->where - 1]);
 		if (j + 18 > term->col)
 			tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 2), 1,
 				ft_putchar);
 		else
 			tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 1), 1,
 				ft_putchar);
-		return (j);
 	}
-	if (term->where == -1)
-		j = ft_strlen(term->done[0]);
-	else
-		j = ft_strlen(term->done[term->where + 1]);
-	if (j + 18 > term->col)
-		tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 2), 1,
-			ft_putchar);
-	else
-		tputs(tgoto(tgetstr("cm", NULL), term->x - 1, term->y - 1), 1,
-			ft_putchar);
 	return (j);
 }
 
@@ -55,7 +50,7 @@ char	*handle_arrow_up(t_term *term, char *end)
 			term->done[term->where]) != 0)
 		term->done = replace_tabtab(term->done, term->where, end);
 	term->where++;
-	j = handle_j(term, 0, 0);
+	j = handle_j_up(term);
 	while (i <= j)
 	{
 		write(1, " ", 1);
@@ -110,7 +105,7 @@ char	*handle_arrow_down(t_term *term, char *end)
 			term->done[term->where]) != 0)
 		term->done = replace_tabtab(term->done, term->where, end);
 	term->where--;
-	j = handle_j(term, 1, 0);
+	j = handle_j_down(term);
 	while (i <= j)
 	{
 		write(1, " ", 1);
@@ -132,7 +127,11 @@ char	*handle_arrow(t_term *term, char *current)
 		if (term->len == 0)
 			return (current);
 		if (current != NULL && term->where == -1)
+		{
+			if (term->last != NULL)
+				free(term->last);
 			term->last = ft_strdup(current);
+		}
 		if ((int)buf[0] == 65)
 			current = handle_arrow_up(term, current);
 		else if ((int)buf[0] == 66)

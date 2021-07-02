@@ -1,4 +1,16 @@
-#include "../minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   start_a_parse.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/29 15:34:56 by budal-bi          #+#    #+#             */
+/*   Updated: 2021/06/30 20:46:47 by budal-bi         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../includes/minishell.h"
 
 t_sig	g_sig;
 
@@ -24,6 +36,7 @@ int	dispatch(char *str, char **env, t_list *var_env, t_command *cmd)
 		g_sig.stop = 0;
 		free_tabtab(res);
 		free_tabtab(f->res);
+		free_tabtab(f->save_pipe);
 	}
 	return (0);
 }

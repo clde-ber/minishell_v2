@@ -1,4 +1,4 @@
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 static char	*ft_attrib(int n, char *res, int i)
 {
