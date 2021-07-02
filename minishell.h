@@ -138,7 +138,7 @@ int		condition_dq(int i, int len, char *str);
 int		condition_sq(int i, int len, char *str);
 void	init_vars_get_env_v(int *i, char **ret);
 int		condition_one(int i, char *dest, char *str, char *env);
-int		condition_two(int i, char *dest);
+int		condition_two(int i, char *dest, char *str);
 
 /*
 **expander_utils3
@@ -495,6 +495,7 @@ void	init_4_values(int *s_q, int *d_q, int *s_q2, int *d_q2);
 int		is_in_string(char *line, int index);
 char	*cut_after_punct(char *dest, char *line, char *command);
 char	**copy_tabtab(char **res);
+int		is_string(char *str, char *dest, int i);
 
 /*
 **minishell_utils3
