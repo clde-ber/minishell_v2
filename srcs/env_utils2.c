@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:54:50 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/17 15:37:56 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/01 10:59:13 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,13 +109,12 @@ int	is_valid_env_name(char *str)
 	i = 0;
 	if (str[i] == '\0')
 		return (0);
+	if (str[i] == '+' || str[i] == '=')
+		return (0);
 	while (i < (int)ft_strlen(str))
 	{
-		if (i < (int)ft_strlen(str) && str[i] == '\\')
-			i += 2;
 		if (i < (int)ft_strlen(str) && !(str[i] == '_' || ft_isalnum(str[i]) \
-		|| str[i] == '$' || str[i] == '\\' || (str[i] == '=' && \
-		ft_strlen(str) > 1)))
+		|| ((str[i] == '=' || str[i] == '+') && ft_strlen(str) > 1)))
 			return (0);
 		i++;
 	}

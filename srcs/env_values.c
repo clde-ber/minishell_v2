@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:26:31 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/28 14:58:04 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/01 08:19:29 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	init_vars_replace_by_env(size_t *i, char **tmp, char **str)
 int	is_not_env_value(size_t i, char *trim)
 {
 	if (!(((i && trim[i] == '$' && trim[i - 1] != '\\') \
-	|| (i == 0 && trim[i] == '$'))))
+	|| (i == 0 && trim[i] == '$')) && (ft_isalnum(trim[i + 1]) || \
+	trim[i + 1] == '_')))
 		return (1);
 	return (0);
 }

@@ -6,11 +6,23 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/20 18:59:08 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/06/17 15:53:12 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/01 10:37:45 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int	is_string(char *str, char *dest, int i)
+{
+	int	j;
+
+	j = 0;
+	while (str[j] && dest[j] && str[j] != dest[j])
+		j++;
+	if (is_in_string(str, i + j))
+		return (1);
+	return (0);
+}
 
 void	init_4_values(int *s_q, int *d_q, int *s_q2, int *d_q2)
 {
@@ -30,7 +42,7 @@ int	is_in_string(char *line, int index)
 
 	init_4_values(&sq, &dq, &sq2, &dq2);
 	i = -1;
-	while (++i < index)
+	while (++i < index && i < (int)ft_strlen(line))
 	{
 		if (line[i] == '\"' && (i == 0 || (i && line[i - 1] != '\\')))
 			dq++;

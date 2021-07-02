@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 14:30:34 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/28 14:21:56 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/01 08:24:57 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ char	*get_string_value(char *str)
 	if (!(res))
 		return (0);
 	while (str[i] && ((str[i] == '\\' && str[i + 1] == '$') || (i && str[i - 1] \
-		== '\\' && str[i] == '$') || str[i] != '$'))
+		== '\\' && str[i] == '$') || (str[i] == '$' && str[i + 1] != '_' && \
+		!ft_isalnum(str[i + 1])) || str[i] != '$'))
 	{
 		res[i] = str[i];
 		i++;

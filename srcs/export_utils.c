@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/28 14:57:50 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/01 11:00:11 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,22 @@ char *res)
 void	split_env_name_a_value(char **str_first, char **str_secd,
 char **p_bin, char *res)
 {
-	if (p_bin && p_bin[0] && p_bin[1])
+	int	i;
+
+	i = 1;
+	if (p_bin && p_bin[0] && p_bin[1] && res[0] != '+' && res[0] != '=')
 	{
 		*str_first = ft_strdup(p_bin[0]);
 		if (p_bin[1])
+		{
 			*str_secd = ft_strdup(p_bin[1]);
+			while (p_bin[++i])
+				*str_secd = join_a_free(join_a_free(*str_secd, "="), p_bin[i]);
+		}
 		else
 			*str_secd = ft_strdup("");
 	}
-	else if (p_bin && p_bin[0])
+	else if (p_bin && p_bin[0] && res[0] != '+' && res[0] != '=')
 		which_is_name_a_value(str_first, str_secd, p_bin, res);
 	else
 	{

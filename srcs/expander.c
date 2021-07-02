@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/25 09:03:50 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/01 09:09:28 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_command *cmd)
 			while (dest[i] && (dest[i] == '\'' || dest[i] == '\"'))
 				i++;
 		}
-		else if (condition_two(i, dest))
+		else if (condition_two(i, dest, str))
 			i++;
 		else if (i < (int)ft_strlen(dest))
 			fill_string(&i, &j, dest, &res);

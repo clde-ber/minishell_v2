@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/06/28 14:22:25 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/01 10:54:00 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,6 @@ char	*replace_by_env(char *res, char *trim, t_list *var_env, t_command *cmd)
 	char	*str;
 
 	init_vars_replace_by_env(&i, &tmp, &str);
-	if (ft_strlen(trim) == 1 && trim[0] == '$')
-	{
-		ft_free_2_strings(trim, tmp);
-		return (ft_strdup("$"));
-	}
 	while (i < ft_strlen(trim))
 	{
 		if ((is_not_env_value(i, trim)) && ft_strchr(res, '=') == 0)
@@ -53,11 +48,6 @@ t_command *cmd)
 	char	*str;
 
 	init_vars_replace_by_env(&i, &tmp, &str);
-	if (ft_strlen(trim) == 1 && trim[0] == '$')
-	{
-		ft_free_2_strings(trim, tmp);
-		return (ft_strdup("$"));
-	}
 	while (i < ft_strlen(trim))
 	{
 		if ((is_not_env_value(i, trim)))
@@ -82,11 +72,6 @@ char	*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 	char	*str;
 
 	init_vars_replace_by_env(&i, &tmp, &str);
-	if (ft_strlen(trim) == 1 && trim[0] == '$')
-	{
-		ft_free_2_strings(trim, tmp);
-		return (ft_strdup("$"));
-	}
 	while (i < ft_strlen(trim))
 	{
 		if ((is_not_env_value(i, trim)))
