@@ -63,11 +63,11 @@ SRCS =	./srcs/echo.c\
 RENAME		= mv a.out minishell
 OBJ			= $(SRCS:.c=.o)
 NAME		= minishell
-FS			= a.out.dSYM minishell.dSYM valgrind_log
+FS			= a.out.dSYM minishell.dSYM
 CC			= gcc
 RM			= rm -f
 RM_DIR		= rm -rf
-CFLAGS		= -g3 -fsanitize=address -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror
 DEP			= -lncurses
 $(NAME):		$(OBJ)
 #add CFLAGS
