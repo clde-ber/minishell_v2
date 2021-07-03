@@ -393,6 +393,7 @@ int		go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env);
 char	**failed_fd(t_fd *f, char **res);
 char	**middle_pipe(char **res, int i);
 int		end_pipe(t_fd *f, t_mp *mp);
+char	**get_redir_ready(char **res);
 
 /*
 **echo
