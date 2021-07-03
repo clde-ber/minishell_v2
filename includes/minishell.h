@@ -376,6 +376,7 @@ int		open_fds_in(char **res, int i);
 int		handle_fds(char **res);
 int		count_pipes(char **res);
 char	**end_redir(char **res, t_fd *f);
+char	**end_redir_pipe(char **res, t_fd *f);
 
 /*
 **redir_utils2
