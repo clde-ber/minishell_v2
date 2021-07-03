@@ -452,6 +452,7 @@ void	init_term(t_term *term);
 */
 char	*handle_delete(char *current, t_term *term);
 void	handle_ctrl_d(char *current, t_term *term);
+char	*handle_hist(t_term *term, char *end);
 
 /*
 **termcap_arrow

@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:28:09 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/01 13:21:49 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/03 13:55:03 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,20 @@ void	handle_ctrl_d(char *current, t_term *term)
 	if (current != NULL)
 		free(current);
 	write(1, "\n", 1);
+}
+
+char	*handle_hist(t_term *term, char *end)
+{
+	if (term->last == NULL)
+	{
+		free(end);
+		end = NULL;
+	}
+	else
+	{
+		ft_putstr_fd(term->last, 1);
+		free(end);
+		end = ft_strdup(term->last);
+	}
+	return (end);
 }

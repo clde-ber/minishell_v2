@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 19:16:23 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/02 14:26:13 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/03 13:53:55 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,12 +76,7 @@ char	*handle_end_up(t_term *term, char *end, int k)
 		return (NULL);
 	}
 	else if (term->where == -1 && end != NULL)
-	{
-		ft_putstr_fd(term->last, 1);
-		if (end != NULL)
-			free(end);
-		end = ft_strdup(term->last);
-	}
+		end = handle_hist(term, end);
 	else
 	{
 		ft_putstr_fd(term->done[term->where], 1);
