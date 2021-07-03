@@ -150,6 +150,11 @@ void	trim_s_quotes(char **buf, char *tmp_sub, int bool2, char *tmp);
 char	*no_trim_starting_space(char *tmp, t_list *var_env, t_command *cmd);
 
 /*
+**expander_utils4
+*/
+char    *ft_free_2_strings_a_return(char *str_first, char *str_secd);
+
+/*
 **expander_a_env
 */
 char	*replace_by_env(char *res, char *trim, t_list *var_env, t_command *cmd);

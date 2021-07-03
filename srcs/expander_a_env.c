@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_a_env.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/03 13:01:25 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,11 +132,12 @@ char	*handled_export(char *res, t_list *var_env, t_command *cmd)
 	env_quotes_a_values(&str_first, &str_secd, &quotes, &name);
 	free_tabtab(p_bin);
 	name = replace_by_env_value(name, var_env, cmd);
-	if ((name && !(is_valid_env_name(name))) || \
-	(!(ft_strcmp(name, "")) && !(is_unknown_env_variable(res, var_env, cmd))))
+	if ((name && !(is_valid_env_name(name))))
 	{
-		cmd->cmd_rv = 1;
 		free(name);
+		if (is_unknown_env_variable(res, var_env, cmd) && !ft_strchr(res, '='))
+			return (ft_free_2_strings_a_return(str_first, str_secd));
+		cmd->cmd_rv = 1;
 		return (export_errors(str_first, str_secd, quotes, res));
 	}
 	free(name);
