@@ -17,6 +17,7 @@ SRCS =	./srcs/echo.c\
 	./srcs/expander_utils.c\
 	./srcs/expander_utils2.c\
 	./srcs/expander_utils3.c\
+	./srcs/expander_utils4.c\
 	./srcs/expander.c\
 	./srcs/export_utils.c\
 	./srcs/export.c\
