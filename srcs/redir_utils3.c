@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/28 11:17:25 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/03 12:27:41 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,35 @@ char	**middle_pipe(char **res, int i)
 	}
 	tabl[i] = NULL;
 	return (tabl);
+}
+
+char	**end_redir(char **res, t_fd *f)
+{
+	char	**tabl;
+	char	**buf;
+
+	if (chrtabtab(res, ">") == -1 && chrtabtab(res, ">>") == -1 && \
+		chrtabtab(res, "<") == -1)
+		return (res);
+	if (handle_fds(res) < 0)
+		return (failed_fd(f, res));
+	tabl = get_redir_ready(res);
+	while (chrtabtab(tabl, ">") != -1 || chrtabtab(tabl, ">>") != -1 || \
+		chrtabtab(tabl, "<") != -1)
+	{
+		buf = copy_tabtab(tabl);
+		free_tabtab(tabl);
+		tabl = end_redir(buf, f);
+		free_tabtab(buf);
+		if (tabl == NULL)
+			return (NULL);
+	}
+	return (tabl);
+}
+
+int	end_pipe(t_fd *f, t_mp *mp)
+{
+	free_tabtab(mp->first);
+	free_tabtab(f->save_pipe);
+	return (0);
 }

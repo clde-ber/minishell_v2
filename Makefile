@@ -67,7 +67,7 @@ FS			= a.out.dSYM minishell.dSYM
 CC			= gcc
 RM			= rm -f
 RM_DIR		= rm -rf
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -g3 -fsanitize=address -Wall -Wextra -Werror
 DEP			= -lncurses
 $(NAME):		$(OBJ)
 #add CFLAGS

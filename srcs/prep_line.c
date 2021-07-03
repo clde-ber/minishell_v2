@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/16 16:24:12 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/02 14:17:20 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/03 12:19:32 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,6 @@ char	*special_line(char *current, char *buf, t_term *term)
 		{
 			handle_ctrl_d(current, term);
 			exit(0);
-		}
-		else
-		{
-			current = free_null(current);
-			ft_putstr_fd("\n***minishell*** > ", 1);
 		}
 	}
 	else if ((int)buf[0] == 127)

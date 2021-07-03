@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:17:22 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/03 11:45:21 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/03 12:28:23 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,8 @@ int	go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 			g_sig.boolean++;
 		waitpid(mp->pid, &mp->status, 1);
 		parent_process(mp, f->save_pipe[0]);
-		go_instruction(end_redir_pipe(copy_tabtab(f->save_pipe), f), var_env, cmd, env);
+		go_instruction(end_redir_pipe(copy_tabtab(f->save_pipe), f), var_env, \
+			cmd, env);
 	}
-	free_tabtab(mp->first);
-	// if (f->save_pipe)
-		free_tabtab(f->save_pipe);
-	return (0);
+	return (end_pipe(f, mp));
 }
