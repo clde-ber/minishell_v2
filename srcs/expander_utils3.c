@@ -3,65 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils3.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:26:40 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/08 16:36:00 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-char	*trim_dq(int *bool2, char *tmp)
+int	is_string_identifier(char *dest, int i)
 {
-	char	*tmp_sub;
+	if ((int)ft_strlen(dest) && (((((i == 0 && dest[i] == '\'') || (i && \
+	dest[i - 1] != '\\' && dest[i] == '\'')) && !(is_in_dq_string(i, dest) && \
+	is_in_dq_string(i, dest) % 2)) || (((i == 0 && dest[i] == '\"') || (i && \
+	dest[i - 1] != '\\' && dest[i] == '\"')) && !(is_in_sq_string(i, dest) && \
+	is_in_sq_string(i, dest) % 2)))))
+		return (1);
+	return (0);
+}
 
-	tmp_sub = NULL;
-	if (tmp[0] == '\"')
+char	*remove_antislashes(char *dest)
+{
+	int		i;
+	int		j;
+	char	*res;
+
+	init_2_vars(&i, &j);
+	res = malloc(sizeof(char) * (ft_strlen(dest) + 1));
+	if (!(res))
+		return (0);
+	while (i < (int)ft_strlen(dest))
 	{
-		*bool2 = 1;
-		tmp_sub = ft_strtrim(tmp, "\"");
+		if (i < (int)ft_strlen(dest) && is_string_identifier(dest, i))
+		{
+			while (dest[i] && ((dest[i] == '\'' && !(is_in_dq_string(i, dest) \
+			&& is_in_dq_string(i, dest) % 2)) || (dest[i] == '\"' && \
+			!(is_in_sq_string(i, dest) && is_in_sq_string(i, dest) % 2))))
+				i++;
+		}
+		else if ((int)ft_strlen(dest) && is_escaped_char(i, dest))
+			i++;
+		else if ((int)ft_strlen(dest))
+			fill_string(&i, &j, dest, &res);
 	}
-	else
-		tmp_sub = ft_strdup(tmp);
-	return (tmp_sub);
-}
-
-char	*trim_sq(int *boolean, char *tmp_sub)
-{
-	char	*buf;
-
-	buf = NULL;
-	if ((even_or_odd(tmp_sub)) && even_or_odd(tmp_sub) % 2)
-		*boolean = 1;
-	buf = ft_strdup(tmp_sub);
-	return (buf);
-}
-
-void	init_var_nh_cmd(int *boolean, int *index, int *bool2, int *cmd_bol)
-{
-	*boolean = 0;
-	*index = 0;
-	*bool2 = 0;
-	*cmd_bol = 0;
-}
-
-void	trim_s_quotes(char **buf, char *tmp_sub, int bool2, char *tmp)
-{
-	if (*buf && (*buf)[0] == '\'' && bool2 == 0)
-	{
-		free_string(*buf);
-		*buf = ft_strtrim(tmp_sub, "\'");
-	}
-	free_string(tmp);
-	free_string(tmp_sub);
-}
-
-char	*no_trim_starting_space(char *tmp, t_list *var_env, t_command *cmd)
-{
-	char	*buf;
-
-	buf = replace_by_env_value(ft_strdup(tmp), var_env, cmd);
-	cmd->bol = 1;
-	return (buf);
+	res[j] = '\0';
+	free_string(dest);
+	return (res);
 }

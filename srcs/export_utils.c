@@ -3,103 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:33 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/09 07:46:12 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	if_d_quotes(char *str_first, char *str_secd, char **str_f, char **str_s)
+void	set_values_export(char *str, char **str_first, char **str_secd)
 {
-	if (str_first[0] == '\"')
-		*str_f = ft_strtrim(str_first, "\"");
-	else
-		*str_f = ft_strdup(str_first);
-	if (str_secd[0] == '\"')
-		*str_s = ft_strtrim(str_secd, "\"");
-	else
-		*str_s = ft_strdup(str_secd);
-}
-
-void	env_quotes_a_values(char **str_first, char **str_secd,
-int *quotes, char **name)
-{
-	char	*str_f;
-	char	*str_s;
-
-	if_d_quotes(*str_first, *str_secd, &str_f, &str_s);
-	if (ft_strlen(*str_first) != ft_strlen(str_f)
-		&& ft_strlen(*str_secd) == ft_strlen(str_s))
-		*quotes = 1;
-	if (ft_strlen(*str_secd) != ft_strlen(str_s)
-		&& ft_strlen(*str_first) == ft_strlen(str_f))
-		*quotes = 2;
-	if (ft_strlen(*str_first) != ft_strlen(str_f)
-		&& ft_strlen(*str_secd) != ft_strlen(str_s))
-		*quotes = 3;
-	if (ft_strlen(*str_first) == ft_strlen(str_f)
-		&& ft_strlen(*str_secd) == ft_strlen(str_s))
-		*quotes = 4;
-	ft_free_2_strings(*str_first, *str_secd);
-	*str_first = str_f;
-	*str_secd = str_s;
-	*name = get_env_name(*quotes, *str_first);
-	if (!(*name))
-		(*str_first)[0] = '\0';
-}
-
-void	which_is_name_a_value(char **str_first, char **str_secd, char **p_bin,
-char *res)
-{
-	if (res[0] == '=')
+	if (str && ft_strchr(str, '='))
 	{
-		*str_first = ft_strdup("");
-		*str_secd = ft_strdup(p_bin[0]);
+		*str_first = ft_strdup(str);
+		(*str_first)[ft_strchr_bis(str, '=')] = '\0';
+		*str_secd = ft_strdup(&str[ft_strchr_bis(str, '=')]);
 	}
 	else
 	{
-		*str_first = ft_strdup(p_bin[0]);
+		*str_first = ft_strdup(str);
 		*str_secd = ft_strdup("");
 	}
 }
 
-void	split_env_name_a_value(char **str_first, char **str_secd,
-char **p_bin, char *res)
+char	*handled_export(char *res, t_list *var_env, t_command *cmd)
 {
-	int	i;
+	char	*str_first;
+	char	*str_secd;
+	char	*str;
 
-	i = 1;
-	if (p_bin && p_bin[0] && p_bin[1] && res[0] != '+' && res[0] != '=')
+	str = replace_by_env_value(ft_strdup(res), var_env, cmd);
+	str = remove_antislashes(str);
+	set_values_export(str, &str_first, &str_secd);
+	if ((str_first && !(is_valid_env_name(str_first))))
 	{
-		*str_first = ft_strdup(p_bin[0]);
-		if (p_bin[1])
-		{
-			*str_secd = ft_strdup(p_bin[1]);
-			while (p_bin[++i])
-				*str_secd = join_a_free(join_a_free(*str_secd, "="), p_bin[i]);
-		}
-		else
-			*str_secd = ft_strdup("");
+		if (is_unknown_env_variable(res, var_env, cmd) && !ft_strchr(res, '='))
+			return (ft_free_3_strings_a_return(str_first, str_secd, str));
+		cmd->cmd_rv = 1;
+		return (export_errors(str_first, str_secd, str));
 	}
-	else if (p_bin && p_bin[0] && res[0] != '+' && res[0] != '=')
-		which_is_name_a_value(str_first, str_secd, p_bin, res);
-	else
-	{
-		*str_first = ft_strdup(res);
-		*str_secd = ft_strdup("");
-	}
-}
-
-void	export_replace_by_env_value(char **str_first, char **str_secd,
-t_list *var_env, t_command *cmd)
-{
-	cmd->index = 0;
-	if (even_or_odd(*str_first) % 2 == 0 || even_or_odd(*str_first) == 0)
-		*str_first = replace_by_env_value(*str_first, var_env, cmd);
-	cmd->index = 0;
-	if (even_or_odd(*str_secd) % 2 == 0 || even_or_odd(*str_secd) == 0)
-		*str_secd = replace_by_env_value(*str_secd, var_env, cmd);
+	if (cmd->cmd_rv != 1)
+		cmd->cmd_rv = 0;
+	return (valid_export(str_first, str_secd, str));
 }

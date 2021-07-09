@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/08 16:30:42 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,36 +37,6 @@ char	*expander(char *res, t_list *var_env, char **args, t_command *cmd)
 	return (ft_strdup(res));
 }
 
-char	*remove_antislashes(char *dest, char *str, t_list *var_env,
-t_command *cmd)
-{
-	int		i;
-	int		j;
-	char	*res;
-	char	*env;
-
-	init_2_vars(&i, &j);
-	env = replace_by_env(str, ft_strdup(str), var_env, cmd);
-	res = malloc(sizeof(char) * (ft_strlen(dest) + 1));
-	if (!(res))
-		return (0);
-	while (i < (int)ft_strlen(dest))
-	{
-		if (condition_one(i, dest, str, env))
-		{
-			while (dest[i] && (dest[i] == '\'' || dest[i] == '\"'))
-				i++;
-		}
-		else if (condition_two(i, dest, str))
-			i++;
-		else if (i < (int)ft_strlen(dest))
-			fill_string(&i, &j, dest, &res);
-	}
-	res[j] = '\0';
-	ft_free_2_strings(dest, env);
-	return (res);
-}
-
 void	init_vars_parse_res(int *i, int *j, char **str)
 {
 	*i = -1;
@@ -91,9 +61,7 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 	parsed_res = create_parsed_res(res);
 	while (res[++i] && !last_command_rv(res, parsed_res))
 	{
-		if (ft_strcmp(res[i], "$?") == 0)
-			parsed_res[j] = rv_itoa(cmd->cmd_rv);
-		else if ((strings_to_join(res, i)) > 0 && ft_strcmp(res[i], "$?"))
+		if ((strings_to_join(res, i)) > 0)
 		{
 			str = ft_strjoin(res[i], res[i + 1]);
 			i++;

@@ -426,7 +426,6 @@ void	write_error_shell(t_command *cmd, char **res);
 **exec_utils2
 */
 void	ft_free_set_args(char **args);
-void	init_vars_set_args(int *index, int *k);
 void	init_2_vars(int *i, int *k);
 int		command_not_found(char **tabl, char **env, char **p_bin);
 int		command_found(char **tabl, char **env, char **p_bin);

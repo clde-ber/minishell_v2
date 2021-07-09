@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_path.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:56:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/08 16:27:36 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,32 +23,13 @@ static size_t	len_word(char *str, int c)
 	size_t	i;
 
 	i = 0;
-	while (i < ft_strlen(str))
+	while (str[i])
 	{
-		if (str[i] == '\'')
-		{
-			i++;
-			while (str[i] && str[i] != '\'')
-				i++;
-		}
-		if (str[i] == '\"')
-		{
-			i++;
-			while (str[i] && str[i] != '\"')
-				i++;
-		}
 		if (str[i] == c)
 			break ;
 		i++;
 	}
 	return (i);
-}
-
-void	is_part_of_string(char c, char *s, size_t *i)
-{
-	(*i)++;
-	while (s[*i] && s[*i] != c)
-		(*i)++;
 }
 
 static size_t	count_tab(char *s, char c)
@@ -60,14 +41,9 @@ static size_t	count_tab(char *s, char c)
 	count = 0;
 	if (s[i] == '\0' || c == '\0')
 		return (1);
-	while (i < ft_strlen(s))
+	while (s[i])
 	{
-		if (i < ft_strlen(s) && s[i] == '\'' && s[i + 1])
-			is_part_of_string(s[i], s, &i);
-		if (i < ft_strlen(s) && s[i] == '\"' && s[i + 1])
-			is_part_of_string(s[i], s, &i);
-		if (i < ft_strlen(s) && s[i] && s[i] != c && (s[i + 1] == c \
-		|| s[i + 1] == '\0'))
+		if (s[i] != c && (s[i + 1] == c || s[i + 1] == '\0'))
 			count++;
 		i++;
 	}
@@ -88,13 +64,19 @@ static void	*free_path(char **res, int j)
 	return (NULL);
 }
 
+void	init_vars_parse_path(size_t *i, size_t *j)
+{
+	*i = -1;
+	*j = 0;
+}
+
 char	**parse_path(char *s, char c)
 {
 	size_t	i;
 	size_t	j;
 	char	**res;
 
-	init_vars_ft_split(&i, &j);
+	init_vars_parse_path(&i, &j);
 	if (!s || !*s)
 		return ((char **)ft_calloc(2, sizeof(char *)));
 	res = malloc(sizeof(char *) * (count_tab(s, c) + 1));
@@ -107,7 +89,7 @@ char	**parse_path(char *s, char c)
 			res[j] = malloc(sizeof(char) * (len_word(&s[i], c) + 1));
 			if (!(res[j]))
 				return (free_path(res, j));
-			res[j] = ft_memmove(res[j], &s[i], len_word(&s[i], c));
+			res[j] = ft_memmove(res[j], &s[i], len_word(&s[i], c) + 1);
 			res[j][len_word(&s[i], c)] = '\0';
 			j++;
 			i += len_word(&s[i], c);

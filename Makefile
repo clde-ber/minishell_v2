@@ -12,6 +12,7 @@ SRCS =	./srcs/echo.c\
 	./srcs/exec.c\
 	./srcs/exec_utils.c\
 	./srcs/exec_utils2.c\
+	./srcs/exec_utils3.c\
 	./srcs/exit.c\
 	./srcs/expander_a_env.c\
 	./srcs/expander_utils.c\

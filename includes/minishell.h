@@ -114,8 +114,7 @@ void	*ft_free(char **res, int j);
 **expander
 */
 char	*expander(char *res, t_list *var_env, char **args, t_command *cmd);
-char	*remove_antislashes(char *dest, char *str, t_list *var_env, \
-t_command *cmd);
+char	*remove_antislashes(char *dest);
 void	init_vars_parse_res(int *i, int *j, char **str);
 void	inc_j(char **parsed_res, int *j);
 char	**parse_res(char **res, t_list *var_env, t_command *cmd);
@@ -138,7 +137,7 @@ int		condition_dq(int i, int len, char *str);
 int		condition_sq(int i, int len, char *str);
 void	init_vars_get_env_v(int *i, char **ret);
 int		condition_one(int i, char *dest, char *str, char *env);
-int		condition_two(int i, char *dest, char *str);
+int		is_escaped_char(int i, char *dest);
 
 /*
 **expander_utils3
@@ -152,12 +151,11 @@ char	*no_trim_starting_space(char *tmp, t_list *var_env, t_command *cmd);
 /*
 **expander_utils4
 */
-char    *ft_free_2_strings_a_return(char *str_first, char *str_secd);
+char    *ft_free_3_strings_a_return(char *str_first, char *str_secd, char *str_third);
 
 /*
 **expander_a_env
 */
-char	*replace_by_env(char *res, char *trim, t_list *var_env, t_command *cmd);
 char	*replace_by_env_value_no_space(char *trim, t_list *var_env, \
 t_command *cmd);
 char	*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd);
@@ -169,7 +167,7 @@ char	*handled_export(char *res, t_list *var_env, t_command *cmd);
 */
 
 void	remove_empty_string(char *str, int *j);
-char	*write_error(char *trim, char *trim2, int quotes, t_command *cmd);
+char	*write_error(char *str, t_command *cmd);
 void	if_d_quotes_unset(char **trim, char *res, int *quotes);
 void	if_s_quotes_unset(char *trim, char **trim2);
 char	*handled_unset(char *res, t_list *var_env, t_command *cmd);
@@ -180,11 +178,9 @@ char	*handled_unset(char *res, t_list *var_env, t_command *cmd);
 void	free_export_errors(char *s1, char *s2, char *s3, char *s4);
 void	if_s_quotes(char *str_first, char *str_secd, char **str_f, \
 char **str_s);
-char	*export_errors(char *str_first, char *str_secd, int quotes, \
-char *res);
+char	*export_errors(char *str_first, char *str_secd, char *res);
 void	ft_free_2_strings(char *s1, char *s2);
-char	*valid_export(char *str_first, char *str_secd, int quotes, \
-char *res);
+char	*valid_export(char *str_first, char *str_secd, char *res);
 
 /*
 **export_utils
@@ -208,6 +204,8 @@ void	init_vars_replace_by_env(size_t *i, char **tmp, char **str);
 int		is_not_env_value(size_t i, char *trim);
 char	*remove_starting_spaces(char *str);
 char	*is_it_unknown_var(char *tmp);
+int		is_in_sq_string(int i, char *str);
+int		is_in_dq_string(int i, char *str);
 
 /*
 **env_values_utils
@@ -222,7 +220,7 @@ void	init_vars_a_a_q(int *i, int *j);
 **env_values_utils2
 */
 char	*get_string(char *str);
-char	*get_string_value(char *str);
+char	*get_string_value(char *str, int boolean, char *trim, int x);
 char	*get_env_value(char *str, t_list *var_env, t_command *cmd);
 int		even_or_odd(char *str);
 char	*find_op(char *str);
@@ -413,7 +411,7 @@ void	ft_echo(char **res, t_command *cmd);
 int		exit_status(int status);
 int		test_shell_bin(char **tabl, char **p_bin, char **res, char **env);
 int		exec_command(char **args, char **res, t_command *cmd, int j);
-int		set_args(char **res, t_command *cmd, int i);
+void	set_args(char **res, t_command *cmd, int i);
 void	init_vars_exec(int *status, char ***env, t_command *cmd, char ***p_bin);
 
 /*
@@ -428,11 +426,18 @@ void	write_error_shell(t_command *cmd, char **res);
 /*
 **exec_utils2
 */
-void	ft_free_set_args(char **args);
-void	init_vars_set_args(int *index, int *k);
+void	ft_free_set_args(char **args, char **n_res);
+void	init_vars_set_args(int *index, int *k, char ***n_res, char **res);
 void	init_2_vars(int *i, int *k);
 int		command_not_found(char **tabl, char **env, char **p_bin);
 int		command_found(char **tabl, char **env, char **p_bin);
+
+/*
+**exec_utils3
+*/
+void	split_execve_args(char ***new_res, char **tmp, int *x, int *j);
+void	init_vars_new_res(int *i, int *j, int *x, char ***tmp);
+char	**new_res(char **res);
 
 /*
 **exit
@@ -557,6 +562,7 @@ char	*ft_strjoin(char *s1, char *s2);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strdup(const char *s1);
+int		ft_strcmp_no_slash(const char *s1, const char *s2);
 
 /*
 **libft_utils2
@@ -587,7 +593,7 @@ int		ft_putchar(int c);
 **libft_utils5
 */
 int		ft_atoi(const char *str);
-char	*rv_itoa(int n);
+char	*rv_itoa(int n, char *buf);
 
 /*
 **libft_utils6

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/09 14:12:18 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,31 +91,31 @@ int	exec_command(char **args, char **res, t_command *cmd, int j)
 	return (exit_status(status));
 }
 
-int	set_args(char **res, t_command *cmd, int i)
+void	set_args(char **res, t_command *cmd, int i)
 {
 	int		index;
 	char	**args;
 	int		k;
+	char	**n_res;
 
-	init_vars_set_args(&index, &k);
+	init_vars_set_args(&index, &k, &n_res, res);
 	if (i > 1)
 	{
 		args = malloc(sizeof(char *) * i);
 		if (!(args))
-			return (0);
+			return ;
 		while (++index + 1 < i)
-			args[index] = ft_strdup(res[index + 1]);
+			args[index] = ft_strdup(n_res[index + 1]);
 		args[index] = NULL;
-		cmd->cmd_rv = exec_command(args, res, cmd, i);
-		if (cmd->cmd_rv == 127)
-			write_error_shell(cmd, res);
+		cmd->cmd_rv = exec_command(args, n_res, cmd, i);
 		ft_free(args, index + 1);
-		return (0);
+		free_tabtab(n_res);
 	}
-	args = ft_calloc(2, sizeof(char *));
-	cmd->cmd_rv = exec_command(args, res, cmd, 1);
-	if (cmd->cmd_rv == 127)
-		write_error_shell(cmd, res);
-	ft_free_set_args(args);
-	return (0);
+	else
+	{
+		args = ft_calloc(2, sizeof(char *));
+		cmd->cmd_rv = exec_command(args, n_res, cmd, 1);
+		ft_free_set_args(args, n_res);
+	}
+	write_error_shell(cmd, res);
 }

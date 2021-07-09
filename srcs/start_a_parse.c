@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   start_a_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 15:34:56 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/03 12:24:49 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/08 16:07:33 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,6 @@ int	main(int ac, char *av[], char **env)
 	{
 		ft_putstr_fd("***minishell*** > ", 1);
 		line = go_line(term);
-		if (line && ft_strncmp(line, "exit", 4) == 0)
-			ft_exit(0, ft_split(line, " \t\n\r\v\f"), cmd);
 		main_loop(line, env, var_env, cmd);
 		g_sig.boolean = 0;
 		line = NULL;
