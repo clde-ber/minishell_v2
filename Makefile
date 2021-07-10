@@ -29,6 +29,7 @@ SRCS =	./srcs/echo.c\
 	./srcs/lexer.c\
 	./srcs/libft_list.c\
 	./srcs/libft_list2.c\
+	./srcs/libft_list3.c\
 	./srcs/libft_utils.c\
 	./srcs/libft_utils2.c\
 	./srcs/libft_utils3.c\
@@ -40,6 +41,7 @@ SRCS =	./srcs/echo.c\
 	./srcs/minishell_utils.c\
 	./srcs/minishell_utils2.c\
 	./srcs/multipipe.c\
+	./srcs/multipipe_utils.c\
 	./srcs/minishell_utils3.c\
 	./srcs/minishell_utils4.c\
 	./srcs/minishell_utils5.c\

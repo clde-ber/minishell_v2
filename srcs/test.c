@@ -1,126 +1,366 @@
 #include <stdlib.h>
 #include <unistd.h>
-
-#include <curses.h>
-#include <term.h>
-
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <string.h>
 
-// int test_ft(int c)
-// {
-//     write(1, "ok", 2);
-//     return (0);
-// }
+#define SIDE_OUT	0
+#define SIDE_IN		1
 
-//maybe pass term in noncanon, get char, check char if arrow
-//if not: save it
-//if it is, display line and change cursor 
+#define STDIN		0
+#define STDOUT		1
+#define STDERR		2
 
-void ft_putchar(int c)
+#define TYPE_END	0
+#define TYPE_PIPE	1
+#define TYPE_BREAK	2
+
+#ifdef TEST_SH
+# define TEST		1
+#else
+# define TEST		0
+#endif
+
+typedef struct	s_list
 {
-    write(1, &c, 1);
+	char			**args;
+	int				length;
+	int				type;
+	int				pipes[2];
+	struct s_list	*previous;
+	struct s_list	*next;
+}				t_list;
+
+int ft_strlen(char const *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }
 
-int main(int argc, char **argv)
+static char	*ft_attrib(int n, char *res, int i)
 {
-    int ret;
-     struct termios s_termios;
-     struct termios s_termios_backup;
-    char *term_type = getenv("TERM");
-    int col;
-    int line;
+	int	j;
 
-    tgetent(NULL, getenv("TERM"));
-	tcgetattr(STDOUT_FILENO, &s_termios);
-	tcgetattr(STDOUT_FILENO, &s_termios_backup);
-	s_termios.c_lflag &= ~(ICANON | ECHO);
-	s_termios.c_cc[VTIME] = 0;
-	s_termios.c_cc[VMIN] = 1;
-	col = tgetnum("co");
-	line = tgetnum("li");
-	tputs(tgetstr("cl", NULL), 1, ft_putchar);
-	// if (init_info(envp))
-	// 	exit(EXIT_FAILURE);
-	tcsetattr(STDOUT_FILENO, TCSANOW, &s_termios);
-    
-    int		first;
-	char	*cur_dir;
-
-	first = 1;
-	ft_printf(RED "Welcome to Minisheh\n" RESET);
-	while (!g_info->crashed)
+	j = 0;
+	if (n == -2147483648)
+		n++;
+	if (n < 0)
 	{
-        //current path
-		cur_dir = get_cur_dir();
-		if (!(cur_dir))
-			cur_dir = ft_strdup("/");
-		ft_printf(BLUE "~ %s > " RESET, cur_dir);
-		//position curseur terminal
-        get_pos(&g_info->cursor.start_posx, &g_info->cursor.start_posy);
-		g_info->prompt_len = ft_strlen(cur_dir) + 6;
-		g_info->cmd_head = ft_create_elem(create_cmd_struct());
-		process_line(first);
-		first = 0;
-		update_cmd_status();
-		reset_info();
-		remove_useless_history();
-		secure_free(cur_dir);
+		n *= -1;
+		j = 1;
 	}
-	free_blocks(g_info->block_head);
-	free_tab(&g_info->dir_paths);
-	secure_free(g_info->line);
-	ft_list_clear(g_info->env_head, free_env_struct);
-	ft_list_clear(g_info->history_head, free_history_struct);
-	secure_free(g_info);
-	return (SUCCESS);
+	while (i >= j)
+	{
+		res[i] = n % 10 + 48;
+		n /= 10;
+		i--;
+	}
+	return (res);
 }
 
-//     ret = tgetent(NULL, term_type);
+static int	ft_mallocsize(int n)
+{
+	int	i;
 
-//     char *arr_u;
-//     char *arr_d;
-//     s_termios.c_lflag &= ~(ICANON); /* Met le terminal en mode non canonique. La fonction read recevra les entrées clavier en direct sans attendre qu'on appuie sur Enter */
-//     if (tcsetattr(0, 0, &s_termios) == -1)
-//           return (-1);
-//     // // s_termios.c_lflag &= ~(ECHO);
-//     int i = 0;
-//     char *cl_cap = tgetstr("up", NULL);
-//     char *cl_cap1 = tgetstr("do", NULL);
-//     while (i != 10)
-//     {
-//     //     write(1, "ok", 2);
-//         char buf[64];
-//         wait(2);
-//         read(0, buf, 64);
-//         // buf[4] = '\0';
-//         int j = 0;
-//         if (strcmp(buf, cl_cap) == 0)
-//             write(1, "yes", 3);
-//         // while (buf[j])
-//         //     {write(1, &buf[j], 1);
-//         //     j++;}
-//     //     printf("%s", buf);
-//     //     write(1, "ok", 2);
-//         // if (buf == tgetstr("do", NULL))
-//         // {
-//         //     write(1, "down", 4);
-//             i++;
-//         // }
-//     }
+	i = 1;
+	if (n <= 0)
+		i++;
+	while (n % 10 != 0 || n != 0)
+	{
+		n /= 10;
+		i++;
+	}
+	return (i);
+}
 
-//  if (tcsetattr(0, 0, &s_termios_backup) == -1)
-//           return (-1);
-    
-//     // tputs (cl_cap, 1, test_ft);
+static char	*ft_int_min(void)
+{
+	char	*res;
+	int		i;
+
+	i = 12;
+	res = malloc(sizeof(char) * i);
+	if (!res)
+		return (NULL);
+	res[0] = '-';
+	ft_attrib(-2147483648, res, i - 2);
+	res[10] += 1;
+	res[11] = '\0';
+	return (res);
+}
+
+char	*ft_itoa(int n)
+{
+	char	*res;
+	int		i;
+
+	if (n == -0)
+		n = 0;
+	if (n == -2147483648)
+	{
+		res = (char *)ft_int_min();
+		return (res);
+	}
+	i = ft_mallocsize(n);
+	res = malloc(sizeof(char) * i);
+	if (!res)
+		return (NULL);
+	if (n < 0)
+		res[0] = '-';
+	ft_attrib(n, res, i - 2);
+	res[i - 1] = '\0';
+	return (res);
+}
 
 
-//     // tputs (cl_cap1, 1, test_ft);
+void	ft_putstr_nbr(int i, int fd)
+{
+	int		j;
+	char	*buf;
 
-//     /* On évite les warnings pour variables non utilisées. */
-//     (void)argc;
-//     (void)argv;
+	j = 0;
+	buf = ft_itoa(i);
+	while (buf[j])
+	{
+		write(fd, &buf[j], 1);
+		j++;
+	}
+	free(buf);
+}
 
-//     return ret;
-// }
+int show_error(char const *str)
+{
+	if (str)
+		write(STDERR, str, ft_strlen(str));
+	return (EXIT_FAILURE);
+}
+
+int exit_fatal(void)
+{
+	show_error("error: fatal\n");
+	exit(EXIT_FAILURE);
+	return (EXIT_FAILURE);
+}
+
+void *exit_fatal_ptr(void)
+{
+	exit_fatal();
+	exit(EXIT_FAILURE);
+	return (NULL);
+}
+
+char *ft_strdup(char const *str)
+{
+	char	*copy;
+	int		i;
+
+	if (!(copy = (char*)malloc(sizeof(*copy) * (ft_strlen(str) + 1))))
+		return (exit_fatal_ptr());
+	i = 0;
+	while (str[i])
+	{
+		copy[i] = str[i];
+		i++;
+	}
+	copy[i] = 0;
+	return (copy);
+}
+
+int add_arg(t_list *cmd, char *arg)
+{
+	char	**tmp;
+	int		i;
+
+	i = 0;
+	tmp = NULL;
+	if (!(tmp = (char**)malloc(sizeof(*tmp) * (cmd->length + 2))))
+		return (exit_fatal());
+	while (i < cmd->length)
+	{
+		tmp[i] = cmd->args[i];
+		i++;
+	}
+	if (cmd->length > 0)
+		free(cmd->args);
+	cmd->args = tmp;
+	cmd->args[i++] = ft_strdup(arg);
+	cmd->args[i] = 0;
+	cmd->length++;
+	return (EXIT_SUCCESS);
+}
+
+int list_push(t_list **list, char *arg)
+{
+	t_list	*new;
+
+	if (!(new = (t_list*)malloc(sizeof(*new))))
+		return (exit_fatal());
+	new->args = NULL;
+	new->length = 0;
+	new->type = TYPE_END;
+	new->previous = NULL;
+	new->next = NULL;
+	if (*list)
+	{
+		(*list)->next = new;
+		new->previous = *list;
+	}
+	*list = new;
+	return (add_arg(new, arg));
+}
+
+int list_rewind(t_list **list)
+{
+	while (*list && (*list)->previous)
+		*list = (*list)->previous;
+	return (EXIT_SUCCESS);
+}
+
+int list_clear(t_list **cmds)
+{
+	t_list	*tmp;
+	int		i;
+
+	list_rewind(cmds);
+	while (*cmds)
+	{
+		tmp = (*cmds)->next;
+		i = 0;
+		while (i < (*cmds)->length)
+			free((*cmds)->args[i++]);
+		free((*cmds)->args);
+		free(*cmds);
+		*cmds = tmp;
+	}
+	*cmds = NULL;
+	return (EXIT_SUCCESS);
+}
+
+int parse_arg(t_list **cmds, char *arg)
+{
+	int	is_break;
+
+	is_break = (strcmp(";", arg) == 0);
+	if (is_break && !*cmds)
+		return (EXIT_SUCCESS);
+	else if (!is_break && (!*cmds || (*cmds)->type > TYPE_END))
+		return (list_push(cmds, arg));
+	else if (strcmp("|", arg) == 0)
+		(*cmds)->type = TYPE_PIPE;
+	else if (is_break)
+		(*cmds)->type = TYPE_BREAK;
+	else
+		return (add_arg(*cmds, arg));
+	return (EXIT_SUCCESS);
+}
+
+int exec_cmd(t_list *cmd, char **env)
+{
+	pid_t	pid;
+	int		ret;
+	int		status;
+	int		pipe_open;
+
+	ret = EXIT_FAILURE;
+	pipe_open = 0;
+    // ft_putstr_nbr(cmd->type, 2);
+    int i = 0;
+    while (cmd->args[i])
+    {
+        write(2, cmd->args[i], ft_strlen(cmd->args));
+        write(2, "\n", 1);
+        i++;
+    }
+	if (cmd->type == TYPE_PIPE || (cmd->previous && cmd->previous->type == TYPE_PIPE))
+	{
+		pipe_open = 1;
+		if (pipe(cmd->pipes))
+			return (exit_fatal());
+	}
+	pid = fork();
+	if (pid < 0)
+		return (exit_fatal());
+	else if (pid == 0)
+	{
+		if (cmd->type == TYPE_PIPE
+			&& dup2(cmd->pipes[SIDE_IN], STDOUT) < 0)
+			return (exit_fatal());
+		if (cmd->previous && cmd->previous->type == TYPE_PIPE
+			&& dup2(cmd->previous->pipes[SIDE_OUT], STDIN) < 0)
+			return (exit_fatal());
+		if ((ret = execve(cmd->args[0], cmd->args, env)) < 0)
+		{
+			show_error("error: cannot execute ");
+			show_error(cmd->args[0]);
+			show_error("\n");
+		}
+		exit(ret);
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (pipe_open)
+		{
+			close(cmd->pipes[SIDE_IN]);
+			if (!cmd->next || cmd->type == TYPE_BREAK)
+				close(cmd->pipes[SIDE_OUT]);
+		}
+		if (cmd->previous && cmd->previous->type == TYPE_PIPE)
+			close(cmd->previous->pipes[SIDE_OUT]);
+		if (WIFEXITED(status))
+			ret = WEXITSTATUS(status);
+	}
+	return (ret);
+}
+
+int exec_cmds(t_list **cmds, char **env)
+{
+	t_list	*crt;
+	int		ret;
+
+	ret = EXIT_SUCCESS;
+	list_rewind(cmds);
+	while (*cmds)
+	{
+		crt = *cmds;
+		if (strcmp("cd", crt->args[0]) == 0)
+		{
+			ret = EXIT_SUCCESS;
+			if (crt->length < 2)
+				ret = show_error("error: cd: bad arguments\n");
+			else if (chdir(crt->args[1]))
+			{
+				ret = show_error("error: cd: cannot change directory to ");
+				show_error(crt->args[1]);
+				show_error("\n");
+			}
+		}
+		else
+			ret = exec_cmd(crt, env);
+		if (!(*cmds)->next)
+			break ;
+		*cmds = (*cmds)->next;
+	}
+	return (ret);
+}
+
+int main(int argc, char **argv, char **env)
+{
+	t_list	*cmds;
+	int		i;
+	int		ret;
+
+	ret = EXIT_SUCCESS;
+	cmds = NULL;
+	i = 1;
+	while (i < argc)
+		parse_arg(&cmds, argv[i++]);
+	if (cmds)
+		ret = exec_cmds(&cmds, env);
+	list_clear(&cmds);
+	if (TEST)
+		while (1);
+	return (ret);
+}

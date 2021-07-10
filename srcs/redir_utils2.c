@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 15:17:22 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/03 12:28:23 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/10 09:35:19 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	go_pipe(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
 	t_mp	mp[1];
 
-	init_mp(mp, 1, f);
+	init_mp(mp, f);
 	if (f->save_pipe[0] == NULL)
 	{
 		go_instruction(end_redir(mp->first, f), var_env, cmd, env);

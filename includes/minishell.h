@@ -51,6 +51,15 @@ typedef struct s_mp
 	char		**first;
 }				t_mp;
 
+typedef struct	s_test t_test;
+struct s_test
+{
+	char			**res;
+	int				pipes[2];
+	t_test			*prec;
+	t_test			*next;
+};
+
 typedef struct s_term
 {
 	struct termios	s_termios;
@@ -78,6 +87,14 @@ typedef struct s_command
 	char		**res;
 	char		**env;
 }				t_command;
+
+typedef struct	s_mult
+{
+	t_list **var_e;
+	t_command **cmd;
+	char ***env;
+	t_fd **f;
+}				t_mult;
 
 /*
 **main_utils
@@ -152,7 +169,7 @@ char	*no_trim_starting_space(char *tmp, t_list *var_env, t_command *cmd);
 /*
 **expander_utils4
 */
-char    *ft_free_2_strings_a_return(char *str_first, char *str_secd);
+char	*ft_free_2_strings_a_return(char *str_first, char *str_secd);
 
 /*
 **expander_a_env
@@ -474,8 +491,14 @@ char	*handle_arrow(t_term *term, char *end);
 int		get_k(int k, char **res, int i, int j);
 char	**middle_pipe(char **res, int i);
 void	print_tabtab(char **res);
-void	init_mp(t_mp *mp, int i, t_fd *f);
+void	init_mp(t_mp *mp, t_fd *f);
 int		handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd, char **env);
+
+/*
+**multipipe_utils
+*/
+void	set_list_mp(t_test **start, t_fd *f);
+void	init_mul(t_mult *mul, t_list *var_env, t_fd *f, char **env);
 
 /*
 **parse_path
@@ -620,6 +643,15 @@ int		record_cmd_path(void *lst, void *cmd);
 void	ft_lstiter(t_list *lst, void (*f)(void *, void *), \
 t_command *cmd);
 void	ft_lstdel(t_list *lst);
+
+/*
+**libft_list3
+*/
+t_test	*ft_lstlast2(t_test *lst);
+t_test *get_prec(t_test *lst);
+void	ft_lstadd_back2(t_test **start, t_test *new);
+t_test	*ft_lstnew2(char **res);
+void	destroy_list(t_test **start, t_test *t);
 
 extern t_sig	g_sig;
 

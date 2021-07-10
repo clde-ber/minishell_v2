@@ -6,74 +6,102 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/10 11:05:20 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	init_mp(t_mp *mp, int i, t_fd *f)
+void	init_mp(t_mp *mp, t_fd *f)
 {
-	if (i == 0)
-	{
-		mp->count = 0;
-		mp->fdd = 0;
-		mp->pid = 0;
-	}
-	else
-	{
-		mp->first = divide_pipe(f);
-		pipe(mp->fd);
-		mp->pid = fork();
-	}
+	mp->first = divide_pipe(f);
+	pipe(mp->fd);
+	mp->pid = fork();
 	g_sig.boolean = 2;
 }
 
-void	prep_fds(t_mp *mp, t_fd *f)
+void	fd_multipipe(int j, int i, t_test *t, int k)
 {
-	dup2(mp->fdd, 0);
-	if (mp->count < count_pipes(f->res))
-		dup2(mp->fd[1], 1);
-	close(mp->fd[0]);
+	if (k == 0)
+	{
+		if (j != i)
+			dup2(t->pipes[1], 1);
+		if (j != 0)
+			dup2(t->prec->pipes[0], 0);
+	}
+	else
+	{
+		close(t->pipes[1]);
+		if (j == i)
+			close(t->pipes[0]);
+		if (j != 0)
+			close(t->prec->pipes[0]);
+	}
 }
 
-void	parent_process_mult(t_mp *mp, int count)
+int	exec_pipe(t_test *t, int j, t_mult *mul, int i)
 {
-	close(mp->fd[1]);
-	mp->fdd = mp->fd[0];
-	mp->count++;
-	if (mp->count == count)
+	t_mp	mp[1];
+	int		ret;
+
+	ret = EXIT_FAILURE;
+	if (pipe(t->pipes))
+		return (-1);
+	mp->pid = fork();
+	if (mp->pid < 0)
+		return (-1);
+	else if (mp->pid == 0)
 	{
-		while (wait(NULL) >= 0)
-			;
+		fd_multipipe(j, i, t, 0);
+		go_instruction(end_redir(t->res, *mul->f), *mul->var_e, *mul->cmd, \
+			*mul->env);
+		exit(mp->status);
 	}
+	else
+	{
+		if (WIFSIGNALED(mp->status) && g_sig.boolean != -1)
+			g_sig.boolean++;
+		waitpid(mp->pid, &mp->status, 0);
+		fd_multipipe(j, i, t, 1);
+		// if (j == i)
+		// {
+		// 	while (wait(NULL) >= 0)
+		// 		;
+		// }
+		// if (WIFEXITED(mp->status))
+		// 	ret = WEXITSTATUS(mp->status);
+		// waitpid(mp->pid, &mp->status, 0);
+		// fd_multipipe(j, i, t, 1);
+		// if (WIFEXITED(mp->status))
+		// 	ret = WEXITSTATUS(mp->status);
+
+	}
+	return (ret);
 }
 
 int	handle_multipipes(t_fd *f, t_list *var_env, t_command *cmd, char **env)
 {
-	t_mp	mp[1];
+	int		j;
+	t_test	*t;
+	t_test	**start;
+	t_mult	mul[1];
+	int		ret;
 
-	init_mp(mp, 0, f);
-	while (mp->count < count_pipes(f->res) + 1)
+	mul->cmd = &cmd;
+	init_mul(mul, var_env, f, env);
+	j = 0;
+	start = NULL;
+	t = ft_lstnew2(middle_pipe(f->res, j));
+	start = &t;
+	set_list_mp(start, f);
+	while (j <= count_pipes(f->res))
 	{
-		pipe(mp->fd);
-		mp->pid = fork();
-		if (mp->pid == -1)
-			return (0);
-		else if (mp->pid == 0)
-		{
-			prep_fds(mp, f);
-			go_instruction(end_redir(middle_pipe(f->res, mp->count), f),
-				var_env, cmd, env);
-			exit(mp->status);
-		}
-		else
-		{
-			if (WIFSIGNALED(mp->status) && g_sig.boolean != -1)
-				g_sig.boolean++;
-			waitpid(mp->pid, &mp->status, 1);
-			parent_process_mult(mp, count_pipes(f->res) + 1);
-		}
+		ret = exec_pipe(t, j, mul, count_pipes(f->res));
+		free_tabtab(t->res);
+		if (t->next != NULL)
+			t = t->next;
+		j++;
 	}
-	return (0);
+	destroy_list(start, t);
+	return (ret);
 }

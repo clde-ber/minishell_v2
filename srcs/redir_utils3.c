@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/28 11:17:25 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/03 12:27:41 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/10 10:49:13 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,8 @@ char	**end_redir(char **res, t_fd *f)
 
 int	end_pipe(t_fd *f, t_mp *mp)
 {
+	close(mp->fd[0]);
+	close(mp->fd[1]);
 	free_tabtab(mp->first);
 	free_tabtab(f->save_pipe);
 	return (0);

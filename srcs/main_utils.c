@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/22 15:17:08 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/05 13:11:15 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	restore_fds(t_fd *f)
 	close(1);
 	dup2(f->save_in, 0);
 	dup2(f->save_out, 1);
+	close(f->save_out);
+	close(f->save_in);
 }
 
 void	init_fds(t_fd *f)
