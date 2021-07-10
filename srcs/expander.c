@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:25 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/08 16:30:42 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/10 08:41:03 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	**parse_res(char **res, t_list *var_env, t_command *cmd)
 
 	init_vars_parse_res(&i, &j, &str);
 	parsed_res = create_parsed_res(res);
-	while (res[++i] && !last_command_rv(res, parsed_res))
+	while (res[++i])
 	{
 		if ((strings_to_join(res, i)) > 0)
 		{

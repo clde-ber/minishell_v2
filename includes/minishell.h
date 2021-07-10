@@ -224,6 +224,7 @@ char	*get_string_value(char *str, int boolean, char *trim, int x);
 char	*get_env_value(char *str, t_list *var_env, t_command *cmd);
 int		even_or_odd(char *str);
 char	*find_op(char *str);
+int		is_command_return_value(int i, char *buf);
 
 /*
 **env_values_utils3

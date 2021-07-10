@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 14:30:34 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/08 16:56:14 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/10 08:38:27 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,36 @@ char	*get_string_value(char *str, int boolean, char *trim, int x)
 	int		i;
 	char	*res;
 
+	(void)trim;
 	i = 0;
 	res = NULL;
 	res = malloc(sizeof(char) * (ft_strlen(str) + 1));
 	(void)boolean;
 	if (!(res))
 		return (0);
-	while (str[i] && ((((i > 1 && i + 2 < (int)ft_strlen(str) && (str[i] == \
-	'\\' || str[i + 2] == '?') && str[i + 1] == '$') || (i && (str[i - 1] \
-	== '\\' || str[i + 1] == '?') && str[i] == '$') || (i == 0 && str[i] \
-	== '$' && !(ft_isalnum(str[i]) || str[i] == '_')) || str[i] != '$' || \
+	while (str[i] && (((((i && str[i] == '\\' && str[i + 1] == '$') || \
+	(i && str[i - 1] == '\\' && str[i] == '$') || (i == 0 && str[i] == '$')) \
+	&& !(ft_isalnum(str[i]) || str[i] == '_')) || str[i] != '$' || \
 	((is_in_sq_string(x + (int)i, trim) && is_in_sq_string(x + (int)i, trim) \
-	% 2) && !(is_in_dq_string((int)i + x, trim) && is_in_dq_string((int)i + x, \
-	trim) % 2))))))
+	% 2) && !(is_in_dq_string((int)i + x, trim) && \
+	is_in_dq_string((int)i + x, trim) % 2)) || (str[i] == '$' && str[i + 1] \
+	== '?' && is_command_return_value(i, str) == 0))))
 	{
 		res[i] = str[i];
 		i++;
 	}
 	res[i] = '\0';
 	return (res);
+}
+
+int	is_command_return_value(int i, char *buf)
+{
+	if (((!is_in_sq_string(i, buf) || \
+	is_in_sq_string(i, buf) % 2 == 0) || (is_in_sq_string(i, buf) && \
+	is_in_sq_string(i, buf) % 2 && is_in_dq_string(i, buf) && \
+	is_in_dq_string(i, buf) % 2)) && (i == 0 || (i && buf[i - 1] != '\\')))
+		return (1);
+	return (0);
 }
 
 char	*get_env_value_name(char *str, t_list *var_env, t_command *cmd)
@@ -94,9 +105,16 @@ char	*get_env_value(char *str, t_list *var_env, t_command *cmd)
 		return (0);
 	test[i] = '\0';
 	ret = search_env_value(test, var_env);
-	while (str[i] && ft_strcmp(ret, "") == 0 && (ft_isalnum(str[i]) || \
-	str[i] == '_'))
+	while (str[i] && ((ft_strcmp(ret, "") == 0 && (ft_isalnum(str[i]) || \
+	str[i] == '_')) || str[i] == '?'))
 	{
+		if (str[i] == '?')
+		{
+			ret = rv_itoa(cmd->cmd_rv, ret);
+			cmd->index += 2;
+			free_string(test);
+			return (ret);
+		}
 		test[i] = str[i];
 		i++;
 		test[i] = '\0';

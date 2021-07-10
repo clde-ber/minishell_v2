@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 13:31:38 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/07 07:51:06 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/09 21:09:22 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ void	write_error_shell(t_command *cmd, char **res)
 		}
 		else
 		{
-			ft_putstr_fd("bash: ", 2);
 			ft_putstr_fd(res[0], 2);
 			ft_putstr_fd(": Command not found\n", 2);
 		}

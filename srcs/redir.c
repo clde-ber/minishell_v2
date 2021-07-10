@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/07 19:07:23 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/09 21:11:46 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	handle_cmd_rv(char **tabl, t_command *cmd)
 		cmd->cmd_rv = 131;
 	if (ft_strcmp(tabl[0], "$?") == 0)
 	{
-		ft_putstr_nbr(cmd->cmd_rv, 2);
+		ft_putstr_fd("$?", 2);
 		ft_putstr_fd(" : Command not found\n", 2);
 		cmd->cmd_rv = 127;
 	}

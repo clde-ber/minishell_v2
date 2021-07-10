@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:15 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/09 14:37:18 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/09 21:50:49 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,11 @@ t_command *cmd)
 	init_vars_replace_by_env(&i, &tmp, &str);
 	while (i < ft_strlen(trim))
 	{
-		if (is_not_env_value(i, trim) || ((is_in_sq_string(i, trim) \
+		if ((is_not_env_value(i, trim) || ((is_in_sq_string(i, trim) \
 		&& is_in_sq_string(i, trim) % 2) && !(is_in_dq_string(i, trim) && \
-		is_in_dq_string(i, trim) % 2)))
+		is_in_dq_string(i, trim) % 2))) && (!(trim[i] == '$' && trim[i + 1] \
+		== '?') || ((trim[i] == '$' && trim[i + 1] == '?') && \
+		is_command_return_value(i, trim) == 0)))
 		{
 			str = get_string_value(&trim[i], 0, trim, i);
 			join_string_value(&str, &tmp, &trim[i], &cmd->index);
@@ -54,9 +56,11 @@ char	*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd)
 	init_vars_replace_by_env(&i, &tmp, &str);
 	while (i < ft_strlen(trim))
 	{
-		if (is_not_env_value(i, trim) || ((is_in_sq_string(i, trim) \
+		if ((is_not_env_value(i, trim) || ((is_in_sq_string(i, trim) \
 		&& is_in_sq_string(i, trim) % 2) && !(is_in_dq_string(i, trim) && \
-		is_in_dq_string(i, trim) % 2)))
+		is_in_dq_string(i, trim) % 2))) && (!(trim[i] == '$' && trim[i + 1] \
+		== '?') || ((trim[i] == '$' && trim[i + 1] == '?') && \
+		is_command_return_value(i, trim) == 0)))
 		{
 			str = get_string_value(&trim[i], 0, trim, i);
 			join_string_value(&str, &tmp, &trim[i], &cmd->index);

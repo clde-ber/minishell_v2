@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_utils3.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 15:55:17 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/09 21:10:06 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 int	is_symbol(char c, char comp)
 {
+	(void)comp;
 	if (c == '<' || c == '>' || c == '|' || c == ';')
 		return (1);
-	if (c == '$' && comp == '?')
-		return (2);
+/*	if (c == '$' && comp == '?')
+		return (2);*/
 	return (0);
 }
 
