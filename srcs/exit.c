@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/24 06:40:46 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/08 16:34:32 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@ void	exit_code(char **res, t_command *cmd)
 
 void	ft_exit(int i, char **res, t_command *cmd)
 {
+	int	boolean;
+
+	boolean = 0;
 	if (g_sig.boolean >= 2 || g_sig.sig == -1)
 		return ;
 	if (res[1] && !res[2])
@@ -60,20 +63,15 @@ void	ft_exit(int i, char **res, t_command *cmd)
 		(i == 0 && (res[1][i] == '+' || res[1][i] == '-')))
 			i++;
 		if (i == (int)ft_strlen(res[1]))
-		{
 			exit_code(res, cmd);
-			exit(cmd->cmd_rv);
-		}
 		else
-		{
 			exit_error_no_nb(res, cmd);
-			exit(2);
-		}
 	}
 	else if (res[1] && res[2] && g_sig.sig == 0)
 	{
 		exit_too_many_args(cmd);
-		exit(1);
+		boolean = 1;
 	}
-	exit(cmd->cmd_rv);
+	if (boolean != 1)
+		exit(cmd->cmd_rv);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/05 14:21:38 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/08 16:29:07 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,21 @@ char	**create_parsed_res(char **res)
 char	*parsed_res_error(char *res, char *parsed_res, t_list *var_env,
 t_command *cmd)
 {
-	if (is_unknown_env_variable(res, var_env, cmd) && cmd->bol == 0)
+	char	*ret;
+
+	if (parsed_res)
+		ret = ft_strdup(parsed_res);
+	else
+		ret = NULL;
+	if (is_unknown_env_variable(res, var_env, cmd))
 	{
+		if (ret)
+			free_string(ret);
 		free_string(parsed_res);
 		return (NULL);
 	}
-	else
-		parsed_res = remove_antislashes(parsed_res, res, var_env, cmd);
-	return (parsed_res);
+	free_string(parsed_res);
+	return (ret);
 }
 
 char	**last_command_rv(char **res, char **parsed_res)

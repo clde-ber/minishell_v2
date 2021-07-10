@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_values.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:26:31 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/09 14:31:08 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	join_string_value(char **str, char **tmp, char *trim, int *index)
 {
-	*str = get_string_value(trim);
+	(void)trim;
 	*tmp = join_a_free(*tmp, *str);
 	*index += ft_strlen(*str);
 }
@@ -28,9 +28,9 @@ void	init_vars_replace_by_env(size_t *i, char **tmp, char **str)
 
 int	is_not_env_value(size_t i, char *trim)
 {
-	if (!(((i && trim[i] == '$' && trim[i - 1] != '\\') \
-	|| (i == 0 && trim[i] == '$')) && (ft_isalnum(trim[i + 1]) || \
-	trim[i + 1] == '_')))
+	if (!(((i && trim[i] == '$' && trim[i - 1] != '\\' && trim[i + 1] != '?') \
+	|| (i == 0 && trim[i] == '$' && trim[i + 1] != '?')) && \
+	(ft_isalnum(trim[i + 1]) || trim[i + 1] == '_')))
 		return (1);
 	return (0);
 }

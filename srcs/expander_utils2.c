@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils2.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:32:07 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/08 16:20:26 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,12 @@ int	condition_one(int i, char *dest, char *str, char *env)
 	return (0);
 }
 
-int	condition_two(int i, char *dest, char *str)
+int	is_escaped_char(int i, char *dest)
 {
-	if (i < (int)ft_strlen(dest) && dest[i] == '\\' && (((dest[i + 1] == '\\' \
+	if (i < (int)ft_strlen(dest) && ((dest[i] == '\\' && (dest[i + 1] == '\\' \
 		|| dest[i + 1] == '|' || dest[i + 1] == ';' || dest[i + 1] == '>' \
 		|| dest[i + 1] == '<' || dest[i + 1] == '\'' || dest[i + 1] == '\"' \
-		|| ft_isspace(dest[i + 1])) && !is_string(str, dest, i)) || \
-		(dest[i + 1] == '\'' || dest[i + 1] == '\"')))
+		|| ft_isspace(dest[i + 1])))))
 		return (1);
 	return (0);
 }

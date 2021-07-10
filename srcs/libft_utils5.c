@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils5.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/23 12:48:39 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/08 16:12:48 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static int	ft_pow(int nb, int pow)
 	return (res);
 }
 
-char	*rv_itoa(int n)
+char	*rv_itoa(int n, char *buf)
 {
 	int		i;
 	int		j;
@@ -110,5 +110,6 @@ char	*rv_itoa(int n)
 	str[len_int(k)] = '\0';
 	if (k < 0 && k != -2147483648)
 		str[0] = '-';
+	free_string(buf);
 	return (str);
 }
