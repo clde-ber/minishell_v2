@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/10 11:40:48 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/10 15:50:24 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,30 +53,16 @@ int	exec_pipe(t_test *t, int j, t_mult *mul, int i)
 	else if (mp->pid == 0)
 	{
 		fd_multipipe(j, i, t, 0);
-		go_instruction(end_redir(t->res, *mul->f), *mul->var_e, *mul->cmd, \
+		go_instruction(end_redir(t->res, *mul->f), mul->var_e, *mul->cmd, \
 			*mul->env);
 		exit(mp->status);
 	}
 	else
 	{
-		// if (!WIFEXITED(mp->status))
 		if (WIFSIGNALED(mp->status) && g_sig.boolean != -1)
 			g_sig.boolean++;
 		waitpid(mp->pid, &mp->status, 0);
 		fd_multipipe(j, i, t, 1);
-		// if (j == i)
-		// {
-		// 	while (wait(NULL) >= 0)
-		// 		;
-		// }
-		// if (WIFEXITED(mp->status))
-		// 	ret = WEXITSTATUS(mp->status);
-		// TRUE IMPL
-		// 	waitpid(mp->pid, &mp->status, 0);
-		// fd_multipipe(j, i, t, 1);
-		// if (WIFEXITED(mp->status))
-		// 	ret = WEXITSTATUS(mp->status);
-
 	}
 	return (ret);
 }

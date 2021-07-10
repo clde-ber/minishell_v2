@@ -90,7 +90,7 @@ typedef struct s_command
 
 typedef struct	s_mult
 {
-	t_list **var_e;
+	t_list *var_e;
 	t_command **cmd;
 	char ***env;
 	t_fd **f;

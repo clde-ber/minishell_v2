@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/09 16:41:01 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/10 09:48:28 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/10 13:15:54 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_test	*ft_lstlast2(t_test *lst)
 	return (lst);
 }
 
-t_test *get_prec(t_test *lst)
+t_test	*get_prec(t_test *lst)
 {
 	if (!lst)
 		return (NULL);
