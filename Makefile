@@ -8,6 +8,7 @@ SRCS =	./srcs/echo.c\
 	./srcs/env_values_utils.c\
 	./srcs/env_values_utils2.c\
 	./srcs/env_values_utils3.c\
+	./srcs/env_values_utils4.c\
 	./srcs/env.c\
 	./srcs/exec.c\
 	./srcs/exec_utils.c\

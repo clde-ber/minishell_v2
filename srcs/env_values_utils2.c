@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 14:30:34 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/10 08:38:27 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/10 13:03:41 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ char	*get_string_value(char *str, int boolean, char *trim, int x)
 	int		i;
 	char	*res;
 
-	(void)trim;
 	i = 0;
 	res = NULL;
 	res = malloc(sizeof(char) * (ft_strlen(str) + 1));
@@ -109,12 +108,7 @@ char	*get_env_value(char *str, t_list *var_env, t_command *cmd)
 	str[i] == '_')) || str[i] == '?'))
 	{
 		if (str[i] == '?')
-		{
-			ret = rv_itoa(cmd->cmd_rv, ret);
-			cmd->index += 2;
-			free_string(test);
-			return (ret);
-		}
+			return (cmd_return_value(&ret, cmd, &test));
 		test[i] = str[i];
 		i++;
 		test[i] = '\0';
