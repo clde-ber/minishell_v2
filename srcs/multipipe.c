@@ -6,7 +6,7 @@
 /*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/08 17:47:58 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/10 11:05:20 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/10 11:40:48 by budal-bi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	exec_pipe(t_test *t, int j, t_mult *mul, int i)
 	}
 	else
 	{
+		// if (!WIFEXITED(mp->status))
 		if (WIFSIGNALED(mp->status) && g_sig.boolean != -1)
 			g_sig.boolean++;
 		waitpid(mp->pid, &mp->status, 0);
@@ -70,7 +71,8 @@ int	exec_pipe(t_test *t, int j, t_mult *mul, int i)
 		// }
 		// if (WIFEXITED(mp->status))
 		// 	ret = WEXITSTATUS(mp->status);
-		// waitpid(mp->pid, &mp->status, 0);
+		// TRUE IMPL
+		// 	waitpid(mp->pid, &mp->status, 0);
 		// fd_multipipe(j, i, t, 1);
 		// if (WIFEXITED(mp->status))
 		// 	ret = WEXITSTATUS(mp->status);

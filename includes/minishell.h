@@ -168,11 +168,7 @@ char	*no_trim_starting_space(char *tmp, t_list *var_env, t_command *cmd);
 /*
 **expander_utils4
 */
-<<<<<<< HEAD
-char	*ft_free_2_strings_a_return(char *str_first, char *str_secd);
-=======
-char    *ft_free_3_strings_a_return(char *str_first, char *str_secd, char *str_third);
->>>>>>> 1b4cb4d1e8aeea6085f729bdf09db2f5e91d5f52
+char	*ft_free_3_strings_a_return(char *str_first, char *str_secd, char *str_third);
 
 /*
 **expander_a_env
