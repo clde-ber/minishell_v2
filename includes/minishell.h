@@ -253,6 +253,11 @@ char	*antislashes_a_quotes(char *str);
 char	*get_env_name(int quotes, char *str_first);
 
 /*
+**env_values_utils4
+*/
+char	*cmd_return_value(char **ret, t_command *cmd, char **test);
+
+/*
 **launch_exe
 */
 void	init_vars_launch_exe(pid_t *pid, int *ret, int *status);
