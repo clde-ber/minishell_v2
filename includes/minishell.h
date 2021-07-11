@@ -168,6 +168,7 @@ char	*no_trim_starting_space(char *tmp, t_list *var_env, t_command *cmd);
 /*
 **expander_utils4
 */
+void	set_buf_value(char **buf, t_list *var_env, t_command *cmd);
 char	*ft_free_3_strings_a_return(char *str_first, char *str_secd, char *str_third);
 
 /*
@@ -178,6 +179,7 @@ t_command *cmd);
 char	*replace_by_env_value(char *trim, t_list *var_env, t_command *cmd);
 char	*non_handled_commands(char *res, t_list *var_env, t_command *cmd);
 char	*handled_export(char *res, t_list *var_env, t_command *cmd);
+int		is_not_in_string(char *buf);
 
 /*
 **unset

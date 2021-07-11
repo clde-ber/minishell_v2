@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_values_utils3.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:55:21 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/02 14:12:38 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/11 10:17:21 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,8 @@ char	*antislashes_dolls(char *str)
 		return (0);
 	while (str[i])
 	{
-		if (str[i] == '\\' && str[i + 1] == '$')
+		if (str[i] == '\\' && str[i + 1] == '$' && !(i + 2 < \
+		(int)ft_strlen(str) && str[i + 2] == '?'))
 			i++;
 		else
 		{	
