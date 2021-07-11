@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 14:30:34 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/10 13:03:41 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/11 09:33:36 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,9 @@ int	is_command_return_value(int i, char *buf)
 	if (((!is_in_sq_string(i, buf) || \
 	is_in_sq_string(i, buf) % 2 == 0) || (is_in_sq_string(i, buf) && \
 	is_in_sq_string(i, buf) % 2 && is_in_dq_string(i, buf) && \
-	is_in_dq_string(i, buf) % 2)) && (i == 0 || (i && buf[i - 1] != '\\')))
+	is_in_dq_string(i, buf) % 2  && ft_strchr(buf, '\'') && \
+	ft_strchr(buf, '\"') && ft_strchr_bis(buf, '\'') > \
+	ft_strchr_bis(buf, '\"') && (i == 0 || (i && buf[i - 1] != '\\')))))
 		return (1);
 	return (0);
 }
