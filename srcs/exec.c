@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: budal-bi <budal-bi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:48:45 by user42            #+#    #+#             */
-/*   Updated: 2021/07/10 11:08:03 by budal-bi         ###   ########.fr       */
+/*   Updated: 2021/07/11 10:56:04 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ int	exec_command(char **args, char **res, t_command *cmd, int j)
 	return (exit_status(status));
 }
 
-void	set_args(char **res, t_command *cmd, int i)
+void	set_args(char **res, t_command *cmd)
 {
 	int		index;
 	char	**args;
@@ -99,15 +99,15 @@ void	set_args(char **res, t_command *cmd, int i)
 	char	**n_res;
 
 	init_vars_set_args(&index, &k, &n_res, res);
-	if (i > 1)
+	if (len_tab(n_res) > 1)
 	{
-		args = malloc(sizeof(char *) * i);
+		args = malloc(sizeof(char *) * (len_tab(n_res) + 1));
 		if (!(args))
 			return ;
-		while (++index + 1 < i)
+		while (++index + 1 < len_tab(n_res))
 			args[index] = ft_strdup(n_res[index + 1]);
 		args[index] = NULL;
-		cmd->cmd_rv = exec_command(args, n_res, cmd, i);
+		cmd->cmd_rv = exec_command(args, n_res, cmd, len_tab(n_res));
 		ft_free(args, index + 1);
 		free_tabtab(n_res);
 	}

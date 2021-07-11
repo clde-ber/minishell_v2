@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/08 16:47:50 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/09 14:15:36 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/11 10:55:51 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,10 @@ char	**new_res(char **res)
 	{
 		tmp = ft_split(res[i], " \t\n\r\v\f");
 		if (tmp[0] && is_handled_cmd(tmp[0]) == 0)
+		{
 			while (tmp[x])
 				split_execve_args(&new_res, tmp, &x, &j);
+		}
 		else
 			no_split_execve_args(&new_res, res, i, &j);
 		x = 0;
@@ -58,4 +60,14 @@ char	**new_res(char **res)
 	}
 	new_res[j] = NULL;
 	return (new_res);
+}
+
+int	len_tab(char **res)
+{
+	int	i;
+
+	i = 0;
+	while (res[i])
+		i++;
+	return (i);
 }

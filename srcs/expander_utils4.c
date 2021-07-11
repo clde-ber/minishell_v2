@@ -6,11 +6,19 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/03 12:59:48 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/10 08:22:02 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/11 10:26:03 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	set_buf_value(char **buf, t_list *var_env, t_command *cmd)
+{
+	if (is_not_in_string(*buf))
+		*buf = replace_by_env_value_no_space(*buf, var_env, cmd);
+	else
+		*buf = replace_by_env_value(*buf, var_env, cmd);
+}
 
 char	*ft_free_3_strings_a_return(char *str_first, char *str_secd,
 char *str_third)

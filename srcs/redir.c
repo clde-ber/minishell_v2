@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/28 13:06:50 by budal-bi          #+#    #+#             */
-/*   Updated: 2021/07/09 21:11:46 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/11 10:55:01 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	go_e(char **tabl, t_list *var_env, t_command *cmd, int j)
 		}
 	}
 	else
-		set_args(tabl, cmd, j);
+		set_args(tabl, cmd);
 	return (0);
 }
 
@@ -97,7 +97,7 @@ int	go_instruction(char **tabl, t_list *var_env, t_command *cmd, char **env)
 	else if (ft_strcmp(tabl[0], "unset") == 0 && ft_strcmp(tabl[0], "$?"))
 		errors(cmd);
 	else if (ft_strcmp(tabl[0], "$?"))
-		set_args(tabl, cmd, j);
+		set_args(tabl, cmd);
 	handle_cmd_rv(tabl, cmd);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: clde-ber <clde-ber@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/16 11:32:07 by clde-ber          #+#    #+#             */
-/*   Updated: 2021/07/08 16:20:26 by clde-ber         ###   ########.fr       */
+/*   Updated: 2021/07/11 10:18:18 by clde-ber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	is_escaped_char(int i, char *dest)
 	if (i < (int)ft_strlen(dest) && ((dest[i] == '\\' && (dest[i + 1] == '\\' \
 		|| dest[i + 1] == '|' || dest[i + 1] == ';' || dest[i + 1] == '>' \
 		|| dest[i + 1] == '<' || dest[i + 1] == '\'' || dest[i + 1] == '\"' \
-		|| ft_isspace(dest[i + 1])))))
+		|| dest[i + 1] == '$' || ft_isspace(dest[i + 1])))))
 		return (1);
 	return (0);
 }
