@@ -51,14 +51,13 @@ typedef struct s_mp
 	char		**first;
 }				t_mp;
 
-typedef struct	s_test t_test;
-struct s_test
+typedef struct s_test
 {
 	char			**res;
 	int				pipes[2];
 	t_test			*prec;
 	t_test			*next;
-};
+}				t_test;
 
 typedef struct s_term
 {
@@ -88,12 +87,12 @@ typedef struct s_command
 	char		**env;
 }				t_command;
 
-typedef struct	s_mult
+typedef struct s_mult
 {
-	t_list *var_e;
-	t_command **cmd;
-	char ***env;
-	t_fd **f;
+	t_list		*var_e;
+	t_command	**cmd;
+	char		***env;
+	t_fd		**f;
 }				t_mult;
 
 /*
@@ -169,7 +168,8 @@ char	*no_trim_starting_space(char *tmp, t_list *var_env, t_command *cmd);
 **expander_utils4
 */
 void	set_buf_value(char **buf, t_list *var_env, t_command *cmd);
-char	*ft_free_3_strings_a_return(char *str_first, char *str_secd, char *str_third);
+char	*ft_free_3_strings_a_return(char *str_first, char *str_secd, \
+char *str_third);
 
 /*
 **expander_a_env
@@ -663,7 +663,7 @@ void	ft_lstdel(t_list *lst);
 **libft_list3
 */
 t_test	*ft_lstlast2(t_test *lst);
-t_test *get_prec(t_test *lst);
+t_test	*get_prec(t_test *lst);
 void	ft_lstadd_back2(t_test **start, t_test *new);
 t_test	*ft_lstnew2(char **res);
 void	destroy_list(t_test **start, t_test *t);
