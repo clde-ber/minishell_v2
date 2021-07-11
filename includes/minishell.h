@@ -436,7 +436,7 @@ void	ft_echo(char **res, t_command *cmd);
 int		exit_status(int status);
 int		test_shell_bin(char **tabl, char **p_bin, char **res, char **env);
 int		exec_command(char **args, char **res, t_command *cmd, int j);
-void	set_args(char **res, t_command *cmd, int i);
+void	set_args(char **res, t_command *cmd);
 void	init_vars_exec(int *status, char ***env, t_command *cmd, char ***p_bin);
 
 /*
@@ -463,6 +463,7 @@ int		command_found(char **tabl, char **env, char **p_bin);
 void	split_execve_args(char ***new_res, char **tmp, int *x, int *j);
 void	init_vars_new_res(int *i, int *j, int *x, char ***tmp);
 char	**new_res(char **res);
+int		len_tab(char **res);
 
 /*
 **exit
